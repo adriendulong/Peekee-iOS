@@ -1,0 +1,960 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5E4C9A334D9FAF59B9CB4BE2 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
+		E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */; };
+		E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
+		E70A55BA1A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */; };
+		E70A8DA51A29D82C0062D446 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70A8DA41A29D82C0062D446 /* MessageUI.framework */; };
+		E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E71AEFE01A6AE1EF00377E86 /* Localizable.strings */; };
+		E720345F1A6A759C0058175B /* EditUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E720345E1A6A759C0058175B /* EditUsernameViewController.swift */; };
+		E727F7021A5B0D3500BB8B0B /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */; };
+		E72E7D5419E6F5BF00D659AC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */; };
+		E72E7D5619E6F5C900D659AC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5519E6F5C900D659AC /* CFNetwork.framework */; };
+		E72E7D5819E6F5D000D659AC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5719E6F5D000D659AC /* CoreGraphics.framework */; };
+		E72E7D5A19E6F5D900D659AC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5919E6F5D900D659AC /* CoreLocation.framework */; };
+		E72E7D5C19E6F5E500D659AC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5B19E6F5E500D659AC /* libz.dylib */; };
+		E72E7D5E19E6F5EF00D659AC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */; };
+		E72E7D6019E6F5F900D659AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */; };
+		E72E7D6219E6F60200D659AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6119E6F60200D659AC /* Security.framework */; };
+		E72E7D6419E6F60A00D659AC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6319E6F60A00D659AC /* StoreKit.framework */; };
+		E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */; };
+		E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */; };
+		E74C1DF61A56F5F7002F86CC /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E74C1DF71A56F5F7002F86CC /* (null) in Resources */ = {isa = PBXBuildFile; };
+		E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */; };
+		E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF261A1C988800318F45 /* TakePhotoViewController.swift */; };
+		E758CF2A1A1CF4C500318F45 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF291A1CF4C500318F45 /* TransitionManager.swift */; };
+		E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
+		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
+		E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */; };
+		E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
+		E7665E3B19E5A3AB003DAAF8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3A19E5A3AB003DAAF8 /* Images.xcassets */; };
+		E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
+		E7665E4A19E5A3AB003DAAF8 /* PeekeeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E4919E5A3AB003DAAF8 /* PeekeeTests.swift */; };
+		E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5419E6C42E003DAAF8 /* Utils.swift */; };
+		E7665E5D19E6E6E9003DAAF8 /* RBResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5C19E6E6E9003DAAF8 /* RBResizer.swift */; };
+		E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */; };
+		E76F9E5C1A3A11A700D02A5D /* TransitionPikiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76F9E5B1A3A11A700D02A5D /* TransitionPikiManager.swift */; };
+		E7834C7F1A1A41CF00CDB32D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */; };
+		E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
+		E796CB281A5D27F100034F8B /* AcountsAdviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */; };
+		E7AE5D791A41CA1800A77A91 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */; };
+		E7B1903C19F5695F0022617F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B1903B19F5695F0022617F /* MainViewController.swift */; };
+		E7B255911A3F5F2A00B540E6 /* TransitionFriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B255901A3F5F2A00B540E6 /* TransitionFriendManager.swift */; };
+		E7B4EB611A4EA25100B69A2A /* better.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5D1A4EA25100B69A2A /* better.wav */; };
+		E7B4EB621A4EA25100B69A2A /* faster.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5E1A4EA25100B69A2A /* faster.wav */; };
+		E7B4EB631A4EA25100B69A2A /* harder.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5F1A4EA25100B69A2A /* harder.wav */; };
+		E7B4EB641A4EA25100B69A2A /* stronger.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB601A4EA25100B69A2A /* stronger.wav */; };
+		E7BA49991A2F431B00DB1C96 /* Proxima-Nova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */; };
+		E7BA499A1A2F431B00DB1C96 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */; };
+		E7BA499E1A2F54A800DB1C96 /* inboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */; };
+		E7C3B32D1A24858D0059F78D /* ChooseReceiversViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */; };
+		E7C9168019F7D71D0094710D /* InboxCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C9167F19F7D71D0094710D /* InboxCollectionViewCell.swift */; };
+		E7C9168419F8F7F60094710D /* DoubleInboxCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C9168319F8F7F60094710D /* DoubleInboxCollectionViewCell.swift */; };
+		E7C9168819F94A900094710D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C9168719F94A900094710D /* Fabric.framework */; };
+		E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */; };
+		E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */; };
+		E7DF60861A10B6E8000CCD52 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */; };
+		E7DF609A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF608A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m */; };
+		E7DF609B1A10C5EA000CCD52 /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF608C1A10C5EA000CCD52 /* NBNumberFormat.m */; };
+		E7DF609C1A10C5EA000CCD52 /* NBPhoneMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF608E1A10C5EA000CCD52 /* NBPhoneMetaData.m */; };
+		E7DF609D1A10C5EA000CCD52 /* NBPhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60901A10C5EA000CCD52 /* NBPhoneNumber.m */; };
+		E7DF609E1A10C5EA000CCD52 /* NBPhoneNumberDesc.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60931A10C5EA000CCD52 /* NBPhoneNumberDesc.m */; };
+		E7DF609F1A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60941A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist */; };
+		E7DF60A01A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60951A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist */; };
+		E7DF60A11A10C5EA000CCD52 /* NBPhoneNumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60971A10C5EA000CCD52 /* NBPhoneNumberUtil.m */; };
+		E7DF60A21A10C5EA000CCD52 /* NSArray+NBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60991A10C5EA000CCD52 /* NSArray+NBAdditions.m */; };
+		E7DF60A41A10C645000CCD52 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */; };
+		E7DF60A61A10C73F000CCD52 /* DiallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */; };
+		E7EBA42B19EC06E3006E8587 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */; };
+		E7EBA42D19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */; };
+		E7F0017F1A02A26A00F71017 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */; };
+		E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E7665E4419E5A3AB003DAAF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E7665E2619E5A3AA003DAAF8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7665E2D19E5A3AB003DAAF8;
+			remoteInfo = Piki;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.debug.xcconfig"; sourceTree = "<group>"; };
+		A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Peekee.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.release.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.release.xcconfig"; sourceTree = "<group>"; };
+		E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountriesTableViewController.swift; sourceTree = "<group>"; };
+		E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainPeekeeCollectionViewCell.swift; sourceTree = "<group>"; };
+		E70A8DA41A29D82C0062D446 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		E71AEFDF1A6AE1EF00377E86 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E71AEFE21A6AE22F00377E86 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E71AEFE31A6AE90000377E86 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		E720345E1A6A759C0058175B /* EditUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUsernameViewController.swift; sourceTree = "<group>"; };
+		E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughViewController.swift; sourceTree = "<group>"; };
+		E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		E72E7D5519E6F5C900D659AC /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		E72E7D5719E6F5D000D659AC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		E72E7D5919E6F5D900D659AC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		E72E7D5B19E6F5E500D659AC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		E72E7D6119E6F60200D659AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		E72E7D6319E6F60A00D659AC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		E72E7D6919E6F63D00D659AC /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
+		E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactsCollectionViewCell.swift; sourceTree = "<group>"; };
+		E74660D21A56FD0B00D4C5BB /* libPods-Peekee-APAddressBook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-APAddressBook.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-APAddressBook.a"; sourceTree = "<group>"; };
+		E74660D31A56FD0B00D4C5BB /* libPods-Peekee-Bolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Bolts.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Bolts.a"; sourceTree = "<group>"; };
+		E74660D41A56FD0B00D4C5BB /* libPods-Peekee-Facebook-iOS-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Facebook-iOS-SDK.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Facebook-iOS-SDK.a"; sourceTree = "<group>"; };
+		E74660D51A56FD0B00D4C5BB /* libPods-Peekee-Mixpanel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Mixpanel.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Mixpanel.a"; sourceTree = "<group>"; };
+		E74660D61A56FD0B00D4C5BB /* libPods-Peekee-Parse.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Parse.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Parse.a"; sourceTree = "<group>"; };
+		E74660D71A56FD0B00D4C5BB /* libPods-Peekee-ParseCrashReporting.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-ParseCrashReporting.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-ParseCrashReporting.a"; sourceTree = "<group>"; };
+		E74660D81A56FD0B00D4C5BB /* libPods-Peekee-ParseFacebookUtils.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-ParseFacebookUtils.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-ParseFacebookUtils.a"; sourceTree = "<group>"; };
+		E74660D91A56FD0B00D4C5BB /* libPods-Peekee-ParseUI.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-ParseUI.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-ParseUI.a"; sourceTree = "<group>"; };
+		E74660DA1A56FD0B00D4C5BB /* libPods-Peekee-PBJVideoPlayer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-PBJVideoPlayer.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-PBJVideoPlayer.a"; sourceTree = "<group>"; };
+		E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFriendsViewController.swift; sourceTree = "<group>"; };
+		E758CF261A1C988800318F45 /* TakePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePhotoViewController.swift; sourceTree = "<group>"; };
+		E758CF291A1CF4C500318F45 /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionManager.swift; sourceTree = "<group>"; };
+		E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodePhoneViewController.swift; sourceTree = "<group>"; };
+		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7665E3219E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PikiViewController.swift; sourceTree = "<group>"; };
+		E7665E3819E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E7665E3A19E5A3AB003DAAF8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		E7665E3D19E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeekeeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7665E4819E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E7665E4919E5A3AB003DAAF8 /* PeekeeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeekeeTests.swift; sourceTree = "<group>"; };
+		E7665E5419E6C42E003DAAF8 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		E7665E5C19E6E6E9003DAAF8 /* RBResizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RBResizer.swift; sourceTree = "<group>"; };
+		E7665E7B19E6F2FB003DAAF8 /* Piki-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Piki-Bridging-Header.h"; sourceTree = "<group>"; };
+		E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFriendsFirstViewController.swift; sourceTree = "<group>"; };
+		E76F9E5B1A3A11A700D02A5D /* TransitionPikiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionPikiManager.swift; sourceTree = "<group>"; };
+		E7834C7D1A1A41CF00CDB32D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = "Vendors/MBProgressHUD-master/MBProgressHUD.h"; sourceTree = SOURCE_ROOT; };
+		E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = "Vendors/MBProgressHUD-master/MBProgressHUD.m"; sourceTree = SOURCE_ROOT; };
+		E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HansomFY-Regular_S.otf"; path = "Font/HansomFY-Regular_S.otf"; sourceTree = SOURCE_ROOT; };
+		E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcountsAdviceViewController.swift; sourceTree = "<group>"; };
+		E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
+		E7B1903B19F5695F0022617F /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ../MainViewController.swift; sourceTree = "<group>"; };
+		E7B255901A3F5F2A00B540E6 /* TransitionFriendManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionFriendManager.swift; sourceTree = "<group>"; };
+		E7B4EB5D1A4EA25100B69A2A /* better.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = better.wav; sourceTree = "<group>"; };
+		E7B4EB5E1A4EA25100B69A2A /* faster.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = faster.wav; sourceTree = "<group>"; };
+		E7B4EB5F1A4EA25100B69A2A /* harder.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = harder.wav; sourceTree = "<group>"; };
+		E7B4EB601A4EA25100B69A2A /* stronger.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = stronger.wav; sourceTree = "<group>"; };
+		E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Proxima-Nova-Light.otf"; path = "Font/Proxima-Nova-Light.otf"; sourceTree = SOURCE_ROOT; };
+		E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Proxima-Nova-Bold.otf"; path = "Font/Proxima-Nova-Bold.otf"; sourceTree = SOURCE_ROOT; };
+		E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = inboxTableViewCell.swift; sourceTree = "<group>"; };
+		E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseReceiversViewController.swift; sourceTree = "<group>"; };
+		E7C9167F19F7D71D0094710D /* InboxCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxCollectionViewCell.swift; sourceTree = "<group>"; };
+		E7C9168319F8F7F60094710D /* DoubleInboxCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleInboxCollectionViewCell.swift; sourceTree = "<group>"; };
+		E7C9168719F94A900094710D /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListRecipientsViewController.swift; sourceTree = "<group>"; };
+		E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Rounded-Bold.ttf"; sourceTree = "<group>"; };
+		E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
+		E7DF60891A10C5EA000CCD52 /* NBAsYouTypeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBAsYouTypeFormatter.h; path = Vendors/LibPhoneNumber/NBAsYouTypeFormatter.h; sourceTree = SOURCE_ROOT; };
+		E7DF608A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBAsYouTypeFormatter.m; path = Vendors/LibPhoneNumber/NBAsYouTypeFormatter.m; sourceTree = SOURCE_ROOT; };
+		E7DF608B1A10C5EA000CCD52 /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBNumberFormat.h; path = Vendors/LibPhoneNumber/NBNumberFormat.h; sourceTree = SOURCE_ROOT; };
+		E7DF608C1A10C5EA000CCD52 /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBNumberFormat.m; path = Vendors/LibPhoneNumber/NBNumberFormat.m; sourceTree = SOURCE_ROOT; };
+		E7DF608D1A10C5EA000CCD52 /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneMetaData.h; path = Vendors/LibPhoneNumber/NBPhoneMetaData.h; sourceTree = SOURCE_ROOT; };
+		E7DF608E1A10C5EA000CCD52 /* NBPhoneMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneMetaData.m; path = Vendors/LibPhoneNumber/NBPhoneMetaData.m; sourceTree = SOURCE_ROOT; };
+		E7DF608F1A10C5EA000CCD52 /* NBPhoneNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumber.h; path = Vendors/LibPhoneNumber/NBPhoneNumber.h; sourceTree = SOURCE_ROOT; };
+		E7DF60901A10C5EA000CCD52 /* NBPhoneNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneNumber.m; path = Vendors/LibPhoneNumber/NBPhoneNumber.m; sourceTree = SOURCE_ROOT; };
+		E7DF60911A10C5EA000CCD52 /* NBPhoneNumberDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumberDefines.h; path = Vendors/LibPhoneNumber/NBPhoneNumberDefines.h; sourceTree = SOURCE_ROOT; };
+		E7DF60921A10C5EA000CCD52 /* NBPhoneNumberDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumberDesc.h; path = Vendors/LibPhoneNumber/NBPhoneNumberDesc.h; sourceTree = SOURCE_ROOT; };
+		E7DF60931A10C5EA000CCD52 /* NBPhoneNumberDesc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneNumberDesc.m; path = Vendors/LibPhoneNumber/NBPhoneNumberDesc.m; sourceTree = SOURCE_ROOT; };
+		E7DF60941A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = NBPhoneNumberMetadata.plist; path = Vendors/LibPhoneNumber/NBPhoneNumberMetadata.plist; sourceTree = SOURCE_ROOT; };
+		E7DF60951A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = NBPhoneNumberMetadataForTesting.plist; path = Vendors/LibPhoneNumber/NBPhoneNumberMetadataForTesting.plist; sourceTree = SOURCE_ROOT; };
+		E7DF60961A10C5EA000CCD52 /* NBPhoneNumberUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumberUtil.h; path = Vendors/LibPhoneNumber/NBPhoneNumberUtil.h; sourceTree = SOURCE_ROOT; };
+		E7DF60971A10C5EA000CCD52 /* NBPhoneNumberUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneNumberUtil.m; path = Vendors/LibPhoneNumber/NBPhoneNumberUtil.m; sourceTree = SOURCE_ROOT; };
+		E7DF60981A10C5EA000CCD52 /* NSArray+NBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+NBAdditions.h"; path = "Vendors/LibPhoneNumber/NSArray+NBAdditions.h"; sourceTree = SOURCE_ROOT; };
+		E7DF60991A10C5EA000CCD52 /* NSArray+NBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+NBAdditions.m"; path = "Vendors/LibPhoneNumber/NSArray+NBAdditions.m"; sourceTree = SOURCE_ROOT; };
+		E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DiallingCodes.plist; sourceTree = "<group>"; };
+		E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiLikeCollectionViewCell.swift; sourceTree = "<group>"; };
+		E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseUsernameViewController.swift; sourceTree = "<group>"; };
+		E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E7665E2B19E5A3AB003DAAF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E70A8DA51A29D82C0062D446 /* MessageUI.framework in Frameworks */,
+				E7DF60A41A10C645000CCD52 /* CoreTelephony.framework in Frameworks */,
+				E7F0017F1A02A26A00F71017 /* MediaPlayer.framework in Frameworks */,
+				E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */,
+				E72E7D6419E6F60A00D659AC /* StoreKit.framework in Frameworks */,
+				E72E7D6219E6F60200D659AC /* Security.framework in Frameworks */,
+				E72E7D6019E6F5F900D659AC /* QuartzCore.framework in Frameworks */,
+				E72E7D5E19E6F5EF00D659AC /* MobileCoreServices.framework in Frameworks */,
+				E72E7D5C19E6F5E500D659AC /* libz.dylib in Frameworks */,
+				E7EBA42B19EC06E3006E8587 /* Crashlytics.framework in Frameworks */,
+				E72E7D5A19E6F5D900D659AC /* CoreLocation.framework in Frameworks */,
+				E72E7D5819E6F5D000D659AC /* CoreGraphics.framework in Frameworks */,
+				E72E7D5619E6F5C900D659AC /* CFNetwork.framework in Frameworks */,
+				E7C9168819F94A900094710D /* Fabric.framework in Frameworks */,
+				E72E7D5419E6F5BF00D659AC /* AudioToolbox.framework in Frameworks */,
+				5E4C9A334D9FAF59B9CB4BE2 /* libPods-Peekee.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7665E4019E5A3AB003DAAF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34DD7A52573B09F7B3A92CAD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */,
+				0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E704D5A61A6A5BFA008BE745 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */,
+				E720345E1A6A759C0058175B /* EditUsernameViewController.swift */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		E725BC901A40A84800275C2B /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				E7B4EB5D1A4EA25100B69A2A /* better.wav */,
+				E7B4EB5E1A4EA25100B69A2A /* faster.wav */,
+				E7B4EB5F1A4EA25100B69A2A /* harder.wav */,
+				E7B4EB601A4EA25100B69A2A /* stronger.wav */,
+			);
+			name = Sound;
+			sourceTree = "<group>";
+		};
+		E758CF281A1CF48000318F45 /* TransitionManagers */ = {
+			isa = PBXGroup;
+			children = (
+				E758CF291A1CF4C500318F45 /* TransitionManager.swift */,
+				E76F9E5B1A3A11A700D02A5D /* TransitionPikiManager.swift */,
+				E7B255901A3F5F2A00B540E6 /* TransitionFriendManager.swift */,
+			);
+			name = TransitionManagers;
+			sourceTree = "<group>";
+		};
+		E7665E2519E5A3AA003DAAF8 = {
+			isa = PBXGroup;
+			children = (
+				E7665E3019E5A3AB003DAAF8 /* Piki */,
+				E7665E4619E5A3AB003DAAF8 /* PikiTests */,
+				E7665E2F19E5A3AB003DAAF8 /* Products */,
+				E7665E5E19E6EF3F003DAAF8 /* Frameworks */,
+				34DD7A52573B09F7B3A92CAD /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		E7665E2F19E5A3AB003DAAF8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E7665E2E19E5A3AB003DAAF8 /* Peekee.app */,
+				E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E7665E3019E5A3AB003DAAF8 /* Piki */ = {
+			isa = PBXGroup;
+			children = (
+				E704D5A61A6A5BFA008BE745 /* Settings */,
+				E7CD3F421A44207300F38FB4 /* Piki */,
+				E7BA499B1A2F548200DB1C96 /* Menu */,
+				E7C3B32B1A2485660059F78D /* New Piki */,
+				E758CF281A1CF48000318F45 /* TransitionManagers */,
+				E78548C61A1B5336001F83FC /* Resources */,
+				E7DF60871A10C584000CCD52 /* Vendors */,
+				E7DF60841A10B6CE000CCD52 /* SignUp */,
+				E7C9167E19F7D65C0094710D /* Inbox Cells */,
+				E7665E5319E6C409003DAAF8 /* Utility */,
+				E7665E7B19E6F2FB003DAAF8 /* Piki-Bridging-Header.h */,
+				E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */,
+				E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */,
+				E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */,
+				E7665E3719E5A3AB003DAAF8 /* Main.storyboard */,
+				E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */,
+				E7665E3A19E5A3AB003DAAF8 /* Images.xcassets */,
+				E7665E3119E5A3AB003DAAF8 /* Supporting Files */,
+				E71AEFE01A6AE1EF00377E86 /* Localizable.strings */,
+			);
+			path = Piki;
+			sourceTree = "<group>";
+		};
+		E7665E3119E5A3AB003DAAF8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E7665E3219E5A3AB003DAAF8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E7665E4619E5A3AB003DAAF8 /* PikiTests */ = {
+			isa = PBXGroup;
+			children = (
+				E7665E4919E5A3AB003DAAF8 /* PeekeeTests.swift */,
+				E7665E4719E5A3AB003DAAF8 /* Supporting Files */,
+			);
+			path = PikiTests;
+			sourceTree = "<group>";
+		};
+		E7665E4719E5A3AB003DAAF8 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E7665E4819E5A3AB003DAAF8 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		E7665E5319E6C409003DAAF8 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				E7665E5419E6C42E003DAAF8 /* Utils.swift */,
+				E7665E5C19E6E6E9003DAAF8 /* RBResizer.swift */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
+		E7665E5E19E6EF3F003DAAF8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E74660D21A56FD0B00D4C5BB /* libPods-Peekee-APAddressBook.a */,
+				E74660D31A56FD0B00D4C5BB /* libPods-Peekee-Bolts.a */,
+				E74660D41A56FD0B00D4C5BB /* libPods-Peekee-Facebook-iOS-SDK.a */,
+				E74660D51A56FD0B00D4C5BB /* libPods-Peekee-Mixpanel.a */,
+				E74660D61A56FD0B00D4C5BB /* libPods-Peekee-Parse.a */,
+				E74660D71A56FD0B00D4C5BB /* libPods-Peekee-ParseCrashReporting.a */,
+				E74660D81A56FD0B00D4C5BB /* libPods-Peekee-ParseFacebookUtils.a */,
+				E74660D91A56FD0B00D4C5BB /* libPods-Peekee-ParseUI.a */,
+				E74660DA1A56FD0B00D4C5BB /* libPods-Peekee-PBJVideoPlayer.a */,
+				E70A8DA41A29D82C0062D446 /* MessageUI.framework */,
+				E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */,
+				E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */,
+				E7C9168719F94A900094710D /* Fabric.framework */,
+				E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */,
+				E72E7D6919E6F63D00D659AC /* ParseFacebookUtils.framework */,
+				E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */,
+				E72E7D6319E6F60A00D659AC /* StoreKit.framework */,
+				E72E7D6119E6F60200D659AC /* Security.framework */,
+				E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */,
+				E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */,
+				E72E7D5B19E6F5E500D659AC /* libz.dylib */,
+				E72E7D5919E6F5D900D659AC /* CoreLocation.framework */,
+				E72E7D5719E6F5D000D659AC /* CoreGraphics.framework */,
+				E72E7D5519E6F5C900D659AC /* CFNetwork.framework */,
+				E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */,
+				A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E7834C7C1A1A41B200CDB32D /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				E7834C7D1A1A41CF00CDB32D /* MBProgressHUD.h */,
+				E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		E78548C61A1B5336001F83FC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E725BC901A40A84800275C2B /* Sound */,
+				E78548C71A1B535A001F83FC /* Fonts */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		E78548C71A1B535A001F83FC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */,
+				E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */,
+				E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */,
+				E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
+		E7BA499B1A2F548200DB1C96 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				E7B1903B19F5695F0022617F /* MainViewController.swift */,
+				E7BA499C1A2F548700DB1C96 /* Cell */,
+			);
+			name = Menu;
+			sourceTree = "<group>";
+		};
+		E7BA499C1A2F548700DB1C96 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		E7C3B32B1A2485660059F78D /* New Piki */ = {
+			isa = PBXGroup;
+			children = (
+				E758CF261A1C988800318F45 /* TakePhotoViewController.swift */,
+				E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */,
+			);
+			name = "New Piki";
+			sourceTree = "<group>";
+		};
+		E7C9167E19F7D65C0094710D /* Inbox Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E7C9167F19F7D71D0094710D /* InboxCollectionViewCell.swift */,
+				E7C9168319F8F7F60094710D /* DoubleInboxCollectionViewCell.swift */,
+			);
+			name = "Inbox Cells";
+			sourceTree = "<group>";
+		};
+		E7CD3F421A44207300F38FB4 /* Piki */ = {
+			isa = PBXGroup;
+			children = (
+				E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */,
+				E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */,
+				E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */,
+				E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */,
+			);
+			name = Piki;
+			sourceTree = "<group>";
+		};
+		E7DF60841A10B6CE000CCD52 /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */,
+				E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */,
+				E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */,
+				E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */,
+				E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */,
+				E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */,
+				E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */,
+				E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */,
+				E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */,
+			);
+			name = SignUp;
+			sourceTree = "<group>";
+		};
+		E7DF60871A10C584000CCD52 /* Vendors */ = {
+			isa = PBXGroup;
+			children = (
+				E7834C7C1A1A41B200CDB32D /* MBProgressHUD */,
+				E7DF60881A10C5A0000CCD52 /* LibPhoneNumber */,
+			);
+			name = Vendors;
+			sourceTree = "<group>";
+		};
+		E7DF60881A10C5A0000CCD52 /* LibPhoneNumber */ = {
+			isa = PBXGroup;
+			children = (
+				E7DF60891A10C5EA000CCD52 /* NBAsYouTypeFormatter.h */,
+				E7DF608A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m */,
+				E7DF608B1A10C5EA000CCD52 /* NBNumberFormat.h */,
+				E7DF608C1A10C5EA000CCD52 /* NBNumberFormat.m */,
+				E7DF608D1A10C5EA000CCD52 /* NBPhoneMetaData.h */,
+				E7DF608E1A10C5EA000CCD52 /* NBPhoneMetaData.m */,
+				E7DF608F1A10C5EA000CCD52 /* NBPhoneNumber.h */,
+				E7DF60901A10C5EA000CCD52 /* NBPhoneNumber.m */,
+				E7DF60911A10C5EA000CCD52 /* NBPhoneNumberDefines.h */,
+				E7DF60921A10C5EA000CCD52 /* NBPhoneNumberDesc.h */,
+				E7DF60931A10C5EA000CCD52 /* NBPhoneNumberDesc.m */,
+				E7DF60941A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist */,
+				E7DF60951A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist */,
+				E7DF60961A10C5EA000CCD52 /* NBPhoneNumberUtil.h */,
+				E7DF60971A10C5EA000CCD52 /* NBPhoneNumberUtil.m */,
+				E7DF60981A10C5EA000CCD52 /* NSArray+NBAdditions.h */,
+				E7DF60991A10C5EA000CCD52 /* NSArray+NBAdditions.m */,
+			);
+			name = LibPhoneNumber;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E7665E2D19E5A3AB003DAAF8 /* Peekee */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "Peekee" */;
+			buildPhases = (
+				F33917FF311AA444C2306A01 /* Check Pods Manifest.lock */,
+				E7665E2A19E5A3AB003DAAF8 /* Sources */,
+				E7665E2B19E5A3AB003DAAF8 /* Frameworks */,
+				E7665E2C19E5A3AB003DAAF8 /* Resources */,
+				E7EBA42919EC06BA006E8587 /* ShellScript */,
+				FB548DFAD071A44F88B97E59 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Peekee;
+			productName = Piki;
+			productReference = E7665E2E19E5A3AB003DAAF8 /* Peekee.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E7665E4219E5A3AB003DAAF8 /* PeekeeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7665E5019E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "PeekeeTests" */;
+			buildPhases = (
+				E7665E3F19E5A3AB003DAAF8 /* Sources */,
+				E7665E4019E5A3AB003DAAF8 /* Frameworks */,
+				E7665E4119E5A3AB003DAAF8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E7665E4519E5A3AB003DAAF8 /* PBXTargetDependency */,
+			);
+			name = PeekeeTests;
+			productName = PikiTests;
+			productReference = E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E7665E2619E5A3AA003DAAF8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = PikiChat;
+				TargetAttributes = {
+					E7665E2D19E5A3AB003DAAF8 = {
+						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = S435857UNK;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+					E7665E4219E5A3AB003DAAF8 = {
+						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = S435857UNK;
+						TestTargetID = E7665E2D19E5A3AB003DAAF8;
+					};
+				};
+			};
+			buildConfigurationList = E7665E2919E5A3AA003DAAF8 /* Build configuration list for PBXProject "Peekee" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				fr,
+			);
+			mainGroup = E7665E2519E5A3AA003DAAF8;
+			productRefGroup = E7665E2F19E5A3AB003DAAF8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E7665E2D19E5A3AB003DAAF8 /* Peekee */,
+				E7665E4219E5A3AB003DAAF8 /* PeekeeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E7665E2C19E5A3AB003DAAF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */,
+				E74C1DF61A56F5F7002F86CC /* (null) in Resources */,
+				E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */,
+				E7BA49991A2F431B00DB1C96 /* Proxima-Nova-Light.otf in Resources */,
+				E7BA499A1A2F431B00DB1C96 /* Proxima-Nova-Bold.otf in Resources */,
+				E7B4EB621A4EA25100B69A2A /* faster.wav in Resources */,
+				E7B4EB641A4EA25100B69A2A /* stronger.wav in Resources */,
+				E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */,
+				E7DF609F1A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist in Resources */,
+				E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */,
+				E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */,
+				E7665E3B19E5A3AB003DAAF8 /* Images.xcassets in Resources */,
+				E7DF60A01A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
+				E74C1DF71A56F5F7002F86CC /* (null) in Resources */,
+				E7B4EB631A4EA25100B69A2A /* harder.wav in Resources */,
+				E7B4EB611A4EA25100B69A2A /* better.wav in Resources */,
+				E7DF60A61A10C73F000CCD52 /* DiallingCodes.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7665E4119E5A3AB003DAAF8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E7EBA42919EC06BA006E8587 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
+		};
+		F33917FF311AA444C2306A01 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FB548DFAD071A44F88B97E59 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Peekee/Pods-Peekee-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E7665E2A19E5A3AB003DAAF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7B1903C19F5695F0022617F /* MainViewController.swift in Sources */,
+				E758CF2A1A1CF4C500318F45 /* TransitionManager.swift in Sources */,
+				E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */,
+				E7BA499E1A2F54A800DB1C96 /* inboxTableViewCell.swift in Sources */,
+				E70A55BA1A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift in Sources */,
+				E7DF609D1A10C5EA000CCD52 /* NBPhoneNumber.m in Sources */,
+				E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */,
+				E7DF609C1A10C5EA000CCD52 /* NBPhoneMetaData.m in Sources */,
+				E7C9168419F8F7F60094710D /* DoubleInboxCollectionViewCell.swift in Sources */,
+				E7DF60861A10B6E8000CCD52 /* PhoneNumberViewController.swift in Sources */,
+				E7DF60A21A10C5EA000CCD52 /* NSArray+NBAdditions.m in Sources */,
+				E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */,
+				E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */,
+				E76F9E5C1A3A11A700D02A5D /* TransitionPikiManager.swift in Sources */,
+				E796CB281A5D27F100034F8B /* AcountsAdviceViewController.swift in Sources */,
+				E720345F1A6A759C0058175B /* EditUsernameViewController.swift in Sources */,
+				E727F7021A5B0D3500BB8B0B /* WalkthroughViewController.swift in Sources */,
+				E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */,
+				E7DF609B1A10C5EA000CCD52 /* NBNumberFormat.m in Sources */,
+				E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */,
+				E7B255911A3F5F2A00B540E6 /* TransitionFriendManager.swift in Sources */,
+				E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */,
+				E7DF609E1A10C5EA000CCD52 /* NBPhoneNumberDesc.m in Sources */,
+				E7665E5D19E6E6E9003DAAF8 /* RBResizer.swift in Sources */,
+				E7C3B32D1A24858D0059F78D /* ChooseReceiversViewController.swift in Sources */,
+				E7834C7F1A1A41CF00CDB32D /* MBProgressHUD.m in Sources */,
+				E7EBA42D19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift in Sources */,
+				E7AE5D791A41CA1800A77A91 /* FirstPageViewController.swift in Sources */,
+				E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */,
+				E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */,
+				E7C9168019F7D71D0094710D /* InboxCollectionViewCell.swift in Sources */,
+				E7DF609A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m in Sources */,
+				E7DF60A11A10C5EA000CCD52 /* NBPhoneNumberUtil.m in Sources */,
+				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
+				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,
+				E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7665E3F19E5A3AB003DAAF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7665E4A19E5A3AB003DAAF8 /* PeekeeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E7665E4519E5A3AB003DAAF8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7665E2D19E5A3AB003DAAF8 /* Peekee */;
+			targetProxy = E7665E4419E5A3AB003DAAF8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		E71AEFE01A6AE1EF00377E86 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E71AEFDF1A6AE1EF00377E86 /* en */,
+				E71AEFE21A6AE22F00377E86 /* fr */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		E7665E3719E5A3AB003DAAF8 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7665E3819E5A3AB003DAAF8 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7665E3D19E5A3AB003DAAF8 /* Base */,
+				E71AEFE31A6AE90000377E86 /* fr */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E74C1DF81A56F609002F86CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pikichat";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pikichat";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "6b8d620b-d10f-4705-b2c1-970fe4162c4b";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Debug;
+		};
+		E74C1DF91A56F609002F86CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = Piki/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E74C1DFA1A56F609002F86CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PikiTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = PeekeeTests;
+				PROVISIONING_PROFILE = "";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Peekee.app/Peekee";
+			};
+			name = Debug;
+		};
+		E7665E4C19E5A3AB003DAAF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pikichat";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pikichat";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "6b8d620b-d10f-4705-b2c1-970fe4162c4b";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E7665E4F19E5A3AB003DAAF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = Piki/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+				);
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E7665E5219E5A3AB003DAAF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PikiTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = PeekeeTests;
+				PROVISIONING_PROFILE = "";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Peekee.app/Peekee";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E7665E2919E5A3AA003DAAF8 /* Build configuration list for PBXProject "Peekee" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7665E4C19E5A3AB003DAAF8 /* Release */,
+				E74C1DF81A56F609002F86CC /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "Peekee" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7665E4F19E5A3AB003DAAF8 /* Release */,
+				E74C1DF91A56F609002F86CC /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7665E5019E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "PeekeeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7665E5219E5A3AB003DAAF8 /* Release */,
+				E74C1DFA1A56F609002F86CC /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E7665E2619E5A3AA003DAAF8 /* Project object */;
+}

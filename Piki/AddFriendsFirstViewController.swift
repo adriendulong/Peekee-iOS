@@ -1,0 +1,738 @@
+//
+//  AddFriendsFirstViewController.swift
+//  Peekee
+//
+//  Created by Adrien Dulong on 04/02/2015.
+//  Copyright (c) 2015 PikiChat. All rights reserved.
+//
+
+import Foundation
+import MessageUI
+import CoreTelephony
+
+
+class ContactCell: UITableViewCell {
+    
+    @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var fullName: UILabel!
+    @IBOutlet weak var checkImageView: UIImageView!
+    
+    var contact:APContact?
+    var userInfos:[String : AnyObject]?
+    
+    func loadCellwithContact(contact: APContact, isSelected : Bool){
+        
+        self.checkImageView.image = UIImage(named: "select_check_empty")
+        self.contact = contact
+        self.userInfos = nil
+        
+        username.text = self.contact!.compositeName
+        fullName.hidden = true
+        
+        if isSelected{
+            self.checkImageView.image = UIImage(named: "select_check_full")
+        }
+        else{
+            self.checkImageView.image = UIImage(named: "select_check_empty")
+        }
+    }
+    
+    func loadCellWithUserInfos(userInfos: [String : AnyObject], isSelected: Bool){
+        
+        self.checkImageView.image = UIImage(named: "select_check_empty")
+        self.userInfos = userInfos
+        self.contact = nil
+
+        var contact:APContact? = userInfos["contact"] as? APContact
+        if contact != nil{
+            fullName.text = contact!.compositeName
+        }
+        
+        println("Userinfos : \(userInfos)")
+        
+        var userInfosDic:[String : String] = userInfos["userInfos"] as [String : String]
+        var usernameString = userInfosDic["username"]
+        username.text = "@\(usernameString!)"
+        
+        fullName.hidden = false
+        
+        
+        if isSelected{
+            self.checkImageView.image = UIImage(named: "select_check_full")
+        }
+        else{
+            self.checkImageView.image = UIImage(named: "select_check_empty")
+        }
+    }
+
+    
+    func select(){
+        self.checkImageView.image = UIImage(named: "select_check_full")
+        UIView.animateWithDuration(0.1,
+            delay: 0,
+            options:nil,
+            animations: { () -> Void in
+                self.checkImageView.transform = CGAffineTransformMakeScale(1.6, 1.6)
+            }) { (finished) -> Void in
+                
+                UIView.animateWithDuration(0.1, animations: { () -> Void in
+                    self.checkImageView.transform = CGAffineTransformIdentity
+                })
+                
+        }
+    }
+    
+    func deselect(){
+        self.checkImageView.image = UIImage(named: "select_check_empty")
+    }
+    
+}
+
+
+class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMessageComposeViewControllerDelegate {
+    
+    @IBOutlet weak var sendIcon: UIImageView!
+    @IBOutlet weak var inviteAllActionLabel: UILabel!
+    @IBOutlet weak var mainActionView: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    let addressBook = APAddressBook()
+    var contactsPhone:Array<APContact> = []
+    var lookingForFriendsOnPeekee:Bool = false
+    var regionLabel:String?
+    var pikiUsersFromPhoneContacts:Array<[String : String]> = Array<[String : String]>()
+    var contactsWithUserInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
+    
+    var usersSelected:Array<String> = Array<String>()
+    var contactsSelected:Array<APContact> = Array<APContact>()
+    var secondButtonLabel:String!
+    var mainOriginLabel:String!
+    var mandatoryStep:Bool = true
+    
+    var secondButton:UIButton!
+    
+    override func viewDidLoad() {
+        
+        titleLabel.text = NSLocalizedString("Add your friends! 👫", comment :"Add your friends! 👫")
+        subtitleLabel.text = NSLocalizedString("Choose at least your 5 best friends. We'll keep you posted when they join the app!", comment :"Choose at least your 5 best friends. We'll keep you posted when they join the app!")
+        
+        
+        // Get region label
+        let networkInfo = CTTelephonyNetworkInfo()
+        let carrier = networkInfo.subscriberCellularProvider
+        if carrier != nil {
+            regionLabel = carrier.isoCountryCode
+        }
+        else{
+            regionLabel = "us"
+        }
+        
+        if regionLabel == nil {
+            regionLabel = "us"
+        }
+        
+        if mandatoryStep{
+            secondButtonLabel = NSLocalizedString("ALL", comment :"ALL")
+            mainOriginLabel = NSLocalizedString("INVITE ALL", comment :"INVITE ALL")
+        }
+        else{
+            secondButtonLabel = NSLocalizedString("SKIP", comment :"SKIP")
+            mainOriginLabel = NSLocalizedString("SKIP", comment :"SKIP")
+        }
+        
+        self.inviteAllActionLabel.text = self.mainOriginLabel
+        
+        secondButton = UIButton(frame: CGRect(x: 0, y: self.view.frame.height - 55, width: self.view.frame.width/3, height: 55))
+        secondButton!.backgroundColor = UIColor(red: 233/255, green: 54/255, blue: 115/255, alpha: 1.0)
+        secondButton.setTitle(secondButtonLabel, forState: UIControlState.Normal)
+        secondButton.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+        secondButton.addTarget(self, action: Selector("secondInvit"), forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(secondButton)
+        secondButton.transform = CGAffineTransformMakeTranslation(-secondButton.frame.width, 0)
+        
+        
+        var gestureMainAction:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("mainInvit"))
+        self.mainActionView.addGestureRecognizer(gestureMainAction)
+        
+        //Get contacts
+        getContacts()
+        
+    }
+
+    // MARK: Table View Datasource
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var viewHeader:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 32))
+        viewHeader.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+        
+        var labelHeader:UILabel = UILabel(frame: CGRect(x: 10, y: 0, width: viewHeader.frame.size.width, height: 32))
+        labelHeader.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
+        labelHeader.textColor = UIColor.whiteColor()
+        viewHeader.addSubview(labelHeader)
+        
+        if section == 0{
+            
+            if self.lookingForFriendsOnPeekee{
+                viewHeader.backgroundColor = Utils().secondColor
+                labelHeader.textAlignment = NSTextAlignment.Center
+                viewHeader.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64)
+                
+                labelHeader.text = NSLocalizedString("LOOKING FOR FRIENDS", comment : "LOOKING FOR FRIENDS")
+                
+                var loadIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+                loadIndicator.tintColor = UIColor.whiteColor()
+                loadIndicator.center = CGPoint(x: viewHeader.frame.width/2, y: viewHeader.frame.height/2 + viewHeader.frame.height/4 - 3)
+                loadIndicator.hidesWhenStopped = true
+                loadIndicator.startAnimating()
+                viewHeader.addSubview(loadIndicator)
+            }
+            else{
+                viewHeader.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                labelHeader.textAlignment = NSTextAlignment.Left
+                labelHeader.text = NSLocalizedString("ON THE APP", comment : "ON THE APP")
+            }
+            
+        }
+        else{
+            labelHeader.text = NSLocalizedString("ON YOUR PHONE CONTACTS", comment :"ON YOUR PHONE CONTACTS")
+        }
+        
+        return viewHeader
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0{
+            if self.lookingForFriendsOnPeekee{
+                return 64
+            }
+            else{
+                return 32
+            }
+        }
+        else{
+            return 32
+        }
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0{
+            return contactsWithUserInfos.count
+        }
+        else{
+            return contactsPhone.count
+        }
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell:ContactCell = tableView.dequeueReusableCellWithIdentifier("Cell") as ContactCell
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        if indexPath.section == 0{
+            var contactInfos = contactsWithUserInfos[indexPath.row]
+            var userInfos:[String : String] = contactInfos["userInfos"] as [String : String]
+            
+            cell.loadCellWithUserInfos(contactsWithUserInfos[indexPath.row], isSelected : isUserSelected(userInfos))
+        }
+        else if indexPath.section == 1{
+            cell.loadCellwithContact(contactsPhone[indexPath.row], isSelected : isContactSelected(contactsPhone[indexPath.row]))
+        }
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.section == 0{
+            
+            var contactInfos = contactsWithUserInfos[indexPath.row]
+            var userInfos:[String : String] = contactInfos["userInfos"] as [String : String]
+            var objectIdUser:String = userInfos["userObjectId"]!
+            
+            if !contains(usersSelected, objectIdUser){
+                println("Select")
+                usersSelected.append(objectIdUser)
+                var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                cell.select()
+                self.tableView.reloadData()
+                
+            }
+            else{
+                println("Deselect")
+                
+                
+                var index:Int?
+                var position : Int = 0
+                for userSelected in usersSelected{
+                    if userSelected == objectIdUser{
+                        index = position
+                    }
+                    position++
+                }
+                
+                if index != nil{
+                    usersSelected.removeAtIndex(index!)
+                    var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                    cell.deselect()
+                    self.tableView.reloadData()
+                }
+                
+                
+            }
+            
+        }
+        else{
+            var contact:APContact = contactsPhone[indexPath.row]
+            
+            if !contains(contactsSelected, contact){
+                println("Select")
+                contactsSelected.append(contact)
+                var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                cell.select()
+                self.tableView.reloadData()
+            }
+            else{
+                println("Deselect")
+                
+                
+                var index:Int?
+                var position : Int = 0
+                for contactSelected in contactsSelected{
+                    if contactSelected == contact{
+                        index = position
+                    }
+                    position++
+                }
+                
+                if index != nil{
+                    contactsSelected.removeAtIndex(index!)
+                    var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                    cell.deselect()
+                    self.tableView.reloadData()
+                }
+                
+            }
+        }
+        
+        if (contactsSelected.count > 0) || (usersSelected.count > 0){
+            
+            //self.inviteAllActionLabel.hidden = true
+            self.inviteAllActionLabel.text = ""
+            UIView.animateWithDuration(0.5,
+                animations: { () -> Void in
+                    self.secondButton.transform = CGAffineTransformIdentity
+                    
+                    self.inviteAllActionLabel.frame = CGRect(x: self.secondButton.frame.width, y: 0, width: self.view.frame.width - self.view.frame.width/3, height: 55)
+            }, completion: { (finished) -> Void in
+                self.inviteAllActionLabel.text = "\(self.usersSelected.count + self.contactsSelected.count)/5 INVITED"
+            })
+            
+        }
+        else{
+            self.inviteAllActionLabel.text = ""
+            UIView.animateWithDuration(0.5,
+                animations: { () -> Void in
+                    self.secondButton.transform = CGAffineTransformMakeTranslation(-self.secondButton.frame.width, 0)
+                    self.mainActionView.frame = CGRect(x: 0, y: self.view.frame.height - 55, width: self.view.frame.width, height: 55)
+                    self.inviteAllActionLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 55)
+                }, completion: { (finished) -> Void in
+                    self.inviteAllActionLabel.text = self.mainOriginLabel
+            })
+            
+        }
+    }
+    
+    // MARK: User Selection
+    
+    func isUserSelected(userInfos : [String : String]) -> Bool{
+        var objectIdUser:String = userInfos["userObjectId"]!
+        
+        if contains(usersSelected, objectIdUser){
+            return true
+        }
+        
+        return false
+    }
+    
+    // MARK : Contact Selection
+    
+    func isContactSelected(contact : APContact) -> Bool{
+        
+        if contains(contactsSelected, contact){
+            return true
+        }
+        
+        return false
+        
+    }
+    
+    
+    
+    // MARK: Status Bar
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
+    
+    // MARK: Contact Access
+    
+    func getContacts(){
+        //Contacts
+        self.addressBook.fieldsMask = APContactField.All
+        self.addressBook.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true),
+            NSSortDescriptor(key: "lastName", ascending: true)]
+        self.addressBook.filterBlock = {(contact: APContact!) -> Bool in
+            return contact.phones.count > 0
+        }
+        self.addressBook.loadContacts(
+            { (contacts: [AnyObject]!, error: NSError!) in
+                //self.activity.stopAnimating()
+                if (contacts != nil) {
+
+                    self.contactsPhone = contacts as Array<APContact>
+                    self.lookingForFriendsOnPeekee = true
+                    self.tableView.reloadData()
+                    
+                    self.checkContactsOnPiki()
+                }
+                else if (error != nil) {
+                    let alert = UIAlertView(title: "Error", message: error.localizedDescription,
+                        delegate: nil, cancelButtonTitle: "OK")
+                    alert.show()
+                }
+        })
+    }
+    
+    
+    
+    // MARK : Friends on Peekee
+    
+    func checkContactsOnPiki(){
+        
+        var phoneNumbers:Array<String> = []
+        
+        let networkInfo = CTTelephonyNetworkInfo()
+        let carrier = networkInfo.subscriberCellularProvider
+        
+        
+        
+        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+        
+        
+        
+        for contact in self.contactsPhone{
+            
+            for tel in contact.phones{
+                
+                if (tel as? String) != nil {
+                    
+                    if countElements(tel as String) > 6{
+                        var errorPointer:NSError?
+                        var number:NBPhoneNumber? = phoneUtil.parse(tel as String, defaultRegion:regionLabel!, error:&errorPointer)
+                        if errorPointer == nil {
+                            if phoneUtil.isValidNumber(number!){
+                                
+                                var errorPhone:NSError?
+                                let phoneNumber:String? = phoneUtil.format(number, numberFormat: NBEPhoneNumberFormatE164, error: &errorPhone)
+                                
+                                if errorPhone == nil {
+                                    phoneNumbers.append(phoneNumber!)
+                                }
+                                
+                                
+                            }
+                        }
+                    }
+                }
+                
+                
+                
+                
+                
+            }
+            
+        }
+        
+        PFCloud.callFunctionInBackground("checkContactOnPiki", withParameters: ["phoneNumbers" : phoneNumbers]) { (pikiUsers, error) -> Void in
+            if error != nil {
+                println("Error getting piki Users : \(error.localizedDescription)")
+                self.lookingForFriendsOnPeekee = false
+                self.tableView.reloadData()
+            }
+            else{
+                println("Piki users : \(pikiUsers)")
+                self.pikiUsersFromPhoneContacts = pikiUsers as Array<[String : String]>
+                self.getAllUsersFromContacts()
+            }
+        }
+        
+    }
+    
+    
+    func getAllUsersFromContacts(){
+        
+        dispatch_async(dispatch_get_global_queue(0, 0), {
+            var tempContactsWithUserInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
+            
+            
+            var friendsUser:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
+            
+            
+            if friendsUser == nil{
+                friendsUser = []
+            }
+            
+            for userInfos in self.pikiUsersFromPhoneContacts{
+                
+                if  !contains(friendsUser!, userInfos["userObjectId"]!){
+                    
+                    for contact in self.contactsPhone{
+                        
+                        for phone in contact.phones{
+                            
+                            let formatedPhone:String? = self.getFormattedPhoneNumber(phone as String)
+                            if  formatedPhone != nil {
+                                if userInfos["phoneNumber"] == formatedPhone{
+                                    tempContactsWithUserInfos.append(["userInfos" : userInfos, "contact" : contact])
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            
+            
+            
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+                self.contactsWithUserInfos = tempContactsWithUserInfos
+                self.lookingForFriendsOnPeekee = false
+                self.tableView.reloadData()
+            })
+        })
+        
+    }
+    
+    func getFormattedPhoneNumber(numberString : String) -> String? {
+        var finalPhoneNumber:String?
+        
+        
+        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+        var errorPointer:NSError?
+        
+        if countElements(numberString) > 4{
+            var number:NBPhoneNumber? = phoneUtil.parse(numberString, defaultRegion:regionLabel!, error:&errorPointer)
+            if errorPointer == nil {
+                if phoneUtil.isValidNumber(number){
+                    let phoneNumber:String = phoneUtil.format(number, numberFormat: NBEPhoneNumberFormatE164, error: nil)
+                    return phoneNumber
+                }
+            }
+        }
+        
+        return finalPhoneNumber
+    }
+    
+    
+    // MARK: Main Function Invit
+    
+    func mainInvit(){
+        
+        //Users seelcted ?
+        if(usersSelected.count > 0) || (contactsSelected.count > 0){
+            
+            var totalUserSeelcted:Int = usersSelected.count + contactsSelected.count
+            
+            if totalUserSeelcted > 4{
+                //Invit
+                
+                if usersSelected.count > 0{
+                    // Add as friends
+                    
+                    var tasks = NSMutableArray()
+                    
+                    for user in usersSelected{
+                        
+                        tasks.addObject(Utils().addFriend(user))
+                        
+                    }
+                    
+                    
+                    BFTask(forCompletionOfAllTasks:tasks).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                        
+                        println("finished adding friends")
+                        
+                        return nil
+                    })
+                }
+                
+                if contactsSelected.count > 0{
+                    self.sendSMSToContacts(contactsSelected)
+                }
+                
+                
+            }
+            else{
+                //Still
+                var stillToGo:Int = 5 - totalUserSeelcted
+                
+                let alert = UIAlertView(title: "Friends", message: "Still \(stillToGo) to go! You need them to enjoy Peekee!",
+                    delegate: nil, cancelButtonTitle: "Ok")
+                alert.show()
+                
+            }
+            
+        }
+        else{
+            if mandatoryStep{
+                //Invite All !
+                //Ask Before
+                var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                    self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+                
+                
+            }
+            else{
+                // Leave
+            }
+        }
+        
+    }
+    
+    func secondInvit(){
+        
+        if mandatoryStep{
+            //Invite All !
+        }
+        else{
+            // Leave
+        }
+        
+    }
+    
+    
+    // MARK: SMS
+    
+    func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+        switch (result.value) {
+        case MessageComposeResultCancelled.value:
+            //Send from server
+            println("Canceled")
+            self.sendSmsFromSeverTo(getArrayOfNumbersForContacts(contactsSelected))
+            
+        case MessageComposeResultFailed.value:
+            //Send from Server
+            self.sendSmsFromSeverTo(getArrayOfNumbersForContacts(contactsSelected))
+            
+        case MessageComposeResultSent.value:
+            println("Sent")
+            
+        default:
+            break
+        }
+        
+        controller.dismissViewControllerAnimated(true, completion: nil)
+        
+        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        
+        
+        
+    }
+    
+    func sendSMSToContacts(contacts : Array<APContact>){
+        
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+        var phonesArray : Array<String> = Array<String>()
+        
+        for contact in contacts{
+            
+            for phone in contact.phones{
+                var phoneNumber:String = "\(phone)"
+                phonesArray.append(phoneNumber)
+            }
+            
+        }
+        
+        
+        var messageController:MFMessageComposeViewController = MFMessageComposeViewController()
+        messageController.messageComposeDelegate = self
+        messageController.recipients = phonesArray
+        messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
+        
+        self.presentViewController(messageController, animated: true) { () -> Void in
+            
+        }
+        
+        
+    }
+    
+    
+    // MARK : SEND FROM SERVER
+    
+    func getArrayOfAllNumbers() -> Array<String>{
+        
+        var allNumberFormatted:Array<String> = Array<String>()
+        
+        for contact in contactsPhone{
+            
+            for phone in contact.phones{
+                
+                if let phoneNumber = self.getFormattedPhoneNumber(phone as String){
+                    allNumberFormatted.append(phoneNumber)
+                }
+                
+                
+                
+            }
+            
+        }
+        
+        return allNumberFormatted
+        
+    }
+    
+    
+    func getArrayOfNumbersForContacts(contacts : Array<APContact>) -> Array<String>{
+        
+        var allNumberFormatted:Array<String> = Array<String>()
+        
+        for contact in contacts{
+            
+            for phone in contact.phones{
+                
+                if let phoneNumber = self.getFormattedPhoneNumber(phone as String){
+                    allNumberFormatted.append(phoneNumber)
+                }
+                
+                
+                
+            }
+            
+        }
+        
+        return allNumberFormatted
+    
+    
+    }
+    
+    
+    func sendSmsFromSeverTo(contactsNumber : Array<String>){
+        
+        println("Send To : \(contactsNumber)")
+    }
+    
+}

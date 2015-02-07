@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "PikiV3": {
+            "applicationId": "BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", 
+            "masterKey": "AKQhW3cNH3y4nwaKovCNhAcUeW6Z4rasX3OdiIkR"
+        }, 
+        "_default": {
+            "link": "PikiV3"
+        }
+    }
+}
