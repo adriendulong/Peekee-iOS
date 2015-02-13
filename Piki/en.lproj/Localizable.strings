@@ -94,7 +94,7 @@
 "%@ on Peekee" = "%@ on Peekee";
 "%d+ replies on the app" = "%d+ replies on the app";
 "Share" = "Share";
-"AlertNotEnoughReact" = "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
 
 // MARK: New Peekee
 "Search" = "Search";
@@ -127,19 +127,30 @@
 // MARK: Commun
 "Cancel" = "Cancel";
 "Error" = "Error";
+"Yes" = "Yes";
+"No" = "No";
 "Sorry an error occured. Please try again later" = "Sorry an error occured. Please try again later";
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "Add your friends! 👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Choose at least your 5 best friends. We'll keep you posted when they join the app!";
+"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Choose at least your %d best friends. We'll keep you posted when they join the app!";
 "ON THE APP" = "ON THE APP";
 "ON YOUR PHONE CONTACTS" = "ON YOUR PHONE CONTACTS";
 "ALL" = "ALL";
 "SKIP" = "SKIP";
 "INVITE ALL" = "INVITE ALL";
-"INVITE %@/%@" = "INVITE %@/%@";
+"INVITE %d/%d" = "ADD %d/%d";
 "Last but not least" = "Last but not least";
 "Check if you have friends here?!😁" = "Check if you have friends here?!😁";
+"Confirmation" = "Confirmation";
+"Are you sure you want to invite all your contacts?" = "Are you sure you want to invite all your contacts?";
+"Friends" = "Friends";
+"Still %d to go! You need them to enjoy Peekee!" = "Still %d to go! You need them to enjoy Peekee!";
+
+// MARK: V1.01
+"From" = "From";
+
+
 
 
 

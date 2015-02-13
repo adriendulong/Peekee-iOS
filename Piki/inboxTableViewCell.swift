@@ -27,6 +27,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
     var deleteImageView:UIImageView?
     var backTempImagePiki:UIView?
     var videoIcon:UIImageView!
+    var fromLabel:UILabel!
     
     
     var deleteView:UIView?
@@ -77,17 +78,27 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         imagePikiPreview = UIImageView(frame: CGRect(x: 0, y: 0, width: (UIScreen.mainScreen().bounds.width - 2)/3, height: (UIScreen.mainScreen().bounds.width - 2)/3))
         self.mainContent!.addSubview(imagePikiPreview!)
         
-        usernameLabel = UILabel(frame: CGRect(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 15, y: 30, width: UIScreen.mainScreen().bounds.width/3 * 2 - 30, height: 30))
-        usernameLabel!.center = CGPoint(x: UIScreen.mainScreen().bounds.width/3 * 2, y: UIScreen.mainScreen().bounds.width/9)
-        usernameLabel?.font = UIFont(name: Utils().customFontSemiBold, size: 22)
+        
+        fromLabel = UILabel(frame: CGRect(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 20, y: UIScreen.mainScreen().bounds.width/9 -  4, width: 40, height: 14))
+        //fromLabel!.center = CGPoint(x: UIScreen.mainScreen().bounds.width/3 * 2, y: UIScreen.mainScreen().bounds.width/9)
+        fromLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 16)
+        fromLabel!.textColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+        fromLabel!.text = "From"
+        //self.mainContent!.addSubview(fromLabel!)
+        
+        usernameLabel = UILabel(frame: CGRect(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 20, y: UIScreen.mainScreen().bounds.width/9 - 15, width: UIScreen.mainScreen().bounds.width/3 * 2 - 40, height: 30))
+        //usernameLabel!.center = CGPoint(x: UIScreen.mainScreen().bounds.width/3 * 2, y: UIScreen.mainScreen().bounds.width/9)
+        usernameLabel?.font = UIFont(name: Utils().customFontSemiBold, size: 26)
         usernameLabel!.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-        usernameLabel!.text = "@adrien >"
+        usernameLabel!.text = ""
+        //usernameLabel!.backgroundColor = UIColor.orangeColor()
+        usernameLabel!.adjustsFontSizeToFitWidth = true
         self.mainContent!.addSubview(usernameLabel!)
         
         answersIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 18, height: 24))
         answersIcon!.image = UIImage(named: "icon_answers")
         answersIcon!.center = CGPoint(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 24, y: UIScreen.mainScreen().bounds.width/9 * 2)
-        self.mainContent!.addSubview(answersIcon!)
+        //self.mainContent!.addSubview(answersIcon!)
         
         var separator:UIView = UIView(frame: CGRect(x: 0, y: UIScreen.mainScreen().bounds.width/3 - 2, width: UIScreen.mainScreen().bounds.width, height: 2))
         separator.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
@@ -95,7 +106,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         
         
         firstPreviewReact = PFImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        firstPreviewReact!.center = CGPoint(x: answersIcon!.center.x + 36, y: answersIcon!.center.y)
+        firstPreviewReact!.center = CGPoint(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 30, y: answersIcon!.center.y)
         firstPreviewReact!.layer.cornerRadius = 2
         firstPreviewReact!.clipsToBounds = true
         firstPreviewReact!.hidden = true

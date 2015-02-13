@@ -125,6 +125,7 @@ class AccountsTableViewCell : UITableViewCell{
 
 class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AccountsCellProtocol {
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var topInfosView: UIView!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var topConstraintsInfoView: NSLayoutConstraint!
@@ -138,6 +139,9 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     var regionLabel:String?
     
     override func viewDidLoad() {
+        
+        titleLabel.text = NSLocalizedString("Surprise", comment :"Surprise")
+        
         
         //Adapt position depending device
         if Utils().isIphone4(){

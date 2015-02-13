@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ppa-iO-VnK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14D72i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="dWB-kv-xM6">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
@@ -16,9 +16,9 @@
             <string>ProximaNova-Semibold</string>
             <string>ProximaNova-Semibold</string>
             <string>ProximaNova-Semibold</string>
+            <string>ProximaNova-Semibold</string>
         </mutableArray>
         <mutableArray key="Proxima-Nova-Light.otf">
-            <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
             <string>ProximaNova-Light</string>
@@ -385,6 +385,7 @@
                         <segue destination="tX9-nA-DBF" kind="show" identifier="searchUsers" id="in1-04-cqt"/>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="detailPiki" id="U8Z-lo-VRH"/>
                         <segue destination="k1d-xI-rZZ" kind="presentation" identifier="showRecommended" id="f2k-6n-HYc"/>
+                        <segue destination="ppa-iO-VnK" kind="presentation" identifier="showFriends" id="H4F-Jr-g8d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nav-Gh-UxY" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -894,6 +895,7 @@
                         <outlet property="nbRecipientsLabel" destination="Ze3-af-0M5" id="dvr-XK-vJe"/>
                         <outlet property="pikiImageView" destination="7F2-Tx-vgw" id="knd-VB-QF4"/>
                         <outlet property="tableView" destination="d2a-03-R6F" id="p9G-iy-tRG"/>
+                        <outlet property="topBarView" destination="OJH-dE-pur" id="kaY-lg-KXt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N02-AP-54Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1262,7 +1264,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2XH-Pr-FX6">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
-                                <color key="backgroundColor" red="0.24313725490196078" green="0.31372549019607843" blue="0.70588235294117641" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.18823529410000001" green="0.2470588235" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="Qdu-4Z-kQm"/>
                                 </constraints>
@@ -1389,6 +1391,7 @@
                         <outlet property="letsGoLabel" destination="AcR-j1-HQb" id="goR-df-h3S"/>
                         <outlet property="subtitleLabel" destination="8NY-jt-ePx" id="c90-so-hsg"/>
                         <outlet property="tableView" destination="6sV-bh-62i" id="p34-Ld-MCh"/>
+                        <outlet property="titleLabel" destination="vFu-Fk-6et" id="s0W-d4-qNi"/>
                         <outlet property="topConstraintsInfoView" destination="5Jf-t4-hbd" id="JYb-R5-nrf"/>
                         <outlet property="topInfosView" destination="4pF-0O-txa" id="zAU-me-RSI"/>
                     </connections>
@@ -1411,7 +1414,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ppp-Tw-RyJ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
-                                <color key="backgroundColor" red="0.24313725489999999" green="0.31372549020000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.18823529410000001" green="0.2470588235" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="dpb-ge-6zm"/>
                                 </constraints>
@@ -1485,13 +1488,13 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Adrien Dulong" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WOm-17-hG2">
-                                                    <rect key="frame" x="43" y="41" width="260" height="14"/>
+                                                    <rect key="frame" x="33" y="41" width="260" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="260" id="4OA-u6-Rfg"/>
                                                         <constraint firstAttribute="height" constant="14" id="Wj4-qy-d5C"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ProximaNova-Light" family="Proxima Nova" pointSize="14"/>
-                                                    <color key="textColor" red="0.1019607843" green="0.1058823529" blue="0.1215686275" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="14"/>
+                                                    <color key="textColor" red="0.81960784313725488" green="0.83137254901960778" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="select_check_full" translatesAutoresizingMaskIntoConstraints="NO" id="p3M-iJ-NNk">
@@ -1507,7 +1510,7 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="WOm-17-hG2" firstAttribute="leading" secondItem="Lhi-e0-zFH" secondAttribute="leadingMargin" constant="35" id="6TY-aY-wij"/>
+                                                <constraint firstItem="WOm-17-hG2" firstAttribute="leading" secondItem="Lhi-e0-zFH" secondAttribute="leadingMargin" constant="25" id="6TY-aY-wij"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="p3M-iJ-NNk" secondAttribute="bottom" constant="-8" id="J1Y-Qz-dOy"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="p3M-iJ-NNk" secondAttribute="trailing" constant="22" id="KcI-dc-TZU"/>
                                                 <constraint firstItem="WOm-17-hG2" firstAttribute="top" secondItem="Lhi-e0-zFH" secondAttribute="topMargin" constant="33" id="L9x-cA-OGQ"/>
@@ -1755,6 +1758,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="in1-04-cqt"/>
-        <segue reference="Am7-AN-QR4"/>
+        <segue reference="f2k-6n-HYc"/>
     </inferredMetricsTieBreakers>
 </document>

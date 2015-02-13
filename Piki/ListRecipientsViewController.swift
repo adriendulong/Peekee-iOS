@@ -95,6 +95,7 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
     @IBOutlet weak var pikiImageView: UIImageView!
     @IBOutlet weak var nbRecipientsLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var topBarView: UIView!
     
     
     var mainPiki:PFObject?
@@ -102,6 +103,12 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Shadow Top Bar
+        var stretchShadowImage:UIImage = UIImage(named: "shadow_top")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        let shadowTopBar:UIImageView = UIImageView(frame: CGRect(x: 0, y: topBarView.frame.origin.y + topBarView.frame.height, width: self.view.frame.size.width, height: 4))
+        shadowTopBar.image = stretchShadowImage
+        self.view.addSubview(shadowTopBar)
         
         //Back Status bar
         let backStatusBar:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 20))

@@ -24,6 +24,7 @@ class ContactPhoneTableViewCell : UITableViewCell {
     var userInfos:[String : String]?
     var loadIndicator:UIActivityIndicatorView?
     var actionButton:UIButton?
+    var moreInfosLabel:UILabel?
     
     
     func loadContact(contact : APContact, searchController : SearchFriendsViewController){
@@ -57,6 +58,11 @@ class ContactPhoneTableViewCell : UITableViewCell {
         loadIndicator!.hidesWhenStopped = true
         self.addSubview(loadIndicator!)
         
+        if moreInfosLabel != nil{
+            moreInfosLabel!.hidden = true
+            
+        }
+        
         nameContactLabel.text = contact.compositeName
         
         /*if let phones = contact.phones {
@@ -76,6 +82,71 @@ class ContactPhoneTableViewCell : UITableViewCell {
             actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
         }
         
+    }
+    
+    func loadUserContact(contactUserInfo : [String : AnyObject], searchController : SearchFriendsViewController){
+        self.searchController = searchController
+        self.contact = contactUserInfo["contact"] as? APContact
+        
+        if actionButton == nil {
+            actionButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 50, y: 0, width: 45, height: 60))
+            actionButton!.addTarget(self, action: Selector("inviteContact:"), forControlEvents: UIControlEvents.TouchUpInside)
+            contentView.addSubview(actionButton!)
+        }
+        
+        
+        actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
+        
+        self.backgroundColor = UIColor.whiteColor()
+        
+        if nameContactLabel == nil {
+            nameContactLabel = UILabel(frame: CGRect(x: 15, y: 0, width: 300, height: 60))
+            nameContactLabel.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
+            nameContactLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            self.addSubview(nameContactLabel)
+            
+        }
+        
+        if moreInfosLabel == nil{
+            moreInfosLabel = UILabel(frame: CGRect(x: 15, y: 40, width: 300, height: 20))
+            moreInfosLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 14.0)
+            moreInfosLabel!.textColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+            self.addSubview(moreInfosLabel!)
+            
+        }
+        
+        moreInfosLabel!.hidden = false
+        
+        
+        loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        loadIndicator!.tintColor = Utils().secondColor
+        loadIndicator!.center = actionButton!.center
+        loadIndicator!.hidesWhenStopped = true
+        self.addSubview(loadIndicator!)
+        
+        
+        nameContactLabel.text = contact!.compositeName
+        
+        
+        userInfos =  contactUserInfo["userInfos"] as? [String : String]
+        /*if let phones = contact.phones {
+        let array = phones as NSArray
+        usernameLabel.text = array.componentsJoinedByString(" ")
+        }*/
+        
+        if userInfos != nil {
+            var username:String? = userInfos!["username"]
+            moreInfosLabel!.text = "@\(username!)"
+            
+            actionButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
+            
+            if self.searchController!.isUserAlreadyAdded(userInfos!["userObjectId"]! as String){
+                actionButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
+            }
+        }
+        else{
+            actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
+        }
     }
     
     /*@IBAction func inviteContact(sender: AnyObject) {
@@ -168,7 +239,7 @@ class PikiUserTableViewCell : UITableViewCell {
         }
         
         addUserButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
-        
+        addUserButton!.hidden = false
         
         self.user = user
         
@@ -191,6 +262,53 @@ class PikiUserTableViewCell : UITableViewCell {
         
         
         
+    }
+    
+    
+    func loadItemSearch(contactInfos : [String : AnyObject]){
+        
+        self.backgroundColor = UIColor.whiteColor()
+        
+        var username:String = contactInfos["username"] as String
+        var isSearching:Bool = contactInfos["searching"] as Bool
+        
+        if usernameLabel == nil {
+            usernameLabel = UILabel(frame: CGRect(x: 15, y: 0, width: 300, height: 60))
+            usernameLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
+            usernameLabel!.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            self.addSubview(usernameLabel!)
+            
+        }
+        
+        
+        if addUserButton == nil {
+            addUserButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 50, y: 0, width: 45, height: 60))
+            addUserButton!.addTarget(self, action: Selector("addUser:"), forControlEvents: UIControlEvents.TouchUpInside)
+            contentView.addSubview(addUserButton!)
+        }
+        
+        addUserButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
+        
+        addUserButton!.hidden = true
+        
+        
+        //self.user = user
+        
+        usernameLabel!.text = "@\(username)"
+        
+        loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        loadIndicator!.center = addUserButton!.center
+        loadIndicator!.hidesWhenStopped = true
+        self.addSubview(loadIndicator!)
+        
+        if isSearching{
+            loadIndicator!.startAnimating()
+        }
+        else{
+            loadIndicator!.stopAnimating()
+        }
+        
+
     }
     
     
@@ -275,7 +393,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     @IBOutlet weak var topRightViewBar: UIView!
     
-    var pikiUsersFound:Array<PFUser> = []
+    var pikiUsersFound:Array<AnyObject> = []
     var contactsPhone:Array<APContact> = []
     var sortedContactsPhone:Array<APContact> = []
     var usersWhoAddedMe:Array<PFUser> = []
@@ -339,7 +457,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         searchTextField.placeholder = NSLocalizedString("Search a user", comment : "Search a user")
         searchTextField.textColor = UIColor.whiteColor()
         searchTextField.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
-        searchTextField.addTarget(self, action: Selector("changedText:"), forControlEvents: UIControlEvents.EditingChanged)
+        //searchTextField.addTarget(self, action: Selector("changedText:"), forControlEvents: UIControlEvents.EditingChanged)
         searchTextField.returnKeyType = UIReturnKeyType.Search
         searchTextField.keyboardAppearance = UIKeyboardAppearance.Light
       
@@ -365,8 +483,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         typeFriendsSelectorView.frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: 50)
         
-        var leftViewSearch:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: searchTextField.frame.size.height))
-        var loupeImageView:UIImageView = UIImageView(frame: CGRect(x: leftViewSearch.frame.size.width/2 - 6, y: leftViewSearch.frame.size.height/2 - 6, width: 12, height: 12))
+        var leftViewSearch:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: searchTextField.frame.size.height))
+        var loupeImageView:UIImageView = UIImageView(frame: CGRect(x: leftViewSearch.frame.size.width/2 - 6, y: leftViewSearch.frame.size.height/2 - 6, width: 16, height: 16))
         loupeImageView.image = UIImage(named: "search_icon")
         leftViewSearch.addSubview(loupeImageView)
         searchTextField.leftView = leftViewSearch
@@ -474,6 +592,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             if self.lookingForFriendsOnPeekee{
                 nbSection++
             }
+            
 
             return nbSection
         }
@@ -500,7 +619,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 }
             }
             else if section == 1{
-                if pikiUsersFound.count > 0{
+                if self.lookingForFriendsOnPeekee{
+                    return 0
+                }
+                else if pikiUsersFound.count > 0{
                     if contactsWithUserInfos.count > 0{
                         return contactsWithUserInfos.count
                     }
@@ -529,7 +651,16 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             if indexPath.section == 0{
                 if pikiUsersFound.count > 0{
                     var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as PikiUserTableViewCell
-                    cell.loadItem(pikiUsersFound[indexPath.row], searchController: self)
+                    
+                    if pikiUsersFound[indexPath.row].isKindOfClass(PFUser){
+                        println("USER")
+                        cell.loadItem(pikiUsersFound[indexPath.row] as PFUser, searchController: self)
+                    }
+                    else{
+                        cell.loadItemSearch(pikiUsersFound[indexPath.row] as [String : AnyObject])
+                    }
+                    
+                    
                     cell.selectionStyle = UITableViewCellSelectionStyle.None
                     return cell
                 }
@@ -537,9 +668,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
                     
                     var contactUserInfo = contactsWithUserInfos[indexPath.row]
-                    cellContact.userInfos = contactUserInfo["userInfos"] as? [String : String]
                     
-                    cellContact.loadContact(contactUserInfo["contact"] as APContact, searchController: self)
+                    
+                    
+                    cellContact.loadUserContact(contactUserInfo, searchController: self)
                     cellContact.selectionStyle = UITableViewCellSelectionStyle.None
                     return cellContact
                 }
@@ -621,6 +753,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if printMode == 0{
+            
             if self.lookingForFriendsOnPeekee{
                 if section == 0{
                     return 64
@@ -644,6 +777,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         var viewHeader:UIView = UIView(frame: CGRect(x: 15, y: 0, width: self.view.frame.size.width, height: 32))
         viewHeader.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
         
+        var backLabel = UIView(frame: CGRect(x: 0, y: 0, width: viewHeader.frame.width, height: 32))
+        backLabel.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+        viewHeader.addSubview(backLabel)
+        
         var labelHeader:UILabel = UILabel(frame: CGRect(x: 10, y: 0, width: viewHeader.frame.size.width, height: 32))
         labelHeader.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
         labelHeader.textColor = UIColor.whiteColor()
@@ -652,7 +789,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         if printMode == 0{
             if section == 0{
-                if pikiUsersFound.count > 0{
+                if pikiUsersFound.count > 0 {
                     labelHeader.text = NSLocalizedString("PEEKEE USER", comment : "PEEKEE USER")
                 }
                 else if contactsWithUserInfos.count > 0{
@@ -664,6 +801,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     viewHeader.backgroundColor = Utils().secondColor
                     labelHeader.textAlignment = NSTextAlignment.Center
                     viewHeader.frame = CGRect(x: 15, y: 0, width: self.view.frame.size.width, height: 64)
+                    
+                    backLabel.backgroundColor = Utils().secondColor
                     
                     var loadIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
                     loadIndicator.tintColor = UIColor.whiteColor()
@@ -678,12 +817,57 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 
             }
             else if section == 1{
-                if pikiUsersFound.count > 0{
-                    labelHeader.text = NSLocalizedString("FRIENDS ON PEEKEE", comment : "FRIENDS ON PEEKEE")
+                if pikiUsersFound.count > 0 {
+                    if contactsWithUserInfos.count > 0{
+                        labelHeader.text = NSLocalizedString("FRIENDS ON PEEKEE", comment : "FRIENDS ON PEEKEE")
+                    }
+                    else if self.lookingForFriendsOnPeekee{
+                        
+                        labelHeader.text = NSLocalizedString("LOOKING FOR FRIENDS", comment : "LOOKING FOR FRIENDS")
+                        viewHeader.backgroundColor = Utils().secondColor
+                        labelHeader.textAlignment = NSTextAlignment.Center
+                        viewHeader.frame = CGRect(x: 15, y: 0, width: self.view.frame.size.width, height: 64)
+                        
+                        backLabel.backgroundColor = Utils().secondColor
+                        
+                        var loadIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+                        loadIndicator.tintColor = UIColor.whiteColor()
+                        loadIndicator.center = CGPoint(x: viewHeader.frame.width/2, y: viewHeader.frame.height/2 + viewHeader.frame.height/4 - 3)
+                        loadIndicator.hidesWhenStopped = true
+                        loadIndicator.startAnimating()
+                        viewHeader.addSubview(loadIndicator)
+                    }
+                    else{
+                        labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
+                    }
                 }
                 else{
                     labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
                 }
+                /*
+                
+                if contactsWithUserInfos.count > 0{
+                    labelHeader.text = NSLocalizedString("FRIENDS ON PEEKEE", comment : "FRIENDS ON PEEKEE")
+                }
+                else if self.lookingForFriendsOnPeekee{
+                    
+                    labelHeader.text = NSLocalizedString("LOOKING FOR FRIENDS", comment : "LOOKING FOR FRIENDS")
+                    viewHeader.backgroundColor = Utils().secondColor
+                    labelHeader.textAlignment = NSTextAlignment.Center
+                    viewHeader.frame = CGRect(x: 15, y: 0, width: self.view.frame.size.width, height: 64)
+                    
+                    backLabel.backgroundColor = Utils().secondColor
+                    
+                    var loadIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+                    loadIndicator.tintColor = UIColor.whiteColor()
+                    loadIndicator.center = CGPoint(x: viewHeader.frame.width/2, y: viewHeader.frame.height/2 + viewHeader.frame.height/4 - 3)
+                    loadIndicator.hidesWhenStopped = true
+                    loadIndicator.startAnimating()
+                    viewHeader.addSubview(loadIndicator)
+                }
+                else{
+                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
+                }*/
             }
             else{
                 labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
@@ -694,7 +878,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         
-        viewHeader.addSubview(labelHeader)
+        backLabel.addSubview(labelHeader)
 
         
         return viewHeader
@@ -708,14 +892,53 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     /*
     * TextField Delegate
     */
-    
-    func changedText(sender : UITextField){
-        
-        var textLessWhite:String = sender.text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         
+        if printMode == 1{
+            printMode = 0
+            self.tableView.reloadData()
+            
+            UIView.animateWithDuration(0.4,
+                delay: 0,
+                usingSpringWithDamping: 0.5,
+                initialSpringVelocity: 10.0,
+                options: nil,
+                animations: { () -> Void in
+                    self.findSelectorLabel!.textColor = Utils().primaryColor
+                    self.friendsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+                    self.indicatorView!.transform = CGAffineTransformIdentity
+                }) { (finished) -> Void in
+                    println("Show Find")
+                    
+            }
+        }
         
-        if countElements(sender.text) > 1 {
+        var finalText:NSString = textField.text as NSString
+        finalText = finalText.stringByReplacingCharactersInRange(range, withString: string).lowercaseString
+        
+        var textLessWhite:String = finalText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
+        
+        pikiUsersFound.removeAll(keepCapacity: false)
+        
+        if countElements(textLessWhite) > 0{
+            if countElements(textLessWhite) > 1 {
+                var contactInfo = ["username" : textLessWhite, "searching" : true]
+                pikiUsersFound.append(contactInfo)
+            }
+            else{
+                var contactInfo = ["username" : textLessWhite, "searching" : false]
+                pikiUsersFound.append(contactInfo)
+            }
+            
+        }
+        
+        
+        self.tableView.reloadData()
+        
+        
+        
+        if countElements(textLessWhite) > 1 {
             
             //Sort phone Contacts
             if printMode == 0{
@@ -744,10 +967,19 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                 }
                 else{
-                    var users:Array<PFUser> = task.result as Array<PFUser>
-                    println("\(users)")
-                    self.pikiUsersFound = users
-                    self.tableView.reloadData()
+                    if task.result.count > 0{
+                        var users:Array<PFUser> = task.result as Array<PFUser>
+                        println("\(users)")
+                        self.pikiUsersFound = users
+                        self.tableView.reloadData()
+                    }
+                    else{
+                        self.pikiUsersFound.removeAll(keepCapacity: false)
+                        var contactInfo = ["username" : textLessWhite, "searching" : false]
+                        self.pikiUsersFound.append(contactInfo)
+                        self.tableView.reloadData()
+                    }
+                    
                     
                 }
                 
@@ -759,6 +991,13 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             sortedContactsPhone = contactsPhone
             self.tableView.reloadData()
         }
+        
+        return true
+    }
+    
+    func changedText(sender : UITextField){
+        
+        
         
     }
     
@@ -1143,6 +1382,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         messageController.recipients = [contacts[0].phones[0]]
         messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
         
+        if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
+            messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+        }
+
         self.presentViewController(messageController, animated: true) { () -> Void in
             
         }
@@ -1320,5 +1563,12 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         return friendsUser.count
     
+    }
+    
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        
+        
+        return true
     }
 }

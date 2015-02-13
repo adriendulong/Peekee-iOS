@@ -27,12 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         //Dev
-        Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
-        Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
+        //Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
+        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
         
         //PROD
-        //Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
-        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
+        Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
+        Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
         
         
         Fabric.with([Crashlytics()])
@@ -40,6 +40,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
         
+        
+        //See if present mandatory screen add friends
+        getIfFriendsMandatory()
         
         if PFUser.currentUser() == nil {
             var storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -103,9 +106,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         if PFUser.currentUser() != nil {
-            //var navController:UINavigationController = window!.rootViewController as UINavigationController
-            //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-            //rootController.updatePikis()
+            var navController:UINavigationController = window!.rootViewController as UINavigationController
+            var rootController:MainViewController = navController.viewControllers[0] as MainViewController
+            rootController.updatePikis()
             
             
             PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
@@ -246,6 +249,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
 
+    }
+    
+    
+    
+    func getIfFriendsMandatory(){
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("mandatoryFriends") == nil{
+            
+            PFCloud.callFunctionInBackground("inviteFriendsParams",
+                withParameters: ["Test" : "Test"],
+                block: { (result, error ) -> Void in
+                    println("Result : \(result)")
+                    if error == nil{
+                        var resultDict : [String:AnyObject] = result as [String:AnyObject]
+                        var invitFriends:Bool = resultDict["forceFriends"] as Bool
+                        var limitFriends:Int = resultDict["numberToAdd"] as Int
+                        
+                        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+                        defaults.setObject(invitFriends, forKey: "mandatoryFriends")
+                        defaults.setObject(limitFriends, forKey: "numberToAdd")
+                    }
+                    else{
+                        println("Error : \(error.localizedDescription)")
+                    }
+    
+            })
+            
+        }
     }
     
 

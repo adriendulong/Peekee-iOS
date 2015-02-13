@@ -183,10 +183,11 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         backgoundOverlayView!.alpha = 0.4
         overlayCameraView.addSubview(backgoundOverlayView!)
         
-        emojiImageView = UIImageView(frame: CGRect(x: overlayCameraView.frame.size.width/4, y: overlayCameraView.frame.size.width/4, width: overlayCameraView.frame.size.width/2, height: overlayCameraView.frame.size.height/2))
+        emojiImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
         emojiImageView.contentMode = UIViewContentMode.ScaleAspectFit
         emojiImageView.image = UIImage(named: "emoji_smiley")
-        overlayCameraView.addSubview(emojiImageView)
+        emojiImageView.hidden = true
+        contentView.addSubview(emojiImageView)
         
         
         textViewOverPhoto = UITextView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height - 10))
@@ -454,7 +455,10 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        NSNotificationCenter.defaultCenter().postNotificationName("scrollCell", object: nil, userInfo: ["exceptReact" : self.react!.objectId])
+        if self.react != nil{
+            NSNotificationCenter.defaultCenter().postNotificationName("scrollCell", object: nil, userInfo: ["exceptReact" : self.react!.objectId])
+        }
+        
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

@@ -124,6 +124,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         phoneNumberTextField!.placeholder = NSLocalizedString("Phone", comment : "Phone")
         phoneNumberTextField!.delegate = self
         phoneNumberTextField!.tintColor = Utils().secondColor
+        phoneNumberTextField!.adjustsFontSizeToFitWidth = true
         phoneNumberTextField!.keyboardType = UIKeyboardType.NumberPad
         phoneNumberTextField!.becomeFirstResponder()
         phoneNumberActionView!.addSubview(phoneNumberTextField!)
@@ -164,6 +165,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         textValidatePhone.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
         textValidatePhone.textColor = UIColor.whiteColor()
         textValidatePhone.textAlignment = NSTextAlignment.Center
+        textValidatePhone.adjustsFontSizeToFitWidth = true
         textValidatePhone.text = NSLocalizedString("TEXT ME A 4 DIGITS CODE", comment : "TEXT ME A 4 DIGITS CODE")
         validatePhoneView!.addSubview(textValidatePhone)
         

@@ -145,7 +145,7 @@ class WalkthroughCollectionViewCell : UICollectionViewCell{
             mainImageView!.image = UIImage(named: "walk_main_image_three")
             
             //Title
-            titleLabel!.text = NSLocalizedString("Share awesome mozaics.", comment : "Share awesome mozaics.")  
+            titleLabel!.text = NSLocalizedString("Share awesome mosaics.", comment : "Share awesome mozaics.")  
             
             //Subtitle
             subtitleLabel!.text = NSLocalizedString("On Snapchat, Insta, Twitter... 🚀", comment : "On Snapchat, Insta, Twitter... 🚀")

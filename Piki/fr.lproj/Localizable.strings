@@ -94,7 +94,7 @@
 "%@ on Peekee" = "%@ sur Peekee";
 "%d+ replies on the app" = "%d+ photos sur l'app";
 "Share" = "Share";
-"AlertNotEnoughReact" = "Il faut au minimum 6 réponses pour pouvoir créer votre mosaïque ! Ajoutes en pour pouvoir la générer !";
+"AlertNotEnoughReact" = "Il te faut 6 réponses pour créer une belle mosaïque ! Ajoutes des amis pour obtenir des réponses ?";
 
 // MARK: New Peekee
 "Search" = "Recherche";
@@ -127,16 +127,25 @@
 // MARK: Commun
 "Cancel" = "Annuler";
 "Error" = "Erreur";
+"Yes" = "Oui";
+"No" = "Non";
 "Sorry an error occured. Please try again later" = "Désolé pour cette erreur. Peux tu ré-essayer ?";
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "Ajoute tes amis! 👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Choisis au moins tes 5 meilleurs amis. On te tiendra au courant dès qu'ils arriveront sur l'application";
+"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Choisis au moins tes %d meilleurs amis. On te tiendra au courant dès qu'ils arriveront sur l'application";
 "ON THE APP" = "SUR L'APP";
 "ON YOUR PHONE CONTACTS" = "DANS TES CONTACTS TELEPHONIQUES";
 "ALL" = "TOUS";
 "SKIP" = "PASSER";
 "INVITE ALL" = "INVITER TOUT LE MONDE";
-"INVITE %@/%@" = "INVITER %@/%@";
+"INVITE %d/%d" = "AJOUTER %@/%@";
 "Last but not least" = "Last but not least";
-"Check if you have friends here?!😁" = "Verifier si tu as des amis sur l'app?!😁";
+"Check if you have friends here?!😁" = "Verifier si tu as des amis sur l'app ?!😁";
+"Confirmation" = "Confirmation";
+"Are you sure you want to invite all your contacts?" = "Etes vous sur de vouloir inviter tous vos contacts ?";
+"Friends" = "Amis";
+"Still %d to go! You need them to enjoy Peekee!" = "Encore %d à ajouter! Tu as besoin d'eux pour profiter de Peekee!";
+
+// MARK: V1.01
+"From" = "De";

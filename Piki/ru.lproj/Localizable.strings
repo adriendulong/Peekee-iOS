@@ -1,0 +1,156 @@
+/* 
+  Localizable.strings
+  Peekee
+
+  Created by Adrien Dulong on 17/01/2015.
+  Copyright (c) 2015 PikiChat. All rights reserved.
+*/
+
+
+// MARK: Walktrough Label
+"React with your camera" = "Действуй вместе с камерой.";
+"Receive and send pics & vids." = "Получай и отправляй фото и видео.";
+"With friends, family, and dogs. 🐶" = "С друзьями, семьей и даже собаками. 🐶";
+"Like and comment with pics & vids. ✨" = "Лайк и комментируй с фото и видео. ✨";
+"Share awesome mosaics." = "Делись фантастической мозаикой.";
+"On Snapchat, Insta, Twitter... 🚀" = "В Инстаграме, Твиттере, Снапчате... 🚀";
+"No Bullshit." = "Без отстоя.";
+"Short signup" = "Быстрая регистрация";
+"No Facebook connect" = "Без связи с Фэйсбуком";
+"No email address" = "Не нужен е-мэйл";
+"Only phone number for human verification" = "Только номер телефона для подтверждения, что ты человек";
+"ALRIGHT, SIGN ME UP" = "ОТЛИЧНО, ЗАРЕГИСТРИРОВАТЬ МЕНЯ";
+
+// MARK: Sign Up
+"No bots allowed." = "Ботам доступ запрещен.";
+"Enter your cell number" = "Введи твой номер телефона";
+"Unknown" = "Неизвестный";
+"Phone" = "Телефон";
+"TEXT ME A 4 DIGITS CODE" = "ОТПРАВИТЬ МНЕ 4 ЗНАЧНЫЙ КОД";
+"Sorry but your phone number is not valid" = "Извини, твой номер телефона недействителен";
+"Code sent." = "Код отправлен.";
+"We had a problem while connecting you with your phone number, please try again later" = "У нас проблема со связью с тобой и твоим номером телефона, пожалуйста, попробуй позднее";
+"CHECK MY CELL NUMBER" = "ПРОВЕРИТЬ НОМЕР МОЕГО ТЕЛЕФОНА";
+"Invalid code. Try again or check your phone number." = "Недействительный код. Попробуй еще раз или проверь твой номер телефона.";
+"Error while getting the confirmation code. Please try again later." = "Ошибка с получением кода подтверждения, Пожалуйста. попробуй еще раз позже.";
+"Big time now." = "Особенное время сейчас.";
+"Choose a username" = "Выбери имя.";
+"USERNAME" = "ИМЯ";
+"We had a problem while connecting you with your phone number, please try again later" = "У нас проблема со связью с тобой и твоим номером телефона, пожалуйста, попробуй позднее";
+"You confirm you've read and accept T&C" = "Ты подтверждаешь, что ты прочел и согласен с Правилами и Условиями.";
+"LET'S GET STARTED" = "ДАВАЙ НАЧНЕМ";
+"The username is already taken. Try again" = "Такое имя уже есть. Попробуй еще раз";
+"The username is not valid : only letters and numbers allowed" = "Имя недействительно: только буквы и числа могут быть использованы";
+"Surprise" = "Сюрприз";
+"Here are some cool people who are already using the app" = "Здесь несколько клевых ребят, которые уже пользуются приложением";
+"Let's GO!" = "Начинаем!";
+
+// MARK: Tuto Overlay
+"Find more friends to get more Peekees" = "Найти больше друзей и получить больше Peekees";
+"This is a PEEKEE 🍩" = "Это PEEKEE 🍩";
+"Add your own reaction" = "Отреагировать";
+"This is a reaction 🎉" = "Вот это реакция 🎉";
+
+// MARK: FIrst Use Pop Up
+"BIG TIME!" = "ВЕЛИКОЕ ВРЕМЯ!";
+"Let's find your friends on the app! 🙇" = "Давай найдем твоих друзей в приложении! 🙇";
+"GET IN THE LOOP" = "ВОЙТИ В ПЕТЛЮ";
+"Don't miss the next pictures from your friends 😁" = "Не упусти новые фотографии от твоих друзей 😁";
+
+// MARK: Main Menu
+"Peekee" = "Peekee";
+"NEW" = "НОВЫЙ";
+"HIDE" = "СКРЫТЫЙ";
+"DELETE" = "УДАЛЕННЫЙ";
+"Are you sure you want to delete this Peekee? There is no way to get back then." = "Ты уверен, что хочешь удалить этот Peekee? Его нельзя будет вернуть назад.";
+
+// MARK: Find Friends
+"%d FRIENDS" = "%d ДРУЗЬЯ";
+"Search a user" = "Найти пользователя";
+"FIND" = "НАЙТИ";
+"FRIENDS" = "ДРУЗЬЯ";
+"FRIENDS ON PEEKEE" = "ДРУЗЬЯ В PEEKEE";
+"FRIENDS NOT YET ON PEEKEE" = "ДРУЗЬЯ ЕЩЕ НЕ В PEEKEE";
+"SendInvitSMS" = "\n %@";
+"LOOKING FOR FRIENDS" = "ИСКАТЬ ДРУЗЕЙ";
+
+// MARK: Peekee View
+"%d friends" = "%d друзья";
+"%d friend" = "%d друг";
+"More" = "Больше";
+"More actions for this Peekee" = "Больше действий для этого Peekee";
+"Report this Peekee" = "Сообщить об этом Peekee";
+"ADD A FRIEND" = "ДОБАВИТЬ ДРУГА";
+"MUTE THIS FRIEND" = "ОТКЛЮЧИТЬ ЭТОГО ДРУГА";
+"UNMUTE THIS USER" = "ВКЛЮЧИТЬ ЭТОГО ПОЛЬЗОВАТЕЛЯ";
+"To %d people" = "К %d людям";
+"Problem while reporting this Peekee. Please try again later" = "Проблема с жалобой на этот Peekee. Пожалуйста, попробуй еще раз позже";
+"This Peekee has been reported. Thank you." = "Этот Peekee был обжалован. Спасибо.";
+"DELETE" = "УДАЛИТЬ";
+"REPORT" = "ПОЖАЛОВАТЬСЯ";
+
+// MARK: MOZAIC
+"SEND" = "ОТПРАВИТЬ";
+"%@ on Peekee" = "%@ на Peekee";
+"%d+ replies on the app" = "%d+ ответов в приложении";
+"Share" = "Поделиться";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+
+// MARK: New Peekee
+"Search" = "Поиск";
+"Send to..." = "Отправить...";
+"RECENT" = "ПОСЛЕДНИЕ";
+"FRIENDS" = "ДРУЗЬЯ";
+"SEND TO EVERYONE" = "ОТПРАВИТЬ КАЖДОМУ";
+"EVERYONE" = "КАЖДЫЙ";
+"SELECTED" = "ВЫБРАННЫЕ";
+"We had a problem while sending your Peekee, please try again later" = "У нас проблема с отсылкой тебе Peekee, пожалуйста, попробуй еще раз позже";
+"%d SELECTED" = "%d  ВЫБРАННЫЕ";
+
+// MARK: Settings
+"Settings" = "Настройки";
+"Change Username" = "Поменять имя";
+"NOTIFICATIONS" = "УВЕДОМЛЕНИЯ";
+"Notifications" = "Уведомления";
+"SUPPORT" = "ПОМОЩЬ";
+"Email Us" = "Отправить е-мэйл нам";
+"Tweet Us" = "Твитнуть нам";
+"OTHER" = "ДРУГОЕ";
+"Share the app" = "Поделиться приложением";
+"Edit username" = "Отредактировать имя";
+"Recommended accounts" = "Рекомендовать аккаунты";
+"Sorry but this username is already taken. Please choose an other one" = "Извините, это имя уже существует. Пожалуйста, выберите другое";
+"Problem while updating your username. Please try again later." = "Проблема с изменением имени. Пожалуйста, попробуй еще раз позже.";
+"Your username can only have letters and numbers." =  "Твое имя может быть только из букв и чисел.";
+"Your username must have at least 3 characters." = "Твое имя должно иметь минимум 3 знака.";
+
+// MARK: Commun
+"Cancel" = "Отменить";
+"Error" = "Ошибка";
+"Yes" = "Да";
+"No" = "Нет";
+"Sorry an error occured. Please try again later" = "Извините, здесь ошибка. Попробуйте еще раз позднее.";
+
+// MARK: Add Friends First
+"Add your friends! 👫" = "Добавить твоих друзей! 👫";
+"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Выбери хотя бы твоих %d лучших друзей. Мы тебе напишем, когда они начнут использовать приложение!";
+"ON THE APP" = "В ПРИЛОЖЕНИИ";
+"ON YOUR PHONE CONTACTS" = "В КОНТАКТАХ ТВОЕГО ТЕЛЕФОНА";
+"ALL" = "ВСЕ";
+"SKIP" = "ПРОПУСТИТЬ";
+"INVITE ALL" = "ПРИГЛАСИТЬ ВСЕХ";
+"INVITE %d/%d" = "ПРИГЛАСИТЬ %d/%d";
+"Last but not least" = "Последнее по счету, но не по важности";
+"Check if you have friends here?!😁" = "Проверил, есть ли твои друзья здесь?😁";
+"Confirmation" = "Подтверждение";
+"Are you sure you want to invite all your contacts?" = "Ты уверен, ты хочешь пригласить все свои контакты?";
+"Friends" = "Друзья";
+"Still %d to go! You need them to enjoy Peekee!" = "Не хватает %d! С ними будет приятнее наслаждаться Peekee!";
+
+// MARK: V1.01
+"From" = "From";
+
+
+
+
+

@@ -81,6 +81,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         checkNumberLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
         checkNumberLabel.textColor = UIColor.whiteColor()
         checkNumberLabel.textAlignment = NSTextAlignment.Center
+        checkNumberLabel.adjustsFontSizeToFitWidth = true
         checkNumberLabel.text = NSLocalizedString("CHECK MY CELL NUMBER", comment : "CHECK MY CELL NUMBER")
         validationView!.addSubview(checkNumberLabel)
         

@@ -1,0 +1,156 @@
+/* 
+  Localizable.strings
+  Peekee
+
+  Created by Adrien Dulong on 17/01/2015.
+  Copyright (c) 2015 PikiChat. All rights reserved.
+*/
+
+
+// MARK: Walktrough Label
+"React with your camera" = "カメラでリアクション";
+"Receive and send pics & vids." = "画像や動画を送受信。";
+"With friends, family, and dogs. 🐶" = "友達、家族やペットまで。🐶";
+"Like and comment with pics & vids. ✨" = "画像や動画に「いいね！」やコメントを。";
+"Share awesome mosaics." = "驚きのモザイク効果入り写真を共有。";
+"On Snapchat, Insta, Twitter... 🚀" = "スナップチャット、インスタグラム、ツイッターで...🚀";
+"No Bullshit." = "操作は簡単。";
+"Short signup" = "登録も手軽に";
+"No Facebook connect" = "フェイスブック連携は不要";
+"No email address" = "メールアドレスも不要";
+"Only phone number for human verification" = "電話番号で本人確認するだけで使えます";
+"ALRIGHT, SIGN ME UP" = "了解！すぐに登録";
+
+// MARK: Sign Up
+"No bots allowed." = "ロボット登録禁止";
+"Enter your cell number" = "携帯電話番号を入力";
+"Unknown" = "不明";
+"Phone" = "電話";
+"TEXT ME A 4 DIGITS CODE" = "4桁のコードをSNSで送信";
+"Sorry but your phone number is not valid" = "恐れ入りますが電話番号が無効です。";
+"Code sent." = "コード送信完了。";
+"We had a problem while connecting you with your phone number, please try again later" = "電話番号への接続中に問題発生。後ほど再度お試しください。";
+"CHECK MY CELL NUMBER" = "携帯電話番号の確認";
+"Invalid code. Try again or check your phone number." = "コード無効。再試行または電話番号をご確認ください。";
+"Error while getting the confirmation code. Please try again later." = "確認コード取得エラー。後ほど再度お試しください。";
+"Big time now." = "さあ、始まります。";
+"Choose a username" = "ユーザー名を選択";
+"USERNAME" = "ユーザー名";
+"We had a problem while connecting you with your phone number, please try again later" = "電話番号への接続注に問題発生。後ほど再度お試しください。";
+"You confirm you've read and accept T&C" = "利用規約を読み、同意したことを確認します。";
+"LET'S GET STARTED" = "さあ、始めましょう！";
+"The username is already taken. Try again" = "すでに使用されています。他のユーザー名をお試しください。";
+"The username is not valid : only letters and numbers allowed" = "ユーザー名無効 : 文字、数字のみ使用できます。";
+"Surprise" = "サプライズ";
+"Here are some cool people who are already using the app" = "こんなクールなユーザーがアプリを使っています！";
+"Let's GO!" = "さあ、行ってみましょう！";
+
+// MARK: Tuto Overlay
+"Find more friends to get more Peekees" = "さらに友人を見つけて、もっとピーキィを獲得";
+"This is a PEEKEE  " = "これがピーキィです 🍩";
+"Add your own reaction" = "あなたのリアクションを追加";
+"This is a reaction 🎉" = "これがリアクションです 🎉";
+
+// MARK: FIrst Use Pop Up
+"BIG TIME!" = "さあ、楽しい時間の始まり！";
+"Let's find your friends on the app! 🙇" = "アプリで友達を探そう！🙇";
+"GET IN THE LOOP" = "ループに入る";
+"Don't miss the next pictures from your friends 😁" = "友達の最新画像をあなたもお見逃しなく 😁";
+
+// MARK: Main Menu
+"Peekee" = "ピーキィ";
+"NEW" = "新着！";
+"HIDE" = "非表示";
+"DELETE" = "削除";
+"Are you sure you want to delete this Peekee? There is no way to get back then." = "このピーキィを本当に削除してよろしいですか？元に戻すことはできません。";
+
+// MARK: Find Friends
+"%d FRIENDS" = "%d 人の友達";
+"Search a user" = "ユーザーを探す";
+"FIND" = "検索";
+"FRIENDS" = "友達";
+"FRIENDS ON PEEKEE" = "ピーキィ内の友達";
+"FRIENDS NOT YET ON PEEKEE" = "ピーキィをまだ使っていない友達";
+"SendInvitSMS" = "\n %@";
+"LOOKING FOR FRIENDS" = "友達を探しています";
+
+// MARK: Peekee View
+"%d friends" = "%d 人の友達";
+"%d friend" = "%d 人の友人";
+"More" = "さらに表示";
+"More actions for this Peekee" = "このピーキィのリアクションをさらに表示";
+"Report this Peekee" = "このピーキィを通報";
+"ADD A FRIEND" = "友人を追加";
+"MUTE THIS FRIEND" = "この友人をミュート";
+"UNMUTE THIS USER" = "このユーザーのミュートを解除";
+"To %d people" = "%d人宛";
+"Problem while reporting this Peekee. Please try again later" = "このピーキィの通報中に問題発生。後ほど再度お試しください。";
+"This Peekee has been reported. Thank you." = "このピーキィを通報済みです。ご協力ありがとうございました";
+"DELETE" = "削除";
+"REPORT" = "通報";
+
+// MARK: MOZAIC
+"SEND" = "送信";
+"%@ on Peekee" = "ピーキィ内に%@人";
+"%d+ replies on the app" = "アプリ内に%d+ 件の返信あり";
+"Share" = "共有";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+
+// MARK: New Peekee
+"Search" = "検索";
+"Send to..." = "送信先...";
+"RECENT" = "最近の投稿";
+"FRIENDS" = "友達";
+"SEND TO EVERYONE" = "全員に送信";
+"EVERYONE" = "全員";
+"SELECTED" = "選択した宛先";
+"We had a problem while sending your Peekee, please try again later" = "ピーキィ送信で問題発生。後ほど再度お試しください。";
+"%d SELECTED" = "%d 件を選択済み";
+
+// MARK: Settings
+"Settings" = "設定";
+"Change Username" = "ユーザー名変更";
+"NOTIFICATIONS" = "通知";
+"Notifications" = "通知";
+"SUPPORT" = "サポート";
+"Email Us" = "メールでのお問い合わせ";
+"Tweet Us" = "ツイートでのお問い合わせ";
+"OTHER" = "その他";
+"Share the app" = "アプリを共有";
+"Edit username" = "ユーザー名を編集";
+"Recommended accounts" = "おすすめのアカウント";
+"Sorry but this username is already taken. Please choose an other one" = "申し訳ございませんがすでに取得済みです。他のユーザー名をお選びください。";
+"Problem while updating your username. Please try again later." = "ユーザー名更新中に問題発生。後ほど再度お試しください。";
+"Your username can only have letters and numbers." =  "ユーザー名は文字と数字のみ使用できます。";
+"Your username must have at least 3 characters." = "ユーザー名は３文字以上の長さが必要です。";
+
+// MARK: Commun
+"Cancel" = "取り消す";
+"Error" = "エラー";
+"Yes" = "はい";
+"No" = "いいえ";
+"Sorry an error occured. Please try again later" = "エラー発生。恐れ入りますが後ほど再度お試しください。";
+
+// MARK: Add Friends First
+"Add your friends! 👫" = "友達を追加！👫";
+"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "まずはお友達を %d 人以上選びます。アプリに友達がログインした時点でお知らせします！";
+"ON THE APP" = "アプリ内";
+"ON YOUR PHONE CONTACTS" = "電話帳内";
+"ALL" = "すべて";
+"SKIP" = "スキップ";
+"INVITE ALL" = "全員を招待";
+"INVITE %d/%d" = "%d/%d を招待";
+"Last but not least" = "忘れてはいけません：";
+"Check if you have friends here?!😁" = "友達がいないか探してみませんか！？😁";
+"Confirmation" = "確認";
+"Are you sure you want to invite all your contacts?" = "連絡先の人を本当に全て招待してよろしいですか？";
+"Friends" = "友達";
+"Still %d to go! You need them to enjoy Peekee!" = "あと %d名！ピーキィを一緒に楽しもう！";
+
+// MARK: V1.01
+"From" = "From";
+
+
+
+
+

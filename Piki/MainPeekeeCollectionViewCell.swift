@@ -36,12 +36,7 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         mainImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         contentView.addSubview(mainImageView)
         
-        //Shadow for bottom button
-        var stretchShadowImage:UIImage = UIImage(named: "shadow_piki")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        shadowImageView = UIImageView(frame: CGRect(x: 0, y: frame.height - 115 , width: frame.width, height: 115))
-        shadowImageView.image = stretchShadowImage
-        shadowImageView.hidden = true
-        contentView.addSubview(shadowImageView)
+        
         
         
         playerView = UIView(frame:  CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
@@ -58,6 +53,13 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         readVideoIcon.hidden = true
         contentView.addSubview(readVideoIcon)
         
+        //Shadow for bottom button
+        var stretchShadowImage:UIImage = UIImage(named: "shadow_piki")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        shadowImageView = UIImageView(frame: CGRect(x: 0, y: frame.height - 115 , width: frame.width, height: 115))
+        shadowImageView.image = stretchShadowImage
+        shadowImageView.hidden = false
+        contentView.addSubview(shadowImageView)
+        
         
         loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
         loadIndicator.tintColor = Utils().secondColor
@@ -65,6 +67,7 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         loadIndicator.hidesWhenStopped = true
         loadIndicator.hidden = true
         contentView.addSubview(loadIndicator)
+        
         
         
         

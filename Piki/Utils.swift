@@ -9,12 +9,14 @@
 import AVFoundation
 import UIKit
 import MediaPlayer
+import ImageIO
+import MobileCoreServices
 
 
 class Utils {
     
     //URL Share App
-    let shareAppUrl = "http://peekeeapp.com/beta"
+    let shareAppUrl = "http://peekeeapp.com"
     let websiteUrl = "http://peekeeapp.com"
     
     //TOKEN TOOLS
@@ -844,7 +846,7 @@ class Utils {
     func usernameValid(username : String) -> Bool{
         
         var valid:Bool = true
-        var acceptedCharacters:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_"
+        var acceptedCharacters:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890"
         
         var countUsernameLength:Int = countElements(username)
         
@@ -857,6 +859,179 @@ class Utils {
      
         
         return valid
+    }
+    
+    
+    // MARK: GIF 
+    
+    func createGifInvit(username : String) -> NSURL{
+        
+        
+        var kFrameCount:Int = 11
+
+        var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFLoopCount : 0]]
+        
+        
+        var delay:Float = 0.5
+        var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFDelayTime : delay]]
+        
+        var documentsDirectoryURL = NSFileManager.defaultManager().URLForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomain: NSSearchPathDomainMask.UserDomainMask, appropriateForURL: nil, create: true, error: nil)
+        var fileURL:NSURL = documentsDirectoryURL!.URLByAppendingPathComponent("animated.gif")
+        
+        var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, UInt(kFrameCount), nil)
+        CGImageDestinationSetProperties(destination, fileProperties as CFDictionaryRef)
+        
+        for i in 0...(kFrameCount - 1){
+            
+            var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
+            
+            switch i{
+                
+                //Parrot Pink
+            case 0:
+                viewToAdd.backgroundColor = Utils().secondColor
+                
+                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
+                imageView.image = UIImage(named: "parrot_blue")
+                imageView.contentMode = UIViewContentMode.Center
+                viewToAdd.addSubview(imageView)
+                
+                var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
+                labelUsername.text = "@\(username)"
+                labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
+                labelUsername.textAlignment = NSTextAlignment.Center
+                labelUsername.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelUsername)
+                
+                //Parrot blue
+            case 1:
+                viewToAdd.backgroundColor = Utils().primaryColor
+                
+                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
+                imageView.image = UIImage(named: "parrot_pink")
+                imageView.contentMode = UIViewContentMode.Center
+                viewToAdd.addSubview(imageView)
+                
+                var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
+                labelUsername.text = "@\(username)"
+                labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
+                labelUsername.textAlignment = NSTextAlignment.Center
+                labelUsername.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelUsername)
+                
+                //Frist mozaic
+            case 2:
+                
+                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                imageView.image = UIImage(named: "mosaic_1")
+                viewToAdd.addSubview(imageView)
+                
+                //Second mozaic
+            case 3:
+                
+                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                imageView.image = UIImage(named: "mosaic_2")
+                viewToAdd.addSubview(imageView)
+                
+                //Third mozaic
+            case 4:
+                
+                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                imageView.image = UIImage(named: "mosaic_full")
+                viewToAdd.addSubview(imageView)
+                
+            case 5:
+                
+                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                imageView.image = UIImage(named: "mosaic_full")
+                viewToAdd.addSubview(imageView)
+                
+                //Screen Add
+            case 6:
+                viewToAdd.backgroundColor = Utils().primaryColor
+                
+                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                labelAdd.text = "Add"
+                labelAdd.textAlignment = NSTextAlignment.Center
+                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                labelAdd.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelAdd)
+                
+                //Screen Me
+            case 7:
+                viewToAdd.backgroundColor = Utils().primaryColor
+                
+                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                labelAdd.text = "Me"
+                labelAdd.textAlignment = NSTextAlignment.Center
+                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                labelAdd.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelAdd)
+                
+                //Screen On
+            case 8:
+                viewToAdd.backgroundColor = Utils().primaryColor
+                
+                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                labelAdd.text = "On"
+                labelAdd.textAlignment = NSTextAlignment.Center
+                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                labelAdd.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelAdd)
+                
+                //Screen On
+            case 9:
+                viewToAdd.backgroundColor = Utils().primaryColor
+                
+                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
+                labelAdd.text = "Peekee"
+                labelAdd.textAlignment = NSTextAlignment.Center
+                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
+                labelAdd.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelAdd)
+                
+                var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
+                imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
+                imageViewRoundPerro.contentMode = UIViewContentMode.Center
+                viewToAdd.addSubview(imageViewRoundPerro)
+                
+            case 10:
+                viewToAdd.backgroundColor = Utils().primaryColor
+                
+                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
+                labelAdd.text = "Peekee"
+                labelAdd.textAlignment = NSTextAlignment.Center
+                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
+                labelAdd.textColor = UIColor.whiteColor()
+                viewToAdd.addSubview(labelAdd)
+                
+                var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
+                imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
+                imageViewRoundPerro.contentMode = UIViewContentMode.Center
+                viewToAdd.addSubview(imageViewRoundPerro)
+                
+            default:
+                viewToAdd.backgroundColor = Utils().secondColor
+                
+            }
+            
+            
+            UIGraphicsBeginImageContextWithOptions(viewToAdd.bounds.size, viewToAdd.opaque, 0.0);
+            viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
+            var img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            CGImageDestinationAddImage(destination, img.CGImage, frameProperties as CFDictionaryRef);
+            
+        }
+        
+        
+        if (!CGImageDestinationFinalize(destination)) {
+            println("failed to finalize image destination");
+        }
+        
+        return fileURL
+        
     }
 
 }

@@ -108,15 +108,33 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     var contactsSelected:Array<APContact> = Array<APContact>()
     var secondButtonLabel:String!
     var mainOriginLabel:String!
-    var mandatoryStep:Bool = true
+    var mandatoryStep:Bool = false
     
     var secondButton:UIButton!
+    var invitingUsers:Bool = false
+    var invitingContacts:Bool = false
+    var limitFriendsInvit:Int = 5
+    
+    
+    //POP UP
+    var rootPopUpView:UIView?
+    var rootOverlay:UIView?
     
     override func viewDidLoad() {
         
         titleLabel.text = NSLocalizedString("Add your friends! 👫", comment :"Add your friends! 👫")
-        subtitleLabel.text = NSLocalizedString("Choose at least your 5 best friends. We'll keep you posted when they join the app!", comment :"Choose at least your 5 best friends. We'll keep you posted when they join the app!")
+        let invitLabel = String(format:NSLocalizedString("Choose at least your 5 best friends. We'll keep you posted when they join the app!", comment :"Choose at least your 5 best friends. We'll keep you posted when they join the app!"), self.limitFriendsInvit)
+        subtitleLabel.text = invitLabel
         
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("mandatoryFriends") != nil{
+            self.mandatoryStep = defaults.objectForKey("mandatoryFriends") as Bool
+        }
+        
+        if defaults.objectForKey("numberToAdd") != nil{
+            self.limitFriendsInvit = defaults.objectForKey("numberToAdd") as Int
+        }
         
         // Get region label
         let networkInfo = CTTelephonyNetworkInfo()
@@ -156,7 +174,10 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         self.mainActionView.addGestureRecognizer(gestureMainAction)
         
         //Get contacts
-        getContacts()
+        //getContacts()
+        
+        self.mainActionView.hidden = true
+        createPopUp()
         
     }
 
@@ -253,7 +274,6 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             var objectIdUser:String = userInfos["userObjectId"]!
             
             if !contains(usersSelected, objectIdUser){
-                println("Select")
                 usersSelected.append(objectIdUser)
                 var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
                 cell.select()
@@ -261,7 +281,6 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 
             }
             else{
-                println("Deselect")
                 
                 
                 var index:Int?
@@ -288,14 +307,12 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             var contact:APContact = contactsPhone[indexPath.row]
             
             if !contains(contactsSelected, contact){
-                println("Select")
                 contactsSelected.append(contact)
                 var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
                 cell.select()
                 self.tableView.reloadData()
             }
             else{
-                println("Deselect")
                 
                 
                 var index:Int?
@@ -327,7 +344,8 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                     
                     self.inviteAllActionLabel.frame = CGRect(x: self.secondButton.frame.width, y: 0, width: self.view.frame.width - self.view.frame.width/3, height: 55)
             }, completion: { (finished) -> Void in
-                self.inviteAllActionLabel.text = "\(self.usersSelected.count + self.contactsSelected.count)/5 INVITED"
+                let invitLabel = String(format: NSLocalizedString("INVITE %d/%d", comment : "INVITE %d/%d"), (self.usersSelected.count + self.contactsSelected.count), self.limitFriendsInvit)
+                self.inviteAllActionLabel.text = invitLabel
             })
             
         }
@@ -382,6 +400,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     func getContacts(){
         //Contacts
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         self.addressBook.fieldsMask = APContactField.All
         self.addressBook.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true),
             NSSortDescriptor(key: "lastName", ascending: true)]
@@ -390,19 +409,19 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         }
         self.addressBook.loadContacts(
             { (contacts: [AnyObject]!, error: NSError!) in
-                //self.activity.stopAnimating()
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 if (contacts != nil) {
 
                     self.contactsPhone = contacts as Array<APContact>
                     self.lookingForFriendsOnPeekee = true
                     self.tableView.reloadData()
                     
+                    self.mainActionView.hidden = false
+                    
                     self.checkContactsOnPiki()
                 }
                 else if (error != nil) {
-                    let alert = UIAlertView(title: "Error", message: error.localizedDescription,
-                        delegate: nil, cancelButtonTitle: "OK")
-                    alert.show()
+                    self.goLeave()
                 }
         })
     }
@@ -547,16 +566,20 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     func mainInvit(){
         
+        
+        
         //Users seelcted ?
         if(usersSelected.count > 0) || (contactsSelected.count > 0){
             
+            
             var totalUserSeelcted:Int = usersSelected.count + contactsSelected.count
             
-            if totalUserSeelcted > 4{
-                //Invit
+            if totalUserSeelcted > (limitFriendsInvit - 1){
+                MBProgressHUD.showHUDAddedTo(self.view, animated: true)
                 
                 if usersSelected.count > 0{
                     // Add as friends
+                    invitingUsers = true
                     
                     var tasks = NSMutableArray()
                     
@@ -565,17 +588,23 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                         tasks.addObject(Utils().addFriend(user))
                         
                     }
-                    
-                    
                     BFTask(forCompletionOfAllTasks:tasks).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                         
                         println("finished adding friends")
+                        self.invitingUsers = false
+                        
+                        if !self.invitingUsers && !self.invitingContacts{
+                            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                            self.goLeave()
+                        }
                         
                         return nil
                     })
                 }
                 
                 if contactsSelected.count > 0{
+                    invitingContacts = true
+                    
                     self.sendSMSToContacts(contactsSelected)
                 }
                 
@@ -583,9 +612,9 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             }
             else{
                 //Still
-                var stillToGo:Int = 5 - totalUserSeelcted
-                
-                let alert = UIAlertView(title: "Friends", message: "Still \(stillToGo) to go! You need them to enjoy Peekee!",
+                var stillToGo:Int = limitFriendsInvit - totalUserSeelcted
+                let nbRecipientsFormat = String(format: NSLocalizedString("Still %d to go! You need them to enjoy Peekee!", comment : "Still %d to go! You need them to enjoy Peekee!"), stillToGo)
+                let alert = UIAlertView(title: NSLocalizedString("Friends", comment : "Friends"), message: nbRecipientsFormat,
                     delegate: nil, cancelButtonTitle: "Ok")
                 alert.show()
                 
@@ -597,9 +626,10 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 //Invite All !
                 //Ask Before
                 var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                     self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
+                    self.goLeave()
                 }))
                 self.presentViewController(alert, animated: true, completion: nil)
                 
@@ -607,6 +637,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             }
             else{
                 // Leave
+                goLeave()
             }
         }
         
@@ -616,9 +647,17 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         if mandatoryStep{
             //Invite All !
+            var alert = UIAlertController(title: NSLocalizedString("Confirmation", comment : "Confirmation"), message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
+                self.goLeave()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
         else{
             // Leave
+            goLeave()
         }
         
     }
@@ -646,7 +685,13 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         controller.dismissViewControllerAnimated(true, completion: nil)
         
-        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        
+        self.invitingContacts = false
+        
+        if !self.invitingUsers && !self.invitingContacts{
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            self.goLeave()
+        }
         
         
         
@@ -672,6 +717,10 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         messageController.messageComposeDelegate = self
         messageController.recipients = phonesArray
         messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
+        
+        if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
+            messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+        }
         
         self.presentViewController(messageController, animated: true) { () -> Void in
             
@@ -708,6 +757,8 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     func getArrayOfNumbersForContacts(contacts : Array<APContact>) -> Array<String>{
         
+        println("Contacts : \(contacts)")
+        
         var allNumberFormatted:Array<String> = Array<String>()
         
         for contact in contacts{
@@ -733,6 +784,141 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     func sendSmsFromSeverTo(contactsNumber : Array<String>){
         
         println("Send To : \(contactsNumber)")
+        
+        var bgTaskIdentifierSendSMS:UIBackgroundTaskIdentifier!
+        bgTaskIdentifierSendSMS = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
+            UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierSendSMS)
+            bgTaskIdentifierSendSMS = UIBackgroundTaskInvalid
+        })
+        
+        PFCloud.callFunctionInBackground("sendInviteSMS",
+            withParameters: ["phoneNumberTab" : contactsNumber]) { (result, error) -> Void in
+                if error != nil {
+                    println("Error : \(error.localizedDescription)")
+                }
+                
+                UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierSendSMS)
+                bgTaskIdentifierSendSMS = UIBackgroundTaskInvalid
+        }
+    }
+    
+    
+    
+    // MARK: POP UP Contact Autho
+    
+    func createPopUp(){
+        
+        if rootPopUpView == nil{
+            
+            rootOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            rootOverlay!.backgroundColor = UIColor.blackColor()
+            rootOverlay!.alpha = 0.8
+            self.view.addSubview(rootOverlay!)
+            
+            rootPopUpView = UIView(frame: CGRect(x: 0, y: 0, width: 240, height: 305))
+            rootPopUpView!.center = self.view.center
+            rootPopUpView!.backgroundColor = UIColor.whiteColor()
+            
+            
+            var headerView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: rootPopUpView!.frame.width, height: 48))
+            headerView.backgroundColor = Utils().secondColor
+            rootPopUpView!.addSubview(headerView)
+            
+            var headerLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: headerView.frame.height))
+            headerLabel.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+            headerLabel.textAlignment = NSTextAlignment.Center
+            headerLabel.textColor = UIColor.whiteColor()
+            headerLabel.text = NSLocalizedString("Last but not least", comment :"Last but not least")
+            headerView.addSubview(headerLabel)
+            
+            
+            var imagePopUp:UIImageView = UIImageView(frame: CGRect(x: 0, y: headerView.frame.height + 5, width: rootPopUpView!.frame.width, height: 135))
+            imagePopUp.image = UIImage(named: "popup")
+            imagePopUp.contentMode = UIViewContentMode.Center
+            rootPopUpView!.addSubview(imagePopUp)
+            
+            
+            let dividerHorizontal:UIView = UIView(frame: CGRect(x: 0, y: 246, width: rootPopUpView!.frame.width, height: 1))
+            dividerHorizontal.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            rootPopUpView!.addSubview(dividerHorizontal)
+            
+            let dividerVertical:UIView = UIView(frame: CGRect(x: rootPopUpView!.frame.width/2, y: 246, width: 1, height: rootPopUpView!.frame.height - 246))
+            dividerVertical.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            rootPopUpView!.addSubview(dividerVertical)
+            
+            let tapGestureQuitPopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUp"))
+            let quitImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 246, width: rootPopUpView!.frame.width/2, height: rootPopUpView!.frame.height - 246))
+            quitImageView.contentMode = UIViewContentMode.Center
+            quitImageView.userInteractionEnabled = true
+            quitImageView.image = UIImage(named: "close_popup_icon")
+            quitImageView.addGestureRecognizer(tapGestureQuitPopUp)
+            rootPopUpView!.addSubview(quitImageView)
+            
+            let validateAction:UIButton = UIButton(frame: CGRect(x: rootPopUpView!.frame.width/2, y: 246, width: rootPopUpView!.frame.width/2, height: rootPopUpView!.frame.height - 246))
+            validateAction.addTarget(self, action: Selector("validateUnlockFriends"), forControlEvents: UIControlEvents.TouchUpInside)
+            validateAction.setImage(UIImage(named: "validate_pop_up"), forState: UIControlState.Normal)
+            rootPopUpView!.addSubview(validateAction)
+            
+            let labelPopUp:UILabel = UILabel(frame: CGRect(x: 18, y: 167, width: rootPopUpView!.frame.width - 36, height: 61))
+            labelPopUp.numberOfLines = 2
+            labelPopUp.textAlignment = NSTextAlignment.Center
+            labelPopUp.adjustsFontSizeToFitWidth = true
+            labelPopUp.font = UIFont(name: Utils().customFontNormal, size: 24.0)
+            labelPopUp.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            labelPopUp.text = NSLocalizedString("Check if you have friends here?!😁", comment : "Check if you have friends here?!😁")
+            rootPopUpView!.addSubview(labelPopUp)
+            
+            self.view.addSubview(rootPopUpView!)
+            
+            
+        }
+        
+    }
+    
+    
+    //Want access contacts
+    func validateUnlockFriends(){
+        
+        switch APAddressBook.access()
+        {
+        case APAddressBookAccess.Unknown:
+            self.rootOverlay!.hidden = true
+            self.rootPopUpView!.hidden = true
+            getContacts()
+            break
+            
+        case APAddressBookAccess.Granted:
+            self.rootOverlay!.hidden = true
+            self.rootPopUpView!.hidden = true
+            getContacts()
+            break
+            
+        case APAddressBookAccess.Denied:
+            leavePopUp()
+            break
+        }
+    }
+    
+    func leavePopUp(){
+        rootOverlay!.hidden = true
+        rootPopUpView!.hidden = true
+        //Quit
+        goLeave()
+        
+    }
+    
+    func goLeave(){
+        
+        PFUser.currentUser()["hasSeenFriends"] = true
+        PFUser.currentUser().saveInBackgroundWithBlock { (finished, error) -> Void in
+            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+                println("UPDATE USER")
+            })
+        }
+        
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            
+        })
     }
     
 }

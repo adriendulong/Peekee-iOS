@@ -1,0 +1,156 @@
+/* 
+  Localizable.strings
+  Peekee
+
+  Created by Adrien Dulong on 17/01/2015.
+  Copyright (c) 2015 PikiChat. All rights reserved.
+*/
+
+
+// MARK: Walktrough Label
+"React with your camera" = "Kameranızla karşılık verin";
+"Receive and send pics & vids." = "Resim ve video gönderin ve alın.";
+"With friends, family, and dogs. 🐶" = "Doslat, aile ve köpeklerle.🐶";
+"Like and comment with pics & vids. ✨" = "Beğenin ve resimler & videolarla yorum yapın. ✨";
+"Share awesome mosaics." = "Harika mozaikler paylaşın.";
+"On Snapchat, Insta, Twitter... 🚀" = "Snaphat, Insta, Twitter, vb. üzerinde ... 🚀";
+"No Bullshit." = "Boş laf yok.";
+"Short signup" = "Kısa üyelik";
+"No Facebook connect" = "Facebook bağlantısı yok";
+"No email address" = "E-posta adresi yok";
+"Only phone number for human verification" = "Görsel doğrulama için sadece telefon numarası";
+"ALRIGHT, SIGN ME UP" = "TAMAM, ÜYE OLACAĞIM";
+
+// MARK: Sign Up
+"No bots allowed." = "Bot'lara izin verilmez.";
+"Enter your cell number" = "Cep telefonunuzu girin";
+"Unknown" = "Bilinmiyor";
+"Phone" = "Telefon";
+"TEXT ME A 4 DIGITS CODE" = "BANA 4 HANELİ KODU GÖNDER";
+"Sorry but your phone number is not valid" = "Üzgünüm, ancak cep telefonu numaranız geçerli değil";
+"Code sent." = "Kod gönderildi.";
+"We had a problem while connecting you with your phone number, please try again later" = "Telefon numaranızla bağlanırken bir sorunla karşılaştık, lütfen daha sonra tekrar deneyin";
+"CHECK MY CELL NUMBER" = "CEP TELEFONU NUMARAMI KONTROL ET";
+"Invalid code. Try again or check your phone number." = "Geçersiz kod. Tekrar deneyin ya da telefon numaranızı kontrol edin.";
+"Error while getting the confirmation code. Please try again later." = "Onay kodu alınırken hata oluştu. Lütfen daha sonra tekrar deneyin.";
+"Big time now." = "Şimdi en güzel zaman.";
+"Choose a username" = "Bir kullanıcı adı seçin";
+"USERNAME" = "KULLANICI ADI";
+"We had a problem while connecting you with your phone number, please try again later" = "Size telefon numaranızla bağlanırken bir hata oluştu, lütfen tekrar deneyin.";
+"You confirm you've read and accept T&C" = "Hüküm ve Koşulları okuyup, kabul ettiğinizi onaylıyorsunuz";
+"LET'S GET STARTED" = "HADİ BAŞLAYALIM";
+"The username is already taken. Try again" = "Kullanıcı adı alınmış. Tekrar deneyin";
+"The username is not valid : only letters and numbers allowed" = "Kullanıcı adı geçerli değil: sadece harfler ve numaralara izin verilir";
+"Surprise" = "Sürpriz";
+"Here are some cool people who are already using the app" = "Burada uygulamayı zaten kullanan bazı havalı kişiler var";
+"Let's GO!" = "Hadi BAŞLA!";
+
+// MARK: Tuto Overlay
+"Find more friends to get more Peekees" = "Daha fazla Peekee almak için daha çok arkadaş bul";
+"This is a PEEKEE 🍩" = "Bu bir PEEKEE 🍩";
+"Add your own reaction" = "Kendi reaksiyonunu ekle";
+"This is a reaction 🎉" = "Bu bir reaksiyon 🎉";
+
+// MARK: FIrst Use Pop Up
+"BIG TIME!" = "EĞLENCE ZAMANI!";
+"Let's find your friends on the app! 🙇" = "Uygulamadaki arkadaşlarını bulalım! 🙇";
+"GET IN THE LOOP" = "ÇEMBERE GİR";
+"Don't miss the next pictures from your friends 😁" = "Sonraki resimleri arkadaşlarından kaçırma 😁";
+
+// MARK: Main Menu
+"Peekee" = "Peekee";
+"NEW" = "YENİ";
+"HIDE" = "GİZLE";
+"DELETE" = "SİL";
+"Are you sure you want to delete this Peekee? There is no way to get back then." = "Bu Peekee'yi silmek istediğinden emin misin? Geri getirmenin bir yolu yok.";
+
+// MARK: Find Friends
+"%d FRIENDS" = "%d ARKADAŞLAR";
+"Search a user" = "Kullanıcı ara";
+"FIND" = "BUL";
+"FRIENDS" = "ARKADAŞLAR";
+"FRIENDS ON PEEKEE" = "PEEKEE'DEKİ ARKADAŞLAR";
+"FRIENDS NOT YET ON PEEKEE" = "HENÜZ PEEKEE'DE OLMAYAN ARKADAŞLAR";
+"SendInvitSMS" = "SendInvitSMS";
+"LOOKING FOR FRIENDS" = "ARKADAŞLAR ARANIYOR";
+
+// MARK: Peekee View
+"%d friends" = "%d arkadaşlar";
+"%d friend" = "%d arkadaş";
+"More" = "Daha fazla";
+"More actions for this Peekee" = "Bu Peekee için daha fazla işlem";
+"Report this Peekee" = "Bu Peekee'yi raporla";
+"ADD A FRIEND" = "ARKADAŞ EKLE";
+"MUTE THIS FRIEND" = "BU ARKADAŞI SUSTUR";
+"UNMUTE THIS USER" = "BU KULLANICIYI KONUŞTUR";
+"To %d people" = "To %d kişi";
+"Problem while reporting this Peekee. Please try again later" = "Peekee raporlanırken bir sorun oluştu. Lütfen daha sonra tekrar deneyin";
+"This Peekee has been reported. Thank you." = "Bu Peekee raporlandı. Teşekkür ederiz.";
+"DELETE" = "SİL";
+"REPORT" = "RAPORLA";
+
+// MARK: MOZAIC
+"SEND" = "GÖNDER";
+"%@ on Peekee" = "%@ Peekee'de";
+"%d+ replies on the app" = "uygulamada %d+ cevap var";
+"Share" = "Paylaş";
+"AlertNotEnoughReact" = "Üzgünüm, ancak mozaiğinizi oluşturmak için bu Peekee'de en az 6 cevabınız olmalı! Kendi mozaiğinizi oluşturmak için kendinize birkaç cevap göndermeyi deneyin!";
+
+// MARK: New Peekee
+"Search" = "Ara";
+"Send to..." = "Kişisine gönder...";
+"RECENT" = "EN SON";
+"FRIENDS" = "ARKADAŞLAR";
+"SEND TO EVERYONE" = "HERKESE GÖNDER";
+"EVERYONE" = "HERKES";
+"SELECTED" = "SEÇİLİ";
+"We had a problem while sending your Peekee, please try again later" = "Peekee'nizi gönderirken bir sorun oluştu, lütfen daha sonra tekrar deneyin";
+"%d SELECTED" = "%d SEÇİLİ";
+
+// MARK: Settings
+"Settings" = "Ayarlar";
+"Change Username" = "Kullanıcı Değiştir";
+"NOTIFICATIONS" = "BİLDİRİMLER";
+"Notifications" = "Bildirimler";
+"SUPPORT" = "DESTEK";
+"Email Us" = "Bize E-posta Gönder";
+"Tweet Us" = "Bize Tweet At";
+"OTHER" = "DİĞER";
+"Share the app" = "Uygulamayı paylaş";
+"Edit username" = "Kullanıcı adını düzenle";
+"Recommended accounts" = "Önerilen hesaplar";
+"Sorry but this username is already taken. Please choose an other one" = "Üzgünüm, ancak bu kullanıcı adı önceden alınmış. Lütfen başka bir tane seçin";
+"Problem while updating your username. Please try again later." = "Kullanıcı adınız güncellenirken hata oluştu. Lütfen daha sonra tekrar deneyin.";
+"Your username can only have letters and numbers." =  "Kullanıcı adınızda sadece harf ve rakamlar olabilir.";
+"Your username must have at least 3 characters." = "Kullanıcı adınızda en az 3 karakter olmalıdır.";
+
+// MARK: Commun
+"Cancel" = "İptal";
+"Error" = "Hata";
+"Yes" = "Evet";
+"No" = "Hayır";
+"Sorry an error occured. Please try again later" = "Üzgünüm, bir hata oluştu. Lütfen daha sonra tekrar deneyin";
+
+// MARK: Add Friends First
+"Add your friends! 👫" = "Arkadaşlarını ekle! 👫";
+"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "En az %d en yakın arkadaşını seç. Uygulamaya katıldıklarında sana haber vereceğiz!";
+"ON THE APP" = "UYGULAMADA";
+"ON YOUR PHONE CONTACTS" = "TELEFON KİŞİLERİNDE";
+"ALL" = "TÜMÜ";
+"SKIP" = "GEÇ";
+"INVITE ALL" = "TÜMÜNÜ DAVET ET";
+"INVITE %d/%d" = "%d/%d DAVET ET";
+"Last but not least" = "Sonuncu, ama bir o kadar da önemli";
+"Check if you have friends here?!😁" = "Burada arkadaşların var mı, kontrol et?! 😁";
+"Confirmation" = "Onay";
+"Are you sure you want to invite all your contacts?" = "Tüm kişilerini davet etmek istediğinden emin misin?";
+"Friends" = "Arkadaşlar";
+"Still %d to go! You need them to enjoy Peekee!" = "Hala %d süre var! Onları Peekee ile eğlendirmen gerek!";
+
+// MARK: V1.01
+"From" = "From";
+
+
+
+
+

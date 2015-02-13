@@ -67,6 +67,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 self.performSegueWithIdentifier("showRecommended", sender: self)
                 
             }
+            else if PFUser.currentUser()["hasSeenFriends"] == nil {
+                //self.performSegueWithIdentifier("showFriends", sender: self)
+            }
+            else if !(PFUser.currentUser()["hasSeenFriends"] as Bool){
+                self.performSegueWithIdentifier("showFriends", sender: self)
+            }
             else{
                 //See if show tuto overlay
                 if PFUser.currentUser()["hasShownOverlayMenu"] != nil{
@@ -147,9 +153,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         parrotImageView.image = UIImage(named: "parrot_menu")
         parrotView.addSubview(parrotImageView)
         
+        var tapGestureParrotLabel = UITapGestureRecognizer(target: self, action: Selector("shareTwitter"))
         let pikiLabel:UILabel = UILabel(frame: CGRect(x: parrotImageView.frame.width + 15, y: 0, width: 80, height: parrotView.frame.height))
         pikiLabel.text = NSLocalizedString("Peekee", comment : "Peekee")
         pikiLabel.textColor = UIColor.whiteColor()
+        pikiLabel.addGestureRecognizer(tapGestureParrotLabel)
+        pikiLabel.userInteractionEnabled = true
         pikiLabel.font = UIFont(name: Utils().customGothamBol, size: 20.0)
         parrotView.addSubview(pikiLabel)
         
@@ -301,22 +310,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         
         if updateAll{
-            var requestPiki:PFQuery = PFQuery(className: "Piki")
-            requestPiki.orderByDescending("updatedAt")
-            requestPiki.includeKey("user")
-            requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-            
-            requestPiki.findObjectsInBackgroundWithBlock { (pikis : [AnyObject]!, error : NSError!) -> Void in
-                if error != nil{
-                    println("Error getting the last pikis")
-                    
-                }
-                else{
-                    self.lastPikis = pikis as Array<PFObject>
-                    self.tableView.reloadData()
-                    self.refreshControl.endRefreshing()
-                }
-            }
+            getPikis()
         }
         else{
             
@@ -471,7 +465,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         if lastPikis[indexPath.item]["user"] != nil {
             var user:PFUser = lastPikis[indexPath.item]["user"] as PFUser
             var username:String = user["username"] as String
-            pikiCell.usernameLabel!.text = "@\(username)"
+            pikiCell.usernameLabel!.attributedText = getLabelUsername(username)
         }
         else{
             pikiCell.usernameLabel!.text = ""
@@ -479,7 +473,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         
         
-        pikiCell.moreInfosViewIndicator!.hidden = true
+        pikiCell.moreInfosViewIndicator!.hidden = false
         pikiCell.firstPreviewReact!.hidden = true
         pikiCell.secondPreviewReact!.hidden = true
         pikiCell.thirdPreviewReact!.hidden = true
@@ -606,7 +600,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 pikiCell.secondPreviewReact!.hidden = true
                 pikiCell.thirdPreviewReact!.hidden = true
                 
-                pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.answersIcon!.frame.size.width + 9 + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
             }
             
             //var count:AnyObject = self.lastPikis[indexPath.item]["nbReaction"]
@@ -618,7 +612,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             pikiCell.secondPreviewReact!.hidden = true
             pikiCell.thirdPreviewReact!.hidden = true
             
-            pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.answersIcon!.frame.size.width + 9 + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+            pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
         }
         
         if Utils().hasEverViewThisPiki(self.lastPikis[indexPath.item]){
@@ -635,6 +629,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                             pikiCell.moreInfosViewIndicator!.hidden = false
                             pikiCell.moreInfosViewIndicator!.backgroundColor = Utils().primaryColor
                             pikiCell.moreInfosLabel!.text = "+ \(nbInteraction - 3)"
+                            pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                             
                             if nbInteraction < 100 {
                                 pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 50, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
@@ -644,6 +639,14 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                                 pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 70, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                                 pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                             }
+                        }
+                        else if nbInteraction == 0 {
+                            pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 100, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                            pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                            pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                            pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                            pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                            pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                         }
                         else{
                             pikiCell.moreInfosViewIndicator!.hidden = true
@@ -652,8 +655,9 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                     else{
                         if nbInteraction > 3{
                             pikiCell.moreInfosViewIndicator!.hidden = false
-                            pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor.grayColor()
+                            pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor.whiteColor()
                             pikiCell.moreInfosLabel!.text = "+ \(nbInteraction - 3)"
+                            pikiCell.moreInfosLabel!.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
                             
                             if nbInteraction < 100 {
                                 pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 50, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
@@ -664,11 +668,31 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                                 pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                             }
                         }
+                        else if nbInteraction == 0{
+                            pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 100, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                            pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                            pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                            pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                            pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                            pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
+                            
+                            
+                        }
                         else{
                             pikiCell.moreInfosViewIndicator!.hidden = true
                         }
                     }
                     
+                }
+                else{
+                    pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 100, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                    pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                    pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                    pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                    pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                    pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
+                    
+                   
                 }
             }
             else{
@@ -679,6 +703,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                         pikiCell.moreInfosViewIndicator!.hidden = false
                         pikiCell.moreInfosViewIndicator!.backgroundColor = Utils().primaryColor
                         pikiCell.moreInfosLabel!.text = "+ \(nbInteraction - 3)"
+                        pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                         
                         if nbInteraction < 100 {
                             pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 50, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
@@ -689,9 +714,25 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                             pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                         }
                     }
+                    else if nbInteraction == 0 {
+                        pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 100, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                        pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                        pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                        pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                        pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                        pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
+                    }
                     else{
                         pikiCell.moreInfosViewIndicator!.hidden = true
                     }
+                }
+                else{
+                    pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 100, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                    pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
+                    pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                    pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                    pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                    pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                 }
                 
             }
@@ -700,7 +741,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             
             pikiCell.moreInfosViewIndicator!.hidden = false
             pikiCell.moreInfosViewIndicator!.backgroundColor = Utils().secondColor
-            pikiCell.moreInfosLabel!.text = NSLocalizedString("NEW", comment : "NEW")
+            pikiCell.moreInfosLabel!.text = "NEW"
+            pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
             
             pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 50, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
             pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
@@ -1233,6 +1275,28 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         else{
             
         }
+    }
+    
+    
+    
+    func getLabelUsername(username : String) -> NSMutableAttributedString{
+        
+        var fromLabel:String = NSLocalizedString("From", comment :"From")
+        var totalLabel:String = "\(fromLabel) \(username)"
+        
+        var mutableString:NSMutableAttributedString = NSMutableAttributedString(string: totalLabel)
+        
+        mutableString.addAttribute(NSFontAttributeName, value: UIFont(name: Utils().customFontSemiBold, size: 16.0)!, range: NSRange(location: 0,length: countElements(fromLabel)))
+        
+        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0), range: NSRange(location: 0,length: countElements(fromLabel)))
+    
+        mutableString.addAttribute(NSFontAttributeName, value: UIFont(name: Utils().customFontSemiBold, size: 24.0)!, range: NSRange(location: countElements(fromLabel),length: countElements(totalLabel) - countElements(fromLabel)))
+        
+        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0), range: NSRange(location: countElements(fromLabel),length: countElements(totalLabel) - countElements(fromLabel)))
+        
+        return mutableString
+        
+        
     }
     
 }

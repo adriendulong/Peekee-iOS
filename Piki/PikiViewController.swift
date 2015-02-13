@@ -136,6 +136,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     var documentInteractionController:UIDocumentInteractionController?
     var isLoadingMore:Bool = false
+    var refreshControl:UIRefreshControl = UIRefreshControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -240,6 +241,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         collectionView!.showsHorizontalScrollIndicator = false
         collectionView!.showsVerticalScrollIndicator = false
         self.view.addSubview(collectionView!)
+        
+        self.collectionView!.alwaysBounceVertical = true
         
         
         //NB People Infos View
@@ -361,7 +364,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         //Reply Button
-        replyButton = UIButton(frame: CGRect(x: self.view.frame.width - 90, y: self.view.frame.height - 93, width: 62, height: 65))
+        replyButton = UIButton(frame: CGRect(x: self.view.frame.width - 103, y: self.view.frame.height - 108, width: 75, height: 80))
         replyButton.setImage(UIImage(named: "reply_button"), forState: UIControlState.Normal)
         replyButton.addTarget(self, action: Selector("replyPeekee"), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(replyButton)
@@ -373,7 +376,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         topOverlay.backgroundColor = UIColor.blackColor()
         topOverlay.addGestureRecognizer(tapGestureLeaveReplyTop)
         topOverlay.hidden = true
-        topOverlay.alpha = 0.5
+        topOverlay.alpha = 0.7
         self.view.addSubview(topOverlay)
         
         let alternativeMiddleOverlayGesture = UITapGestureRecognizer(target: self, action: Selector("leaveReply"))
@@ -416,13 +419,13 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             case 0:
                 emojiButton.setImage(UIImage(named: "text_emoji_button"), forState: UIControlState.Normal)
             case 1:
-                emojiButton.setImage(UIImage(named: "emoji_icon"), forState: UIControlState.Normal)
+                emojiButton.setImage(UIImage(named: "awesome_icon"), forState: UIControlState.Normal)
             case 2:
-                emojiButton.setImage(UIImage(named: "perfect_emoji_button"), forState: UIControlState.Normal)
+                emojiButton.setImage(UIImage(named: "cute_icon"), forState: UIControlState.Normal)
             case 3:
-                emojiButton.setImage(UIImage(named: "heart_emoji_button"), forState: UIControlState.Normal)
+                emojiButton.setImage(UIImage(named: "fuck_icon"), forState: UIControlState.Normal)
             default:
-                emojiButton.setImage(UIImage(named: "text_emoji_button"), forState: UIControlState.Normal)
+                emojiButton.setImage(UIImage(named: "awesome_icon"), forState: UIControlState.Normal)
             }
             
             emojiButton.transform = CGAffineTransformMakeScale(0, 0)
@@ -493,6 +496,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
         
+        refreshControl.tintColor = UIColor(red: 63/255, green: 45/255, blue: 50/255, alpha: 1.0)
+        refreshControl.addTarget(self, action: Selector("refresh"), forControlEvents: UIControlEvents.ValueChanged)
+        self.collectionView!.addSubview(refreshControl)
+        
         
         getReacts()
         Utils().setPikiAsView(self.mainPiki!)
@@ -509,6 +516,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     override func viewDidAppear(animated: Bool) {
+        
         
         
         //See if show tuto overlay
@@ -534,6 +542,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 beginSession(cell.previewCameraView)
             }
             
+            //self.collectionView!.reloadData()
             
             //captureSession.startRunning()
             //self.collectionView!.reloadData()
@@ -544,6 +553,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func refresh(){
+        
+        getReacts()
+        
     }
     
     
@@ -592,9 +607,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    /*func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         return UIEdgeInsetsMake(0, 0, 0, 0)
-    }
+    }*/
     //Build each cell
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -648,25 +663,52 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                 var player:AVPlayer = AVPlayer(playerItem: playerItem)
                                 player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
                                 player.muted = false
-                                player.play()
+                                
                                 
                                 
                                 
                                 
                                 NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
                                 
-                                dispatch_async(dispatch_get_main_queue(), { ()->() in
-                                    
-                                    let indexPathCell = collectionView.indexPathForCell(cell as UICollectionViewCell)
+ 
+                                if (self as UIViewController).isViewLoaded() && ((self as UIViewController).view.window != nil) {
+                                    cell.loadIndicator.hidden = true
+                                    cell.playerLayer.player = player
+                                    cell.playerView.hidden = false
+                                    player.play()
+                                }
+                                
+                                /*
+                                let indexPathCell = collectionView.indexPathForCell(cell as UICollectionViewCell)
+                                if indexPathCell != nil{
                                     if indexPathCell!.section == 0{
                                         if indexPathCell!.item == 0{
+                                            
                                             cell.loadIndicator.hidden = true
                                             cell.playerLayer.player = player
                                             cell.playerView.hidden = false
-                                            
+                                            player.play()
                                         }
                                     }
-                                })
+                                }*/
+                                /*dispatch_async(dispatch_get_main_queue(), { ()->() in
+                                    
+                                    
+                                    
+                                    let indexPathCell = collectionView.indexPathForCell(cell as UICollectionViewCell)
+                                    if indexPathCell != nil{
+                                        if indexPathCell!.section == 0{
+                                            if indexPathCell!.item == 0{
+                                                
+                                                cell.loadIndicator.hidden = true
+                                                cell.playerLayer.player = player
+                                                cell.playerView.hidden = false
+                                                
+                                            }
+                                        }
+                                    }
+                                    
+                                })*/
                                 
                                 
                             }
@@ -886,10 +928,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 if (cellMain.playerLayer.player.rate > 0 && cellMain.playerLayer.player.error == nil) {
                     cellMain.playerLayer.player.pause()
                     cellMain.readVideoIcon.hidden = false
+                    cellMain.loadIndicator.hidden = true
                 }
                 else{
                     cellMain.playerLayer.player.play()
                     cellMain.readVideoIcon.hidden = true
+                    cellMain.loadIndicator.hidden = true
                 }
                 
                 
@@ -1077,62 +1121,138 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func beginSession(viewToUse : UIView) {
         
-        //configureDevice()
-        audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-        var errAudio : NSError? = nil
-        audioDeviceInput = AVCaptureDeviceInput(device: audioCaptureDevice, error: &errAudio)
-        if errAudio != nil{
-            println("Problem to get audio input : \(errAudio!.localizedDescription)")
-        }
-        else{
-            /*if captureSession.canAddInput(audioDeviceInput){
+        
+        
+        var authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
+        
+        if authStatus == AVAuthorizationStatus.Authorized{
+            //configureDevice()
+            audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+            var errAudio : NSError? = nil
+            audioDeviceInput = AVCaptureDeviceInput(device: audioCaptureDevice, error: &errAudio)
+            if errAudio != nil{
+                println("Problem to get audio input : \(errAudio!.localizedDescription)")
+            }
+            else{
+                /*if captureSession.canAddInput(audioDeviceInput){
                 captureSession.addInput(audioDeviceInput)
                 println("ADD")
-            }*/
+                }*/
+            }
+            
+            
+            
+            
+            var err : NSError? = nil
+            captureDeviceInput = AVCaptureDeviceInput(device: captureDevice, error: &err)
+            if captureSession.canAddInput(captureDeviceInput!){
+                captureSession.addInput(captureDeviceInput!)
+            }
+            
+            
+            if err != nil {
+                println("error: \(err?.localizedDescription)")
+            }
+            
+            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            
+            previewLayer?.frame = viewToUse.layer.frame
+            viewToUse.layer.addSublayer(previewLayer)
+            
+            
+            
+            
+            imageOutput = AVCaptureStillImageOutput()
+            imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+            if captureSession.canAddOutput(imageOutput){
+                captureSession.addOutput(imageOutput)
+            }
+            
+            
+            //Movie output
+            videoOutput = AVCaptureMovieFileOutput()
+            let totalSeconds:Float64 = 10
+            let preferedTimeScale:Int32 = 30
+            let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
+            videoOutput!.maxRecordedDuration = maxDuration
+            videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
+            if captureSession.canAddOutput(videoOutput!){
+                captureSession.addOutput(videoOutput!)
+            }
+            
+            captureSession.startRunning()
+        }
+        else if authStatus == AVAuthorizationStatus.NotDetermined{
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeAudio, completionHandler: { (succeed) -> Void in
+                if succeed{
+                    //configureDevice()
+                    self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+                    var errAudio : NSError? = nil
+                    self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
+                    if errAudio != nil{
+                        println("Problem to get audio input : \(errAudio!.localizedDescription)")
+                    }
+                    else{
+                        /*if captureSession.canAddInput(audioDeviceInput){
+                        captureSession.addInput(audioDeviceInput)
+                        println("ADD")
+                        }*/
+                    }
+                    
+                    
+                    
+                    
+                    var err : NSError? = nil
+                    self.captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice, error: &err)
+                    if self.captureSession.canAddInput(self.captureDeviceInput!){
+                        self.captureSession.addInput(self.captureDeviceInput!)
+                    }
+                    
+                    
+                    if err != nil {
+                        println("error: \(err?.localizedDescription)")
+                    }
+                    
+                    self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
+                    self.previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+                    
+                    self.previewLayer?.frame = viewToUse.layer.frame
+                    viewToUse.layer.addSublayer(self.previewLayer)
+                    
+                    
+                    
+                    
+                    self.imageOutput = AVCaptureStillImageOutput()
+                    self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+                    if self.captureSession.canAddOutput(self.imageOutput){
+                        self.captureSession.addOutput(self.imageOutput)
+                    }
+                    
+                    
+                    //Movie output
+                    self.videoOutput = AVCaptureMovieFileOutput()
+                    let totalSeconds:Float64 = 10
+                    let preferedTimeScale:Int32 = 30
+                    let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
+                    self.videoOutput!.maxRecordedDuration = maxDuration
+                    self.videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
+                    if self.captureSession.canAddOutput(self.videoOutput!){
+                        self.captureSession.addOutput(self.videoOutput!)
+                    }
+                    
+                    self.captureSession.startRunning()
+                }
+                else{
+                    self.camDenied()
+                }
+            })
+        }
+        else{
+            self.camDenied()
         }
         
         
-        
-        
-        var err : NSError? = nil
-        captureDeviceInput = AVCaptureDeviceInput(device: captureDevice, error: &err)
-        if captureSession.canAddInput(captureDeviceInput!){
-            captureSession.addInput(captureDeviceInput!)
-        }
-        
-        
-        if err != nil {
-            println("error: \(err?.localizedDescription)")
-        }
-        
-        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
-        previewLayer?.frame = viewToUse.layer.frame
-        viewToUse.layer.addSublayer(previewLayer)
-        
-        
-        
-        
-        imageOutput = AVCaptureStillImageOutput()
-        imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
-        if captureSession.canAddOutput(imageOutput){
-            captureSession.addOutput(imageOutput)
-        }
-        
-        
-        //Movie output
-        videoOutput = AVCaptureMovieFileOutput()
-        let totalSeconds:Float64 = 10
-        let preferedTimeScale:Int32 = 30
-        let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-        videoOutput!.maxRecordedDuration = maxDuration
-        videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
-        if captureSession.canAddOutput(videoOutput!){
-            captureSession.addOutput(videoOutput!)
-        }
-        
-        captureSession.startRunning()
     }
     
     func addAudio(){
@@ -1599,8 +1719,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         UIGraphicsBeginImageContext(size)
         
         image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        blackOverlayImage!.drawInRect(CGRect(x: 0, y: 0, width: size.width * UIScreen.mainScreen().scale , height: size.height * UIScreen.mainScreen().scale))
-        imageLike!.drawInRect(CGRect(x: size.width/2 - sizeLikeImage.width/2, y: size.height/2 - sizeLikeImage.height/2, width: imageLike!.size.width *  UIScreen.mainScreen().scale, height: imageLike!.size.height  * UIScreen.mainScreen().scale))
+        /*blackOverlayImage!.drawInRect(CGRect(x: 0, y: 0, width: size.width * UIScreen.mainScreen().scale , height: size.height * UIScreen.mainScreen().scale))*/
+        imageLike!.drawInRect(CGRect(x: 0, y: 0, width: imageLike!.size.width *  UIScreen.mainScreen().scale, height: imageLike!.size.height  * UIScreen.mainScreen().scale))
         
         
         var finalImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -1689,8 +1809,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
                     dispatch_async(dispatch_get_main_queue(), {
 
+                        
                         self.pikiReacts.insert(pikiInfos, atIndex: 0)
                         self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 1)])
+                        self.leaveReply()
                         //self.startVideoOnVisibleCells()
                     })
                     
@@ -2072,8 +2194,27 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 if indexPath!.section > 0{
                     if indexPath != nil {
                         if (cell as ReactsCollectionViewCell).playerLayer.player != nil{
-                            (cell as ReactsCollectionViewCell).playerLayer.player.pause()
-                            (cell as ReactsCollectionViewCell).playerLayer.player = nil
+                            
+                            dispatch_async(dispatch_get_main_queue(), {
+                                (cell as ReactsCollectionViewCell).playerLayer.player.pause()
+                                (cell as ReactsCollectionViewCell).playerLayer.player = nil
+                            })
+                            
+                            
+                        }
+                    }
+                }
+                else{
+                    if indexPath != nil {
+                        if (cell as MainPeekeeCollectionViewCell).playerLayer.player != nil{
+                            
+                            dispatch_async(dispatch_get_main_queue(), {
+                                (cell as MainPeekeeCollectionViewCell).playerLayer.player.pause()
+                                (cell as MainPeekeeCollectionViewCell).loadIndicator.hidden = true
+                                (cell as MainPeekeeCollectionViewCell).readVideoIcon.hidden = false
+                            })
+                            
+                            
                         }
                     }
                 }
@@ -2270,11 +2411,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         var requestReact:PFQuery = PFQuery(className: "React")
         requestReact.whereKey("Piki", equalTo: mainPiki)
         requestReact.orderByDescending("createdAt")
-        requestReact.limit = 20
+        requestReact.limit = 50
         requestReact.cachePolicy = kPFCachePolicyCacheThenNetwork
         requestReact.includeKey("user")
         
         requestReact.findObjectsInBackgroundWithBlock { (reacts, error) -> Void in
+            self.refreshControl.endRefreshing()
             if error != nil{
                 
             }
@@ -2748,7 +2890,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             animations: { () -> Void in
                 
                 cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, (self.view.frame.width-2)/3 * 2, (self.view.frame.width-2)/3 * 2)
-                cell.usernameLabel!.center = CGPoint(x: cell.frame.width/2, y: cell.frame.height - 25)
+                cell.usernameLabel!.frame = CGRectMake(0,cell.frame.height - 25, cell.frame.width, 25)
                 cell.reactImage.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
                 cell.playerView.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
                 cell.playerLayer.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
@@ -2776,6 +2918,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         UIView.transitionWithView(cell, duration: 0.2, options: nil,
             animations: { () -> Void in
                 cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y,  (self.view.frame.size.width - 2)/3,  (self.view.frame.size.width - 2)/3)
+                cell.usernameLabel!.frame = CGRectMake(0,cell.frame.height - 25, cell.frame.width, 25)
                 cell.reactImage.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
                 cell.playerView.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
                 cell.playerLayer.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
@@ -3162,7 +3305,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             restScreenOverlay.alpha = 0.7
             overlayTuto.addSubview(restScreenOverlay)
             
-            let imageButton  = UIImageView(frame: CGRect(x: cameraActionButton!.frame.origin.x, y: cameraActionButton!.frame.origin.y, width: cameraActionButton!.frame.width, height: cameraActionButton!.frame.height))
+            let imageButton  = UIImageView(frame: CGRect(x: replyButton!.frame.origin.x, y: replyButton!.frame.origin.y, width: replyButton!.frame.width, height: replyButton!.frame.height))
             imageButton.image = UIImage(named: "reply_button")
             overlayTuto.addSubview(imageButton)
             
@@ -3170,7 +3313,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             lineReact.image = UIImage(named: "peekee_line_react")
             overlayTuto.addSubview(lineReact)
             
-            let lineButton = UIImageView(frame: CGRect(x: replyButton!.center.x - 3, y: replyButton!.frame.origin.y - 274 , width: 6, height: 275))
+            let lineButton = UIImageView(frame: CGRect(x: replyButton!.center.x - 3, y: replyButton!.frame.origin.y - 280 , width: 6, height: 275))
             lineButton.image = UIImage(named: "peekee_line_button")
             overlayTuto.addSubview(lineButton)
             
@@ -3535,6 +3678,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         backEmojiButtonSelected.hidden = true
         var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
         cameraCell.overlayCameraView.hidden = true
+        cameraCell.emojiImageView.hidden = true
         cameraCell.textViewOverPhoto!.hidden = true
         
     }
@@ -3550,6 +3694,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         backEmojiButtonSelected.center = CGPoint(x: arrayEmojisButton[position].center.x, y: arrayEmojisButton[position].center.y - 2)
         backEmojiButtonSelected.hidden = false
         cameraCell.emojiImageView!.hidden = false
+        cameraCell.overlayCameraView.hidden = true
         
         switch position{
         case 0:
@@ -3560,17 +3705,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             cameraCell.textViewOverPhoto!.text = "Your text here 😀"
             goInTextMode()
         case 1:
-            cameraCell.emojiImageView.image = UIImage(named: "emoji_smiley")
+            cameraCell.emojiImageView.image = UIImage(named: "awesome")
         case 2:
-            cameraCell.emojiImageView.image = UIImage(named: "emoji_perfect")
+            cameraCell.emojiImageView.image = UIImage(named: "cute")
         case 3:
-            cameraCell.emojiImageView.image = UIImage(named: "big_coeur")
+            cameraCell.emojiImageView.image = UIImage(named: "fuck")
         default:
-            cameraCell.emojiImageView.image = UIImage(named: "emoji_smiley")
+            cameraCell.emojiImageView.image = UIImage(named: "awesome")
         }
         
         
-        cameraCell.overlayCameraView.hidden = false
+        //cameraCell.overlayCameraView.hidden = false
         
     }
     
@@ -3835,13 +3980,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
             
             
-            
             let library = ALAssetsLibrary()
             library.writeImageToSavedPhotosAlbum(image.CGImage, orientation: ALAssetOrientation.Up) { (url, error) -> Void in
                 if error != nil {
-                    
+                    let alert = UIAlertView(title: "Error", message: "Error while saving your photo",
+                        delegate: nil, cancelButtonTitle: "OK")
+                    alert.show()
+                }
+                else{
+                    let alert = UIAlertView(title: "Saved!", message: "Your photo has been saved on your library",
+                        delegate: nil, cancelButtonTitle: "OK")
+                    alert.show()
                 }
             }
+
         }
     }
     
@@ -4167,9 +4319,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
             }
             else if nbReacts! < 6{
-                let alert = UIAlertView(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"),
-                    delegate: nil, cancelButtonTitle: "OK")
-                alert.show()
+                
+                var alert = UIAlertController(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    self.sendSMSToContacts()
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
             }
             
             var position:Int = 0
@@ -4283,9 +4440,13 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         else{
             
-            let alert = UIAlertView(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"),
-                delegate: nil, cancelButtonTitle: "OK")
-            alert.show()
+            var alert = UIAlertController(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                self.sendSMSToContacts()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
         
         
@@ -4390,6 +4551,65 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         self.pikiReacts.insert(pikiInfos, atIndex: 0)
         self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 1)])
         
+        self.leaveReply()
+        
+    }
+    
+    
+    // MARK: Send SMS
+    
+    func sendSMSToContacts(){
+        
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+
+        
+        var messageController:MFMessageComposeViewController = MFMessageComposeViewController()
+        messageController.messageComposeDelegate = self
+        messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
+        
+        if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
+            messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+        }
+        
+        self.presentViewController(messageController, animated: true) { () -> Void in
+            
+        }
+        
+        
+    }
+    
+    
+    // MARK: Cam Denied
+    
+    func camDenied(){
+        
+        
+        var canOpenSettings:Bool = false
+        
+        if UIApplicationOpenSettingsURLString != nil{
+            canOpenSettings = true
+        }
+        
+        if canOpenSettings{
+            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Go to settings to allow?", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                
+                self.openSettings()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else{
+            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Peekee", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    func openSettings(){
+        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
     }
 
 }

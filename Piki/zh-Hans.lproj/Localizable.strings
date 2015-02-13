@@ -1,0 +1,156 @@
+/* 
+  Localizable.strings
+  Peekee
+
+  Created by Adrien Dulong on 17/01/2015.
+  Copyright (c) 2015 PikiChat. All rights reserved.
+*/
+
+
+// MARK: Walktrough Label
+"React with your camera" = "用您的相机拍照回应";
+"Receive and send pics & vids." = "收发图片和视频。";
+"With friends, family, and dogs. 🐶" = "与好友、家人和宠物。🐶";
+"Like and comment with pics & vids. ✨" = "赞图片和视频并发表评论。✨";
+"Share awesome mosaics." = "分享超棒拼图。";
+"On Snapchat, Insta, Twitter... 🚀" = "在 Snapchat、Instagram、Twitter 上... 🚀";
+"No Bullshit." = "无需填写大量信息。";
+"Short signup" = "快速注册";
+"No Facebook connect" = "无需 Facebook Connect";
+"No email address" = "无需电子邮件地址";
+"Only phone number for human verification" = "只需提供手机号码验证您是真人";
+"ALRIGHT, SIGN ME UP" = "好了，给我注册";
+
+// MARK: Sign Up
+"No bots allowed." = "不允许机器人注册。";
+"Enter your cell number" = "输入您的手机号码";
+"Unknown" = "未知";
+"Phone" = "手机";
+"TEXT ME A 4 DIGITS CODE" = "用短信向我发送 4 位代码";
+"Sorry but your phone number is not valid" = "抱歉，您的手机号码无效";
+"Code sent." = "代码已发送。";
+"We had a problem while connecting you with your phone number, please try again later" = "关联您的手机号码时遇到问题。请稍后重试。";
+"CHECK MY CELL NUMBER" = "检查我的手机号码";
+"Invalid code. Try again or check your phone number." = "代码无效。请重试或检查您的手机号码。";
+"Error while getting the confirmation code. Please try again later." = "获取验证码时出错。请稍后重试。";
+"Big time now." = "现在是重要时刻。";
+"Choose a username" = "选择用户名";
+"USERNAME" = "用户名";
+"We had a problem while connecting you with your phone number, please try again later" = "关联您的手机号码时遇到问题。请稍后重试";
+"You confirm you've read and accept T&C" = "确认您已阅读并接受条款和条件";
+"LET'S GET STARTED" = "立即开始";
+"The username is already taken. Try again" = "此用户名已被占用。请重试";
+"The username is not valid : only letters and numbers allowed" = "用户名无效：只允许使用字母和数字";
+"Surprise" = "惊喜";
+"Here are some cool people who are already using the app" = "以下是一些已经用上此应用的达人";
+"Let's GO!" = "完成注册！";
+
+// MARK: Tuto Overlay
+"Find more friends to get more Peekees" = "查找更多好友来获取更多 Peekee";
+"This is a PEEKEE 🍩" = "这是一个 Peekee 🍩";
+"Add your own reaction" = "添加您的回应";
+"This is a reaction 🎉" = "这是一条回应 🎉";
+
+// MARK: FIrst Use Pop Up
+"BIG TIME!" = "重要时刻！";
+"Let's find your friends on the app! 🙇" = "让我们帮您找出使用此应用的好友！🙇";
+"GET IN THE LOOP" = "接收通知";
+"Don't miss the next pictures from your friends 😁" = "不要错过您好友的下一批图片 😁";
+
+// MARK: Main Menu
+"Peekee" = "Peekee";
+"NEW" = "新建";
+"HIDE" = "隐藏";
+"DELETE" = "删除";
+"Are you sure you want to delete this Peekee? There is no way to get back then." = "确定要删除此 Peekee 吗？删除后再也无法恢复。";
+
+// MARK: Find Friends
+"%d FRIENDS" = "%d 名好友";
+"Search a user" = "搜索用户";
+"FIND" = "查找";
+"FRIENDS" = "好友";
+"FRIENDS ON PEEKEE" = "使用 Peekee 的好友";
+"FRIENDS NOT YET ON PEEKEE" = "尚未使用 Peekee 的好友";
+"SendInvitSMS" = "\n %@";
+"LOOKING FOR FRIENDS" = "查找好友";
+
+// MARK: Peekee View
+"%d friends" = "%d 名好友";
+"%d friend" = "%d 名好友";
+"More" = "更多";
+"More actions for this Peekee" = "针对此 Peekee 的更多操作";
+"Report this Peekee" = "举报此 Peekee";
+"ADD A FRIEND" = "添加好友";
+"MUTE THIS FRIEND" = "屏蔽此好友";
+"UNMUTE THIS USER" = "取消屏蔽此好友";
+"To %d people" = "发送给 %d 人";
+"Problem while reporting this Peekee. Please try again later" = "举报此 Peekee 时遇到问题。请稍后重试";
+"This Peekee has been reported. Thank you." = "已举报此 Peekee，谢谢。";
+"DELETE" = "删除";
+"REPORT" = "举报";
+
+// MARK: MOZAIC
+"SEND" = "发送";
+"%@ on Peekee" = "Peekee 上的 %@";
+"%d+ replies on the app" = "应用上有超过 %d 条回复";
+"Share" = "分享";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+
+// MARK: New Peekee
+"Search" = "搜索";
+"Send to..." = "发送至...";
+"RECENT" = "最近";
+"FRIENDS" = "好友";
+"SEND TO EVERYONE" = "发送至所有人";
+"EVERYONE" = "所有人";
+"SELECTED" = "选定的人";
+"We had a problem while sending your Peekee, please try again later" = "发送您的 Peekee 时遇到问题，请稍后重试";
+"%d SELECTED" = "已选定 %d 人";
+
+// MARK: Settings
+"Settings" = "设置";
+"Change Username" = "更改用户名";
+"NOTIFICATIONS" = "通知";
+"Notifications" = "通知";
+"SUPPORT" = "支持";
+"Email Us" = "给我们发电子邮件";
+"Tweet Us" = "给我们发 Twitter 消息";
+"OTHER" = "其他方式";
+"Share the app" = "分享此应用";
+"Edit username" = "修改用户名";
+"Recommended accounts" = "推荐帐户";
+"Sorry but this username is already taken. Please choose an other one" = "抱歉，此用户已被占用。请选择其他用户名";
+"Problem while updating your username. Please try again later." = "更新您的用户名时遇到问题。请稍后重试。";
+"Your username can only have letters and numbers." =  "用户名只能包含字母和数字。";
+"Your username must have at least 3 characters." = "用户名必须至少包含 3 个字符。";
+
+// MARK: Commun
+"Cancel" = "取消";
+"Error" = "错误";
+"Yes" = "是";
+"No" = "否";
+"Sorry an error occured. Please try again later" = "抱歉，出错了。请稍后重试";
+
+// MARK: Add Friends First
+"Add your friends! 👫" = "添加您的好友！👫";
+"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "选择您的至少 %d 名密友。当他们开始使用此应用时，我们会通知您！";
+"ON THE APP" = "此应用的用户";
+"ON YOUR PHONE CONTACTS" = "您的手机联系人";
+"ALL" = "全部";
+"SKIP" = "跳过";
+"INVITE ALL" = "全部邀请";
+"INVITE %d/%d" = "邀请 %d/%d";
+"Last but not least" = "重要的最后一步";
+"Check if you have friends here?!😁" = "检查您是否有好友在使用此应用！😁";
+"Confirmation" = "确认";
+"Are you sure you want to invite all your contacts?" = "确定要邀请所有联系人吗？";
+"Friends" = "好友";
+"Still %d to go! You need them to enjoy Peekee!" = "还差 %d 人才能继续！您需要选择这么多好友才能享用 Peekee！";
+
+// MARK: V1.01
+"From" = "From";
+
+
+
+
+

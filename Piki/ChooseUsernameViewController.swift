@@ -29,6 +29,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
     var phoneNumber:String?
     var username:String?
     var usernameChoiceIndicator:UIImageView?
+    var canSignUp:Bool = false
     
     @IBOutlet weak var spaceVerticalConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
@@ -76,13 +77,15 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
         labelGetStarted.text = NSLocalizedString("LET'S GET STARTED", comment : "LET'S GET STARTED")
         validationView!.addSubview(labelGetStarted)
 
-        
+        var tapGestureTerms = UITapGestureRecognizer(target: self, action: Selector("openTerms"))
         termsLabel = UILabel(frame: CGRect(x: 0, y: validationView!.frame.origin.y - 25, width: self.view.frame.width, height: 15))
         termsLabel!.font = UIFont(name: Utils().customFontNormal, size: 14.0)
         termsLabel!.textAlignment = NSTextAlignment.Center
         termsLabel!.textColor = Utils().primaryColorDark
         termsLabel!.text = NSLocalizedString("You confirm you've read and accept T&C", comment : "You confirm you've read and accept T&C")
+        termsLabel!.userInteractionEnabled = true
         termsLabel!.hidden = false
+        termsLabel!.addGestureRecognizer(tapGestureTerms)
         self.view.addSubview(termsLabel!)
         
         notAvailableUsernameLabel = UILabel(frame: CGRect(x: 0, y: validationView!.frame.origin.y - 25, width: self.view.frame.width, height: 15))
@@ -157,11 +160,17 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
             return false
         }
         
+        
+        
         notAvailableUsernameLabel!.text = NSLocalizedString("The username is already taken. Try again.", comment : "The username is already taken. Try again.")
         usernameChoiceIndicator!.hidden = true
         
         var finalText:NSString = textField.text as NSString
         finalText = finalText.stringByReplacingCharactersInRange(range, withString: string)
+        
+        if finalText.length > 15{
+            return false
+        }
         
         
         var finalString:String = finalText as String!
@@ -181,6 +190,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                                 self.usernameChoiceIndicator!.hidden = false
                                 self.usernameChoiceIndicator!.image = UIImage(named: "error_username_icon")
                                 self.validationView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                                self.canSignUp = false
                                 self.notAvailableUsernameLabel!.hidden = false
                                 self.termsLabel!.hidden = true
                             }
@@ -191,6 +201,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                                 self.usernameChoiceIndicator!.image = UIImage(named: "validated_username_icon")
                                 self.validationView!.backgroundColor = Utils().secondColor
                                 self.notAvailableUsernameLabel!.hidden = true
+                                self.canSignUp = true
                                 self.termsLabel!.hidden = false
                             }
                         }
@@ -202,6 +213,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                             self.usernameChoiceIndicator!.image = UIImage(named: "validated_username_icon")
                             self.validationView!.backgroundColor = Utils().secondColor
                             self.notAvailableUsernameLabel!.hidden = true
+                            self.canSignUp = true
                             self.termsLabel!.hidden = false
                         }
                     }
@@ -223,6 +235,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
             self.usernameChoiceIndicator!.image = UIImage(named: "error_username_icon")
             self.notAvailableUsernameLabel!.hidden = false
             self.termsLabel!.hidden = true
+            self.canSignUp = false
             self.validationView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
         }
         
@@ -264,6 +277,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                 user["hasSeenRecommanded"] = false
                 user["hasShownOverlayMenu"] = false
                 user["hasShownOverlayPeekee"] = false
+                user["hasSeenFriends"] = false
                 
                 Mixpanel.sharedInstance().createAlias(PFUser.currentUser().objectId, forDistinctID: Mixpanel.sharedInstance().distinctId)
                 if user.username != nil{
@@ -344,6 +358,15 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
         else{
           return false
         }
+    }
+    
+    
+    // MARK: Open Terms
+    
+    func openTerms(){
+        
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://peekeeapp.com/terms")!)
+        
     }
     
     

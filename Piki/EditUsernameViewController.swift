@@ -58,6 +58,12 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
+        var finalText:NSString = textField.text as NSString
+        finalText = finalText.stringByReplacingCharactersInRange(range, withString: string)
+        
+        if finalText.length > 15{
+            return false
+        }
         
         if isForbidden(string){
             return false

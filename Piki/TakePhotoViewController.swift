@@ -46,6 +46,8 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     var timerReact:NSTimer?
     var isRecording:Bool = false
     
+    var backKeyboardView:UIView?
+    
     //Camera
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
@@ -246,7 +248,18 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     self.libraryButton!.layer.borderColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0).CGColor
                     self.view.addSubview(self.libraryButton!)
                     
+                    self.backKeyboardView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - keyboardSize.height, width: self.view.frame.width, height: keyboardSize.height))
+                    self.backKeyboardView!.backgroundColor = UIColor.blackColor()
+                    self.backKeyboardView!.alpha = 0.9
+                    self.view.addSubview(self.backKeyboardView!)
                     
+                    var novideoLabel = UILabel(frame: CGRect(x: 25, y: 0, width: self.backKeyboardView!.frame.width - 50, height: self.backKeyboardView!.frame.height))
+                    novideoLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
+                    novideoLabel.textColor = UIColor.whiteColor()
+                    novideoLabel.numberOfLines = 2
+                    novideoLabel.textAlignment = NSTextAlignment.Center
+                    novideoLabel.text = "You can not add text on the video for the moment😪 Promise, it comes soon!"
+                    self.backKeyboardView!.addSubview(novideoLabel)
                     
                     
                     self.accessLastLibPhoto()
@@ -302,50 +315,111 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     
     func beginSession(viewToUse : UIView) {
         
-        //configureDevice()
-        audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-        var errAudio : NSError? = nil
-        audioDeviceInput = AVCaptureDeviceInput(device: audioCaptureDevice, error: &errAudio)
+        var authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
         
-        if audioDeviceInput != nil {
-            captureSession.addInput(audioDeviceInput)
+        if authStatus == AVAuthorizationStatus.Authorized{
+            //configureDevice()
+            audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+            var errAudio : NSError? = nil
+            audioDeviceInput = AVCaptureDeviceInput(device: audioCaptureDevice, error: &errAudio)
+            
+            if audioDeviceInput != nil {
+                captureSession.addInput(audioDeviceInput)
+            }
+            
+            var err : NSError? = nil
+            captureDeviceInput = AVCaptureDeviceInput(device: captureDevice, error: &err)
+            captureSession.addInput(captureDeviceInput!)
+            
+            if err != nil {
+                println("error: \(err?.localizedDescription)")
+            }
+            
+            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+            previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+            
+            previewLayer?.frame = viewToUse.layer.frame
+            viewToUse.layer.addSublayer(previewLayer)
+            
+            
+            
+            imageOutput = AVCaptureStillImageOutput()
+            imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+            if captureSession.canAddOutput(imageOutput){
+                captureSession.addOutput(imageOutput)
+            }
+            
+            
+            //Movie output
+            videoOutput = AVCaptureMovieFileOutput()
+            let totalSeconds:Float64 = 15
+            let preferedTimeScale:Int32 = 30
+            let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
+            videoOutput!.maxRecordedDuration = maxDuration
+            videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
+            if captureSession.canAddOutput(videoOutput!){
+                captureSession.addOutput(videoOutput!)
+            }
+            
+            captureSession.startRunning()
+        }
+        else if authStatus == AVAuthorizationStatus.NotDetermined{
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeAudio, completionHandler: { (succeed) -> Void in
+                if succeed{
+                    //configureDevice()
+                    self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+                    var errAudio : NSError? = nil
+                    self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
+                    
+                    if self.audioDeviceInput != nil {
+                        self.captureSession.addInput(self.audioDeviceInput)
+                    }
+                    
+                    var err : NSError? = nil
+                    self.captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice, error: &err)
+                    self.captureSession.addInput(self.captureDeviceInput!)
+                    
+                    if err != nil {
+                        println("error: \(err?.localizedDescription)")
+                    }
+                    
+                    self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
+                    self.previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+                    
+                    self.previewLayer?.frame = viewToUse.layer.frame
+                    viewToUse.layer.addSublayer(self.previewLayer)
+                    
+                    
+                    
+                    self.imageOutput = AVCaptureStillImageOutput()
+                    self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+                    if self.captureSession.canAddOutput(self.imageOutput){
+                        self.captureSession.addOutput(self.imageOutput)
+                    }
+                    
+                    
+                    //Movie output
+                    self.videoOutput = AVCaptureMovieFileOutput()
+                    let totalSeconds:Float64 = 15
+                    let preferedTimeScale:Int32 = 30
+                    let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
+                    self.videoOutput!.maxRecordedDuration = maxDuration
+                    self.videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
+                    if self.captureSession.canAddOutput(self.videoOutput!){
+                        self.captureSession.addOutput(self.videoOutput!)
+                    }
+                    
+                    self.captureSession.startRunning()
+                }
+                else{
+                    self.camDenied()
+                }
+            })
+        }
+        else{
+            self.camDenied()
         }
         
-        var err : NSError? = nil
-        captureDeviceInput = AVCaptureDeviceInput(device: captureDevice, error: &err)
-        captureSession.addInput(captureDeviceInput!)
-        
-        if err != nil {
-            println("error: \(err?.localizedDescription)")
-        }
-        
-        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
-        previewLayer?.frame = viewToUse.layer.frame
-        viewToUse.layer.addSublayer(previewLayer)
-        
-        
-        
-        imageOutput = AVCaptureStillImageOutput()
-        imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
-        if captureSession.canAddOutput(imageOutput){
-            captureSession.addOutput(imageOutput)
-        }
-        
-        
-        //Movie output
-        videoOutput = AVCaptureMovieFileOutput()
-        let totalSeconds:Float64 = 15
-        let preferedTimeScale:Int32 = 30
-        let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-        videoOutput!.maxRecordedDuration = maxDuration
-        videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
-        if captureSession.canAddOutput(videoOutput!){
-            captureSession.addOutput(videoOutput!)
-        }
-        
-        captureSession.startRunning()
     }
     
     func quit(sender : UIButton){
@@ -380,7 +454,8 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             
             println("Start recording video")
             
-            //self.cameraTextView!.hidden = true
+            self.cameraTextView!.resignFirstResponder()
+            self.cameraTextView!.hidden = true
             
             //Create temporary URL to record to
             let outpuPath:NSString = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
@@ -701,6 +776,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         self.imageToUpload = nil
         
         self.cameraTextView!.hidden = false
+        self.cameraTextView!.becomeFirstResponder()
         
         self.saveImageButton!.hidden = true
         self.cameraView!.hidden = false
@@ -1053,5 +1129,37 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             println("Error")
         }
         
+    }
+    
+    
+    func camDenied(){
+        
+        
+        var canOpenSettings:Bool = false
+        
+        if UIApplicationOpenSettingsURLString != nil{
+            canOpenSettings = true
+        }
+        
+        if canOpenSettings{
+            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Go to settings to allow?", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                
+                self.openSettings()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else{
+            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Peekee", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    func openSettings(){
+        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
     }
 }
