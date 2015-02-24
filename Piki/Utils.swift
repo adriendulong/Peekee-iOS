@@ -723,7 +723,7 @@ class Utils {
     
     func containsStringForAll(string : String, insideString : String) -> Bool{
         
-        let stringNS :NSString = NSString(string: string)
+        let stringNS :NSString = NSString(string: NSString(string: string).lowercaseString) 
         let insideStringNS : NSString = NSString(string: insideString)
         
         let versionHeight:NSString = NSString(string: "8.0")
@@ -1031,6 +1031,85 @@ class Utils {
         }
         
         return fileURL
+        
+    }
+    
+    
+    // MARK: Get Image Username to share
+    
+    func getShareUsernameImage() -> UIImage?{
+        
+        var imageToShare:UIImage?
+        var username:String = PFUser.currentUser().username
+        
+        var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
+        viewToAdd.backgroundColor = Utils().primaryColor
+        
+        var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
+        imageView.image = UIImage(named: "parrot_pink")
+        imageView.contentMode = UIViewContentMode.Center
+        viewToAdd.addSubview(imageView)
+        
+        var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
+        labelUsername.text = "@\(username)"
+        labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
+        labelUsername.textAlignment = NSTextAlignment.Center
+        labelUsername.textColor = UIColor.whiteColor()
+        viewToAdd.addSubview(labelUsername)
+        
+        UIGraphicsBeginImageContextWithOptions(viewToAdd.bounds.size, viewToAdd.opaque, 0.0);
+        viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
+        imageToShare = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageToShare
+        
+    }
+    
+    
+    
+    // MARK: Nb visit app
+    
+    func nbVisitAppIncrement(){
+
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("nbVisitApp") != nil{
+            var nbVisits:Int = defaults.objectForKey("nbVisitApp") as Int
+            
+            var newNbVisits = nbVisits + 1
+            defaults.setObject(newNbVisits, forKey: "nbVisitApp")
+            
+            var nbVisitTemp = defaults.objectForKey("nbVisitApp") as Int
+            println("Nb visits : \(nbVisitTemp)")
+            
+        }
+        else{
+            defaults.setObject(1, forKey: "nbVisitApp")
+        }
+        
+    }
+    
+    func isMomentForRealName() -> Bool{
+        
+        var nbVisitForRealName:Int = 10
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("nbVisitApp") != nil{
+            var nbVisits:Int = defaults.objectForKey("nbVisitApp") as Int
+            
+            
+            if nbVisits == nbVisitForRealName{
+                return true
+            }
+            else{
+                return false
+            }
+            
+        }
+        else{
+            return false
+        }
         
     }
 

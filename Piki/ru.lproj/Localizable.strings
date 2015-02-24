@@ -94,7 +94,7 @@
 "%@ on Peekee" = "%@ на Peekee";
 "%d+ replies on the app" = "%d+ ответов в приложении";
 "Share" = "Поделиться";
-"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mosaic! Add some friends to get some answers?";
 
 // MARK: New Peekee
 "Search" = "Поиск";

@@ -344,7 +344,8 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                     
                     self.inviteAllActionLabel.frame = CGRect(x: self.secondButton.frame.width, y: 0, width: self.view.frame.width - self.view.frame.width/3, height: 55)
             }, completion: { (finished) -> Void in
-                let invitLabel = String(format: NSLocalizedString("INVITE %d/%d", comment : "INVITE %d/%d"), (self.usersSelected.count + self.contactsSelected.count), self.limitFriendsInvit)
+                let nbSelected:Int = (self.usersSelected.count + self.contactsSelected.count) as Int
+                let invitLabel = String(format: NSLocalizedString("INVITE %d/%d", comment : "INVITE %d/%d"), nbSelected, self.limitFriendsInvit)
                 self.inviteAllActionLabel.text = invitLabel
             })
             

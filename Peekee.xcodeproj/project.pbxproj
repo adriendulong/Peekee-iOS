@@ -47,6 +47,9 @@
 		E7834C7F1A1A41CF00CDB32D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */; };
 		E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
 		E796CB281A5D27F100034F8B /* AcountsAdviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */; };
+		E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
+		E7AB74811A9B792E00EEA0D8 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
+		E7AB74831A9BC37700EEA0D8 /* MemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */; };
 		E7AE5D791A41CA1800A77A91 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */; };
 		E7B1903C19F5695F0022617F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B1903B19F5695F0022617F /* MainViewController.swift */; };
 		E7B255911A3F5F2A00B540E6 /* TransitionFriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B255901A3F5F2A00B540E6 /* TransitionFriendManager.swift */; };
@@ -150,6 +153,9 @@
 		E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = "Vendors/MBProgressHUD-master/MBProgressHUD.m"; sourceTree = SOURCE_ROOT; };
 		E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HansomFY-Regular_S.otf"; path = "Font/HansomFY-Regular_S.otf"; sourceTree = SOURCE_ROOT; };
 		E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcountsAdviceViewController.swift; sourceTree = "<group>"; };
+		E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Birdy_Notification2.wav; sourceTree = "<group>"; };
+		E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Space_Notification1.wav; sourceTree = "<group>"; };
+		E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemCollectionViewCell.swift; sourceTree = "<group>"; };
 		E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstPageViewController.swift; sourceTree = "<group>"; };
 		E7B1903B19F5695F0022617F /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ../MainViewController.swift; sourceTree = "<group>"; };
 		E7B255901A3F5F2A00B540E6 /* TransitionFriendManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionFriendManager.swift; sourceTree = "<group>"; };
@@ -257,6 +263,8 @@
 		E725BC901A40A84800275C2B /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */,
+				E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */,
 				E7B4EB5D1A4EA25100B69A2A /* better.wav */,
 				E7B4EB5E1A4EA25100B69A2A /* faster.wav */,
 				E7B4EB5F1A4EA25100B69A2A /* harder.wav */,
@@ -461,6 +469,7 @@
 				E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */,
 				E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */,
 				E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */,
+				E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */,
 			);
 			name = Piki;
 			sourceTree = "<group>";
@@ -566,7 +575,7 @@
 				TargetAttributes = {
 					E7665E2D19E5A3AB003DAAF8 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = NFX5SLR3JY;
+						DevelopmentTeam = S435857UNK;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -619,9 +628,11 @@
 				E7BA49991A2F431B00DB1C96 /* Proxima-Nova-Light.otf in Resources */,
 				E7BA499A1A2F431B00DB1C96 /* Proxima-Nova-Bold.otf in Resources */,
 				E7B4EB621A4EA25100B69A2A /* faster.wav in Resources */,
+				E7AB74811A9B792E00EEA0D8 /* Space_Notification1.wav in Resources */,
 				E7B4EB641A4EA25100B69A2A /* stronger.wav in Resources */,
 				E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */,
 				E7DF609F1A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist in Resources */,
+				E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */,
 				E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */,
 				E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */,
 				E7665E3B19E5A3AB003DAAF8 /* Images.xcassets in Resources */,
@@ -729,6 +740,7 @@
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
 				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,
 				E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */,
+				E7AB74831A9BC37700EEA0D8 /* MemCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,8 +817,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -819,7 +831,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "364c7678-d94e-4513-a1de-a891143c3bfa";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -833,8 +845,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -848,7 +860,7 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "364c7678-d94e-4513-a1de-a891143c3bfa";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -890,8 +902,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -904,7 +916,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "364c7678-d94e-4513-a1de-a891143c3bfa";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -918,8 +930,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Piki Chat (NFX5SLR3JY)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -932,7 +944,7 @@
 					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
 				);
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "364c7678-d94e-4513-a1de-a891143c3bfa";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -125,7 +125,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         phoneNumberTextField!.delegate = self
         phoneNumberTextField!.tintColor = Utils().secondColor
         phoneNumberTextField!.adjustsFontSizeToFitWidth = true
-        phoneNumberTextField!.keyboardType = UIKeyboardType.NumberPad
+        phoneNumberTextField!.keyboardType = UIKeyboardType.PhonePad
         phoneNumberTextField!.becomeFirstResponder()
         phoneNumberActionView!.addSubview(phoneNumberTextField!)
         
@@ -553,6 +553,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         indicatorLabel!.text = "+\(countryNumbers)"
         countryLabel!.text = countryChoiceInfos["countryName"]! as String
         
+        phoneNumberTextField!.text = ""
         phoneFormatter = NBAsYouTypeFormatter(regionCode: self.regionLabel!)
         
     }

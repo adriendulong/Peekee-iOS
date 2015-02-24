@@ -93,8 +93,8 @@
 "SEND" = "ENVÍA";
 "%@ on Peekee" = "%@ en Peekee";
 "%d+ replies on the app" = "%d+ respuestas en la aplicación";
-"Share" = "Comparte";
-"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+"Share" = "Mosaic";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mosaic! Add some friends to get some answers?";
 
 // MARK: New Peekee
 "Search" = "Busca";

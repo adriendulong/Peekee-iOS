@@ -364,55 +364,58 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             captureSession.startRunning()
         }
         else if authStatus == AVAuthorizationStatus.NotDetermined{
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeAudio, completionHandler: { (succeed) -> Void in
+            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (succeed) -> Void in
                 if succeed{
-                    //configureDevice()
-                    self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-                    var errAudio : NSError? = nil
-                    self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+                        var errAudio : NSError? = nil
+                        self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
+                        
+                        if self.audioDeviceInput != nil {
+                            self.captureSession.addInput(self.audioDeviceInput)
+                        }
+                        
+                        var err : NSError? = nil
+                        self.captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice, error: &err)
+                        self.captureSession.addInput(self.captureDeviceInput!)
+                        
+                        if err != nil {
+                            println("error: \(err?.localizedDescription)")
+                        }
+                        
+                        
+                        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
+                        self.previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+                        
+                        self.previewLayer?.frame = viewToUse.layer.frame
+                        viewToUse.layer.addSublayer(self.previewLayer)
+                        
+                        self.imageOutput = AVCaptureStillImageOutput()
+                        self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+                        if self.captureSession.canAddOutput(self.imageOutput){
+                            self.captureSession.addOutput(self.imageOutput)
+                        }
+                        
+                        
+                        //Movie output
+                        self.videoOutput = AVCaptureMovieFileOutput()
+                        let totalSeconds:Float64 = 15
+                        let preferedTimeScale:Int32 = 30
+                        let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
+                        self.videoOutput!.maxRecordedDuration = maxDuration
+                        self.videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
+                        if self.captureSession.canAddOutput(self.videoOutput!){
+                            self.captureSession.addOutput(self.videoOutput!)
+                        }
+                        
+                        self.captureSession.startRunning()
+                    })    
                     
-                    if self.audioDeviceInput != nil {
-                        self.captureSession.addInput(self.audioDeviceInput)
-                    }
-                    
-                    var err : NSError? = nil
-                    self.captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice, error: &err)
-                    self.captureSession.addInput(self.captureDeviceInput!)
-                    
-                    if err != nil {
-                        println("error: \(err?.localizedDescription)")
-                    }
-                    
-                    self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-                    self.previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                    
-                    self.previewLayer?.frame = viewToUse.layer.frame
-                    viewToUse.layer.addSublayer(self.previewLayer)
-                    
-                    
-                    
-                    self.imageOutput = AVCaptureStillImageOutput()
-                    self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
-                    if self.captureSession.canAddOutput(self.imageOutput){
-                        self.captureSession.addOutput(self.imageOutput)
-                    }
-                    
-                    
-                    //Movie output
-                    self.videoOutput = AVCaptureMovieFileOutput()
-                    let totalSeconds:Float64 = 15
-                    let preferedTimeScale:Int32 = 30
-                    let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-                    self.videoOutput!.maxRecordedDuration = maxDuration
-                    self.videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
-                    if self.captureSession.canAddOutput(self.videoOutput!){
-                        self.captureSession.addOutput(self.videoOutput!)
-                    }
-                    
-                    self.captureSession.startRunning()
                 }
                 else{
-                    self.camDenied()
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.camDenied()
+                    })
                 }
             })
         }
@@ -1142,7 +1145,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         }
         
         if canOpenSettings{
-            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Go to settings to allow?", preferredStyle: UIAlertControllerStyle.Alert)
+            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 

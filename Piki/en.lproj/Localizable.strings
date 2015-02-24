@@ -14,7 +14,7 @@
 "Like and comment with pics & vids. ✨" = "Like and comment with pics & vids. ✨";
 "Share awesome mosaics." = "Share awesome mosaics.";
 "On Snapchat, Insta, Twitter... 🚀" = "On Snapchat, Insta, Twitter... 🚀";
-"No Bullshit." = "No Bullshit.";
+"No Bullshit." = "No Worries.";
 "Short signup" = "Short signup";
 "No Facebook connect" = "No Facebook connect";
 "No email address" = "No email address";
@@ -93,8 +93,8 @@
 "SEND" = "SEND";
 "%@ on Peekee" = "%@ on Peekee";
 "%d+ replies on the app" = "%d+ replies on the app";
-"Share" = "Share";
-"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+"Share" = "Mosaic";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mosaic! Add some friends to get some answers?";
 
 // MARK: New Peekee
 "Search" = "Search";
@@ -149,6 +149,17 @@
 
 // MARK: V1.01
 "From" = "From";
+
+
+// MARK: V1.0.3
+"Change my name" = "Change my name";
+"Edit your name" = "Edit your name";
+"Error while editing your name. Please try again later." = "Error while editing your name. Please try again later.";
+"To help your friend to find you please set your real name." = "To help your friend to find you please set your real name.";
+"Your real name" = "Your real name";
+"Later" = "Later";
+"If you want to change your name anytime later go to the settings from the friends screen." = "If you want to change your name anytime later go to the settings from the friends screen.";
+"Your real name must have at least 3 characters and can have 30 characters max." = "Your real name must have at least 3 characters and can have 30 characters max.";
 
 
 

@@ -57,9 +57,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     }
     
     override func viewDidAppear(animated: Bool) {
-        //getInLoopNotif()
-        //unlockFriendsPopUp()
-        
+
         //See if show Recommend Accounts
         if PFUser.currentUser()["hasSeenRecommanded"] != nil{
             if !(PFUser.currentUser()["hasSeenRecommanded"] as Bool){
@@ -153,12 +151,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         parrotImageView.image = UIImage(named: "parrot_menu")
         parrotView.addSubview(parrotImageView)
         
-        var tapGestureParrotLabel = UITapGestureRecognizer(target: self, action: Selector("shareTwitter"))
+        //var tapGestureParrotLabel = UITapGestureRecognizer(target: self, action: Selector("shareTwitter"))
         let pikiLabel:UILabel = UILabel(frame: CGRect(x: parrotImageView.frame.width + 15, y: 0, width: 80, height: parrotView.frame.height))
         pikiLabel.text = NSLocalizedString("Peekee", comment : "Peekee")
         pikiLabel.textColor = UIColor.whiteColor()
-        pikiLabel.addGestureRecognizer(tapGestureParrotLabel)
-        pikiLabel.userInteractionEnabled = true
+        //pikiLabel.addGestureRecognizer(tapGestureParrotLabel)
+        pikiLabel.userInteractionEnabled = false
         pikiLabel.font = UIFont(name: Utils().customGothamBol, size: 20.0)
         parrotView.addSubview(pikiLabel)
         
@@ -464,8 +462,14 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         if lastPikis[indexPath.item]["user"] != nil {
             var user:PFUser = lastPikis[indexPath.item]["user"] as PFUser
-            var username:String = user["username"] as String
-            pikiCell.usernameLabel!.attributedText = getLabelUsername(username)
+            
+            if user["name"] != nil{
+                pikiCell.usernameLabel!.attributedText = getLabelUsername(user["name"] as String)
+            }
+            else{
+                pikiCell.usernameLabel!.attributedText = getLabelUsername(user.username)
+            }
+            
         }
         else{
             pikiCell.usernameLabel!.text = ""
@@ -1265,6 +1269,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             composer.setInitialText("Hey @Peekeeapp I just clicked on your awesome icon! #itouchedpeekee")
             composer.addURL(NSURL(string: Utils().websiteUrl))
             
+            var imageToShare:UIImage? = Utils().getShareUsernameImage()
+            
+            if imageToShare != nil{
+                composer.addImage(imageToShare)
+            }
+            
             composer.completionHandler = {
                 (result:SLComposeViewControllerResult) in
                 println("Result : \(result)")
@@ -1296,6 +1306,50 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         return mutableString
         
+        
+    }
+    
+    
+    func setName(){
+        
+        var alert = UIAlertController(title: NSLocalizedString("Edit your name", comment : "Edit your name"), message: NSLocalizedString("To help your friend to find you please set your real name.", comment : "To help your friend to find you please set your real name."), preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addTextFieldWithConfigurationHandler { (textfield : UITextField!) -> Void in
+            textfield.placeholder =  NSLocalizedString("Your real name", comment : "Your real name")
+        }
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment : "Cancel"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            
+            var alertLater = UIAlertController(title: NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), preferredStyle: UIAlertControllerStyle.Alert)
+            alertLater.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+            self.presentViewController(alertLater, animated: true, completion: nil)
+            
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+            
+            var realName:String = (alert.textFields!.first! as UITextField).text
+            
+            if countElements(realName) > 3 && countElements(realName) < 30{
+                PFUser.currentUser()["name"] = realName
+                PFUser.currentUser().saveEventually()
+                
+                Mixpanel.sharedInstance().people.set(["Name" : realName])
+                
+                var alertLater = UIAlertController(title: NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), preferredStyle: UIAlertControllerStyle.Alert)
+                alertLater.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+                self.presentViewController(alertLater, animated: true, completion: nil)
+            }
+            else{
+                var alertProblem = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Your real name must have at least 3 characters and can have 30 characters max.", comment : "Your real name must have at least 3 characters and can have 30 characters max."), preferredStyle: UIAlertControllerStyle.Alert)
+                alertProblem.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }))
+                self.presentViewController(alertProblem, animated: true, completion: nil)
+            }
+            
+            
+            
+            
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
         
     }
     

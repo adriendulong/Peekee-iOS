@@ -14,7 +14,7 @@
 "Like and comment with pics & vids. ✨" = "Curta e comente com imagens e videos. ✨";
 "Share awesome mosaics." = "Compartilhe lindos mosaicos.";
 "On Snapchat, Insta, Twitter... 🚀" = "No Snapchat, Insta, Twitter... 🚀";
-"No Bullshit." = "Sem encheção de saco.";
+"No Bullshit." = "Não se preocupe.";
 "Short signup" = "Inscrição fácil.";
 "No Facebook connect" = "Sem conexão com o Facebook.";
 "No email address" = "Sem endereço de e-mail.";
@@ -93,8 +93,8 @@
 "SEND" = "ENVIAR";
 "%@ on Peekee" = "%@ no Peekee";
 "%d+ replies on the app" = "%d+ respostas no app";
-"Share" = "Compartlhar";
-"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
+"Share" = "Mosaic";
+"AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mosaic! Add some friends to get some answers?";
 
 // MARK: New Peekee
 "Search" = "Procurar";

@@ -17,6 +17,7 @@
             <string>ProximaNova-Semibold</string>
             <string>ProximaNova-Semibold</string>
             <string>ProximaNova-Semibold</string>
+            <string>ProximaNova-Semibold</string>
         </mutableArray>
         <mutableArray key="Proxima-Nova-Light.otf">
             <string>ProximaNova-Light</string>
@@ -269,20 +270,34 @@
                                                         <action selector="changePropertie:" destination="ABu-vv-Wrd" eventType="valueChanged" id="yvG-cB-mFk"/>
                                                     </connections>
                                                 </switch>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6YW-Ih-zSC">
+                                                    <rect key="frame" x="15" y="40" width="311" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="311" id="CHq-Wd-GYE"/>
+                                                        <constraint firstAttribute="height" constant="21" id="IXM-Ca-Tsg"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="15"/>
+                                                    <color key="textColor" red="0.81960784310000001" green="0.83137254900000002" blue="0.85490196080000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" secondItem="4mZ-GT-kcR" secondAttribute="bottom" constant="7" id="7Vb-bA-nKd"/>
                                                 <constraint firstItem="hpR-lX-VJd" firstAttribute="top" secondItem="NUb-HU-dy1" secondAttribute="topMargin" constant="8" id="E53-WV-ahI"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="6YW-Ih-zSC" secondAttribute="bottom" constant="-6" id="EHN-9K-ZvM"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="4mZ-GT-kcR" secondAttribute="trailing" constant="6" id="UKH-Mo-1u4"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="hpR-lX-VJd" secondAttribute="trailing" constant="12" id="WLY-jD-eRA"/>
                                                 <constraint firstItem="4mZ-GT-kcR" firstAttribute="leading" secondItem="NUb-HU-dy1" secondAttribute="leadingMargin" constant="7" id="YAC-sM-Nfz"/>
                                                 <constraint firstItem="4mZ-GT-kcR" firstAttribute="top" secondItem="NUb-HU-dy1" secondAttribute="topMargin" constant="8" id="c0t-Dc-xvg"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="hpR-lX-VJd" secondAttribute="bottom" constant="8" id="fyw-lF-rsT"/>
+                                                <constraint firstItem="6YW-Ih-zSC" firstAttribute="leading" secondItem="NUb-HU-dy1" secondAttribute="leadingMargin" constant="7" id="td0-fh-R7S"/>
+                                                <constraint firstItem="6YW-Ih-zSC" firstAttribute="top" secondItem="NUb-HU-dy1" secondAttribute="topMargin" constant="32" id="wcz-Bf-TOa"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="mainLabel" destination="4mZ-GT-kcR" id="UAB-wg-qsy"/>
                                             <outlet property="mainSwitch" destination="hpR-lX-VJd" id="vge-OS-zpe"/>
+                                            <outlet property="secondLabel" destination="6YW-Ih-zSC" id="v8W-jQ-ZRx"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -956,12 +971,6 @@
                                                         <constraint firstAttribute="height" constant="1" id="Bmb-n6-VMr"/>
                                                     </constraints>
                                                 </view>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1J0-W7-tjc">
-                                                    <rect key="frame" x="15" y="14" width="250" height="33"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="select_check_empty" translatesAutoresizingMaskIntoConstraints="NO" id="7p9-FZ-70G">
                                                     <rect key="frame" x="540" y="19" width="24" height="24"/>
                                                     <constraints>
@@ -980,7 +989,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="selectedImageView" destination="7p9-FZ-70G" id="01l-3f-q5a"/>
-                                            <outlet property="testLabel" destination="1J0-W7-tjc" id="aMs-nf-hPd"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1541,9 +1549,9 @@
                                             <constraint firstAttribute="width" constant="25" id="2La-KQ-VBs"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="INVITE ALL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fs9-4l-hDh">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="INVITE ALL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Fs9-4l-hDh">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="55"/>
-                                        <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="20"/>
+                                        <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1757,7 +1765,7 @@
         <image name="walk_previous_icon" width="10" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="in1-04-cqt"/>
-        <segue reference="f2k-6n-HYc"/>
+        <segue reference="1e5-R0-VAq"/>
+        <segue reference="Am7-AN-QR4"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -12,7 +12,7 @@
 "Receive and send pics & vids." = "Reçois et envoie des photos !";
 "With friends, family, and dogs. 🐶" = "Avec tes amis, ta famille ou ton chien 🐶";
 "Like and comment with pics & vids. ✨" = "Aime et commente en photos / vidéos. ✨";
-"Share awesome mozaics." = " Génère des mosaïques incroyables ! ";
+"Share awesome mosaics." = " Génère des mosaïques incroyables ! ";
 "On Snapchat, Insta, Twitter... 🚀" = "Sur Facebook, Insta, Twitter... 🚀";
 "No Bullshit." = "Ne t'inquiète pas";
 "Short signup" = "Inscription ultra-rapide";
@@ -93,7 +93,7 @@
 "SEND" = "ENVOYER";
 "%@ on Peekee" = "%@ sur Peekee";
 "%d+ replies on the app" = "%d+ photos sur l'app";
-"Share" = "Share";
+"Share" = "Mosaic";
 "AlertNotEnoughReact" = "Il te faut 6 réponses pour créer une belle mosaïque ! Ajoutes des amis pour obtenir des réponses ?";
 
 // MARK: New Peekee
@@ -139,7 +139,7 @@
 "ALL" = "TOUS";
 "SKIP" = "PASSER";
 "INVITE ALL" = "INVITER TOUT LE MONDE";
-"INVITE %d/%d" = "AJOUTER %@/%@";
+"INVITE %d/%d" = "AJOUTER %d/%d";
 "Last but not least" = "Last but not least";
 "Check if you have friends here?!😁" = "Verifier si tu as des amis sur l'app ?!😁";
 "Confirmation" = "Confirmation";

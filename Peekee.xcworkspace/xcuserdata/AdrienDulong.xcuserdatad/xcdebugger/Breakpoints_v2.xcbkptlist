@@ -10,57 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Piki/TakePhotoViewController.swift"
-            timestampString = "445347164.497506"
+            timestampString = "446322498.6685"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "318"
-            endingLineNumber = "318"
-            landmarkName = "beginSession(_:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.TakePhotoViewController.beginSession (Peekee.TakePhotoViewController)(ObjectiveC.UIView) -&gt; ()"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.155039"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "318"
-                  endingLineNumber = "318"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.TakePhotoViewController.beginSession (Peekee.TakePhotoViewController)(ObjectiveC.UIView) -&gt; ()"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.155186"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "318"
-                  endingLineNumber = "318"
-                  offsetFromSymbolStart = "56">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/TakePhotoViewController.swift"
-            timestampString = "445347252.705125"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1138"
-            endingLineNumber = "1138"
+            startingLineNumber = "1141"
+            endingLineNumber = "1141"
             landmarkName = "camDenied()"
             landmarkType = "5">
             <Locations>
@@ -71,12 +25,12 @@
                   symbolName = "Peekee.TakePhotoViewController.beginSession (Peekee.TakePhotoViewController)(ObjectiveC.UIView) -&gt; ()"
                   moduleName = "Peekee"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.19489"
+                  timestampString = "446509306.309796"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1140"
-                  endingLineNumber = "1140"
-                  offsetFromSymbolStart = "680">
+                  startingLineNumber = "1143"
+                  endingLineNumber = "1143"
+                  offsetFromSymbolStart = "672">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -85,11 +39,11 @@
                   symbolName = "Peekee.TakePhotoViewController.camDenied (Peekee.TakePhotoViewController)() -&gt; ()"
                   moduleName = "Peekee"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.195038"
+                  timestampString = "446509306.309947"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1140"
-                  endingLineNumber = "1140"
+                  startingLineNumber = "1143"
+                  endingLineNumber = "1143"
                   offsetFromSymbolStart = "36">
                </Location>
                <Location
@@ -99,11 +53,11 @@
                   symbolName = "Peekee.TakePhotoViewController.camDenied (Peekee.TakePhotoViewController)() -&gt; ()"
                   moduleName = "Peekee"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.195151"
+                  timestampString = "446509306.310057"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1140"
-                  endingLineNumber = "1140"
+                  startingLineNumber = "1143"
+                  endingLineNumber = "1143"
                   offsetFromSymbolStart = "72">
                </Location>
                <Location
@@ -113,26 +67,26 @@
                   symbolName = "@objc Peekee.TakePhotoViewController.camDenied (Peekee.TakePhotoViewController)() -&gt; ()"
                   moduleName = "Peekee"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.195337"
+                  timestampString = "446509306.310159"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1140"
-                  endingLineNumber = "1140"
+                  startingLineNumber = "1143"
+                  endingLineNumber = "1143"
                   offsetFromSymbolStart = "36">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.TakePhotoViewController.(beginSession (Peekee.TakePhotoViewController) -&gt; (ObjectiveC.UIView) -&gt; ()).(closure #1)"
+                  symbolName = "Peekee.TakePhotoViewController.(beginSession (Peekee.TakePhotoViewController) -&gt; (ObjectiveC.UIView) -&gt; ()).(closure #1).(closure #2)"
                   moduleName = "Peekee"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/TakePhotoViewController.swift"
-                  timestampString = "445357565.195464"
+                  timestampString = "446509306.310261"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1140"
-                  endingLineNumber = "1140"
-                  offsetFromSymbolStart = "288">
+                  startingLineNumber = "1143"
+                  endingLineNumber = "1143"
+                  offsetFromSymbolStart = "80">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -144,11 +98,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Piki/PikiViewController.swift"
-            timestampString = "445356699.769597"
+            timestampString = "446508321.118459"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "523"
-            endingLineNumber = "523"
+            startingLineNumber = "562"
+            endingLineNumber = "562"
             landmarkName = "viewDidAppear(_:)"
             landmarkType = "5">
             <Locations>
@@ -189,42 +143,56 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "445359001.605404"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330097.451956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1130"
-            endingLineNumber = "1130"
-            landmarkName = "beginSession(_:)"
+            startingLineNumber = "584"
+            endingLineNumber = "584"
+            landmarkName = "getMoreFriends()"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.getMoreFriends (Peekee.ChooseReceiversViewController)() -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.21706"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.311562"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1123"
-                  endingLineNumber = "1123"
-                  offsetFromSymbolStart = "480">
+                  startingLineNumber = "584"
+                  endingLineNumber = "584"
+                  offsetFromSymbolStart = "32">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.getMoreFriends (Peekee.ChooseReceiversViewController)() -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.217327"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.311704"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1123"
-                  endingLineNumber = "1123"
-                  offsetFromSymbolStart = "512">
+                  startingLineNumber = "584"
+                  endingLineNumber = "584"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "@objc Peekee.ChooseReceiversViewController.getMoreFriends (Peekee.ChooseReceiversViewController)() -&gt; ()"
+                  moduleName = "Peekee"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.311814"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "584"
+                  endingLineNumber = "584"
+                  offsetFromSymbolStart = "36">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -235,42 +203,42 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "445359001.605404"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330301.688111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1149"
-            endingLineNumber = "1149"
-            landmarkName = "beginSession(_:)"
+            startingLineNumber = "835"
+            endingLineNumber = "835"
+            landmarkName = "largeSend(_:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.largeSend (Peekee.ChooseReceiversViewController)(ObjectiveC.UIGestureRecognizer) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.218439"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.312654"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1142"
-                  endingLineNumber = "1142"
-                  offsetFromSymbolStart = "3656">
+                  startingLineNumber = "835"
+                  endingLineNumber = "835"
+                  offsetFromSymbolStart = "2244">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.largeSend (Peekee.ChooseReceiversViewController)(ObjectiveC.UIGestureRecognizer) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.218571"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.312784"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1142"
-                  endingLineNumber = "1142"
-                  offsetFromSymbolStart = "3776">
+                  startingLineNumber = "835"
+                  endingLineNumber = "835"
+                  offsetFromSymbolStart = "2268">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -281,42 +249,86 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "445359001.605404"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446328713.08126"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1168"
-            endingLineNumber = "1168"
-            landmarkName = "beginSession(_:)"
+            startingLineNumber = "411"
+            endingLineNumber = "411"
+            landmarkName = "tableView(_:didSelectRowAtIndexPath:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330097.451956"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "524"
+            endingLineNumber = "524"
+            landmarkName = "addUserToSelected(_:isUserIAdded:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.addUserToSelected (Peekee.ChooseReceiversViewController)(ObjectiveC.PFUser, isUserIAdded : Swift.Bool) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.219204"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.313858"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1161"
-                  endingLineNumber = "1161"
-                  offsetFromSymbolStart = "6296">
+                  startingLineNumber = "524"
+                  endingLineNumber = "524"
+                  offsetFromSymbolStart = "40">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.addUserToSelected (Peekee.ChooseReceiversViewController)(ObjectiveC.PFUser, isUserIAdded : Swift.Bool) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.219331"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.313977"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1161"
-                  endingLineNumber = "1161"
-                  offsetFromSymbolStart = "6304">
+                  startingLineNumber = "524"
+                  endingLineNumber = "524"
+                  offsetFromSymbolStart = "100">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "@objc Peekee.ChooseReceiversViewController.addUserToSelected (Peekee.ChooseReceiversViewController)(ObjectiveC.PFUser, isUserIAdded : Swift.Bool) -&gt; ()"
+                  moduleName = "Peekee"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.314069"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "524"
+                  endingLineNumber = "524"
+                  offsetFromSymbolStart = "68">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "@objc Peekee.ChooseReceiversViewController.addUserToSelected (Peekee.ChooseReceiversViewController)(ObjectiveC.PFUser, isUserIAdded : Swift.Bool) -&gt; ()"
+                  moduleName = "Peekee"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.314157"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "524"
+                  endingLineNumber = "524"
+                  offsetFromSymbolStart = "128">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -327,42 +339,42 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "445359001.605404"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330301.688111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1169"
-            endingLineNumber = "1169"
-            landmarkName = "beginSession(_:)"
+            startingLineNumber = "826"
+            endingLineNumber = "826"
+            landmarkName = "largeSend(_:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.largeSend (Peekee.ChooseReceiversViewController)(ObjectiveC.UIGestureRecognizer) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.219923"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.315128"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1162"
-                  endingLineNumber = "1162"
-                  offsetFromSymbolStart = "6476">
+                  startingLineNumber = "826"
+                  endingLineNumber = "826"
+                  offsetFromSymbolStart = "956">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.largeSend (Peekee.ChooseReceiversViewController)(ObjectiveC.UIGestureRecognizer) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.220052"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.31532"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1162"
-                  endingLineNumber = "1162"
-                  offsetFromSymbolStart = "6484">
+                  startingLineNumber = "826"
+                  endingLineNumber = "826"
+                  offsetFromSymbolStart = "1016">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -373,44 +385,170 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "445359001.605404"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330360.269762"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1181"
-            endingLineNumber = "1181"
-            landmarkName = "beginSession(_:)"
+            startingLineNumber = "828"
+            endingLineNumber = "828"
+            landmarkName = "largeSend(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330385.610544"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "857"
+            endingLineNumber = "857"
+            landmarkName = "recipientsWithoutBlockedOnes(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330407.345925"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "884"
+            endingLineNumber = "884"
+            landmarkName = "sendPiki(_:isPublic:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.sendPiki (Peekee.ChooseReceiversViewController)(Swift.Array&lt;Swift.String&gt;, isPublic : Swift.Bool) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.220656"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.31688"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1174"
-                  endingLineNumber = "1174"
-                  offsetFromSymbolStart = "7116">
+                  startingLineNumber = "884"
+                  endingLineNumber = "884"
+                  offsetFromSymbolStart = "752">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.beginSession (Peekee.PikiViewController)(ObjectiveC.UIView) -&gt; ()"
+                  symbolName = "Peekee.ChooseReceiversViewController.sendPiki (Peekee.ChooseReceiversViewController)(Swift.Array&lt;Swift.String&gt;, isPublic : Swift.Bool) -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "445357565.22077"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.317007"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1174"
-                  endingLineNumber = "1174"
-                  offsetFromSymbolStart = "7232">
+                  startingLineNumber = "884"
+                  endingLineNumber = "884"
+                  offsetFromSymbolStart = "768">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330421.11524"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "874"
+            endingLineNumber = "874"
+            landmarkName = "recipientsWithoutBlockedOnes(_:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Peekee.ChooseReceiversViewController.recipientsWithoutBlockedOnes (Peekee.ChooseReceiversViewController)(Swift.Array&lt;Swift.String&gt;) -&gt; Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "Peekee"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.317607"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "874"
+                  endingLineNumber = "874"
+                  offsetFromSymbolStart = "1284">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Peekee.ChooseReceiversViewController.recipientsWithoutBlockedOnes (Peekee.ChooseReceiversViewController)(Swift.Array&lt;Swift.String&gt;) -&gt; Swift.Array&lt;Swift.String&gt;"
+                  moduleName = "Peekee"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/ChooseReceiversViewController.swift"
+                  timestampString = "446509306.317729"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "874"
+                  endingLineNumber = "874"
+                  offsetFromSymbolStart = "1296">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330453.730999"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "899"
+            endingLineNumber = "899"
+            landmarkName = "sendPiki(_:isPublic:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/ChooseReceiversViewController.swift"
+            timestampString = "446330593.897106"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "920"
+            endingLineNumber = "920"
+            landmarkName = "sendPiki(_:isPublic:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Piki/AppDelegate.swift"
+            timestampString = "446394161.443188"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "applicationDidBecomeActive(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

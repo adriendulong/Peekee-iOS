@@ -13,6 +13,7 @@ import Social
 class SettingsTableViewCell: UITableViewCell {
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var mainSwitch: UISwitch!
+    @IBOutlet weak var secondLabel: UILabel!
     
     func updateSwitch(){
         
@@ -60,6 +61,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var appVersionLabel: UILabel!
     
+    var changeUsernameChosen:Bool = true
+    
     override func viewDidLoad() {
         
         let backStatusBar:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20))
@@ -75,6 +78,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         settingsLabel.text = NSLocalizedString("Settings", comment : "Settings")
         
+    }
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        self.tableView.reloadData()
     }
     
     
@@ -134,7 +142,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section{
         case 0:
-            return 2
+            return 3
         case 1:
             return 1
         case 2:
@@ -150,6 +158,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         var cell:SettingsTableViewCell = tableView.dequeueReusableCellWithIdentifier("SettingsCell") as SettingsTableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.secondLabel.hidden = true
         
         switch indexPath.section{
         case 0:
@@ -157,7 +166,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             case 0:
                 cell.mainLabel.text = NSLocalizedString("Change Username", comment : "Change Username")
                 cell.mainSwitch.hidden = true
+                cell.secondLabel.hidden = false
+                cell.secondLabel.text = "@\(PFUser.currentUser().username)"
             case 1:
+                cell.mainLabel.text = NSLocalizedString("Change my name", comment : "Change my name")
+                cell.mainSwitch.hidden = true
+                cell.secondLabel.hidden = false
+                
+                if PFUser.currentUser()["name"] != nil{
+                    cell.secondLabel.text = PFUser.currentUser()["name"] as? String
+                }
+                else{
+                    cell.secondLabel.text = "undefined"
+                }
+                
+                
+            case 2:
                 cell.mainLabel.text = NSLocalizedString("Recommended accounts", comment : "Recommended accounts")
                 cell.mainSwitch.hidden = true
             default:
@@ -207,8 +231,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         case 0:
             switch indexPath.row{
             case 0:
+                changeUsernameChosen = true
                 self.performSegueWithIdentifier("changeUsername", sender: self)
+                
             case 1:
+                changeUsernameChosen = false
+                self.performSegueWithIdentifier("changeUsername", sender: self)
+                
+            case 2:
                 self.performSegueWithIdentifier("showRecommendedAccounts", sender: self)
             default:
                 self.performSegueWithIdentifier("changeUsername", sender: self)
@@ -321,5 +351,18 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func logOut(){
         PFUser.logOut()
+    }
+    
+    
+    //MARK : PRepare Segue
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "changeUsername"{
+            
+            var targetController:EditUsernameViewController = segue.destinationViewController as EditUsernameViewController
+            targetController.changeUsernameChosen = self.changeUsernameChosen
+        }
+        
     }
 }

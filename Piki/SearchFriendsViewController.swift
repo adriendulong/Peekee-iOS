@@ -213,6 +213,7 @@ class PikiUserTableViewCell : UITableViewCell {
     
     
     var usernameLabel: UILabel?
+    var secondLabel: UILabel?
     var addUserButton: UIButton?
     var user:PFUser?
     var loadIndicator:UIActivityIndicatorView?
@@ -232,6 +233,33 @@ class PikiUserTableViewCell : UITableViewCell {
             
         }
         
+        
+        if user["name"] != nil{
+            usernameLabel!.frame = CGRect(x: 15, y: 0, width: 300, height: 50)
+            
+            usernameLabel!.text = user["name"] as? String
+            
+            if secondLabel == nil{
+                secondLabel = UILabel(frame: CGRect(x: 15, y: 30, width: 300, height: 30))
+                secondLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 17.0)
+                secondLabel!.textColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+                self.addSubview(secondLabel!)
+            }
+            secondLabel!.hidden = false
+            secondLabel!.text = "@\(user.username)"
+        }
+        else{
+            usernameLabel!.frame = CGRect(x: 15, y: 0, width: 300, height: 60)
+            
+            if secondLabel != nil{
+                secondLabel!.hidden = true
+            }
+            
+            usernameLabel!.text = "@\(user.username)"
+            
+        }
+        
+        
         if addUserButton == nil {
             addUserButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 50, y: 0, width: 45, height: 60))
             addUserButton!.addTarget(self, action: Selector("addUser:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -242,9 +270,6 @@ class PikiUserTableViewCell : UITableViewCell {
         addUserButton!.hidden = false
         
         self.user = user
-        
-        var username:String = user["username"] as String
-        usernameLabel!.text = "@\(username)"
         
         loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         loadIndicator!.center = addUserButton!.center

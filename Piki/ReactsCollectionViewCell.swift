@@ -117,6 +117,11 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     var mainPeekee:PFObject!
     var isInBigMode:Bool = false
     
+    var addFriendsView:UIView!
+    var moreInfosIconeUserImageView:UIImageView?
+    var moreInfosUsernameLabel:UILabel?
+    var moreInfosUserAdd:UILabel?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -260,6 +265,11 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         readVideoImageView.contentMode = UIViewContentMode.Center
         contentView.addSubview(readVideoImageView)
         
+        var addGestureFriends = UITapGestureRecognizer(target: self, action: Selector("addFriends"))
+        addFriendsView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        addFriendsView.backgroundColor = Utils().secondColor
+        addFriendsView.addGestureRecognizer(addGestureFriends)
+        contentView.addSubview(addFriendsView)
         
         
         
@@ -893,6 +903,81 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         }
 
         
+        
+        
+    }
+    
+    
+    func addFriends(){
+        if react != nil{
+            if react!["user"] != nil{
+                self.delegate!.seeUserWhoPosted(react!["user"] as PFUser)
+            }
+            
+        }
+    }
+    
+    
+    func showMoreInfos(){
+        
+        let reactUser:PFUser = self.react!["user"] as PFUser
+        
+        if moreInfosIconeUserImageView == nil{
+            moreInfosIconeUserImageView = UIImageView(frame: CGRectMake(0, 0, addFriendsView.frame.width, 60))
+            moreInfosIconeUserImageView!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2)
+            moreInfosIconeUserImageView!.contentMode = UIViewContentMode.Center
+            moreInfosIconeUserImageView!.image = UIImage(named: "people_icon")
+            addFriendsView.addSubview(moreInfosIconeUserImageView!)
+        }
+        else{
+            moreInfosIconeUserImageView!.frame = CGRectMake(0, 0, addFriendsView.frame.width, 60)
+            moreInfosIconeUserImageView!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2)
+        }
+        
+        
+        if moreInfosUsernameLabel == nil{
+            moreInfosUsernameLabel = UILabel(frame: CGRectMake(0, 0, addFriendsView.frame.width, 30))
+            moreInfosUsernameLabel!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 + 30)
+            moreInfosUsernameLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+            moreInfosUsernameLabel!.textColor = UIColor.whiteColor()
+            moreInfosUsernameLabel!.adjustsFontSizeToFitWidth = true
+            moreInfosUsernameLabel!.textAlignment = NSTextAlignment.Center
+            moreInfosUsernameLabel!.text = "@\(reactUser.username)"
+            addFriendsView.addSubview(moreInfosUsernameLabel!)
+        }
+        else{
+            moreInfosUsernameLabel!.frame = CGRectMake(0, 0, addFriendsView.frame.width, 30)
+            moreInfosUsernameLabel!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 + 30)
+        }
+        
+        
+        if moreInfosUserAdd == nil{
+            moreInfosUserAdd = UILabel(frame: CGRectMake(0, 0, addFriendsView.frame.width, 30))
+            moreInfosUserAdd!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 - 30)
+            moreInfosUserAdd!.font = UIFont(name: Utils().customFontSemiBold, size: 26)
+            moreInfosUserAdd!.textColor = UIColor.whiteColor()
+            moreInfosUserAdd!.adjustsFontSizeToFitWidth = true
+            moreInfosUserAdd!.textAlignment = NSTextAlignment.Center
+            moreInfosUserAdd!.text = "Add"
+            addFriendsView.addSubview(moreInfosUserAdd!)
+        }
+        else{
+            moreInfosUserAdd!.frame = CGRectMake(0, 0, addFriendsView.frame.width, 30)
+            moreInfosUserAdd!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 - 30)
+        }
+        
+        
+        
+        if Utils().isUserAFriend(reactUser){
+            moreInfosUserAdd!.hidden = true
+        }
+        else{
+            moreInfosUserAdd!.hidden = false
+        }
+        
+        
+        moreInfosUsernameLabel!.hidden = false
+        moreInfosIconeUserImageView!.hidden = false
         
         
     }

@@ -13,11 +13,26 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
+    
+    var changeUsernameChosen:Bool = true
 
     
     override func viewDidLoad() {
         
-        titleLabel.text = NSLocalizedString("Edit username", comment : "Edit username")
+        if changeUsernameChosen{
+            titleLabel.text = NSLocalizedString("Edit username", comment : "Edit username")
+        }
+        else{
+            titleLabel.text = NSLocalizedString("Edit your name", comment : "Edit your name")
+        }
+        
+        if changeUsernameChosen{
+            usernameTextField.placeholder = "@username"
+        }
+        else{
+            usernameTextField.placeholder = "Your Name"
+        }
+        
         
         let backStatusBar:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20))
         backStatusBar.backgroundColor = Utils().statusBarColor
@@ -42,7 +57,14 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func validateUsername(sender: AnyObject) {
-        verifyUsernameAvailable()
+        
+        if changeUsernameChosen{
+            verifyUsernameAvailable()
+        }
+        else{
+            changeName()
+        }
+        
     }
     
     
@@ -51,7 +73,12 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         
         //Verify Username
-        verifyUsernameAvailable()
+        if changeUsernameChosen{
+            verifyUsernameAvailable()
+        }
+        else{
+            changeName()
+        }
         
         return true
     }
@@ -65,9 +92,12 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
             return false
         }
         
-        if isForbidden(string){
-            return false
+        if changeUsernameChosen{
+            if isForbidden(string){
+                return false
+            }
         }
+        
         
         return true
         
@@ -162,6 +192,31 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
             alert.show()
         }
         
+        
+        
+    }
+    
+    
+    
+    
+    func changeName(){
+        
+        PFUser.currentUser()["name"] = usernameTextField.text
+        
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        PFUser.currentUser().saveInBackgroundWithBlock { (succeed, error) -> Void in
+            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+            if error != nil{
+                let alert = UIAlertView(title: "Error", message: NSLocalizedString("Error while editing your name. Please try again later.", comment :"Error while editing your name. Please try again later."),
+                    delegate: nil, cancelButtonTitle: "OK")
+                alert.show()
+            }
+            else{
+                Mixpanel.sharedInstance().people.set(["Name" : self.usernameTextField.text])
+                
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+        }
         
         
     }

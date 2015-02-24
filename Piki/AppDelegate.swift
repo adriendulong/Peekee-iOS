@@ -27,15 +27,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         //Dev
-        //Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
-        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
-        
+        Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
+        Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
+         
         //PROD
-        Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
-        Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
+        //Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
+        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
         
         
         Fabric.with([Crashlytics()])
+        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
 
        
         Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
@@ -50,22 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //self.window?.makeKeyAndVisible()
             self.window!.rootViewController = phoneViewController
         
-        }
-        else{
-            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
-                if error != nil {
-                    
-                }
-                else{
-                    var userFriends:Array<String>? = user["usersFriend"] as? Array<String>
-                    
-                    if userFriends != nil {
-                        Mixpanel.sharedInstance().people.set(["Nb Friends" : userFriends!.count])
-                        Mixpanel.sharedInstance().people.set(["Username" : PFUser.currentUser().username])
-                    }
-                    
-                }
-            })
         }
         
         
@@ -116,6 +101,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                 }
                 else{
+                    
+                    Utils().nbVisitAppIncrement()
+                    
+                    
+                    
+                    if Utils().isMomentForRealName(){
+                        if PFUser.currentUser()["name"] == nil{
+                            rootController.setName()
+                        }
+                        else if countElements(PFUser.currentUser()["name"] as String) == 0{
+                            rootController.setName()
+                        }
+                        
+                    }
+                    
                     let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
                     
                     
