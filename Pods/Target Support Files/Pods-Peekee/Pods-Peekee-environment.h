@@ -18,6 +18,12 @@
 #define COCOAPODS_VERSION_MINOR_APAddressBook_Swift 1
 #define COCOAPODS_VERSION_PATCH_APAddressBook_Swift 5
 
+// Animated-Gif-iOS
+#define COCOAPODS_POD_AVAILABLE_Animated_Gif_iOS
+#define COCOAPODS_VERSION_MAJOR_Animated_Gif_iOS 1
+#define COCOAPODS_VERSION_MINOR_Animated_Gif_iOS 1
+#define COCOAPODS_VERSION_PATCH_Animated_Gif_iOS 0
+
 // Bolts
 #define COCOAPODS_POD_AVAILABLE_Bolts
 #define COCOAPODS_VERSION_MAJOR_Bolts 1
@@ -42,12 +48,6 @@
 #define COCOAPODS_VERSION_MINOR_Mixpanel_MPCategoryHelpers 6
 #define COCOAPODS_VERSION_PATCH_Mixpanel_MPCategoryHelpers 2
 
-// PBJVideoPlayer
-#define COCOAPODS_POD_AVAILABLE_PBJVideoPlayer
-#define COCOAPODS_VERSION_MAJOR_PBJVideoPlayer 0
-#define COCOAPODS_VERSION_MINOR_PBJVideoPlayer 1
-#define COCOAPODS_VERSION_PATCH_PBJVideoPlayer 11
-
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
 #define COCOAPODS_VERSION_MAJOR_Parse 1
@@ -71,4 +71,10 @@
 #define COCOAPODS_VERSION_MAJOR_ParseUI 1
 #define COCOAPODS_VERSION_MINOR_ParseUI 0
 #define COCOAPODS_VERSION_PATCH_ParseUI 2
+
+// libPhoneNumber-iOS
+#define COCOAPODS_POD_AVAILABLE_libPhoneNumber_iOS
+#define COCOAPODS_VERSION_MAJOR_libPhoneNumber_iOS 0
+#define COCOAPODS_VERSION_MINOR_libPhoneNumber_iOS 8
+#define COCOAPODS_VERSION_PATCH_libPhoneNumber_iOS 3
 

@@ -1,3 +1,4 @@
+
 //
 //  AppDelegate.swift
 //  Piki
@@ -13,11 +14,12 @@ import ParseCrashReporting
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerDelegate {
 
     var window: UIWindow?
     var startTimeSession:NSDate?
-    
+    var _messengerUrlHandler:FBSDKMessengerURLHandler?
+    var _replyMessengerContext:FBSDKMessengerContext?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -39,21 +41,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
 
        
-        Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
+        
         
         
         //See if present mandatory screen add friends
         getIfFriendsMandatory()
         
         if PFUser.currentUser() == nil {
+            Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
+            
             var storyboard = UIStoryboard(name: "Main", bundle: nil)
             var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as UINavigationController
-            //self.window?.makeKeyAndVisible()
+            //self.window?.makeKeyAndVisible()  
             self.window!.rootViewController = phoneViewController
         
         }
         
         
+        _messengerUrlHandler = FBSDKMessengerURLHandler()
+        _messengerUrlHandler!.delegate = self
 
         return true
     }
@@ -63,6 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
         
         Mixpanel.sharedInstance().track("Session")
+        
+        Utils().removeAllComeFromMessenger()
+        _replyMessengerContext = nil
         
     }
 
@@ -94,6 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var navController:UINavigationController = window!.rootViewController as UINavigationController
             var rootController:MainViewController = navController.viewControllers[0] as MainViewController
             rootController.updatePikis()
+            
             
             
             PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
@@ -154,97 +164,102 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         
         
-        let type:NSString = userInfo["type"] as NSString
+        let type:NSString? = userInfo["type"] as? NSString
         
         
-        switch application.applicationState{
-        case UIApplicationState.Active:
-            println("Active")
-        case UIApplicationState.Background:
-            println("Background")
-        case UIApplicationState.Inactive:
-            println("Inactive")
-        }
-        
-        println("Application State : \(application.applicationState)")
-        
-        if application.applicationState == UIApplicationState.Background{
-            switch type {
-                
-            case "newReact":
-                let pikiId: NSString? = userInfo["pikiId"] as? NSString
-                
-                if pikiId != nil{
-                    var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId!)
+        if type != nil{
+            switch application.applicationState{
+            case UIApplicationState.Active:
+                println("Active")
+            case UIApplicationState.Background:
+                println("Background")
+            case UIApplicationState.Inactive:
+                println("Inactive")
+            }
+            
+            println("Application State : \(application.applicationState)")
+            
+            if application.applicationState == UIApplicationState.Background{
+                switch type! {
                     
-                    var queryPiki:PFQuery = PFQuery(className: "Piki")
-                    queryPiki.whereKey("objectId", equalTo: pikiId)
-                    queryPiki.includeKey("user")
+                case "newReact":
+                    let pikiId: NSString? = userInfo["pikiId"] as? NSString
                     
-                    queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
-                        if error != nil {
-                            completionHandler(UIBackgroundFetchResult.Failed)
-                        }
-                        else{
-                            let photoFile:PFFile = pikiObject["photo"] as PFFile
-                            photoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
-                                if error != nil {
-                                    completionHandler(UIBackgroundFetchResult.Failed)
-                                }
-                                else{
-                                    
-                                    //var navController:UINavigationController = self.window!.rootViewController as UINavigationController
-                                    //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-                                    //rootController.goToPiki(pikiObject)
-                                    completionHandler(UIBackgroundFetchResult.NewData)
-                                }
-                            })
-                        }
-                    })
+                    if pikiId != nil{
+                        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId!)
+                        
+                        var queryPiki:PFQuery = PFQuery(className: "Piki")
+                        queryPiki.whereKey("objectId", equalTo: pikiId)
+                        queryPiki.includeKey("user")
+                        
+                        queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
+                            if error != nil {
+                                completionHandler(UIBackgroundFetchResult.Failed)
+                            }
+                            else{
+                                let photoFile:PFFile = pikiObject["photo"] as PFFile
+                                photoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                                    if error != nil {
+                                        completionHandler(UIBackgroundFetchResult.Failed)
+                                    }
+                                    else{
+                                        
+                                        //var navController:UINavigationController = self.window!.rootViewController as UINavigationController
+                                        //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
+                                        //rootController.goToPiki(pikiObject)
+                                        completionHandler(UIBackgroundFetchResult.NewData)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                    
+                case "newPiki":
+                    let pikiId: NSString? = userInfo["pikiId"] as? NSString
+                    
+                    if pikiId != nil{
+                        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId!)
+                        
+                        var queryPiki:PFQuery = PFQuery(className: "Piki")
+                        queryPiki.whereKey("objectId", equalTo: pikiId)
+                        queryPiki.includeKey("user")
+                        
+                        queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
+                            if error != nil {
+                                completionHandler(UIBackgroundFetchResult.Failed)
+                            }
+                            else{
+                                let photoFile:PFFile = pikiObject["photo"] as PFFile
+                                photoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                                    if error != nil {
+                                        completionHandler(UIBackgroundFetchResult.Failed)
+                                    }
+                                    else{
+                                        
+                                        //var navController:UINavigationController = self.window!.rootViewController as UINavigationController
+                                        //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
+                                        //rootController.goToPiki(pikiObject)
+                                        
+                                        completionHandler(UIBackgroundFetchResult.NewData)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                    
+                    
+                default:
+                    println("wrong type")
+                    completionHandler(UIBackgroundFetchResult.NoData)
+                    
                 }
-                
-            case "newPiki":
-                let pikiId: NSString? = userInfo["pikiId"] as? NSString
-                
-                if pikiId != nil{
-                    var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId!)
-                    
-                    var queryPiki:PFQuery = PFQuery(className: "Piki")
-                    queryPiki.whereKey("objectId", equalTo: pikiId)
-                    queryPiki.includeKey("user")
-                    
-                    queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
-                        if error != nil {
-                            completionHandler(UIBackgroundFetchResult.Failed)
-                        }
-                        else{
-                            let photoFile:PFFile = pikiObject["photo"] as PFFile
-                            photoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
-                                if error != nil {
-                                    completionHandler(UIBackgroundFetchResult.Failed)
-                                }
-                                else{
-                                    
-                                    //var navController:UINavigationController = self.window!.rootViewController as UINavigationController
-                                    //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-                                    //rootController.goToPiki(pikiObject)
-                                    
-                                    completionHandler(UIBackgroundFetchResult.NewData)
-                                }
-                            })
-                        }
-                    })
-                }
-                
-                
-            default:
-                println("wrong type")
-                
+            }
+            else{
+                completionHandler(UIBackgroundFetchResult.NoData)
             }
         }
-        else{
-            completionHandler(UIBackgroundFetchResult.NoData)
-        }
+        
+        
 
         
         
@@ -278,6 +293,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
             
         }
+    }
+    
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        
+        
+        if _messengerUrlHandler!.canOpenURL(url, sourceApplication: sourceApplication){
+            _messengerUrlHandler!.openURL(url, sourceApplication: sourceApplication)
+        }
+        
+        
+        return true
+    }
+    
+    
+    func messengerURLHandler(messengerURLHandler: FBSDKMessengerURLHandler!, didHandleReplyWithContext context: FBSDKMessengerURLHandlerReplyContext!) {
+        var metadata:String = context.metadata
+        
+        println("Metadata : \(metadata)")
+        
+        _replyMessengerContext = context
+        Utils().comeFromMessengerPleek(metadata)
+        
+        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: metadata)
+        
+        var queryPiki:PFQuery = PFQuery(className: "Piki")
+        queryPiki.whereKey("objectId", equalTo: metadata)
+        queryPiki.includeKey("user")
+        queryPiki.cachePolicy = kPFCachePolicyCacheElseNetwork
+        
+        queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
+            if error != nil {
+            }
+            else{
+                PFCloud.callFunctionInBackground("addToAPublicPleek", withParameters: ["pleekId" : metadata])
+                
+                var navController:UINavigationController = self.window!.rootViewController as UINavigationController
+                var rootController:MainViewController = navController.viewControllers[0] as MainViewController
+                rootController.goToPiki(pikiObject)
+            }
+        })
+        
+        
+        
+        
+        
+        
     }
     
 

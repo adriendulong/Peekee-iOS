@@ -318,6 +318,9 @@ class PikiUserTableViewCell : UITableViewCell {
         
         
         //self.user = user
+        if self.secondLabel != nil{
+            self.secondLabel!.hidden = true
+        }
         
         usernameLabel!.text = "@\(username)"
         
@@ -815,10 +818,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         if printMode == 0{
             if section == 0{
                 if pikiUsersFound.count > 0 {
-                    labelHeader.text = NSLocalizedString("PEEKEE USER", comment : "PEEKEE USER")
+                    labelHeader.text = NSLocalizedString("PLEEK USER", comment : "PLEEK USER")
                 }
                 else if contactsWithUserInfos.count > 0{
-                    labelHeader.text = NSLocalizedString("FRIENDS ON PEEKEE", comment : "FRIENDS ON PEEKEE")
+                    labelHeader.text = NSLocalizedString("FRIENDS ON PLEEK", comment : "FRIENDS ON PLEEK")
                 }
                 else if self.lookingForFriendsOnPeekee{
                     
@@ -837,14 +840,14 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     viewHeader.addSubview(loadIndicator)
                 }
                 else{
-                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
+                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
                 }
                 
             }
             else if section == 1{
                 if pikiUsersFound.count > 0 {
                     if contactsWithUserInfos.count > 0{
-                        labelHeader.text = NSLocalizedString("FRIENDS ON PEEKEE", comment : "FRIENDS ON PEEKEE")
+                        labelHeader.text = NSLocalizedString("FRIENDS ON PLEEK", comment : "FRIENDS ON PLEEK")
                     }
                     else if self.lookingForFriendsOnPeekee{
                         
@@ -863,11 +866,11 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                         viewHeader.addSubview(loadIndicator)
                     }
                     else{
-                        labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
+                        labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
                     }
                 }
                 else{
-                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
+                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
                 }
                 /*
                 
@@ -895,7 +898,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 }*/
             }
             else{
-                labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
+                labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
             }
         }
         else{
@@ -1176,7 +1179,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         
         
-        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
         
         
         
@@ -1291,7 +1294,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         var finalPhoneNumber:String?
         
         
-        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
         var errorPointer:NSError?
         
         if countElements(numberString) > 4{
@@ -1407,8 +1410,17 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         messageController.recipients = [contacts[0].phones[0]]
         messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
         
-        if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-            messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+        if Utils().iOS8{
+            if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
+                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+            }
+        }
+        else{
+            var dataImage:NSData? = UIImagePNGRepresentation(Utils().getShareUsernameImage())
+            if dataImage != nil{
+                messageController.addAttachmentData(dataImage, typeIdentifier: "image/png", filename: "peekeeInvit.png")
+            }
+            
         }
 
         self.presentViewController(messageController, animated: true) { () -> Void in
@@ -1548,6 +1560,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func getContacts(){
         //Contacts
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
         self.addressBook.fieldsMask = APContactField.All
         self.addressBook.sortDescriptors = [NSSortDescriptor(key: "firstName", ascending: true),
             NSSortDescriptor(key: "lastName", ascending: true)]
@@ -1557,6 +1571,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         self.addressBook.loadContacts(
             { (contacts: [AnyObject]!, error: NSError!) in
                 //self.activity.stopAnimating()
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 if (contacts != nil) {
                     //self.memoryStorage().addItems(contacts)
                     //println("Contacts : \(contacts)")

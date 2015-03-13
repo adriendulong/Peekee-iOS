@@ -979,7 +979,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
     func problemSendingPiki(error : NSError){
         MBProgressHUD.hideHUDForView(self.view, animated: true)
         var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-            message: NSLocalizedString("We had a problem while sending your Peekee, please try again later", comment : "We had a problem while sending your Peekee, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+            message: NSLocalizedString("We had a problem while sending your Pleek, please try again later", comment : "We had a problem while sending your Pleek, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
         

@@ -19,7 +19,7 @@ protocol PikiControllerProtocol {
     func updatePikis()
 }
 
-class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, AVCaptureFileOutputRecordingDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate {
+class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, AVCaptureFileOutputRecordingDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate {
     
     
     //Asset Keys
@@ -144,6 +144,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var isMemShowed : Bool = false
     var positionMemShowed:Int?
     var mems : Array<PFObject> = Array<PFObject>()
+    var backShareButton:UIImageView?
+    
+    var share1vs1View:UIView?
+    
+    var shareMessengerReactView:UIView?
+    var gifURLLastReact:NSURL?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -200,8 +206,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         //View top left for username/back
         var gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quit"))
-        let backLeftView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width/4 * 3, height: 60))
-        backLeftView.backgroundColor = Utils().primaryColorDark
+        let backLeftView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width - 85, height: 60))
+        backLeftView.backgroundColor = Utils().primaryColor
         backLeftView.addGestureRecognizer(gesture)
         topBarView.addSubview(backLeftView)
         
@@ -210,9 +216,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         usernameLabel.textColor = UIColor.whiteColor()
         backLeftView.addSubview(usernameLabel)
         if self.mainPiki!["user"] != nil {
+
             var user = self.mainPiki!["user"] as PFUser
-            var username:String = user["username"] as String
-            usernameLabel.text = "@\(username)"
+            
+            if user["name"] != nil{
+                usernameLabel.text = "@\(user.username)"
+            }
+            else{
+                var name:String = user["name"] as String
+                usernameLabel.text = "\(name)"
+            }
+            
+            
         }
         
         let backImageView:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 8, height: 60))
@@ -220,9 +235,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         backImageView.contentMode = UIViewContentMode.Center
         topBarView.addSubview(backImageView)
         
-        let shareButton:UIButton = UIButton(frame: CGRect(x: self.view.frame.size.width/4 * 3, y: 0, width: self.view.frame.size.width/4, height: 60))
+        let colorShareButton:UIView = UIView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
+        colorShareButton.backgroundColor = Utils().primaryColorDark
+        topBarView.addSubview(colorShareButton)
+        
+        backShareButton = UIImageView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
+        backShareButton!.contentMode = UIViewContentMode.Center
+        backShareButton!.hidden = true
+        backShareButton!.alpha = 0.5
+        topBarView.addSubview(backShareButton!)
+        
+        
+        let shareButton:UIButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
         shareButton.setImage(UIImage(named: "share_icon"), forState: UIControlState.Normal)
-        shareButton.addTarget(self, action: Selector("buildViewShare"), forControlEvents: UIControlEvents.TouchUpInside)
+        shareButton.addTarget(self, action: Selector("buildViewSharePopUp"), forControlEvents: UIControlEvents.TouchUpInside)
         topBarView.addSubview(shareButton)
         
         //Collection View Layout
@@ -264,7 +290,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         nbPeopleView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.width + topBarView.frame.size.height - 50, width: self.view.frame.size.width, height: 50))
         nbPeopleView!.backgroundColor = UIColor.clearColor()
         
-        let nbPeopleButton:UIButton = UIButton(frame: CGRect(x: 20, y: 0, width: 200, height: nbPeopleView!.frame.height))
+        let nbPeopleButton:UIButton = UIButton(frame: CGRect(x: 10, y: 0, width: 200, height: nbPeopleView!.frame.height))
         nbPeopleButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         nbPeopleButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         recipients = self.mainPiki!["recipients"] as? Array<String>
@@ -282,7 +308,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         else{
             nbPeopleButton.setTitle(" friends", forState: UIControlState.Normal)
         }
-        nbPeopleButton.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 25)
+        nbPeopleButton.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 22)
         nbPeopleButton.titleLabel!.textAlignment = NSTextAlignment.Left
         nbPeopleButton.addTarget(self, action: Selector("seeFriends:"), forControlEvents: UIControlEvents.TouchUpInside)
         nbPeopleView!.addSubview(nbPeopleButton)
@@ -548,6 +574,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         getLastMem()
         
         
+        self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject!, error : NSError!) -> Void in
+            if error == nil{
+                let nbReact = updatedMainPiki["nbReaction"] as? Int
+                if nbReact != nil{
+                    self.nbReactLabel!.text = "\(nbReact!)"
+                }
+                else{
+                    self.nbReactLabel!.text = "0"
+                    
+                }
+            }
+        }
+        
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -583,6 +623,19 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func refresh(){
+        
+        self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject!, error : NSError!) -> Void in
+            if error == nil{
+                let nbReact = updatedMainPiki["nbReaction"] as? Int
+                if nbReact != nil{
+                    self.nbReactLabel!.text = "\(nbReact!)"
+                }
+                else{
+                    self.nbReactLabel!.text = "0"
+                    
+                }
+            }
+        }
         
         getReacts()
         
@@ -634,8 +687,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
             else{
                 if indexPath == indexPathBig{
-                    //return CGSize(width: self.view.frame.width, height: (self.view.frame.width - 2)/3 * 2)
-                    return CGSize(width: (self.view.frame.width - 2)/3 * 2, height: (self.view.frame.width - 2)/3 * 2)
+                    return CGSize(width: self.view.frame.width, height: (self.view.frame.width - 2)/3 * 2)
+                    //return CGSize(width: (self.view.frame.width - 2)/3 * 2, height: (self.view.frame.width - 2)/3 * 2)
                 }
                 else{
                     return CGSize(width: (self.view.frame.size.width - 2)/3, height: (self.view.frame.size.width - 2)/3)
@@ -711,34 +764,40 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             
                             videoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
                                 
-                                
-                                var fileManager:NSFileManager = NSFileManager()
-                                if data.writeToFile("\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov", atomically: false){
-                                    
-                                    
-                                    var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov")
-                                    var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
-                                    var player:AVPlayer = AVPlayer(playerItem: playerItem)
-                                    player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                                    player.muted = false
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-                                    
-                                    
-                                    if (self as UIViewController).isViewLoaded() && ((self as UIViewController).view.window != nil) {
-                                        cell.loadIndicator.hidden = true
-                                        cell.playerLayer.player = player
-                                        cell.playerView.hidden = false
-                                        player.play()
+                                if data != nil{
+                                    if self.mainPiki != nil{
+                                        var fileManager:NSFileManager = NSFileManager()
+                                        if data.writeToFile("\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov", atomically: false){
+                                            
+                                            
+                                            var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov")
+                                            var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
+                                            var player:AVPlayer = AVPlayer(playerItem: playerItem)
+                                            player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
+                                            player.muted = false
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+                                            
+                                            
+                                            if (self as UIViewController).isViewLoaded() && ((self as UIViewController).view.window != nil) {
+                                                cell.loadIndicator.hidden = true
+                                                cell.playerLayer.player = player
+                                                cell.playerView.hidden = false
+                                                player.play()
+                                            }
+                                            
+                                            
+                                            
+                                        }
                                     }
-                                    
-                                    
-                                    
                                 }
+                                
+                                
+                                
                                 
                                 
                             })
@@ -897,7 +956,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 if indexPath.item == (pikiReacts.count - 1){
                     
                     
-                    if pikiReacts.count > 0 && !isLoadingMore{
+                    if pikiReacts.count > 30 && !isLoadingMore{
                         
                         let nbReact = self.mainPiki!["nbReaction"] as? Int
                         if nbReact != nil{
@@ -917,10 +976,11 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellMem", forIndexPath: indexPath) as MemCollectionViewCell
 
             cell.iconImageView.image = nil
+            cell.loadIndicator.startAnimating()
             
             var fileMem = self.mems[indexPath.item]["image"] as PFFile
             fileMem.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
-                
+                cell.loadIndicator.stopAnimating()
                 cell.iconImageView.image = UIImage(data: data)
                 
             })
@@ -1027,7 +1087,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if collectionView == self.collectionView! {
             if section == 1{
-                if pikiReacts.count > 0{
+                if pikiReacts.count > 30{
                     let nbReact = self.mainPiki!["nbReaction"] as? Int
                     if nbReact != nil{
                         if nbReact > pikiReacts.count{
@@ -1065,7 +1125,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 if indexPath.section == 1{
                     
-                    reusableView!.backgroundColor = UIColor.whiteColor()
+                    reusableView!.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
                     
                     if parrotLoad == nil{
                         parrotLoad = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -1448,8 +1508,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         else{
             self.camDenied()
         }
-        
-        
     }
     
     func addAudio(){
@@ -1744,9 +1802,30 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                 
                                 newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
                                     if succeeded{
+                                        
+                                        var reactName:String?
+                                        
                                         Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Emoji Sent" : 1])
-                                        FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
-                                        Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
+                                        if self.positionMemShowed != nil{
+                                            reactName = self.mems[self.positionMemShowed!]["name"] as? String
+                                            
+                                            if reactName != nil{
+                                                FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji", "Meme Name" : reactName!])
+                                                Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji", "Meme Name" : reactName!])
+                                            }
+                                            else{
+                                                FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
+                                                Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
+                                            }
+                                            
+                                            
+                                        }
+                                        else{
+                                            FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
+                                            Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
+                                        }
+                                        
+                                        
                                         
                                         //Push notif
                                         var isPublic:Bool?
@@ -2604,6 +2683,19 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
+    func updateReactRequest(){
+        var requestReact:PFQuery = PFQuery(className: "React")
+        requestReact.whereKey("Piki", equalTo: mainPiki)
+        requestReact.orderByDescending("createdAt")
+        requestReact.limit = 50
+        requestReact.cachePolicy = kPFCachePolicyNetworkOnly
+        requestReact.includeKey("user")
+        
+        requestReact.findObjectsInBackgroundWithBlock { (reacts, error) -> Void in
+            
+        }
+    }
+    
 
     func getReacts(){
         
@@ -2627,6 +2719,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     for react in self.pikiReacts{
                     }
                     
+                    self.buildViewShareBackButton()
                     self.collectionView!.reloadData()
                 }
                 else{
@@ -2634,10 +2727,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     for react in reacts as Array<PFObject> {
                         var alreadyIn:Bool = false
                         for actualReact in self.pikiReacts{
-                            if react.objectId == actualReact.objectId{
-                                alreadyIn = true
-                                break
+                            
+                            if actualReact.isKindOfClass(PFObject){
+                                if react.objectId == actualReact.objectId{
+                                    alreadyIn = true
+                                    break
+                                }
                             }
+                            
+                            
                         }
                         
                         if !alreadyIn{
@@ -2659,6 +2757,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         self.collectionView!.performBatchUpdates({ () -> Void in
                             self.collectionView!.insertItemsAtIndexPaths(indexToInsert)
                         }, completion: { (completed) -> Void in
+                            self.buildViewShareBackButton()
+
                         })
                         
                         
@@ -2679,6 +2779,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func getMoreReacts(){
         
+        println("MORE REACTS")
         
         var skipNumber:Int = self.pikiReacts.count
         
@@ -2695,11 +2796,11 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         requestReact.findObjectsInBackgroundWithBlock { (reacts, error) -> Void in
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                if firstTimeDone{
+                //if firstTimeDone{
                     self.isLoadingMore = false
-                }
+                //}
                 
-                firstTimeDone = true
+                //firstTimeDone = true
                 
                 
                 self.refreshControl.endRefreshing()
@@ -2873,14 +2974,36 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         UIView.animateWithDuration(animationDuration, animations: { () -> Void in
             
+            var dif = self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)
+            println("Difference collection view move : \(dif)")
+            
+            
+            var difOrigin:CGFloat = self.cameraActionButton!.frame.origin.y - self.middleOverlay.frame.origin.y
+            var difFinal:CGFloat = self.middleOverlay.frame.height - self.cameraActionButton!.frame.height
+            var difToMove:CGFloat = difOrigin - difFinal
+            println("Dif Final : \(difToMove). Origin : \(difOrigin), final : \(difFinal)")
             
             self.cameraActionButton!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
             self.backEmojiButtonSelected.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
             self.arrayEmojisButton[0].transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
-            self.topOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-            self.middleOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-            self.bottomOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-            self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
+            
+            
+            
+            
+            if Utils().isIphone4(){
+                self.topOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
+                self.middleOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
+                self.bottomOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
+                self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
+            }
+            else{
+                self.topOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
+                self.middleOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
+                self.bottomOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
+                self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
+            }
+            
+            
             
             }) { (finished) -> Void in
         }
@@ -3143,6 +3266,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         alert.show()
                     }
                     else{
+                        self.updateReactRequest()
+                        
+                        
                         let alert = UIAlertView(title: "Delete", message: "Your react has been deleted.",
                             delegate: nil, cancelButtonTitle: "OK")
                         alert.show()
@@ -3171,34 +3297,50 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             cellSmaller(cellToReduce!)
         }
         
-        
-        
         self.indexPathBig = self.collectionView!.indexPathForCell(cell)
-        self.collectionView!.collectionViewLayout.invalidateLayout()
-        //cell.addFriendsView.alpha = 1.0
         
-        UIView.transitionWithView(cell, duration: 0.5, options: nil,
-            animations: { () -> Void in
-                
-                //cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.width, (self.view.frame.width - 2)/3 * 2)
-                cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, (self.view.frame.width - 2)/3 * 2, (self.view.frame.width - 2)/3 * 2)
-                //cell.reactImage.frame = CGRectMake(0, 0, (cell.frame.width - 2)/3 * 2, (cell.frame.width - 2)/3 * 2)
-                cell.reactImage.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
-                cell.usernameLabel!.frame = CGRectMake(0,cell.reactImage.frame.height - 25, cell.reactImage.frame.width, 25)
-                cell.playerView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                cell.playerLayer.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                cell.loadIndicator!.center = cell.playerView.center
-                cell.readVideoImageView.center = cell.playerView.center
-                cell.insideCollectionView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                //cell.addFriendsView.frame = CGRectMake(cell.reactImage.frame.width + 1, 0, cell.frame.width - cell.reactImage.frame.width - 1, cell.frame.height)
-                cell.insideCollectionView.reloadData()
-            }, completion: { (finisehd) -> Void in
-                //cell.showMoreInfos()
-                cell.isInBigMode = true
-                self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
-                cell.startVideo()
-                NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
+        self.collectionView!.performBatchUpdates({ () -> Void in
+            self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
+        }, completion: { (finished) -> Void in
+            
+            self.collectionView!.collectionViewLayout.invalidateLayout()
+            
+            
+            UIView.transitionWithView(cell, duration: 0.5, options: nil,
+                animations: { () -> Void in
+                    
+                    cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.width, (self.view.frame.width - 2)/3 * 2)
+                    //cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, (self.view.frame.width - 2)/3 * 2, (self.view.frame.width - 2)/3 * 2)
+                    cell.reactImage.frame = CGRectMake(0, 0, (cell.frame.width - 2)/3 * 2, (cell.frame.width - 2)/3 * 2)
+                    //cell.reactImage.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
+                    cell.usernameLabel!.frame = CGRectMake(0,cell.reactImage.frame.height - 25, cell.reactImage.frame.width, 25)
+                    cell.playerView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
+                    cell.playerLayer.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
+                    cell.loadIndicator!.center = cell.playerView.center
+                    cell.readVideoImageView.center = cell.playerView.center
+                    cell.insideCollectionView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
+                    cell.moreInfosView.frame = CGRectMake(cell.reactImage.frame.width + 1, 0, cell.frame.width - cell.reactImage.frame.width - 1, cell.frame.height)
+                    cell.moreInfosView.alpha = 1.0
+                    
+                    
+                    
+                    cell.insideCollectionView.reloadData()
+                }, completion: { (finisehd) -> Void in
+                    cell.showMoreInfos()
+                    
+                    if cell.separatorMoreInfos != nil{
+                        cell.separatorMoreInfos!.alpha = 1.0
+                    }
+                    
+                    cell.isInBigMode = true
+                    self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
+                    cell.startVideo()
+                    NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
+            })
         })
+        
+        
+        
         
     }
     
@@ -3209,14 +3351,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
         
         cell.stopVideo()
-        //cell.addFriendsView.alpha = 0.0
+        cell.moreInfosView.alpha = 0.0
         
-        
-        if cell.moreInfosIconeUserImageView != nil{
-            cell.moreInfosUsernameLabel!.hidden = true
-            cell.moreInfosIconeUserImageView!.hidden = true
-            cell.moreInfosUserAdd!.hidden = true
-        }
+        share1vs1View = nil
         
         
         UIView.transitionWithView(cell, duration: 0.2, options: nil,
@@ -3230,8 +3367,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 cell.insideCollectionView.reloadData()
                 cell.loadIndicator!.center = cell.playerView.center
                 cell.readVideoImageView.center = cell.playerView.center
-                //cell.addFriendsView.frame = CGRectMake(0, 0, 0, 0)
-                
+                cell.moreInfosView.frame = CGRectMake(0, 0, 0, 0)
+                cell.separatorMoreInfos!.alpha = 0.0
                 
             }, completion: { (finisehd) -> Void in
                 cell.isInBigMode = false
@@ -3257,7 +3394,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func presentPopUpForUser(user : PFUser){
         
-        muteAllVideos()
+        //muteAllVideos()
         
         userPopUp = user
         
@@ -3320,6 +3457,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             addFriend.tag = 11
             popUpView!.addSubview(addFriend)
             
+            let activityIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+            activityIndicator.center = addFriend.center
+            activityIndicator.hidesWhenStopped = true
+            activityIndicator.tag = 13
+            popUpView!.addSubview(activityIndicator)
+            
             
         }
         
@@ -3333,7 +3476,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if Utils().isUserAFriend(user){
             actionButton.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
-            labelHeader.text = NSLocalizedString("ADD A FRIEND", comment : "ADD A FRIEND")
+            labelHeader.text = NSLocalizedString("REMOVE A FRIEND", comment : "REMOVE A FRIEND")
         }
         else{
             actionButton.setImage(UIImage(named: "add_friends_icon_pop_up"), forState: UIControlState.Normal)
@@ -3366,18 +3509,22 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     func addFriendFromPopUp(){
-        println("Add Friend")
+        (self.popUpView!.viewWithTag(13) as UIActivityIndicatorView).startAnimating()
+        (self.popUpView!.viewWithTag(11) as UIButton).hidden = true
         
         if userPopUp != nil {
             
             if Utils().isUserAFriend(userPopUp!){
                 
                 Utils().removeFriend(userPopUp!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                    (self.popUpView!.viewWithTag(13) as UIActivityIndicatorView).stopAnimating()
+                    (self.popUpView!.viewWithTag(11) as UIButton).hidden = false
                     if task.error != nil{
                         
                     }
                     else{
-                        (self.popUpView!.viewWithTag(11) as UIButton).setImage(UIImage(named: "mute_icon"), forState: UIControlState.Normal)
+                        (self.popUpView!.viewWithTag(11) as UIButton).setImage(UIImage(named: "add_friends_icon_pop_up"), forState: UIControlState.Normal)
+                        (self.popUpView!.viewWithTag(12) as UILabel).text = NSLocalizedString("ADD A FRIEND", comment : "ADD A FRIEND")
                     }
                     
                     return nil
@@ -3386,11 +3533,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             else{
                 //Not a friend, friend him
                 Utils().addFriend(self.userPopUp!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                    (self.popUpView!.viewWithTag(13) as UIActivityIndicatorView).stopAnimating()
+                    (self.popUpView!.viewWithTag(11) as UIButton).hidden = false
                     if task.error != nil{
                         
                     }
                     else{
-                        (self.popUpView!.viewWithTag(11) as UIButton).setImage(UIImage(named: "mute_icon"), forState: UIControlState.Normal)
+                        (self.popUpView!.viewWithTag(11) as UIButton).setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
+                        (self.popUpView!.viewWithTag(12) as UILabel).text = NSLocalizedString("REMOVE A FRIEND", comment : "REMOVE A FRIEND")
                     }
                     
                     return nil
@@ -3684,7 +3834,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    // MARK: More Peekee
+    // MARK: More Pleek
     
     func morePeekee(){
         
@@ -3692,20 +3842,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if objc_getClass("UIAlertController") != nil {
             
             var alert = UIAlertController(title: NSLocalizedString("More", comment : "More"),
-                message: NSLocalizedString("More actions for this Peekee", comment : "More actions for this Peekee"), preferredStyle: UIAlertControllerStyle.ActionSheet)
+                message: NSLocalizedString("More actions for this Pleek", comment : "More actions for this Pleek"), preferredStyle: UIAlertControllerStyle.ActionSheet)
             alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
                 
             }))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Report this Peekee", comment : "Report this Peekee"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Report this Pleek", comment : "Report this Pleek"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 PFCloud.callFunctionInBackground("reportPiki ",
                     withParameters: ["pikiId" : self.mainPiki!.objectId], block: { (result, error) -> Void in
                         if error != nil{
-                            let alert = UIAlertView(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Problem while reporting this Peekee. Please try again later", comment :"Problem while reporting this Peekee. Please try again later") ,
+                            let alert = UIAlertView(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Problem while reporting this Pleek. Please try again later", comment :"Problem while reporting this Pleek. Please try again later") ,
                                 delegate: nil, cancelButtonTitle: "OK")
                             alert.show()
                         }
                         else{
-                            let alert = UIAlertView(title: "Confirmation", message: NSLocalizedString( "This Peekee has been reported. Thank you.", comment :  "This Peekee has been reported. Thank you."),
+                            let alert = UIAlertView(title: "Confirmation", message: NSLocalizedString( "This Pleek has been reported. Thank you.", comment :  "This Pleek has been reported. Thank you."),
                                 delegate: nil, cancelButtonTitle: "OK")
                             alert.show()
                         }
@@ -3747,11 +3897,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
         }, completion: { (finished) -> Void in
             // Calculate the move the table view has to made in order to have enough space
-            var spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
+            var spaceToMove:CGFloat?
+            
+            if Utils().iOS8{
+                spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
+            }
+            else{
+                spaceToMove =  (self.view.frame.height - (60 + 125 + self.view.frame.width/3)) - self.view.frame.width
+            }
+            
+            //var spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
             println("Table view to move of : \(spaceToMove)")
             
             
-            self.collectionView!.frame = CGRect(x: 0, y: self.collectionView!.frame.origin.y + spaceToMove, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height - spaceToMove)
+            self.collectionView!.frame = CGRect(x: 0, y: self.collectionView!.frame.origin.y + spaceToMove!, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height - spaceToMove!)
             self.collectionView!.reloadData()
         })
         
@@ -3833,11 +3992,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
         
+        addAudio()
+        
+        
         
     }
     
     //Leave reply mode
     func leaveReply(){
+        
+        self.memCollectionView!.hidden = false
         
         NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
         
@@ -3883,9 +4047,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     self.bottomOverlay.alpha = 0.0
                     
                     // Calculate the move the table view has to made in order to have enough space
-                    var spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
+                    var spaceToMove:CGFloat?
                     
-                    self.collectionView!.frame = CGRect(x: 0, y: self.collectionView!.frame.origin.y - spaceToMove, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height + spaceToMove)
+                    if Utils().iOS8{
+                        spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
+                    }
+                    else{
+                        spaceToMove =  (self.view.frame.height - (60 + 125 + self.view.frame.width/3)) - self.view.frame.width
+                    }
+                    
+                    self.collectionView!.frame = CGRect(x: 0, y: self.collectionView!.frame.origin.y - spaceToMove!, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height + spaceToMove!)
                     
                     self.quitButtonReply!.center = self.replyButton.center
                     self.quitButtonReply!.alpha = 0.0
@@ -3928,11 +4099,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 hideEmojis()
                 arrayEmojisButton[0].selected = false
                 leaveTextMode()
+                self.memCollectionView!.hidden = false
             }
             else{
                 deselectAllEmojis()
                 showEmojis(0)
                 arrayEmojisButton[0].selected = true
+                self.memCollectionView!.hidden = true
+                self.positionMemShowed = nil
             }
             
             
@@ -4018,6 +4192,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
+    
     func hideMem(){
         var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
         cameraCell.overlayCameraView.hidden = true
@@ -4075,89 +4250,137 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     //MARK: Share View
     
-    func showShareView(){
+    func showShareView(isMozaic : Bool){
         
-        if bottomShareView == nil{
-            shareOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-            shareOverlay!.backgroundColor = UIColor.blackColor()
-            shareOverlay!.alpha = 0.8
-            self.view.addSubview(shareOverlay!)
-            
-            self.setNeedsStatusBarAppearanceUpdate()
-            
-            bottomShareView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - 254, width: self.view.frame.width, height: 254))
-            bottomShareView!.backgroundColor = UIColor.whiteColor()
-            bottomShareView!.alpha = 0.94
-            self.view.addSubview(bottomShareView!)
-            bottomShareView!.transform = CGAffineTransformMakeTranslation(0, bottomShareView!.frame.height)
-            
-            var shareTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bottomShareView!.frame.width, height: 50))
-            shareTitleLabel.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
-            shareTitleLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1)
-            shareTitleLabel.text = NSLocalizedString("SEND", comment : "SEND")
-            shareTitleLabel.textAlignment = NSTextAlignment.Center
-            bottomShareView!.addSubview(shareTitleLabel)
-            
-            var separatorLine = UIView(frame: CGRect(x: 0, y: 50, width: bottomShareView!.frame.width, height: 2))
-            separatorLine.backgroundColor = UIColor.whiteColor()
-            bottomShareView!.addSubview(separatorLine)
-            
-            var buttonQuit = UIButton(frame: CGRect(x: bottomShareView!.frame.width - 60, y: 0, width: 40, height: 50))
-            buttonQuit.setImage(UIImage(named : "quit_share"), forState: UIControlState.Normal)
-            buttonQuit.addTarget(self, action: Selector("quitShare"), forControlEvents: UIControlEvents.TouchUpInside)
-            bottomShareView!.addSubview(buttonQuit)
-            
-            // SMS Share
+        var isPleekPublic:Bool = self.mainPiki!["isPublic"] as Bool
+        
+        
+        shareOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        shareOverlay!.backgroundColor = UIColor.blackColor()
+        shareOverlay!.alpha = 0.8
+        self.view.addSubview(shareOverlay!)
+        
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        bottomShareView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - 254, width: self.view.frame.width, height: 254))
+        bottomShareView!.backgroundColor = UIColor.whiteColor()
+        bottomShareView!.alpha = 0.94
+        self.view.addSubview(bottomShareView!)
+        bottomShareView!.transform = CGAffineTransformMakeTranslation(0, bottomShareView!.frame.height)
+        
+        var shareTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bottomShareView!.frame.width, height: 50))
+        shareTitleLabel.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
+        shareTitleLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1)
+        shareTitleLabel.text = NSLocalizedString("SEND", comment : "SEND")
+        shareTitleLabel.textAlignment = NSTextAlignment.Center
+        bottomShareView!.addSubview(shareTitleLabel)
+        
+        var separatorLine = UIView(frame: CGRect(x: 0, y: 50, width: bottomShareView!.frame.width, height: 2))
+        separatorLine.backgroundColor = UIColor.whiteColor()
+        bottomShareView!.addSubview(separatorLine)
+        
+        var buttonQuit = UIButton(frame: CGRect(x: bottomShareView!.frame.width - 60, y: 0, width: 40, height: 50))
+        buttonQuit.setImage(UIImage(named : "quit_share"), forState: UIControlState.Normal)
+        buttonQuit.addTarget(self, action: Selector("quitShare"), forControlEvents: UIControlEvents.TouchUpInside)
+        bottomShareView!.addSubview(buttonQuit)
+        
+        // SMS Share
+        if isMozaic || !isPleekPublic || !Utils().facebookMessengerActivated{
             let shareSMSButton = UIButton(frame: CGRect(x: 30, y: 79, width: 64, height: 64))
             shareSMSButton.setImage(UIImage(named: "sms_share_icon"), forState: UIControlState.Normal)
             shareSMSButton.addTarget(self, action: Selector("shareSms"), forControlEvents: UIControlEvents.TouchUpInside)
             bottomShareView!.addSubview(shareSMSButton)
             
+            
             //Twitter Share
-            let shareTwitterButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width/2 - 32, y: 79, width: 64, height: 64))
+            //let shareTwitterButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width/2 - 32, y: 79, width: 64, height: 64))
+            let shareTwitterButton = UIButton(frame: CGRect(x: 30, y: 168, width: 64, height: 64))
             shareTwitterButton.setImage(UIImage(named: "twitter_share_icon"), forState: UIControlState.Normal)
             shareTwitterButton.addTarget(self, action: Selector("shareTwitter"), forControlEvents: UIControlEvents.TouchUpInside)
             bottomShareView!.addSubview(shareTwitterButton)
-            
-            //Facebook Share
-            let shareFacebookButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width - 98, y: 79, width: 64, height: 64))
-            shareFacebookButton.setImage(UIImage(named: "facebook_share_icon"), forState: UIControlState.Normal)
-            shareFacebookButton.addTarget(self, action: Selector("shareFacebook"), forControlEvents: UIControlEvents.TouchUpInside)
-            bottomShareView!.addSubview(shareFacebookButton)
-            
-            // Instagram Share
-            let shareInstagramButton = UIButton(frame: CGRect(x: 30, y: 168, width: 64, height: 64))
-            shareInstagramButton.setImage(UIImage(named: "instagram_share_icon"), forState: UIControlState.Normal)
-            shareInstagramButton.addTarget(self, action: Selector("shareInstagram"), forControlEvents: UIControlEvents.TouchUpInside)
-            bottomShareView!.addSubview(shareInstagramButton)
             
             // Save Share
             let shareSaveButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width/2 - 32, y: 168, width: 64, height: 64))
             shareSaveButton.setImage(UIImage(named: "save_share_icon"), forState: UIControlState.Normal)
             shareSaveButton.addTarget(self, action: Selector("shareSave"), forControlEvents: UIControlEvents.TouchUpInside)
             bottomShareView!.addSubview(shareSaveButton)
-            
-            
-            let heightContainer:CGFloat = (self.view.frame.height - bottomShareView!.frame.height) - 30
-            let maxWidth:CGFloat = self.view.frame.width - 30
-            
-            var realSizeContainer:CGFloat!
-            if heightContainer > maxWidth{
-                realSizeContainer = maxWidth
-            }
-            else{
-               realSizeContainer = heightContainer
-            }
-            
-            imageContainerView = UIView(frame: CGRect(x: self.view.frame.width/2 - realSizeContainer/2, y: (self.view.frame.height - bottomShareView!.frame.height)/2 - realSizeContainer/2, width: realSizeContainer, height: realSizeContainer))
-            imageContainerView!.layer.borderColor = UIColor.whiteColor().CGColor
-            imageContainerView!.layer.cornerRadius = 4
-            imageContainerView!.clipsToBounds = true
-            imageContainerView!.backgroundColor = UIColor.blackColor()
-            imageContainerView!.layer.borderWidth = 2
-            imageContainerView!.hidden = true
-            self.view.addSubview(imageContainerView!)
         }
+        else{
+            
+            var tapGestureSendGifBack:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("shareMessenger"))
+            let backMessengerButtonView:UIImageView = UIImageView(frame: CGRect(x: 19, y: 48, width: 85, height: 100))
+            backMessengerButtonView.image = UIImage(named: "send_gif")
+            backMessengerButtonView.addGestureRecognizer(tapGestureSendGifBack)
+            bottomShareView!.addSubview(backMessengerButtonView)
+            
+            let messengerButtonView = UIView(frame: CGRect(x: 30, y: 79, width: 64, height: 64))
+            messengerButtonView.backgroundColor = UIColor.clearColor()
+            bottomShareView!.addSubview(messengerButtonView)
+            
+            //var widthMessengerButton:CGFloat = 64
+            //var buttonMessenger:UIButton = FBSDKMessengerShareButton.rectangularButtonWithStyle(FBSDKMessengerShareButtonStyle.Blue)
+            //buttonMessenger.frame.size = CGSize(width: 64, height: 64)
+            var buttonMessenger:UIButton = FBSDKMessengerShareButton.circularButtonWithStyle(FBSDKMessengerShareButtonStyle.Blue, width: 64)
+            buttonMessenger.backgroundColor = UIColor.clearColor()
+            buttonMessenger.addTarget(self, action: Selector("shareMessenger"), forControlEvents: UIControlEvents.TouchUpInside)
+            messengerButtonView.addSubview(buttonMessenger)
+            
+            
+            
+            let shareSMSButton = UIButton(frame: CGRect(x: 30, y: 168, width: 64, height: 64))
+            shareSMSButton.setImage(UIImage(named: "sms_share_icon"), forState: UIControlState.Normal)
+            shareSMSButton.addTarget(self, action: Selector("shareSms"), forControlEvents: UIControlEvents.TouchUpInside)
+            bottomShareView!.addSubview(shareSMSButton)
+            
+            
+            
+            let shareTwitterButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width/2 - 32, y: 168, width: 64, height: 64))
+            shareTwitterButton.setImage(UIImage(named: "twitter_share_icon"), forState: UIControlState.Normal)
+            shareTwitterButton.addTarget(self, action: Selector("shareTwitter"), forControlEvents: UIControlEvents.TouchUpInside)
+            bottomShareView!.addSubview(shareTwitterButton)
+            
+            // Save Share
+            let shareSaveButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width - 98, y: 168, width: 64, height: 64))
+            shareSaveButton.setImage(UIImage(named: "save_share_icon"), forState: UIControlState.Normal)
+            shareSaveButton.addTarget(self, action: Selector("shareSave"), forControlEvents: UIControlEvents.TouchUpInside)
+            bottomShareView!.addSubview(shareSaveButton)
+        }
+        
+        //Facebook Share
+        //let shareFacebookButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width - 98, y: 79, width: 64, height: 64))
+        let shareFacebookButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width/2 - 32, y: 79, width: 64, height: 64))
+        shareFacebookButton.setImage(UIImage(named: "facebook_share_icon"), forState: UIControlState.Normal)
+        shareFacebookButton.addTarget(self, action: Selector("shareFacebook"), forControlEvents: UIControlEvents.TouchUpInside)
+        bottomShareView!.addSubview(shareFacebookButton)
+        
+        // Instagram Share
+        //let shareInstagramButton = UIButton(frame: CGRect(x: 30, y: 168, width: 64, height: 64))
+        let shareInstagramButton = UIButton(frame: CGRect(x: bottomShareView!.frame.width - 98, y: 79, width: 64, height: 64))
+        shareInstagramButton.setImage(UIImage(named: "instagram_share_icon"), forState: UIControlState.Normal)
+        shareInstagramButton.addTarget(self, action: Selector("shareInstagram"), forControlEvents: UIControlEvents.TouchUpInside)
+        bottomShareView!.addSubview(shareInstagramButton)
+        
+
+        
+        let heightContainer:CGFloat = (self.view.frame.height - bottomShareView!.frame.height) - 30
+        let maxWidth:CGFloat = self.view.frame.width - 30
+        
+        var realSizeContainer:CGFloat!
+        if heightContainer > maxWidth{
+            realSizeContainer = maxWidth
+        }
+        else{
+            realSizeContainer = heightContainer
+        }
+        
+        imageContainerView = UIView(frame: CGRect(x: self.view.frame.width/2 - realSizeContainer/2, y: (self.view.frame.height - bottomShareView!.frame.height)/2 - realSizeContainer/2, width: realSizeContainer, height: realSizeContainer))
+        imageContainerView!.layer.borderColor = UIColor.whiteColor().CGColor
+        imageContainerView!.layer.cornerRadius = 4
+        imageContainerView!.clipsToBounds = true
+        imageContainerView!.backgroundColor = UIColor.blackColor()
+        imageContainerView!.layer.borderWidth = 2
+        imageContainerView!.hidden = true
+        self.view.addSubview(imageContainerView!)
         
         
         UIView.animateWithDuration(0.2,
@@ -4172,11 +4395,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func quitShare(){
+        share1vs1View = nil
+        
         UIView.animateWithDuration(0.2,
             animations: { () -> Void in
                 self.bottomShareView!.transform = CGAffineTransformMakeTranslation(0, self.bottomShareView!.frame.height)
             }) { (finished) -> Void in
-                self.shareOverlay!.hidden = true
+                self.shareOverlay!.removeFromSuperview()
+                self.shareOverlay = nil
+                self.bottomShareView!.removeFromSuperview()
+                self.bottomShareView = nil
                 self.imageContainerView!.hidden = true
                 self.setNeedsStatusBarAppearanceUpdate()
         }
@@ -4192,12 +4420,26 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let instagramURL : NSURL = NSURL(string: "instagram://app")!
         
         if UIApplication.sharedApplication().canOpenURL(instagramURL){
-            viewToBuildImage!.transform = CGAffineTransformIdentity
             
-            var image = Utils().imageWithView(viewToBuildImage!)
+            var image:UIImage?
             
-            let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
-            viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            
+            if share1vs1View != nil{
+                share1vs1View!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(share1vs1View!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
+                share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
+            else if viewToBuildImage != nil{
+                viewToBuildImage!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(viewToBuildImage!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
+                viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
             
             
             
@@ -4217,7 +4459,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         let url =  NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_shareInstagram.igo")!
                         println("URL : \(url.description)")
                         self.documentInteractionController!.UTI = "com.instagram.exclusivegram"
-                        self.documentInteractionController!.annotation = ["InstagramCaption" : "Awesome friends mozaic created with @Peekeeapp #peekee"]
+                        self.documentInteractionController!.annotation = ["InstagramCaption" : "Awesome friends mozaic created with @Pleekapp #pleek"]
                         
                         self.documentInteractionController!.presentOpenInMenuFromRect(CGRectMake(0,0,0,0), inView: self.view, animated: true)
                         
@@ -4234,7 +4476,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     let url =  NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_shareInstagram.igo")!
                     println("URL : \(url.description)")
                     self.documentInteractionController!.UTI = "com.instagram.exclusivegram"
-                    self.documentInteractionController!.annotation = ["InstagramCaption" : "Awesome friends mozaic created with @Peekeeapp #peekee"]
+                    self.documentInteractionController!.annotation = ["InstagramCaption" : "Awesome friends mozaic created with @Pleekapp #pleek"]
                     
                     self.documentInteractionController!.presentOpenInMenuFromRect(CGRectMake(0,0,0,0), inView: self.view, animated: true)
                     
@@ -4263,15 +4505,29 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             var composer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
             
-            viewToBuildImage!.transform = CGAffineTransformIdentity
+            var image:UIImage?
             
-            var image = Utils().imageWithView(viewToBuildImage!)
+            if share1vs1View != nil{
+                share1vs1View!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(share1vs1View!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
+                share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
+            else if viewToBuildImage != nil{
+                viewToBuildImage!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(viewToBuildImage!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
+                viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
             
-            let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
-            viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
             
-            composer.addImage(image)
-            composer.setInitialText("Awesome friends mozaic created with @Peekeeapp")
+            
+            composer.addImage(image!)
+            composer.setInitialText("Awesome friends mozaic created with @Pleekapp")
             composer.addURL(NSURL(string: Utils().websiteUrl))
             
             composer.completionHandler = {
@@ -4288,15 +4544,27 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func shareFacebook(){
         
-        viewToBuildImage!.transform = CGAffineTransformIdentity
+        var image:UIImage?
         
-        var image = Utils().imageWithView(viewToBuildImage!)
-        
-        let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
-        viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+        if share1vs1View != nil{
+            share1vs1View!.transform = CGAffineTransformIdentity
+            
+            image = Utils().imageWithView(share1vs1View!)
+            
+            let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
+            share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+        }
+        else if viewToBuildImage != nil{
+            viewToBuildImage!.transform = CGAffineTransformIdentity
+            
+            image = Utils().imageWithView(viewToBuildImage!)
+            
+            let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
+            viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+        }
         
         var params : FBPhotoParams = FBPhotoParams()
-        params.photos = [image]
+        params.photos = [image!]
 
         
         
@@ -4321,21 +4589,120 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
+    func shareMessenger(){
+        println("Share on Messenger")
+        var pleekImage:UIImage?
+        var reactImage:UIImage?
+        
+        if indexPathBig != nil{
+            
+            
+            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+            
+            Utils().getImagePleekOrReact(self.mainPiki!).continueWithBlock { (task : BFTask!) -> AnyObject! in
+                if task.error != nil{
+                    //Error
+                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                    println("Error Image pleek: \(task.error)")
+                }
+                else{
+                    pleekImage = task.result as? UIImage
+                    println("We have pleekImage")
+                    
+                    if self.indexPathBig != nil{
+                        var reactObject:AnyObject = self.pikiReacts[self.indexPathBig!.item - 1]
+                        println("We have index path big")
+                        
+                        
+                        if reactObject.isKindOfClass(PFObject){
+                            println("Index path big is class PFObject")
+                            
+                            Utils().getImagePleekOrReact(reactObject as PFObject).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                                if task.error != nil{
+                                    println("Error react Image: \(task.error)")
+                                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                                }
+                                else{
+                                    
+                                    reactImage = task.result as? UIImage
+                                    
+                                    Utils().buildGifShareMessenger(pleekImage!, reactImage: reactImage!, otherReact: nil).continueWithBlock({ (taskGif : BFTask!) -> AnyObject! in
+                                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                                        
+                                        if taskGif.error != nil{
+                                            //Error
+                                            
+                                            println("Error Gif : \(taskGif.error)")
+                                        }
+                                        else{
+                                            println("url of gif : \(taskGif.result)")
+                                            var urlGif : NSURL = (taskGif.result as NSURL)
+                                            println("Pth gig \(urlGif.path)")
+                                            Utils().shareFBMessenger((taskGif.result as NSURL).path!, pleekId: self.mainPiki!.objectId, context : nil)
+                                        }
+                                        
+                                        return nil
+                                        
+                                    })
+                                    
+                                }
+                                
+                                return nil
+                            })
+                        }
+                        else{
+                            //Error
+                            println("react no PFObject")
+                            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                        }
+                    }
+                    else{
+                        println("Big index path empty")
+                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                    }
+                }
+                
+                return nil
+            }
+        }
+        else if self.gifURLLastReact != nil{
+            self.quitShareMessenger()
+            
+            Utils().shareFBMessenger(self.gifURLLastReact!.path!, pleekId: self.mainPiki!.objectId, context : (UIApplication.sharedApplication().delegate as AppDelegate)._replyMessengerContext)
+        }
+        
+        
+        
+        
+    }
+    
     func shareSave(){
-        if viewToBuildImage != nil{
+        if viewToBuildImage != nil || share1vs1View != nil{
             
             Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Save"])
             
-            viewToBuildImage!.transform = CGAffineTransformIdentity
+            var image:UIImage?
             
-            var image = Utils().imageWithView(viewToBuildImage!)
-            
-            let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
-            viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            if share1vs1View != nil{
+                share1vs1View!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(share1vs1View!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
+                share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
+            else if viewToBuildImage != nil{
+                viewToBuildImage!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(viewToBuildImage!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
+                viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
             
             
             let library = ALAssetsLibrary()
-            library.writeImageToSavedPhotosAlbum(image.CGImage, orientation: ALAssetOrientation.Up) { (url, error) -> Void in
+            library.writeImageToSavedPhotosAlbum(image!.CGImage, orientation: ALAssetOrientation.Up) { (url, error) -> Void in
                 if error != nil {
                     let alert = UIAlertView(title: "Error", message: "Error while saving your photo",
                         delegate: nil, cancelButtonTitle: "OK")
@@ -4363,14 +4730,26 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")){
             
-            viewToBuildImage!.transform = CGAffineTransformIdentity
+            var image:UIImage?
             
-            var image = Utils().imageWithView(viewToBuildImage!)
+            if share1vs1View != nil{
+                share1vs1View!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(share1vs1View!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
+                share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
+            else if viewToBuildImage != nil{
+                viewToBuildImage!.transform = CGAffineTransformIdentity
+                
+                image = Utils().imageWithView(viewToBuildImage!)
+                
+                let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
+                viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            }
             
-            let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
-            viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
-            
-            let attachementsData:NSData = UIImageJPEGRepresentation(image, 1.0)
+            let attachementsData:NSData = UIImageJPEGRepresentation(image!, 1.0)
             
             messageController.addAttachmentData(attachementsData, typeIdentifier: "public.data", filename: "mymozaic.jpg")
         }
@@ -4382,409 +4761,67 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-    func buildViewShare(){
+    func buildViewShareBackButton(){
         
-        
-        
-        
-        
-        var nbReacts:Int? = self.mainPiki!["nbReaction"] as? Int
+
+        var nbReacts:Int? = self.pikiReacts.count
         var arrayImageViewReact:Array<UIImageView> = Array<UIImageView>()
         
         if nbReacts == nil{
             nbReacts = 0
         }
         
-        for react in self.pikiReacts{
+        /*for react in self.pikiReacts{
+        if !react.isKindOfClass(PFObject){
+        nbReacts!++
+        }
+        }*/
+        
+        if nbReacts! > 5{
+            
+            buildShareView()
+            
+            
+            let scale:CGFloat = 60 / viewToBuildImage!.frame.height
+            
+            viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            viewToBuildImage!.frame.origin = CGPoint(x: 0, y: 0)
+            backShareButton!.addSubview(viewToBuildImage!)
+            backShareButton!.hidden = false
+        }
+        else{
+            backShareButton!.hidden = true
+        }
+        
+    }
+    
+    
+    
+    func buildViewSharePopUp(){
+        
+        
+        
+        
+        
+        var nbReacts:Int? = self.pikiReacts.count
+        var arrayImageViewReact:Array<UIImageView> = Array<UIImageView>()
+        
+        if nbReacts == nil{
+            nbReacts = 0
+        }
+        
+        /*for react in self.pikiReacts{
             if !react.isKindOfClass(PFObject){
                 nbReacts!++
             }
-        }
+        }*/
         
         if nbReacts! > 5{
-            showShareView()
-            
-            //MainSHare View
-            viewToBuildImage = UIView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
-            viewToBuildImage!.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-            
-            //Main peekee image view
-            var viewMainPeekeeContainer = UIView(frame: CGRect(x: 250, y: 250, width: 500, height: 500))
-            viewMainPeekeeContainer.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-            viewToBuildImage!.addSubview(viewMainPeekeeContainer)
-            
-            if nbReacts > 5 && nbReacts < 11{
-                viewMainPeekeeContainer.frame = CGRect(x: 0, y: 0, width: 750, height: 750)
-            }
-            else if nbReacts > 23 && nbReacts < 44{
-                viewMainPeekeeContainer.frame = CGRect(x: 0, y: 0, width: 750, height: 750)
-            }
+            showShareView(true)
             
             
-            var mainPikiView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewMainPeekeeContainer.frame.width, height: viewMainPeekeeContainer.frame.height))
-            viewMainPeekeeContainer.addSubview(mainPikiView)
+            buildShareView()
             
-            //Shadow for bottom button
-            var stretchShadowImage:UIImage = UIImage(named: "shadow_piki")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-            let shadowImageView = UIImageView(frame: CGRect(x: 0, y: viewMainPeekeeContainer.frame.height - 115 , width: viewMainPeekeeContainer.frame.width, height: 115))
-            shadowImageView.image = stretchShadowImage
-            shadowImageView.hidden = true
-            viewMainPeekeeContainer.addSubview(shadowImageView)
-            
-            //Icon Peekee
-            var iconPeekee = UIImageView(frame: CGRect(x: 15, y: viewMainPeekeeContainer.frame.height - 60, width: 50, height: 50))
-            iconPeekee.layer.cornerRadius = 15
-            iconPeekee.clipsToBounds = true
-            iconPeekee.image = UIImage(named: "app_icon")
-            viewMainPeekeeContainer.addSubview(iconPeekee)
-            
-            //User label
-            let userMainPeekee = self.mainPiki!["user"] as PFUser
-            var userLabel = UILabel(frame: CGRect(x: iconPeekee.frame.origin.x + iconPeekee.frame.width + 20, y: iconPeekee.frame.origin.y, width: viewMainPeekeeContainer.frame.width - (iconPeekee.frame.origin.x + iconPeekee.frame.width + 20 + 10), height: 30))
-            userLabel.font = UIFont(name: Utils().customFontSemiBold, size: 24.0)
-            userLabel.textColor = UIColor.whiteColor()
-            let onPeekeeFormat = String(format: NSLocalizedString("%@ on Peekee", comment : "%@ on Peekee"), userMainPeekee.username)
-            userLabel.text = onPeekeeFormat
-            viewMainPeekeeContainer.addSubview(userLabel)
-            
-            //Label when
-            var creationDate:NSDate = self.mainPiki!.createdAt
-            
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "MMMM dd, yyyy - h:mm a" // superset of OP's format
-            let str = dateFormatter.stringFromDate(creationDate)
-            
-            var labelWhen = UILabel(frame: CGRect(x: iconPeekee.frame.origin.x + iconPeekee.frame.width + 20, y: iconPeekee.frame.origin.y + 30, width: viewMainPeekeeContainer.frame.width - (iconPeekee.frame.origin.x + iconPeekee.frame.width + 20 + 10), height: 20))
-            labelWhen.font = UIFont(name: Utils().customFontNormal, size: 18.0)
-            labelWhen.textColor = UIColor.whiteColor()
-            labelWhen.text = "\(str)"
-            viewMainPeekeeContainer.addSubview(labelWhen)
-            
-            //PeekeeInfos VIew
-            var peekeeInfosView = UIView(frame: CGRect(x: 0, y: 750, width: 250, height: 250))
-            peekeeInfosView.backgroundColor = Utils().secondColor
-            viewToBuildImage!.addSubview(peekeeInfosView)
-            
-            var labelNbReply:UILabel = UILabel(frame: CGRect(x: 15, y: 0, width: peekeeInfosView.frame.width - 30, height: peekeeInfosView.frame.height))
-            labelNbReply.numberOfLines = 2
-            labelNbReply.adjustsFontSizeToFitWidth = true
-            labelNbReply.font = UIFont(name: Utils().customFontSemiBold, size: 36.0)
-            labelNbReply.textColor = UIColor.whiteColor()
-            let repliesFormat = String(format: NSLocalizedString("%d+ replies on the app", comment : "%d+ replies on the app"), nbReacts!)
-            labelNbReply.text = repliesFormat
-            labelNbReply.textAlignment = NSTextAlignment.Center
-            peekeeInfosView.addSubview(labelNbReply)
-            
-            //Apple Icon
-            var appleIcon = UIImageView(frame: CGRect(x: 89, y: 195, width: 20, height: 24))
-            appleIcon.image = UIImage(named: "apple_icon")
-            peekeeInfosView.addSubview(appleIcon)
-            
-            //Android Icon
-            var androidIcon = UIImageView(frame: CGRect(x: 137, y: 195, width: 20, height: 24))
-            androidIcon.image = UIImage(named: "android_icon")
-            peekeeInfosView.addSubview(androidIcon)
-            
-            //Reply Icon
-            var replyIcon = UIImageView(frame: CGRect(x: 0, y: 40, width: peekeeInfosView.frame.width, height: 25))
-            replyIcon.contentMode = UIViewContentMode.Center
-            replyIcon.image = UIImage(named: "reply_icon_share")
-            peekeeInfosView.addSubview(replyIcon)
-            
-            //Set the image
-            if self.mainPekeeImage != nil{
-                mainPikiView.image = self.mainPekeeImage
-                
-                
-                if self.mainPiki!["video"] != nil{
-                    var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: mainPikiView.frame.width/3, height: mainPikiView.frame.width/3))
-                    playImage.center = mainPikiView.center
-                    playImage.image = UIImage(named: "read_video_icon")
-                    playImage.contentMode = UIViewContentMode.ScaleAspectFit
-                    viewMainPeekeeContainer.addSubview(playImage)
-                }
-            }
-            
-            if nbReacts! > 5 && nbReacts! < 11{
-                for i in 0...5{
-                    
-                    if i < 4{
-                        var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 0 + (250 * i), width: 250, height: 250))
-                        viewToBuildImage!.addSubview(imageViewReact)
-                        arrayImageViewReact.append(imageViewReact)
-                    }
-                    else{
-                        if i == 5{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 500, y: 750, width: 250, height: 250))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 250, y: 750, width: 250, height: 250))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        
-                    }
-                    
-                    
-                }
-            }
-            else if nbReacts! > 10 && nbReacts! < 24 {
-                for i in 0...10{
-                    
-                    if i < 2{
-                        var imageViewReact = UIImageView(frame: CGRect(x: 0, y: 250 + (250 * i), width: 250, height: 250))
-                        viewToBuildImage!.addSubview(imageViewReact)
-                        arrayImageViewReact.append(imageViewReact)
-                    }
-                    else if i > 1 && i < 6{
-                        var imageViewReact = UIImageView(frame: CGRect(x: 0 + (250 * (i - 2)), y: 0, width: 250, height: 250))
-                        viewToBuildImage!.addSubview(imageViewReact)
-                        arrayImageViewReact.append(imageViewReact)
-                    }
-                    else if i > 5 && i < 9{
-                        var imageViewReact = UIImageView(frame: CGRect(x: 750 , y: 250 + (250 * (i - 6)), width: 250, height: 250))
-                        viewToBuildImage!.addSubview(imageViewReact)
-                        arrayImageViewReact.append(imageViewReact)
-                    }
-                    else{
-                        var imageViewReact = UIImageView(frame: CGRect(x: 500 - (250 * (i - 9)), y: 750, width: 250, height: 250))
-                        viewToBuildImage!.addSubview(imageViewReact)
-                        arrayImageViewReact.append(imageViewReact)
-                        
-                    }
-                    
-                    
-                }
-            }
-            else if nbReacts! > 23 && nbReacts! < 44{
-                for i in 1...24{
-                    
-                    if i < 13{
-                        
-                        var divider:Float = roundf(Float(i)/2) - 1
-                        var positionYMore : Float = 125 * divider
-                        
-                        println("Divider : \(positionYMore)")
-                        
-                        if i%2 == 0{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 750, width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 875, width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        
-                        
-                    }
-                    else if i > 12 && i < 25{
-                        var divider:Float = roundf(Float(i)/2) - 7
-                        var positionYMore : Float = 125 * divider
-                        
-                        println("Divider : \(positionYMore)")
-                        
-                        if i%2 == 0{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 0 + CGFloat(positionYMore), width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 875, y: 0 + CGFloat(positionYMore), width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                    }
-                    
-                }
-            }
-            else if nbReacts! > 43{
-                for i in 1...44{
-                    
-                    if i < 13{
-                        
-                        var divider:Float = roundf(Float(i)/2)
-                        var positionYMore : Float = 125 * divider
-                        
-                        if i%2 == 0{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 0, y: 750 - CGFloat(positionYMore), width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 125, y: 750 - CGFloat(positionYMore), width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        
-                        
-                    }
-                    else if i > 12 && i < 25{
-                        var divider:Float = roundf(Float(i)/2) - 7
-                        var positionYMore : Float = 125 * divider
-                        
-                        if i%2 == 0{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 0, width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 125, width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                    }
-                    else if i > 24 && i < 37{
-                        var divider:Float = roundf(Float(i)/2) - 13
-                        var positionYMore : Float = 125 * divider
-                        
-                        if i%2 == 0{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 250 + CGFloat(positionYMore), width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 875, y: 250 + CGFloat(positionYMore), width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                    }
-                    else{
-                        var divider:Float = roundf(Float(i)/2) - 19
-                        var positionYMore : Float = 125 * divider
-                        
-                        if i%2 == 0{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 625 - CGFloat(positionYMore), y: 750 , width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                        else{
-                            var imageViewReact = UIImageView(frame: CGRect(x: 625 - CGFloat(positionYMore), y: 875, width: 125, height: 125))
-                            viewToBuildImage!.addSubview(imageViewReact)
-                            arrayImageViewReact.append(imageViewReact)
-                        }
-                    }
-                    
-                }
-                
-                
-            }
-            else if nbReacts! < 6{
-                
-                var alert = UIAlertController(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"), preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-                    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                    self.sendSMSToContacts()
-                }))
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
-            
-            var position:Int = 0
-            var nbReactDone:Int = 0
-
-            
-            for react in self.pikiReacts {
-
-                if arrayImageViewReact.count > 0{
-
-                    
-                    if react.isKindOfClass(PFObject){
-                        
-                        let reactObject:PFObject = react as PFObject
-                        if reactObject["photo"] != nil {
-                            
-                            let photoFile:PFFile = reactObject["photo"] as PFFile
-                            photoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
-                                if error == nil{
-                                    if arrayImageViewReact.count > 0{
-                                        let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
-                                        imageViewNow.image = UIImage(data: data)
-                                        nbReactDone++
-                                    }
-                                    
-                                }
-                                else{
-                                    
-                                }
-                            })
-                        }
-                        else{
-                            let photoFile:PFFile = reactObject["previewImage"] as PFFile
-                            photoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
-                                if error == nil{
-                                    if arrayImageViewReact.count > 0{
-                                        let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
-                                        imageViewNow.image = UIImage(data: data)
-                                        
-                                        var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: imageViewNow.frame.width/3, height: imageViewNow.frame.width/3))
-                                        playImage.center = imageViewNow.center
-                                        playImage.image = UIImage(named: "play_answer")
-                                        self.viewToBuildImage!.addSubview(playImage)
-                                        nbReactDone++
-                                    }
-                                }
-                                else{
-                                    
-                                }
-                            })
-                        }
-                        
-                    }
-                    else{
-                       
-                        var pikiInfos:[String : AnyObject] = react as [String : AnyObject]
-
-
-                        if pikiInfos["photo"] != nil {
-                            
-                            if arrayImageViewReact.count > 0{
-                                
-                                let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
-                                imageViewNow.image = pikiInfos["photo"] as? UIImage
-                                nbReactDone++
-                            }
-                            
-                            
-                        }
-                        else{
-                            if arrayImageViewReact.count > 0{
-                                
-                                let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
-                                imageViewNow.image = pikiInfos["previewImage"] as? UIImage
-                                
-                                var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: imageViewNow.frame.width/3, height: imageViewNow.frame.width/3))
-                                playImage.center = imageViewNow.center
-                                playImage.image = UIImage(named: "play_answer")
-                                self.viewToBuildImage!.addSubview(playImage)
-                                nbReactDone++
-                            }
-                        }
-                        
-                    }
-                }
-                else{
-                    nbReactDone++
-                }
-                
-                
-            }
-            
-            
-            
-            
-            /*var image = Utils().imageWithView(mainShareView)
-            println("image ok")
-            
-            let library = ALAssetsLibrary()
-            library.writeImageToSavedPhotosAlbum(image.CGImage, orientation: ALAssetOrientation.Up) { (url, error) -> Void in
-            if error != nil {
-            
-            }
-            }*/
             
             let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
             
@@ -4793,22 +4830,450 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             imageContainerView!.addSubview(viewToBuildImage!)
         }
         else{
+            if Utils().iOS8{
+                var alert = UIAlertController(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Pleek in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    self.sendSMSToContacts()
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            else{
+                var alertView = UIAlertView(title: NSLocalizedString("Share", comment : "Share"),
+                    message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Pleek in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"),
+                    delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
+                    otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
+                
+                alertView.tag = 1
+                alertView.show()
+            }
             
-            var alert = UIAlertController(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Peekee in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"), preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-                MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                self.sendSMSToContacts()
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    func buildShareView(){
+        
+        
+        var nbReacts:Int? = self.pikiReacts.count
+        var arrayImageViewReact:Array<UIImageView> = Array<UIImageView>()
+        
+        if nbReacts == nil{
+            nbReacts = 0
+        }
+        
+        /*for react in self.pikiReacts{
+        if !react.isKindOfClass(PFObject){
+        nbReacts!++
+        }
+        }*/
+        
+        //MainSHare View
+        viewToBuildImage = UIView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
+        viewToBuildImage!.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+        
+        //Main Pleek image view
+        var viewMainPeekeeContainer = UIView(frame: CGRect(x: 250, y: 250, width: 500, height: 500))
+        viewMainPeekeeContainer.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+        viewToBuildImage!.addSubview(viewMainPeekeeContainer)
+        
+        if nbReacts > 5 && nbReacts < 11{
+            viewMainPeekeeContainer.frame = CGRect(x: 0, y: 0, width: 750, height: 750)
+        }
+        else if nbReacts > 23 && nbReacts < 44{
+            viewMainPeekeeContainer.frame = CGRect(x: 0, y: 0, width: 750, height: 750)
         }
         
         
+        var mainPikiView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewMainPeekeeContainer.frame.width, height: viewMainPeekeeContainer.frame.height))
+        viewMainPeekeeContainer.addSubview(mainPikiView)
         
-       
+        //Shadow for bottom button
+        var stretchShadowImage:UIImage = UIImage(named: "shadow_piki")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        let shadowImageView = UIImageView(frame: CGRect(x: 0, y: viewMainPeekeeContainer.frame.height - 115 , width: viewMainPeekeeContainer.frame.width, height: 115))
+        shadowImageView.image = stretchShadowImage
+        shadowImageView.hidden = true
+        viewMainPeekeeContainer.addSubview(shadowImageView)
+        
+        //Icon Pleek
+        var iconPeekee = UIImageView(frame: CGRect(x: 15, y: viewMainPeekeeContainer.frame.height - 60, width: 50, height: 50))
+        iconPeekee.layer.cornerRadius = 15
+        iconPeekee.clipsToBounds = true
+        iconPeekee.image = UIImage(named: "app_icon")
+        viewMainPeekeeContainer.addSubview(iconPeekee)
+        
+        //User label
+        let userMainPeekee = self.mainPiki!["user"] as PFUser
+        var userLabel = UILabel(frame: CGRect(x: iconPeekee.frame.origin.x + iconPeekee.frame.width + 20, y: iconPeekee.frame.origin.y, width: viewMainPeekeeContainer.frame.width - (iconPeekee.frame.origin.x + iconPeekee.frame.width + 20 + 10), height: 30))
+        userLabel.font = UIFont(name: Utils().customFontSemiBold, size: 24.0)
+        userLabel.textColor = UIColor.whiteColor()
+        let onPeekeeFormat = String(format: NSLocalizedString("%@ on Pleek", comment : "%@ on Pleek"), userMainPeekee.username)
+        userLabel.text = onPeekeeFormat
+        viewMainPeekeeContainer.addSubview(userLabel)
+        
+        //Label when
+        var creationDate:NSDate = self.mainPiki!.createdAt
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "MMMM dd, yyyy - h:mm a" // superset of OP's format
+        let str = dateFormatter.stringFromDate(creationDate)
+        
+        var labelWhen = UILabel(frame: CGRect(x: iconPeekee.frame.origin.x + iconPeekee.frame.width + 20, y: iconPeekee.frame.origin.y + 30, width: viewMainPeekeeContainer.frame.width - (iconPeekee.frame.origin.x + iconPeekee.frame.width + 20 + 10), height: 20))
+        labelWhen.font = UIFont(name: Utils().customFontNormal, size: 18.0)
+        labelWhen.textColor = UIColor.whiteColor()
+        labelWhen.text = "\(str)"
+        viewMainPeekeeContainer.addSubview(labelWhen)
+        
+        //PeekeeInfos VIew
+        var peekeeInfosView = UIView(frame: CGRect(x: 0, y: 750, width: 250, height: 250))
+        peekeeInfosView.backgroundColor = Utils().secondColor
+        viewToBuildImage!.addSubview(peekeeInfosView)
+        
+        var labelNbReply:UILabel = UILabel(frame: CGRect(x: 15, y: 0, width: peekeeInfosView.frame.width - 30, height: peekeeInfosView.frame.height))
+        labelNbReply.numberOfLines = 2
+        labelNbReply.adjustsFontSizeToFitWidth = true
+        labelNbReply.font = UIFont(name: Utils().customFontSemiBold, size: 36.0)
+        labelNbReply.textColor = UIColor.whiteColor()
+        let repliesFormat = String(format: NSLocalizedString("%d+ replies on the app", comment : "%d+ replies on the app"), nbReacts!)
+        labelNbReply.text = repliesFormat
+        labelNbReply.textAlignment = NSTextAlignment.Center
+        peekeeInfosView.addSubview(labelNbReply)
+        
+        //Apple Icon
+        var appleIcon = UIImageView(frame: CGRect(x: 89, y: 195, width: 20, height: 24))
+        appleIcon.image = UIImage(named: "apple_icon")
+        peekeeInfosView.addSubview(appleIcon)
+        
+        //Android Icon
+        var androidIcon = UIImageView(frame: CGRect(x: 137, y: 195, width: 20, height: 24))
+        androidIcon.image = UIImage(named: "android_icon")
+        peekeeInfosView.addSubview(androidIcon)
+        
+        //Reply Icon
+        var replyIcon = UIImageView(frame: CGRect(x: 0, y: 40, width: peekeeInfosView.frame.width, height: 25))
+        replyIcon.contentMode = UIViewContentMode.Center
+        replyIcon.image = UIImage(named: "reply_icon_share")
+        peekeeInfosView.addSubview(replyIcon)
+        
+        //Set the image
+        if self.mainPekeeImage != nil{
+            mainPikiView.image = self.mainPekeeImage
+            
+            
+            if self.mainPiki!["video"] != nil{
+                var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: mainPikiView.frame.width/3, height: mainPikiView.frame.width/3))
+                playImage.center = mainPikiView.center
+                playImage.image = UIImage(named: "read_video_icon")
+                playImage.contentMode = UIViewContentMode.ScaleAspectFit
+                viewMainPeekeeContainer.addSubview(playImage)
+            }
+        }
+        else{
+            if self.mainPiki!["photo"] != nil{
+                var filePeekee:PFFile = mainPiki!["photo"] as PFFile
+                filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    if data != nil{
+                        mainPikiView.image = UIImage(data: data)
+                    }
+                })
+            }
+            else{
+                var filePeekee:PFFile = mainPiki!["previewImage"] as PFFile
+                filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    if data != nil{
+                        mainPikiView.image = UIImage(data: data)
+                        
+                        var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: mainPikiView.frame.width/3, height: mainPikiView.frame.width/3))
+                        playImage.center = mainPikiView.center
+                        playImage.image = UIImage(named: "read_video_icon")
+                        playImage.contentMode = UIViewContentMode.ScaleAspectFit
+                        viewMainPeekeeContainer.addSubview(playImage)
+                    }
+                })
+            }
+        }
+        
+        if nbReacts! > 5 && nbReacts! < 11{
+            for i in 0...5{
+                
+                if i < 4{
+                    var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 0 + (250 * i), width: 250, height: 250))
+                    viewToBuildImage!.addSubview(imageViewReact)
+                    arrayImageViewReact.append(imageViewReact)
+                }
+                else{
+                    if i == 5{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 500, y: 750, width: 250, height: 250))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 250, y: 750, width: 250, height: 250))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    
+                }
+                
+                
+            }
+        }
+        else if nbReacts! > 10 && nbReacts! < 24 {
+            for i in 0...10{
+                
+                if i < 2{
+                    var imageViewReact = UIImageView(frame: CGRect(x: 0, y: 250 + (250 * i), width: 250, height: 250))
+                    viewToBuildImage!.addSubview(imageViewReact)
+                    arrayImageViewReact.append(imageViewReact)
+                }
+                else if i > 1 && i < 6{
+                    var imageViewReact = UIImageView(frame: CGRect(x: 0 + (250 * (i - 2)), y: 0, width: 250, height: 250))
+                    viewToBuildImage!.addSubview(imageViewReact)
+                    arrayImageViewReact.append(imageViewReact)
+                }
+                else if i > 5 && i < 9{
+                    var imageViewReact = UIImageView(frame: CGRect(x: 750 , y: 250 + (250 * (i - 6)), width: 250, height: 250))
+                    viewToBuildImage!.addSubview(imageViewReact)
+                    arrayImageViewReact.append(imageViewReact)
+                }
+                else{
+                    var imageViewReact = UIImageView(frame: CGRect(x: 500 - (250 * (i - 9)), y: 750, width: 250, height: 250))
+                    viewToBuildImage!.addSubview(imageViewReact)
+                    arrayImageViewReact.append(imageViewReact)
+                    
+                }
+                
+                
+            }
+        }
+        else if nbReacts! > 23 && nbReacts! < 44{
+            for i in 1...24{
+                
+                if i < 13{
+                    
+                    var divider:Float = roundf(Float(i)/2) - 1
+                    var positionYMore : Float = 125 * divider
+                    
+                    println("Divider : \(positionYMore)")
+                    
+                    if i%2 == 0{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 750, width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 875, width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    
+                    
+                }
+                else if i > 12 && i < 25{
+                    var divider:Float = roundf(Float(i)/2) - 7
+                    var positionYMore : Float = 125 * divider
+                    
+                    println("Divider : \(positionYMore)")
+                    
+                    if i%2 == 0{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 0 + CGFloat(positionYMore), width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 875, y: 0 + CGFloat(positionYMore), width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                }
+                
+            }
+        }
+        else if nbReacts! > 43{
+            for i in 1...44{
+                
+                if i < 13{
+                    
+                    var divider:Float = roundf(Float(i)/2)
+                    var positionYMore : Float = 125 * divider
+                    
+                    if i%2 == 0{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 0, y: 750 - CGFloat(positionYMore), width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 125, y: 750 - CGFloat(positionYMore), width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    
+                    
+                }
+                else if i > 12 && i < 25{
+                    var divider:Float = roundf(Float(i)/2) - 7
+                    var positionYMore : Float = 125 * divider
+                    
+                    if i%2 == 0{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 0, width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 125, width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                }
+                else if i > 24 && i < 37{
+                    var divider:Float = roundf(Float(i)/2) - 13
+                    var positionYMore : Float = 125 * divider
+                    
+                    if i%2 == 0{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 250 + CGFloat(positionYMore), width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 875, y: 250 + CGFloat(positionYMore), width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                }
+                else{
+                    var divider:Float = roundf(Float(i)/2) - 19
+                    var positionYMore : Float = 125 * divider
+                    
+                    if i%2 == 0{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 625 - CGFloat(positionYMore), y: 750 , width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                    else{
+                        var imageViewReact = UIImageView(frame: CGRect(x: 625 - CGFloat(positionYMore), y: 875, width: 125, height: 125))
+                        viewToBuildImage!.addSubview(imageViewReact)
+                        arrayImageViewReact.append(imageViewReact)
+                    }
+                }
+                
+            }
+            
+            
+        }
+        else if nbReacts! < 6{
+            
+            if Utils().iOS8{
+                var alert = UIAlertController(title: NSLocalizedString("Share", comment : "Share"), message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Pleek in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                    MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                    self.sendSMSToContacts()
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            else{
+                var alertView = UIAlertView(title: NSLocalizedString("Share", comment : "Share"),
+                    message: NSLocalizedString("AlertNotEnoughReact", comment : "Sorry but you need to have at least 6 answers to this Pleek in order to create your mozaic! Try to post some answers yourself to create your own mozaic!"),
+                    delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
+                    otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
+                
+                alertView.tag = 1
+                alertView.show()
+            }
+            
+        }
+        
+        var position:Int = 0
+        var nbReactDone:Int = 0
         
         
-        
+        for react in self.pikiReacts {
+            
+            if arrayImageViewReact.count > 0{
+                
+                
+                if react.isKindOfClass(PFObject){
+                    
+                    let reactObject:PFObject = react as PFObject
+                    if reactObject["photo"] != nil {
+                        
+                        let photoFile:PFFile = reactObject["photo"] as PFFile
+                        photoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                            if error == nil{
+                                if arrayImageViewReact.count > 0{
+                                    let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
+                                    imageViewNow.image = UIImage(data: data)
+                                    nbReactDone++
+                                }
+                                
+                            }
+                            else{
+                                
+                            }
+                        })
+                    }
+                    else{
+                        let photoFile:PFFile = reactObject["previewImage"] as PFFile
+                        photoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                            if error == nil{
+                                if arrayImageViewReact.count > 0{
+                                    let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
+                                    imageViewNow.image = UIImage(data: data)
+                                    
+                                    var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: imageViewNow.frame.width/3, height: imageViewNow.frame.width/3))
+                                    playImage.center = imageViewNow.center
+                                    playImage.image = UIImage(named: "play_answer")
+                                    self.viewToBuildImage!.addSubview(playImage)
+                                    nbReactDone++
+                                }
+                            }
+                            else{
+                                
+                            }
+                        })
+                    }
+                    
+                }
+                else{
+                    
+                    var pikiInfos:[String : AnyObject] = react as [String : AnyObject]
+                    
+                    
+                    if pikiInfos["photo"] != nil {
+                        
+                        if arrayImageViewReact.count > 0{
+                            
+                            let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
+                            imageViewNow.image = pikiInfos["photo"] as? UIImage
+                            nbReactDone++
+                        }
+                        
+                        
+                    }
+                    else{
+                        if arrayImageViewReact.count > 0{
+                            
+                            let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
+                            imageViewNow.image = pikiInfos["previewImage"] as? UIImage
+                            
+                            var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: imageViewNow.frame.width/3, height: imageViewNow.frame.width/3))
+                            playImage.center = imageViewNow.center
+                            playImage.image = UIImage(named: "play_answer")
+                            self.viewToBuildImage!.addSubview(playImage)
+                            nbReactDone++
+                        }
+                    }
+                    
+                }
+            }
+            else{
+                nbReactDone++
+            }
+            
+            
+        }
     }
     
     
@@ -4838,7 +5303,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    // MARK: Random Number 
+    // MARK: Random Number
     
     func randomNumber() -> Int{
         var random:Int = 0
@@ -4849,7 +5314,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    // MARK: 
+    // MARK:
     
     func findPikiInfosPosition(intId : Int) -> Int?{
         
@@ -4905,7 +5370,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         self.pikiReacts.insert(pikiInfos, atIndex: 0)
         self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 1)])
         
+        self.buildViewShareBackButton()
+
+        
         self.leaveReply()
+        
+        self.shareOnMessengerDirectReact(pikiInfos["photo"] as UIImage)
         
     }
     
@@ -4921,9 +5391,19 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         messageController.messageComposeDelegate = self
         messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
         
-        if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-            messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+        if Utils().iOS8{
+            if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
+                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+            }
         }
+        else{
+            var dataImage:NSData? = UIImagePNGRepresentation(Utils().getShareUsernameImage())
+            if dataImage != nil{
+                messageController.addAttachmentData(dataImage, typeIdentifier: "image/png", filename: "peekeeInvit.png")
+            }
+            
+        }
+        
         
         self.presentViewController(messageController, animated: true) { () -> Void in
             
@@ -4945,7 +5425,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
         if canOpenSettings{
-            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", preferredStyle: UIAlertControllerStyle.Alert)
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", comment : "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 
@@ -4954,7 +5434,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             self.presentViewController(alert, animated: true, completion: nil)
         }
         else{
-            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Peekee", preferredStyle: UIAlertControllerStyle.Alert)
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek", comment : "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
@@ -4983,6 +5463,192 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
             
             
+        }
+        
+    }
+    
+    
+    // MARK : 1vs1 Share
+    
+    func shareOneVsOne(react : PFObject){
+        
+        showShareView(false)
+        
+        share1vs1View = UIView(frame: CGRect(x: 0, y: 0, width: 1000, height: 1000))
+        share1vs1View!.backgroundColor = Utils().secondColor
+        
+        var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: share1vs1View!.frame.width, height: share1vs1View!.frame.height))
+        
+        if self.mainPiki!["photo"] != nil{
+            var filePeekee:PFFile = mainPiki!["photo"] as PFFile
+            filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                if data != nil{
+                    mainImageView.image = UIImage(data: data)
+                }
+            })
+        }
+        else{
+            var filePeekee:PFFile = mainPiki!["previewImage"] as PFFile
+            filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                if data != nil{
+                    mainImageView.image = UIImage(data: data)
+                }
+            })
+        }
+        
+        share1vs1View!.addSubview(mainImageView)
+        
+        //Shadow for bottom button
+        var stretchShadowImage:UIImage = UIImage(named: "shadow_piki")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
+        let shadowImageView = UIImageView(frame: CGRect(x: 0, y: share1vs1View!.frame.height - 115 , width: share1vs1View!.frame.width, height: 115))
+        shadowImageView.image = stretchShadowImage
+        shadowImageView.hidden = false
+        share1vs1View!.addSubview(shadowImageView)
+        
+        var reactImageView = UIImageView(frame: CGRect(x: 640, y: 640, width: 360, height: 360))
+        reactImageView.layer.borderColor = UIColor.whiteColor().CGColor
+        reactImageView.layer.borderWidth = 2
+        reactImageView.layer.cornerRadius = 4
+        
+        if react["photo"] != nil{
+            var fileReact:PFFile = react["photo"] as PFFile
+            fileReact.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                if data != nil{
+                    reactImageView.image = UIImage(data: data)
+                }
+            })
+        }
+        else{
+            var fileReact:PFFile = react["previewImage"] as PFFile
+            fileReact.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                if data != nil{
+                    reactImageView.image = UIImage(data: data)
+                }
+            })
+        }
+        share1vs1View!.addSubview(reactImageView)
+        
+        var iconPeekee:UIImageView = UIImageView(frame: CGRect(x: 36, y: 900, width: 66, height: 66))
+        iconPeekee.image = UIImage(named: "app_icon")
+        iconPeekee.layer.cornerRadius = 12
+        iconPeekee.clipsToBounds = true
+        share1vs1View!.addSubview(iconPeekee)
+        
+        var labelWho:UILabel = UILabel(frame: CGRect(x: 129, y: 917, width: 500, height: 34))
+        labelWho.textColor = UIColor.whiteColor()
+        labelWho.font = UIFont(name: Utils().customFontSemiBold, size: 40)
+        labelWho.adjustsFontSizeToFitWidth = true
+        share1vs1View!.addSubview(labelWho)
+        
+        
+        var userReact:PFUser = react["user"] as PFUser
+        var userPiki:PFUser = self.mainPiki!["user"] as PFUser
+        labelWho.text = "@\(userReact.username) to @\(userPiki.username) on Pleek"
+        
+        
+        
+        
+        let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
+        
+        share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+        share1vs1View!.frame.origin = CGPoint(x: 0, y: 0)
+        imageContainerView!.addSubview(share1vs1View!)
+        
+        
+        
+        
+    }
+    
+    
+    func shareOnMessengerDirectReact(reactImage : UIImage){
+        
+        if Utils().isComingFromMessengerForThisPleek(self.mainPiki!){
+            shareMessengerReactView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            
+            var shareMessengerQuitAction:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quitShareMessenger"))
+            shareMessengerReactView!.addGestureRecognizer(shareMessengerQuitAction)
+            
+            let overlay:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            overlay.backgroundColor = UIColor.blackColor()
+            overlay.alpha = 0.85
+            shareMessengerReactView!.addSubview(overlay)
+            
+            let animatedGifView:UIImageView = UIImageView(frame: CGRect(x: 10, y: 30, width: self.view.frame.width - 20, height: self.view.frame.width - 20))
+            animatedGifView.image = reactImage
+            shareMessengerReactView!.addSubview(animatedGifView)
+            
+            
+            var animatedGifBottom:CGFloat = animatedGifView.frame.height + animatedGifView.frame.origin.y
+            let viewButtonMessenger:UIView = UIView(frame: CGRect(x: self.view.frame.width/2 - 40, y: (animatedGifBottom + (self.view.frame.height - animatedGifBottom)/2) - 40, width: 80, height: 80))
+            
+            var buttonMessenger:UIButton = FBSDKMessengerShareButton.circularButtonWithStyle(FBSDKMessengerShareButtonStyle.Blue, width: 80)
+            buttonMessenger.addTarget(self, action: Selector("shareMessenger"), forControlEvents: UIControlEvents.TouchUpInside)
+            viewButtonMessenger.addSubview(buttonMessenger)
+            shareMessengerReactView!.addSubview(viewButtonMessenger)
+            
+            let sendLabel:UILabel = UILabel(frame: CGRect(x: 0, y: viewButtonMessenger.frame.origin.y - 50, width: self.view.frame.width, height: 30))
+            sendLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
+            sendLabel.textColor = UIColor.whiteColor()
+            sendLabel.textAlignment = NSTextAlignment.Center
+            sendLabel.text = "Reply to your friends on Messenger!"
+            shareMessengerReactView!.addSubview(sendLabel)
+            
+            self.view.addSubview(shareMessengerReactView!)
+            
+            
+            Utils().getImagePleekOrReact(self.mainPiki!).continueWithBlock { (task : BFTask!) -> AnyObject! in
+                if task.error != nil{
+                    
+                }
+                else{
+                    Utils().buildGifShareMessenger((task.result as UIImage), reactImage: reactImage, otherReact: nil).continueWithBlock({ (taskGif : BFTask!) -> AnyObject! in
+                        
+                        if taskGif.error != nil{
+                            //Error
+                            println("Error Gif : \(taskGif.error)")
+                        }
+                        else{
+                            self.gifURLLastReact = (taskGif.result as NSURL)
+                            var animatedGif : AnimatedGif = AnimatedGif.getAnimationForGifAtUrl((taskGif.result as NSURL))
+                            animatedGifView.setAnimatedGif(animatedGif, startImmediately: true)
+                            
+                        }
+                        
+                        return nil
+                        
+                    })
+                }
+                
+                return nil
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+    }
+    
+    func quitShareMessenger(){
+        shareMessengerReactView!.removeFromSuperview()
+    }
+    
+    
+    // MARK : UIAlertView Delegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        if alertView.tag == 1{
+            // No Invit Mosaic
+            if buttonIndex == 0{
+            }
+            //Invit Mosaic
+            else{
+                MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                self.sendSMSToContacts()
+            }
         }
         
     }

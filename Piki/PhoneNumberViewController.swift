@@ -352,7 +352,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
             let phoneNumber = phoneNumberTextField!.text
             
             if phoneNumber != nil {
-                let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+                let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
                 var errorPointer:NSError?
                 var number:NBPhoneNumber = phoneUtil.parse(phoneNumber, defaultRegion:regionLabel, error:&errorPointer)
                 
@@ -437,11 +437,22 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         var shouldReplace = true
         
+        
+        
+        
         var finalText:NSString = textField.text as NSString
         finalText = finalText.stringByReplacingCharactersInRange(range, withString: string)
         
         
+        if finalText.length > 14{
+            return false
+        }
+        
         if finalText.length > (textField.text as NSString).length{
+            if !isAllowed(string){
+                return false
+            }
+            
             textField.text = phoneFormatter!.inputDigit(string)
         }
         else{
@@ -519,19 +530,25 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
     
     func isCorrectPhoneNumber(phone : String) -> Bool{
 
-        
-        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
-        var errorPointer:NSError?
-        var number:NBPhoneNumber = phoneUtil.parse(phone, defaultRegion:regionLabel, error:&errorPointer)
-        
-        if errorPointer == nil{
-            if phoneUtil.isValidNumber(number){
-                return true
-            }
-            else{
-                return false
+        if regionLabel != nil{
+            let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
+            var errorPointer:NSError?
+            var number:NBPhoneNumber? = phoneUtil.parse(phone, defaultRegion:regionLabel!, error:&errorPointer)
+            
+            println("Phone : \(phone), region label : \(regionLabel), region code :")
+            println("Number : \(number)")
+            
+            if errorPointer == nil{
+                if phoneUtil.isValidNumber(number){
+                    return true
+                }
+                else{
+                    return false
+                }
             }
         }
+        
+        
         
         return false
         
@@ -554,7 +571,11 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         countryLabel!.text = countryChoiceInfos["countryName"]! as String
         
         phoneNumberTextField!.text = ""
+        phoneFormatter!.clear()
         phoneFormatter = NBAsYouTypeFormatter(regionCode: self.regionLabel!)
+        
+        phoneNumberValid = false
+        validatePhoneView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
         
     }
     
@@ -603,6 +624,19 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
             }
         }
         
+    }
+    
+    
+    func isAllowed(string : String) -> Bool{
+        
+        let allowedCharacters : Array<String> = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
+        
+        if contains(allowedCharacters, string){
+            return true
+        }
+        else{
+            return false
+        }
     }
     
     

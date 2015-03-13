@@ -22,7 +22,7 @@ class RecipientsPikiCell: UITableViewCell {
        
         if actionButton == nil {
             actionButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 50, y: 0, width: 45, height: 60))
-            actionButton!.addTarget(self, action: Selector("inviteContact:"), forControlEvents: UIControlEvents.TouchUpInside)
+            //actionButton!.addTarget(self, action: Selector("inviteContact:"), forControlEvents: UIControlEvents.TouchUpInside)
             contentView.addSubview(actionButton!)
         }
         
@@ -37,9 +37,11 @@ class RecipientsPikiCell: UITableViewCell {
         self.addSubview(loadIndicator!)
         
         if Utils().isUserAFriend(user){
+            actionButton!.hidden = false
             actionButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
         }
         else{
+            actionButton!.hidden = true
             actionButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
         }
         

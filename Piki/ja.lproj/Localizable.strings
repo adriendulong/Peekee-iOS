@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Peekee
+  Pleek
 
   Created by Adrien Dulong on 17/01/2015.
   Copyright (c) 2015 PikiChat. All rights reserved.
@@ -46,8 +46,8 @@
 "Let's GO!" = "さあ、行ってみましょう！";
 
 // MARK: Tuto Overlay
-"Find more friends to get more Peekees" = "さらに友人を見つけて、もっとピーキィを獲得";
-"This is a PEEKEE  " = "これがピーキィです 🍩";
+"Find more friends to get more Pleeks" = "さらに友人を見つけて、もっと Pleek を獲得";
+"This is a PLEEK 🍩" = "これが Pleek です 🍩";
 "Add your own reaction" = "あなたのリアクションを追加";
 "This is a reaction 🎉" = "これがリアクションです 🎉";
 
@@ -58,45 +58,45 @@
 "Don't miss the next pictures from your friends 😁" = "友達の最新画像をあなたもお見逃しなく 😁";
 
 // MARK: Main Menu
-"Peekee" = "ピーキィ";
+"Pleek" = " Pleek ";
 "NEW" = "新着！";
 "HIDE" = "非表示";
 "DELETE" = "削除";
-"Are you sure you want to delete this Peekee? There is no way to get back then." = "このピーキィを本当に削除してよろしいですか？元に戻すことはできません。";
+"Are you sure you want to delete this Pleek? There is no way to get back then." = "この Pleek を本当に削除してよろしいですか？元に戻すことはできません。";
 
 // MARK: Find Friends
 "%d FRIENDS" = "%d 人の友達";
 "Search a user" = "ユーザーを探す";
 "FIND" = "検索";
 "FRIENDS" = "友達";
-"FRIENDS ON PEEKEE" = "ピーキィ内の友達";
-"FRIENDS NOT YET ON PEEKEE" = "ピーキィをまだ使っていない友達";
+"FRIENDS ON PLEEK" = " Pleek 内の友達";
+"FRIENDS NOT YET ON PLEEK" = " Pleek をまだ使っていない友達";
 "SendInvitSMS" = "\n %@";
 "LOOKING FOR FRIENDS" = "友達を探しています";
 
-// MARK: Peekee View
+// MARK: Pleek View
 "%d friends" = "%d 人の友達";
 "%d friend" = "%d 人の友人";
 "More" = "さらに表示";
-"More actions for this Peekee" = "このピーキィのリアクションをさらに表示";
-"Report this Peekee" = "このピーキィを通報";
+"More actions for this Pleek" = "この Pleek のリアクションをさらに表示";
+"Report this Pleek" = "この Pleek を通報";
 "ADD A FRIEND" = "友人を追加";
 "MUTE THIS FRIEND" = "この友人をミュート";
 "UNMUTE THIS USER" = "このユーザーのミュートを解除";
 "To %d people" = "%d人宛";
-"Problem while reporting this Peekee. Please try again later" = "このピーキィの通報中に問題発生。後ほど再度お試しください。";
-"This Peekee has been reported. Thank you." = "このピーキィを通報済みです。ご協力ありがとうございました";
+"Problem while reporting this Pleek. Please try again later" = "この Pleek の通報中に問題発生。後ほど再度お試しください。";
+"This Pleek has been reported. Thank you." = "この Pleek を通報済みです。ご協力ありがとうございました";
 "DELETE" = "削除";
 "REPORT" = "通報";
 
 // MARK: MOZAIC
 "SEND" = "送信";
-"%@ on Peekee" = "ピーキィ内に%@人";
+"%@ on Pleek" = " Pleek 内に%@人";
 "%d+ replies on the app" = "アプリ内に%d+ 件の返信あり";
 "Share" = "共有";
 "AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
 
-// MARK: New Peekee
+// MARK: New Pleek
 "Search" = "検索";
 "Send to..." = "送信先...";
 "RECENT" = "最近の投稿";
@@ -104,7 +104,7 @@
 "SEND TO EVERYONE" = "全員に送信";
 "EVERYONE" = "全員";
 "SELECTED" = "選択した宛先";
-"We had a problem while sending your Peekee, please try again later" = "ピーキィ送信で問題発生。後ほど再度お試しください。";
+"We had a problem while sending your Pleek, please try again later" = " Pleek 送信で問題発生。後ほど再度お試しください。";
 "%d SELECTED" = "%d 件を選択済み";
 
 // MARK: Settings
@@ -133,7 +133,7 @@
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "友達を追加！👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "まずはお友達を %d 人以上選びます。アプリに友達がログインした時点でお知らせします！";
+"Choose at least your %d best friends. We'll keep you posted when they join the app!" = "まずはお友達を %d 人以上選びます。アプリに友達がログインした時点でお知らせします！";
 "ON THE APP" = "アプリ内";
 "ON YOUR PHONE CONTACTS" = "電話帳内";
 "ALL" = "すべて";
@@ -145,7 +145,7 @@
 "Confirmation" = "確認";
 "Are you sure you want to invite all your contacts?" = "連絡先の人を本当に全て招待してよろしいですか？";
 "Friends" = "友達";
-"Still %d to go! You need them to enjoy Peekee!" = "あと %d名！ピーキィを一緒に楽しもう！";
+"Still %d to go! You need them to enjoy Pleek!" = "あと %d名！ Pleek を一緒に楽しもう！";
 
 // MARK: V1.01
 "From" = "From";

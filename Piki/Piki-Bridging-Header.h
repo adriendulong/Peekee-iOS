@@ -12,4 +12,6 @@
 #import "MBProgressHUD.h"
 #import "APAddressBook-Bridging.h"
 #import "Mixpanel.h"
-#import "PBJVideoPlayerController.h"
+#import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
+#import "UIImageView+AnimatedGif.h"
+#import "AnimatedGif.h"

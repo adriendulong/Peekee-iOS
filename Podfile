@@ -7,7 +7,8 @@ pod 'Parse'
 pod 'ParseUI'
 pod 'Mixpanel'
 pod 'ParseCrashReporting'
-pod 'PBJVideoPlayer'
+pod "Animated-Gif-iOS"
+pod 'libPhoneNumber-iOS'
 end
 
 

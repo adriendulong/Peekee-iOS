@@ -16,12 +16,18 @@ import MobileCoreServices
 class Utils {
     
     //URL Share App
-    let shareAppUrl = "http://peekeeapp.com"
-    let websiteUrl = "http://peekeeapp.com"
+    let shareAppUrl = "http://pleekapp.com"
+    let websiteUrl = "http://pleekapp.com"
     
     //TOKEN TOOLS
     let mixpanelDev = "8ed35339994dd90dec6bda7d83c3d3eb"
     let mixpanelProd = "bdde62cd933f58205b7cb98da8a2bca8"
+    
+    // FB Messenger
+    let facebookMessengerActivated:Bool = false
+    
+    let iOS7 = floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_7_1)
+    let iOS8 = floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1)
     
     let sizeVideo:CGFloat = 250
     
@@ -869,6 +875,7 @@ class Utils {
         
         var kFrameCount:Int = 11
 
+
         var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFLoopCount : 0]]
         
         
@@ -882,146 +889,233 @@ class Utils {
         CGImageDestinationSetProperties(destination, fileProperties as CFDictionaryRef)
         
         for i in 0...(kFrameCount - 1){
+            println("I count : \(i)")
             
-            var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
             
-            switch i{
+            if iOS8{
+                var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
                 
-                //Parrot Pink
-            case 0:
-                viewToAdd.backgroundColor = Utils().secondColor
                 
-                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
-                imageView.image = UIImage(named: "parrot_blue")
-                imageView.contentMode = UIViewContentMode.Center
-                viewToAdd.addSubview(imageView)
+                switch i{
+                    
+                    //Parrot Pink
+                case 0:
+                    viewToAdd.backgroundColor = Utils().secondColor
+                    
+                    var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
+                    imageView.image = UIImage(named: "parrot_blue")
+                    imageView.contentMode = UIViewContentMode.Center
+                    viewToAdd.addSubview(imageView)
+                    
+                    var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
+                    labelUsername.text = "@\(username)"
+                    labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
+                    labelUsername.textAlignment = NSTextAlignment.Center
+                    labelUsername.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelUsername)
+                    
+                    //Parrot blue
+                case 1:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
+                    imageView.image = UIImage(named: "parrot_pink")
+                    imageView.contentMode = UIViewContentMode.Center
+                    viewToAdd.addSubview(imageView)
+                    
+                    var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
+                    labelUsername.text = "@\(username)"
+                    labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
+                    labelUsername.textAlignment = NSTextAlignment.Center
+                    labelUsername.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelUsername)
+                    
+                    //Frist mozaic
+                case 2:
+                    
+                    var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    imageView.image = UIImage(named: "mosaic_1")
+                    viewToAdd.addSubview(imageView)
+                    
+                    //Second mozaic
+                case 3:
+                    
+                    var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    imageView.image = UIImage(named: "mosaic_2")
+                    viewToAdd.addSubview(imageView)
+                    
+                    //Third mozaic
+                case 4:
+                    
+                    var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    imageView.image = UIImage(named: "mosaic_full")
+                    viewToAdd.addSubview(imageView)
+                    
+                case 5:
+                    
+                    var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    imageView.image = UIImage(named: "mosaic_full")
+                    viewToAdd.addSubview(imageView)
+                    
+                    //Screen Add
+                case 6:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    labelAdd.text = "Add"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    //Screen Me
+                case 7:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    labelAdd.text = "Me"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    //Screen On
+                case 8:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    labelAdd.text = "On"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    //Screen On
+                case 9:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
+                    labelAdd.text = "Pleek"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
+                    imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
+                    imageViewRoundPerro.contentMode = UIViewContentMode.Center
+                    viewToAdd.addSubview(imageViewRoundPerro)
+                    
+                case 10:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
+                    labelAdd.text = "Pleek"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
+                    imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
+                    imageViewRoundPerro.contentMode = UIViewContentMode.Center
+                    viewToAdd.addSubview(imageViewRoundPerro)
+                    
+                default:
+                    viewToAdd.backgroundColor = Utils().secondColor
+                    
+                }
                 
-                var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
-                labelUsername.text = "@\(username)"
-                labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
-                labelUsername.textAlignment = NSTextAlignment.Center
-                labelUsername.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelUsername)
+                UIGraphicsBeginImageContextWithOptions(viewToAdd.bounds.size, viewToAdd.opaque, 0.0);
+                viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
+                var img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
                 
-                //Parrot blue
-            case 1:
-                viewToAdd.backgroundColor = Utils().primaryColor
+                CGImageDestinationAddImage(destination, img.CGImage, frameProperties as CFDictionaryRef);
+            }
+            else{
+                var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
                 
-                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height - 40))
-                imageView.image = UIImage(named: "parrot_pink")
-                imageView.contentMode = UIViewContentMode.Center
-                viewToAdd.addSubview(imageView)
+                switch i{
+                    
+                case 0:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    labelAdd.text = "Add"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    //Screen Me
+                case 1:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    labelAdd.text = "Me"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    //Screen On
+                case 2:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    labelAdd.text = "On"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    //Screen On
+                case 3:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
+                    labelAdd.text = "Pleek"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
+                    imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
+                    imageViewRoundPerro.contentMode = UIViewContentMode.Center
+                    viewToAdd.addSubview(imageViewRoundPerro)
+                    
+                case 4:
+                    viewToAdd.backgroundColor = Utils().primaryColor
+                    
+                    var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
+                    labelAdd.text = "Pleek"
+                    labelAdd.textAlignment = NSTextAlignment.Center
+                    labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
+                    labelAdd.textColor = UIColor.whiteColor()
+                    viewToAdd.addSubview(labelAdd)
+                    
+                    var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
+                    imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
+                    imageViewRoundPerro.contentMode = UIViewContentMode.Center
+                    viewToAdd.addSubview(imageViewRoundPerro)
+                    
+                default:
+                    viewToAdd.backgroundColor = Utils().secondColor
+                    
+                }
                 
-                var labelUsername:UILabel = UILabel(frame: CGRect(x: 0, y:  viewToAdd.frame.height - 60, width: viewToAdd.frame.width, height: 50))
-                labelUsername.text = "@\(username)"
-                labelUsername.font = UIFont(name: Utils().customGothamBol, size: 40)
-                labelUsername.textAlignment = NSTextAlignment.Center
-                labelUsername.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelUsername)
+                UIGraphicsBeginImageContextWithOptions(viewToAdd.bounds.size, viewToAdd.opaque, 0.0);
+                viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
+                var img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
                 
-                //Frist mozaic
-            case 2:
-                
-                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                imageView.image = UIImage(named: "mosaic_1")
-                viewToAdd.addSubview(imageView)
-                
-                //Second mozaic
-            case 3:
-                
-                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                imageView.image = UIImage(named: "mosaic_2")
-                viewToAdd.addSubview(imageView)
-                
-                //Third mozaic
-            case 4:
-                
-                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                imageView.image = UIImage(named: "mosaic_full")
-                viewToAdd.addSubview(imageView)
-                
-            case 5:
-                
-                var imageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                imageView.image = UIImage(named: "mosaic_full")
-                viewToAdd.addSubview(imageView)
-                
-                //Screen Add
-            case 6:
-                viewToAdd.backgroundColor = Utils().primaryColor
-                
-                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                labelAdd.text = "Add"
-                labelAdd.textAlignment = NSTextAlignment.Center
-                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
-                labelAdd.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelAdd)
-                
-                //Screen Me
-            case 7:
-                viewToAdd.backgroundColor = Utils().primaryColor
-                
-                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                labelAdd.text = "Me"
-                labelAdd.textAlignment = NSTextAlignment.Center
-                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
-                labelAdd.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelAdd)
-                
-                //Screen On
-            case 8:
-                viewToAdd.backgroundColor = Utils().primaryColor
-                
-                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
-                labelAdd.text = "On"
-                labelAdd.textAlignment = NSTextAlignment.Center
-                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 80)
-                labelAdd.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelAdd)
-                
-                //Screen On
-            case 9:
-                viewToAdd.backgroundColor = Utils().primaryColor
-                
-                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
-                labelAdd.text = "Peekee"
-                labelAdd.textAlignment = NSTextAlignment.Center
-                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
-                labelAdd.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelAdd)
-                
-                var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
-                imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
-                imageViewRoundPerro.contentMode = UIViewContentMode.Center
-                viewToAdd.addSubview(imageViewRoundPerro)
-                
-            case 10:
-                viewToAdd.backgroundColor = Utils().primaryColor
-                
-                var labelAdd:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2))
-                labelAdd.text = "Peekee"
-                labelAdd.textAlignment = NSTextAlignment.Center
-                labelAdd.font = UIFont(name: Utils().customGothamBol, size: 60)
-                labelAdd.textColor = UIColor.whiteColor()
-                viewToAdd.addSubview(labelAdd)
-                
-                var imageViewRoundPerro = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.width/2 + 5, width: viewToAdd.frame.width, height: viewToAdd.frame.height/2 - 40))
-                imageViewRoundPerro.image = UIImage(named: "parrot_rounded")
-                imageViewRoundPerro.contentMode = UIViewContentMode.Center
-                viewToAdd.addSubview(imageViewRoundPerro)
-                
-            default:
-                viewToAdd.backgroundColor = Utils().secondColor
-                
+                CGImageDestinationAddImage(destination, img.CGImage, frameProperties as CFDictionaryRef);
             }
             
             
-            UIGraphicsBeginImageContextWithOptions(viewToAdd.bounds.size, viewToAdd.opaque, 0.0);
-            viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
-            var img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
             
-            CGImageDestinationAddImage(destination, img.CGImage, frameProperties as CFDictionaryRef);
             
         }
         
@@ -1112,5 +1206,370 @@ class Utils {
         }
         
     }
+    
+    
+    // MARK : Share MEssenger Facebook
+    
+    func shareFBMessenger(pathName: String, pleekId:String, context:FBSDKMessengerContext?){
+        
+        //println("Messanger capabilities : \(FBSDKMessengerSharer.messengerPlatformCapabilities())")
+        
+        if (FBSDKMessengerSharer.messengerPlatformCapabilities() != nil){
+            
+            println("Path Name : \(pathName) & pleekId : \(pleekId)")
+            
+            //var filePath : String = NSBundle.mainBundle().pathForResource(pathName, ofType: "gif")!
+            var gifData:NSData = NSData(contentsOfFile: pathName)!
+            
+            
+            FBSDKMessengerSharer.shareAnimatedGIF(gifData, withMetadata: pleekId, withContext: context)
+            
+        }
+        else{
+            // Not able to share
+            println("Not able")
+            
+            var itunesLink:String = "itms://itunes.apple.com/us/app/facebook-messenger/id454638411?mt=8"
+            UIApplication.sharedApplication().openURL(NSURL(string: itunesLink)!)
+        }
+        
+        
+    }
 
+    
+    func buildGifShareMessenger(imagePleek : UIImage, reactImage:UIImage, otherReact : Array<PFObject>?) -> BFTask{
+        var successful = BFTaskCompletionSource()
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            var kFrameCount:Int = 20
+            
+            
+            var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFLoopCount : 0]]
+            
+            
+            var delay:Float = 0.15
+            var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFDelayTime : delay]]
+            
+            var documentsDirectoryURL = NSFileManager.defaultManager().URLForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomain: NSSearchPathDomainMask.UserDomainMask, appropriateForURL: nil, create: true, error: nil)
+            var fileURL:NSURL = documentsDirectoryURL!.URLByAppendingPathComponent("pleek_messenger.gif")
+            
+            var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, UInt(kFrameCount), nil)
+            CGImageDestinationSetProperties(destination, fileProperties as CFDictionaryRef)
+            
+            
+            for i in 0...(kFrameCount - 1){
+                var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+                
+                
+                
+                switch i{
+                    
+                    // First State : React Image is 1/4 of the Pleek Image
+                case 0, 14:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/4 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    reactImageView.image = reactImage
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // Second State : React Image is  of the Pleek Image
+                case 1, 13:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/8 * 5, y: viewToAdd.frame.height/8 * 5, width: viewToAdd.frame.width/8 * 3, height: viewToAdd.frame.height/8 * 3))
+                    reactImageView.image = reactImage
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // Second State : React Image is 1/2 of the Pleek Image
+                case 2, 12:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/2, y: viewToAdd.frame.height/2, width: viewToAdd.frame.width/2, height: viewToAdd.frame.height/2))
+                    reactImageView.image = reactImage
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(reactImageView)
+                    
+                case 3, 11:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/8 * 3, y: viewToAdd.frame.height/8 * 3, width: viewToAdd.frame.width/8 * 5, height: viewToAdd.frame.height/8 * 5))
+                    reactImageView.image = reactImage
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // Third State : React Image is 3/4 of the Pleek Image
+                case 4, 10:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4, y: viewToAdd.frame.height/4, width: viewToAdd.frame.width/4 * 3, height: viewToAdd.frame.height/4 * 3))
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    reactImageView.image = reactImage
+                    viewToAdd.addSubview(reactImageView)
+                    
+                case 5, 9:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/8, y: viewToAdd.frame.height/8, width: viewToAdd.frame.width/8 * 7, height: viewToAdd.frame.height/8 * 7))
+                    reactImageView.image = reactImage
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // Fourth State : React Image is same size than the Pleek Image
+                case 6, 8:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    reactImageView.image = reactImage
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(reactImageView)
+                    
+                case 7:
+                    // Pleek Image
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/2 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: -viewToAdd.frame.width/8, y: -viewToAdd.frame.height/8, width: viewToAdd.frame.width/8 * 9, height: viewToAdd.frame.height/8 * 9))
+                    reactImageView.image = reactImage
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(reactImageView)
+                    
+                case 15, 19:
+                    //Pleek image is now 3/4 of the view
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/4 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    reactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    reactImageView.image = reactImage
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // 2 More react image
+                    var secondLeftReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 2, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    secondLeftReactImageView.image = reactImage
+                    secondLeftReactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(secondLeftReactImageView)
+                    
+                    var secondTopReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 2, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    secondTopReactImageView.image = reactImage
+                    secondTopReactImageView.contentMode = UIViewContentMode.ScaleAspectFill
+                    viewToAdd.addSubview(secondTopReactImageView)
+                    
+                case 16, 18:
+                    //Pleek image is now 3/4 of the view
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/4 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    reactImageView.image = reactImage
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // 2 More react image
+                    var secondLeftReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 2, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    secondLeftReactImageView.image = reactImage
+                    viewToAdd.addSubview(secondLeftReactImageView)
+                    
+                    var secondTopReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 2, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    secondTopReactImageView.image = reactImage
+                    viewToAdd.addSubview(secondTopReactImageView)
+                    
+                    // 2 More react image
+                    var thirdLeftReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    thirdLeftReactImageView.image = reactImage
+                    viewToAdd.addSubview(thirdLeftReactImageView)
+                    
+                    var thirdTopReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    thirdTopReactImageView.image = reactImage
+                    viewToAdd.addSubview(thirdTopReactImageView)
+                    
+                case 17:
+                    //Pleek image is now 3/4 of the view
+                    var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: viewToAdd.frame.width, height: viewToAdd.frame.height))
+                    mainImageView.image = imagePleek
+                    viewToAdd.addSubview(mainImageView)
+                    
+                    // React Image made 1/4 of the Pleek Image
+                    var reactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    reactImageView.image = reactImage
+                    viewToAdd.addSubview(reactImageView)
+                    
+                    // 2 More react image
+                    var secondLeftReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 2, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    secondLeftReactImageView.image = reactImage
+                    viewToAdd.addSubview(secondLeftReactImageView)
+                    
+                    var secondTopReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4 * 2, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    secondTopReactImageView.image = reactImage
+                    viewToAdd.addSubview(secondTopReactImageView)
+                    
+                    // 2 More react image
+                    var thirdLeftReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    thirdLeftReactImageView.image = reactImage
+                    viewToAdd.addSubview(thirdLeftReactImageView)
+                    
+                    var thirdTopReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: viewToAdd.frame.height/4, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    thirdTopReactImageView.image = reactImage
+                    viewToAdd.addSubview(thirdTopReactImageView)
+                    
+                    // 2 More react image
+                    var fourthLeftReactImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: viewToAdd.frame.height/4 * 3, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    fourthLeftReactImageView.image = reactImage
+                    viewToAdd.addSubview(fourthLeftReactImageView)
+                    
+                    var fourthTopReactImageView:UIImageView = UIImageView(frame: CGRect(x: viewToAdd.frame.width/4 * 3, y: 0, width: viewToAdd.frame.width/4, height: viewToAdd.frame.height/4))
+                    fourthTopReactImageView.image = reactImage
+                    viewToAdd.addSubview(fourthTopReactImageView)
+                    
+                    
+                default:
+                    println("default")
+                    
+                }
+                
+                
+                UIGraphicsBeginImageContextWithOptions(viewToAdd.bounds.size, viewToAdd.opaque, 0.0);
+                viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
+                var img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                
+                CGImageDestinationAddImage(destination, img.CGImage, frameProperties as CFDictionaryRef);
+            }
+            
+            if (!CGImageDestinationFinalize(destination)) {
+                println("failed to finalize image destination")
+                successful.setError(NSError(domain: "Image Destination", code: 400, userInfo: ["description" : "Failed to finalize image destination"]))
+            }
+            else{
+                successful.setResult(fileURL)
+            }
+        }
+        
+        
+        
+        
+        return successful.task
+        
+    }
+    
+    
+    func comeFromMessengerPleek(pleekId : String){
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(pleekId, forKey: "comeFromMessenger")
+    }
+    
+    func removeAllComeFromMessenger(){
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey("comeFromMessenger")
+    }
+    
+    func isComingFromMessengerForThisPleek(pleek : PFObject) -> Bool{
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("comeFromMessenger") != nil{
+            
+            var pleekId:String = defaults.objectForKey("comeFromMessenger") as String
+            
+            if pleekId == pleek.objectId{
+                return true
+            }
+            
+        }
+        else{
+            return false
+        }
+        
+        return false
+    }
+    
+    
+    // MARK : Server Image
+    
+    func getImagePleekOrReact(pleek : PFObject) -> BFTask{
+        var successful = BFTaskCompletionSource()
+        
+        var mainPleekImage:UIImage?
+        
+        var fileMainPleek:PFFile?
+        
+        if pleek["photo"] != nil{
+            fileMainPleek = pleek["photo"] as? PFFile
+            
+            fileMainPleek!.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                
+                if error == nil{
+                    println("Get Image without error")
+                    mainPleekImage = UIImage(data: data)
+                    
+                    successful.setResult(mainPleekImage!)
+                    
+                }
+                else{
+                    //Problem
+                    println("error getting image")
+                    successful.setError(error)
+                }
+                
+            })
+        }
+        else{
+            fileMainPleek = pleek["previewImage"] as? PFFile
+            
+            fileMainPleek!.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                
+                if data != nil{
+                     println("Get Image without error")
+                    mainPleekImage = UIImage(data: data)
+                    
+                    successful.setResult(mainPleekImage!)
+                    
+                }
+                else{
+                    //Problem
+                    println("error getting image")
+                    successful.setError(error)
+                }
+                
+            })
+        }
+        
+        return successful.task
+    }
+    
+    
 }

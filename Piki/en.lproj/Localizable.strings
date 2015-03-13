@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Peekee
+  Pleek
 
   Created by Adrien Dulong on 17/01/2015.
   Copyright (c) 2015 PikiChat. All rights reserved.
@@ -14,9 +14,9 @@
 "Like and comment with pics & vids. ✨" = "Like and comment with pics & vids. ✨";
 "Share awesome mosaics." = "Share awesome mosaics.";
 "On Snapchat, Insta, Twitter... 🚀" = "On Snapchat, Insta, Twitter... 🚀";
-"No Bullshit." = "No Worries.";
+"No Bullshit." = "Ready?";
 "Short signup" = "Short signup";
-"No Facebook connect" = "No Facebook connect";
+"No Facebook connect" = "No Ads";
 "No email address" = "No email address";
 "Only phone number for human verification" = "Only phone number for human verification";
 "ALRIGHT, SIGN ME UP" = "ALRIGHT, SIGN ME UP";
@@ -46,8 +46,8 @@
 "Let's GO!" = "Let's GO!";
 
 // MARK: Tuto Overlay
-"Find more friends to get more Peekees" = "Find more friends to get more Peekees";
-"This is a PEEKEE 🍩" = "This is a PEEKEE 🍩";
+"Find more friends to get more Pleeks" = "Find more friends to get more Pleeks";
+"This is a PLEEK 🍩" = "This is a PLEEK 🍩";
 "Add your own reaction" = "Add your own reaction";
 "This is a reaction 🎉" = "This is a reaction 🎉";
 
@@ -58,45 +58,45 @@
 "Don't miss the next pictures from your friends 😁" = "Don't miss the next pictures from your friends 😁";
 
 // MARK: Main Menu
-"Peekee" = "Peekee";
+"Pleek" = "Pleek";
 "NEW" = "NEW";
 "HIDE" = "HIDE";
 "DELETE" = "DELETE";
-"Are you sure you want to delete this Peekee? There is no way to get back then." = "Are you sure you want to delete this Peekee? There is no way to get back then.";
+"Are you sure you want to delete this Pleek? There is no way to get back then." = "Are you sure you want to delete this Pleek? There is no way to get back then.";
 
 // MARK: Find Friends
 "%d FRIENDS" = "%d FRIENDS";
 "Search a user" = "Search a user";
 "FIND" = "FIND";
 "FRIENDS" = "FRIENDS";
-"FRIENDS ON PEEKEE" = "FRIENDS ON PEEKEE";
-"FRIENDS NOT YET ON PEEKEE" = "FRIENDS NOT YET ON PEEKEE";
+"FRIENDS ON PLEEK" = "FRIENDS ON PLEEK";
+"FRIENDS NOT YET ON PLEEK" = "FRIENDS NOT YET ON PLEEK";
 "SendInvitSMS" = "\n %@";
 "LOOKING FOR FRIENDS" = "LOOKING FOR FRIENDS";
 
-// MARK: Peekee View
-"%d friends" = "%d friends";
-"%d friend" = "%d friend";
+// MARK: Pleek View
+"%d friends" = "%d recipients";
+"%d friend" = "%d recipient";
 "More" = "More";
-"More actions for this Peekee" = "More actions for this Peekee";
-"Report this Peekee" = "Report this Peekee";
+"More actions for this Pleek" = "More actions for this Pleek";
+"Report this Pleek" = "Report this Pleek";
 "ADD A FRIEND" = "ADD A FRIEND";
 "MUTE THIS FRIEND" = "MUTE THIS FRIEND";
 "UNMUTE THIS USER" = "UNMUTE THIS USER";
 "To %d people" = "To %d people";
-"Problem while reporting this Peekee. Please try again later" = "Problem while reporting this Peekee. Please try again later";
-"This Peekee has been reported. Thank you." = "This Peekee has been reported. Thank you.";
+"Problem while reporting this Pleek. Please try again later" = "Problem while reporting this Pleek. Please try again later";
+"This Pleek has been reported. Thank you." = "This Pleek has been reported. Thank you.";
 "DELETE" = "DELETE";
 "REPORT" = "REPORT";
 
 // MARK: MOZAIC
 "SEND" = "SEND";
-"%@ on Peekee" = "%@ on Peekee";
+"%@ on Pleek" = "%@ on Pleek";
 "%d+ replies on the app" = "%d+ replies on the app";
 "Share" = "Mosaic";
 "AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mosaic! Add some friends to get some answers?";
 
-// MARK: New Peekee
+// MARK: New Pleek
 "Search" = "Search";
 "Send to..." = "Send to...";
 "RECENT" = "RECENT";
@@ -104,7 +104,7 @@
 "SEND TO EVERYONE" = "SEND TO EVERYONE";
 "EVERYONE" = "EVERYONE";
 "SELECTED" = "SELECTED";
-"We had a problem while sending your Peekee, please try again later" = "We had a problem while sending your Peekee, please try again later";
+"We had a problem while sending your Pleek, please try again later" = "We had a problem while sending your Pleek, please try again later";
 "%d SELECTED" = "%d SELECTED";
 
 // MARK: Settings
@@ -133,7 +133,7 @@
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "Add your friends! 👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Choose at least your %d best friends. We'll keep you posted when they join the app!";
+"Choose at least your %d best friends. We'll keep you posted when they join the app!" = "Choose at least your %d best friends. We'll keep you posted when they join the app!";
 "ON THE APP" = "ON THE APP";
 "ON YOUR PHONE CONTACTS" = "ON YOUR PHONE CONTACTS";
 "ALL" = "ALL";
@@ -143,15 +143,15 @@
 "Last but not least" = "Last but not least";
 "Check if you have friends here?!😁" = "Check if you have friends here?!😁";
 "Confirmation" = "Confirmation";
-"Are you sure you want to invite all your contacts?" = "Are you sure you want to invite all your contacts?";
+"Are you sure you want to invite all your contacts?" = "Are you sure you want to add all your contacts?";
 "Friends" = "Friends";
-"Still %d to go! You need them to enjoy Peekee!" = "Still %d to go! You need them to enjoy Peekee!";
+"Still %d to go! You need them to enjoy Pleek!" = "Still %d to go! You need them to enjoy Pleek!";
 
 // MARK: V1.01
 "From" = "From";
 
 
-// MARK: V1.0.3
+// MARK: V1.0.2
 "Change my name" = "Change my name";
 "Edit your name" = "Edit your name";
 "Error while editing your name. Please try again later." = "Error while editing your name. Please try again later.";
@@ -160,8 +160,20 @@
 "Later" = "Later";
 "If you want to change your name anytime later go to the settings from the friends screen." = "If you want to change your name anytime later go to the settings from the friends screen.";
 "Your real name must have at least 3 characters and can have 30 characters max." = "Your real name must have at least 3 characters and can have 30 characters max.";
-
-
+"If you're lost anytime, just touch the parrot on the top left of the screen!" = "If you're lost anytime, just touch the parrot on the top left of the screen!";
+"SOME HELP?!" = "SOME HELP?!";
+"Do you want to watch a simple video to understand Pleek?" = "Do you want to watch a simple video to understand Pleek?";
+"We had a problem activating the silent mode. Please try again later" = "We had a problem activating the silent mode. Please try again later";
+"In Progress" = "In Progress";
+"The silent mode is being activated. It can take a while. You'll receive a notification when the activation will be completed." = "The silent mode is being activated. It can take a while. You'll receive a notification when the activation will be completed.";
+"We had a problem stopping the silent mode. Please try again later" = "We had a problem stopping the silent mode. Please try again";
+"The silent mode is being stopped. It can take a while. You'll receive a notification when the silent mode will be stopped" = "The silent mode is being stopped. It can take a while. You'll receive a notification when the silent mode will be stopped";
+"Silent Mode Status (stopping)" = "Silent Mode Status (stopping)";
+"Silent Mode" = "Silent Mode";
+"REMOVE A FRIEND" = "REMOVE A FRIEND";
+"To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu" = "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu";
+"To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek" = "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek";
+"If you activate the silent mode all your contacts will be mute. And you won't receive their Pleeks anymore. Here you'll be able to unmute the friend you want to receive Pleek from." = "If you activate the silent mode all your contacts will be mute, and you won't receive their Pleeks anymore. Here you'll be able to unmute the friend you want to receive Pleek from.";
 
 
 

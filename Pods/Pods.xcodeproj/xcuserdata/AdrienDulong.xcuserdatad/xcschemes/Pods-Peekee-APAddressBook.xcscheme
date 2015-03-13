@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A795E870350B3750EEC78F12"
+               BlueprintIdentifier = "B6A3E48B667A72640EF5CB82"
                BuildableName = "libPods-Peekee-APAddressBook.a"
                BlueprintName = "Pods-Peekee-APAddressBook"
                ReferencedContainer = "container:Pods.xcodeproj">

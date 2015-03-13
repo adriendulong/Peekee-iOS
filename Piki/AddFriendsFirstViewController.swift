@@ -1,6 +1,6 @@
 //
 //  AddFriendsFirstViewController.swift
-//  Peekee
+//  Pleek
 //
 //  Created by Adrien Dulong on 04/02/2015.
 //  Copyright (c) 2015 PikiChat. All rights reserved.
@@ -89,7 +89,7 @@ class ContactCell: UITableViewCell {
 }
 
 
-class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMessageComposeViewControllerDelegate {
+class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate {
     
     @IBOutlet weak var sendIcon: UIImageView!
     @IBOutlet weak var inviteAllActionLabel: UILabel!
@@ -122,11 +122,6 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     override func viewDidLoad() {
         
-        titleLabel.text = NSLocalizedString("Add your friends! 👫", comment :"Add your friends! 👫")
-        let invitLabel = String(format:NSLocalizedString("Choose at least your 5 best friends. We'll keep you posted when they join the app!", comment :"Choose at least your 5 best friends. We'll keep you posted when they join the app!"), self.limitFriendsInvit)
-        subtitleLabel.text = invitLabel
-        
-        
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if defaults.objectForKey("mandatoryFriends") != nil{
             self.mandatoryStep = defaults.objectForKey("mandatoryFriends") as Bool
@@ -135,6 +130,13 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         if defaults.objectForKey("numberToAdd") != nil{
             self.limitFriendsInvit = defaults.objectForKey("numberToAdd") as Int
         }
+        
+        titleLabel.text = NSLocalizedString("Add your friends! 👫", comment :"Add your friends! 👫")
+        let invitLabel = String(format:NSLocalizedString("Choose at least your %d best friends. We'll keep you posted when they join the app!", comment :"Choose at least your %d best friends. We'll keep you posted when they join the app!"), self.limitFriendsInvit)
+        subtitleLabel.text = invitLabel
+        
+        
+        
         
         // Get region label
         let networkInfo = CTTelephonyNetworkInfo()
@@ -429,7 +431,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     
     
-    // MARK : Friends on Peekee
+    // MARK : Friends on Pleek
     
     func checkContactsOnPiki(){
         
@@ -440,7 +442,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         
         
-        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
         
         
         
@@ -546,7 +548,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         var finalPhoneNumber:String?
         
         
-        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil.sharedInstance()
+        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
         var errorPointer:NSError?
         
         if countElements(numberString) > 4{
@@ -614,7 +616,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             else{
                 //Still
                 var stillToGo:Int = limitFriendsInvit - totalUserSeelcted
-                let nbRecipientsFormat = String(format: NSLocalizedString("Still %d to go! You need them to enjoy Peekee!", comment : "Still %d to go! You need them to enjoy Peekee!"), stillToGo)
+                let nbRecipientsFormat = String(format: NSLocalizedString("Still %d to go! You need them to enjoy Pleek!", comment : "Still %d to go! You need them to enjoy Pleek!"), stillToGo)
                 let alert = UIAlertView(title: NSLocalizedString("Friends", comment : "Friends"), message: nbRecipientsFormat,
                     delegate: nil, cancelButtonTitle: "Ok")
                 alert.show()
@@ -626,17 +628,37 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             if mandatoryStep{
                 //Invite All !
                 //Ask Before
-                var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-                    self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
-                    self.goLeave()
-                }))
-                self.presentViewController(alert, animated: true, completion: nil)
+                if Utils().iOS8{
+                    var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                    alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                        self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
+                        self.goLeave()
+                    }))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                else{
+                    
+                    var alertView = UIAlertView(title: "Confirmation",
+                        message: NSLocalizedString("Are you sure you want to invite all your contacts?",
+                            comment : "Are you sure you want to invite all your contacts?"),
+                        delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
+                        otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
+                    alertView.delegate = self
+                    alertView.show()
+                    
+                    
+                    
+                }
+                
                 
                 
             }
             else{
+                
+                
+                
+                
                 // Leave
                 goLeave()
             }
@@ -648,13 +670,25 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         if mandatoryStep{
             //Invite All !
-            var alert = UIAlertController(title: NSLocalizedString("Confirmation", comment : "Confirmation"), message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-                self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
-                self.goLeave()
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
+            if Utils().iOS8{
+                var alert = UIAlertController(title: NSLocalizedString("Confirmation", comment : "Confirmation"), message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                    self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
+                    self.goLeave()
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }
+            else{
+                var alertView = UIAlertView(title: "Confirmation",
+                    message: NSLocalizedString("Are you sure you want to invite all your contacts?",
+                        comment : "Are you sure you want to invite all your contacts?"),
+                    delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
+                    otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
+                alertView.delegate = self
+                alertView.show()
+            }
+            
         }
         else{
             // Leave
@@ -719,8 +753,17 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         messageController.recipients = phonesArray
         messageController.body = String(format: NSLocalizedString("SendInvitSMS", comment : ""), Utils().shareAppUrl)
         
-        if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-            messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+        if Utils().iOS8{
+            if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
+                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+            }
+        }
+        else{
+            var dataImage:NSData? = UIImagePNGRepresentation(Utils().getShareUsernameImage())
+            if dataImage != nil{
+                messageController.addAttachmentData(dataImage, typeIdentifier: "image/png", filename: "peekeeInvit.png")
+            }
+            
         }
         
         self.presentViewController(messageController, animated: true) { () -> Void in
@@ -920,6 +963,27 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             
         })
+    }
+    
+    
+    // MARK Alert View Delegate
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        
+        println("Index  : \(buttonIndex)")
+        
+        if alertView.tag == 1{
+            
+            // No Send
+            if buttonIndex == 0{
+                
+            }
+            else{
+                self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
+                self.goLeave()
+            }
+            
+        }
+        
     }
     
 }

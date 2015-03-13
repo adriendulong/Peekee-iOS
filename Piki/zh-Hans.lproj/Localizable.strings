@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Peekee
+  Pleek
 
   Created by Adrien Dulong on 17/01/2015.
   Copyright (c) 2015 PikiChat. All rights reserved.
@@ -46,8 +46,8 @@
 "Let's GO!" = "完成注册！";
 
 // MARK: Tuto Overlay
-"Find more friends to get more Peekees" = "查找更多好友来获取更多 Peekee";
-"This is a PEEKEE 🍩" = "这是一个 Peekee 🍩";
+"Find more friends to get more Pleeks" = "查找更多好友来获取更多 Pleeks";
+"This is a PLEEK 🍩" = "这是一个 Pleek 🍩";
 "Add your own reaction" = "添加您的回应";
 "This is a reaction 🎉" = "这是一条回应 🎉";
 
@@ -58,45 +58,45 @@
 "Don't miss the next pictures from your friends 😁" = "不要错过您好友的下一批图片 😁";
 
 // MARK: Main Menu
-"Peekee" = "Peekee";
+"Pleek" = "Pleek";
 "NEW" = "新建";
 "HIDE" = "隐藏";
 "DELETE" = "删除";
-"Are you sure you want to delete this Peekee? There is no way to get back then." = "确定要删除此 Peekee 吗？删除后再也无法恢复。";
+"Are you sure you want to delete this Pleek? There is no way to get back then." = "确定要删除此 Pleek 吗？删除后再也无法恢复。";
 
 // MARK: Find Friends
 "%d FRIENDS" = "%d 名好友";
 "Search a user" = "搜索用户";
 "FIND" = "查找";
 "FRIENDS" = "好友";
-"FRIENDS ON PEEKEE" = "使用 Peekee 的好友";
-"FRIENDS NOT YET ON PEEKEE" = "尚未使用 Peekee 的好友";
+"FRIENDS ON PLEEK" = "使用 Pleek 的好友";
+"FRIENDS NOT YET ON PLEEK" = "尚未使用 Pleek 的好友";
 "SendInvitSMS" = "\n %@";
 "LOOKING FOR FRIENDS" = "查找好友";
 
-// MARK: Peekee View
+// MARK: Pleek View
 "%d friends" = "%d 名好友";
 "%d friend" = "%d 名好友";
 "More" = "更多";
-"More actions for this Peekee" = "针对此 Peekee 的更多操作";
-"Report this Peekee" = "举报此 Peekee";
+"More actions for this Pleek" = "针对此 Pleek 的更多操作";
+"Report this Pleek" = "举报此 Pleek";
 "ADD A FRIEND" = "添加好友";
 "MUTE THIS FRIEND" = "屏蔽此好友";
 "UNMUTE THIS USER" = "取消屏蔽此好友";
 "To %d people" = "发送给 %d 人";
-"Problem while reporting this Peekee. Please try again later" = "举报此 Peekee 时遇到问题。请稍后重试";
-"This Peekee has been reported. Thank you." = "已举报此 Peekee，谢谢。";
+"Problem while reporting this Pleek. Please try again later" = "举报此 Pleek 时遇到问题。请稍后重试";
+"This Pleek has been reported. Thank you." = "已举报此 Pleek，谢谢。";
 "DELETE" = "删除";
 "REPORT" = "举报";
 
 // MARK: MOZAIC
 "SEND" = "发送";
-"%@ on Peekee" = "Peekee 上的 %@";
+"%@ on Pleek" = "Pleek 上的 %@";
 "%d+ replies on the app" = "应用上有超过 %d 条回复";
 "Share" = "分享";
 "AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mozaic! Add some friends to get some answers?";
 
-// MARK: New Peekee
+// MARK: New Pleek
 "Search" = "搜索";
 "Send to..." = "发送至...";
 "RECENT" = "最近";
@@ -104,7 +104,7 @@
 "SEND TO EVERYONE" = "发送至所有人";
 "EVERYONE" = "所有人";
 "SELECTED" = "选定的人";
-"We had a problem while sending your Peekee, please try again later" = "发送您的 Peekee 时遇到问题，请稍后重试";
+"We had a problem while sending your Pleek, please try again later" = "发送您的 Pleek 时遇到问题，请稍后重试";
 "%d SELECTED" = "已选定 %d 人";
 
 // MARK: Settings
@@ -133,7 +133,7 @@
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "添加您的好友！👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "选择您的至少 %d 名密友。当他们开始使用此应用时，我们会通知您！";
+"Choose at least your %d best friends. We'll keep you posted when they join the app!" = "选择您的至少 %d 名密友。当他们开始使用此应用时，我们会通知您！";
 "ON THE APP" = "此应用的用户";
 "ON YOUR PHONE CONTACTS" = "您的手机联系人";
 "ALL" = "全部";
@@ -145,7 +145,7 @@
 "Confirmation" = "确认";
 "Are you sure you want to invite all your contacts?" = "确定要邀请所有联系人吗？";
 "Friends" = "好友";
-"Still %d to go! You need them to enjoy Peekee!" = "还差 %d 人才能继续！您需要选择这么多好友才能享用 Peekee！";
+"Still %d to go! You need them to enjoy Pleek!" = "还差 %d 人才能继续！您需要选择这么多好友才能享用 Pleek！";
 
 // MARK: V1.01
 "From" = "From";

@@ -1,6 +1,6 @@
 //
 //  EditUsernameViewController.swift
-//  Peekee
+//  Pleek
 //
 //  Created by Adrien Dulong on 17/01/2015.
 //  Copyright (c) 2015 PikiChat. All rights reserved.
@@ -88,9 +88,21 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
         var finalText:NSString = textField.text as NSString
         finalText = finalText.stringByReplacingCharactersInRange(range, withString: string)
         
-        if finalText.length > 15{
-            return false
+        
+        if changeUsernameChosen{
+            titleLabel.text = NSLocalizedString("Edit username", comment : "Edit username")
+            if finalText.length > 15{
+                return false
+            }
         }
+        else{
+            titleLabel.text = NSLocalizedString("Edit your name", comment : "Edit your name")
+            if finalText.length > 30{
+                return false
+            }
+        }
+        
+        
         
         if changeUsernameChosen{
             if isForbidden(string){

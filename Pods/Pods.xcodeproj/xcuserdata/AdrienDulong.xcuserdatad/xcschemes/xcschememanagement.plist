@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Peekee-Animated-Gif-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Peekee-Bolts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -20,11 +25,6 @@
 			<false/>
 		</dict>
 		<key>Pods-Peekee-Mixpanel.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Pods-Peekee-PBJVideoPlayer.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -49,6 +49,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Peekee-libPhoneNumber-iOS.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Peekee.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -57,52 +62,57 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1FBB81C6D7385FEF73D10288</key>
+		<key>02AEAE3E31B454EA45E1D088</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2D5B6EBC35D541A62749F39C</key>
+		<key>152E0F42BE9C9FB4EA1AF16C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>66E74DF2C8EF8E22C3702A39</key>
+		<key>2154E33B0FED9EA8D29A787C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A092FB2F11A6DF3CC2243286</key>
+		<key>632B0524CB1F8F5EA6FD5124</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A795E870350B3750EEC78F12</key>
+		<key>7242365A59ABEFD66CA26C6D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A7A31525A0D14C1FFB7EF6C2</key>
+		<key>77DD07C61BADAB28241D9A03</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B43AB7E11669BD321C3EE83D</key>
+		<key>7DA21B51F37A42B5F61DDAAB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DB16A10FC2EF6E3C6E20CBBA</key>
+		<key>9641C0C7A5316D8D131A94F1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EBCB53907E92D06F26E0A143</key>
+		<key>B6A3E48B667A72640EF5CB82</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EDF153D9849CFDBC3C8F3BA4</key>
+		<key>EC63A47EDD2DADA3AB21090F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FE69B8A302881DB5B418094B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

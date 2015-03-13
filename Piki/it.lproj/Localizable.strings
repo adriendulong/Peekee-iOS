@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Peekee
+  Pleek
 
   Created by Adrien Dulong on 17/01/2015.
   Copyright (c) 2015 PikiChat. All rights reserved.
@@ -14,7 +14,7 @@
 "Like and comment with pics & vids. ✨" = "Commenta con foto e video.";
 "Share awesome mosaics." = "Condividi fantastici mosaici.";
 "On Snapchat, Insta, Twitter... 🚀" = "Su Snapchat, Insta, Twitter... 🚀";
-"No Bullshit." = "Nessun problema.";
+"No Bullshit." = "Ready ?";
 "Short signup" = "Iscriviti subito";
 "No Facebook connect" = "Nessuna connessione Facebook";
 "No email address" = "Nessun indirizzo email";
@@ -46,8 +46,8 @@
 "Let's GO!" = "ANDIAMO!";
 
 // MARK: Tuto Overlay
-"Find more friends to get more Peekees" = "Trova più amici per ricevere più Peekee";
-"This is a PEEKEE 🍩" = "Questo è un PEEKEE 🍩";
+"Find more friends to get more Pleeks" = "Trova più amici per ricevere più Pleeks";
+"This is a PLEEK 🍩" = "Questo è un PLEEK 🍩";
 "Add your own reaction" = "Aggiungi la tua reazione";
 "This is a reaction 🎉" = "Questa è una reazione 🎉";
 
@@ -58,45 +58,45 @@
 "Don't miss the next pictures from your friends 😁" = "Non perdere le prossime foto dei tuoi amici 😁";
 
 // MARK: Main Menu
-"Peekee" = "Peekee";
+"Pleek" = "Pleek";
 "NEW" = "NUOVO";
 "HIDE" = "NASCONDI";
 "DELETE" = "ELIMINA";
-"Are you sure you want to delete this Peekee? There is no way to get back then." = "Sei sicuro di voler eliminare questo Peekee? Dopo non si potrà più tornare indietro.";
+"Are you sure you want to delete this Pleek? There is no way to get back then." = "Sei sicuro di voler eliminare questo Pleek? Dopo non si potrà più tornare indietro.";
 
 // MARK: Find Friends
 "%d FRIENDS" = "%d AMICI";
 "Search a user" = "Cerca un utente";
 "FIND" = "TROVA";
 "FRIENDS" = "AMICI";
-"FRIENDS ON PEEKEE" = "AMICI SU PEEKEE";
-"FRIENDS NOT YET ON PEEKEE" = "AMICI NON ANCORA SU PEEKEE";
+"FRIENDS ON PLEEK" = "AMICI SU PLEEK";
+"FRIENDS NOT YET ON PLEEK" = "AMICI NON ANCORA SU PLEEK";
 "SendInvitSMS" = "\n %@";
 "LOOKING FOR FRIENDS" = "CERCARE AMICI";
 
-// MARK: Peekee View
-"%d friends" = "%d amici";
-"%d friend" = "%d amico";
+// MARK: Pleek View
+"%d friends" = "%d destinatari";
+"%d friend" = "%d destinataro";
 "More" = "Altro";
-"More actions for this Peekee" = "Altre azioni per questo Peekee";
-"Report this Peekee" = "Segnala questo Peekee";
+"More actions for this Pleek" = "Altre azioni per questo Pleek";
+"Report this Pleek" = "Segnala questo Pleek";
 "ADD A FRIEND" = "AGGIUNGI UN AMICO";
 "MUTE THIS FRIEND" = "DISATTIVA QUESTO AMICO";
 "UNMUTE THIS USER" = "RIATTIVA QUESTO AMICO";
 "To %d people" = "Per %d persone";
-"Problem while reporting this Peekee. Please try again later" = "Problema nella segnalazione di questo Peekee. Riprova più tardi";
-"This Peekee has been reported. Thank you." = "Questo Peekee è stato segnalato. Grazie.";
+"Problem while reporting this Pleek. Please try again later" = "Problema nella segnalazione di questo Pleek. Riprova più tardi";
+"This Pleek has been reported. Thank you." = "Questo Pleek è stato segnalato. Grazie.";
 "DELETE" = "ELIMINA";
 "REPORT" = "SEGNALA";
 
 // MARK: MOZAIC
 "SEND" = "INVIA";
-"%@ on Peekee" = "%@ su Peekee";
+"%@ on Pleek" = "%@ su Pleek";
 "%d+ replies on the app" = "%d+ risposte sull'app";
 "Share" = "Mosaic";
 "AlertNotEnoughReact" = "Sorry but you need at least 6 answers to create a beautiful mosaic! Add some friends to get some answers?";
 
-// MARK: New Peekee
+// MARK: New Pleek
 "Search" = "Cerca";
 "Send to..." = "Invia a...";
 "RECENT" = "RECENTI";
@@ -104,7 +104,7 @@
 "SEND TO EVERYONE" = "INVIA A TUTTI";
 "EVERYONE" = "TUTTI";
 "SELECTED" = "SELEZIONATI";
-"We had a problem while sending your Peekee, please try again later" = "Si è verificato un problema nell'invio del tuo Peekee, riprova più tardi";
+"We had a problem while sending your Pleek, please try again later" = "Si è verificato un problema nell'invio del tuo Pleek, riprova più tardi";
 "%d SELECTED" = "%d SELEZIONATI";
 
 // MARK: Settings
@@ -133,7 +133,7 @@
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "Aggiungi i tuoi amici! 👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "Seleziona almeno i tuoi %d migliori amici. Ti informeremo quando inizieranno a usare l'app!";
+"Choose at least your %d best friends. We'll keep you posted when they join the app!" = "Seleziona almeno i tuoi %d migliori amici. Ti informeremo quando inizieranno a usare l'app!";
 "ON THE APP" = "SULL'APP";
 "ON YOUR PHONE CONTACTS" = "SUI TUOI CONTATTI TELEFONICI";
 "ALL" = "TUTTI";
@@ -145,7 +145,7 @@
 "Confirmation" = "Conferma";
 "Are you sure you want to invite all your contacts?" = "Sei sicuro/a di voler invitare tutti i tuoi contatti?";
 "Friends" = "Amici";
-"Still %d to go! You need them to enjoy Peekee!" = "Ancora %d per iniziare! Ti servono per goderti Peekee!";
+"Still %d to go! You need them to enjoy Pleek!" = "Ancora %d per iniziare! Ti servono per goderti Pleek!";
 
 // MARK: V1.01
 "From" = "From";

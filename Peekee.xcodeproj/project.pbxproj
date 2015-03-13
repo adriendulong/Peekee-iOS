@@ -26,12 +26,15 @@
 		E72E7D6419E6F60A00D659AC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6319E6F60A00D659AC /* StoreKit.framework */; };
 		E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */; };
 		E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */; };
+		E72ED24C1AAA58F500505A56 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E72ED24B1AAA4DB200505A56 /* peekee_tuto.mp4 */; };
+		E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */; };
 		E74C1DF61A56F5F7002F86CC /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E74C1DF71A56F5F7002F86CC /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */; };
 		E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF261A1C988800318F45 /* TakePhotoViewController.swift */; };
 		E758CF2A1A1CF4C500318F45 /* TransitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF291A1CF4C500318F45 /* TransitionManager.swift */; };
 		E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
+		E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
 		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
 		E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */; };
 		E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
@@ -67,21 +70,13 @@
 		E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */; };
 		E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */; };
 		E7DF60861A10B6E8000CCD52 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */; };
-		E7DF609A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF608A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m */; };
-		E7DF609B1A10C5EA000CCD52 /* NBNumberFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF608C1A10C5EA000CCD52 /* NBNumberFormat.m */; };
-		E7DF609C1A10C5EA000CCD52 /* NBPhoneMetaData.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF608E1A10C5EA000CCD52 /* NBPhoneMetaData.m */; };
-		E7DF609D1A10C5EA000CCD52 /* NBPhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60901A10C5EA000CCD52 /* NBPhoneNumber.m */; };
-		E7DF609E1A10C5EA000CCD52 /* NBPhoneNumberDesc.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60931A10C5EA000CCD52 /* NBPhoneNumberDesc.m */; };
-		E7DF609F1A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60941A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist */; };
-		E7DF60A01A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60951A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist */; };
-		E7DF60A11A10C5EA000CCD52 /* NBPhoneNumberUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60971A10C5EA000CCD52 /* NBPhoneNumberUtil.m */; };
-		E7DF60A21A10C5EA000CCD52 /* NSArray+NBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60991A10C5EA000CCD52 /* NSArray+NBAdditions.m */; };
 		E7DF60A41A10C645000CCD52 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */; };
 		E7DF60A61A10C73F000CCD52 /* DiallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */; };
 		E7EBA42B19EC06E3006E8587 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */; };
 		E7EBA42D19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */; };
 		E7F0017F1A02A26A00F71017 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */; };
 		E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */; };
+		E7F628E01AA8B907009329DE /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F628DF1AA8B907009329DE /* FBSDKMessengerShareKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +114,8 @@
 		E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		E72E7D6919E6F63D00D659AC /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactsCollectionViewCell.swift; sourceTree = "<group>"; };
+		E72ED24B1AAA4DB200505A56 /* peekee_tuto.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = peekee_tuto.mp4; sourceTree = "<group>"; };
+		E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutoVideoViewController.swift; sourceTree = "<group>"; };
 		E74660D21A56FD0B00D4C5BB /* libPods-Peekee-APAddressBook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-APAddressBook.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-APAddressBook.a"; sourceTree = "<group>"; };
 		E74660D31A56FD0B00D4C5BB /* libPods-Peekee-Bolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Bolts.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Bolts.a"; sourceTree = "<group>"; };
 		E74660D41A56FD0B00D4C5BB /* libPods-Peekee-Facebook-iOS-SDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Facebook-iOS-SDK.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Facebook-iOS-SDK.a"; sourceTree = "<group>"; };
@@ -132,6 +129,7 @@
 		E758CF261A1C988800318F45 /* TakePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePhotoViewController.swift; sourceTree = "<group>"; };
 		E758CF291A1CF4C500318F45 /* TransitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionManager.swift; sourceTree = "<group>"; };
 		E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodePhoneViewController.swift; sourceTree = "<group>"; };
+		E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuteAllViewController.swift; sourceTree = "<group>"; };
 		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E3219E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -181,28 +179,12 @@
 		E7D716951A8A59DB004B7148 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E7D716971A8A59FA004B7148 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNumberViewController.swift; sourceTree = "<group>"; };
-		E7DF60891A10C5EA000CCD52 /* NBAsYouTypeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBAsYouTypeFormatter.h; path = Vendors/LibPhoneNumber/NBAsYouTypeFormatter.h; sourceTree = SOURCE_ROOT; };
-		E7DF608A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBAsYouTypeFormatter.m; path = Vendors/LibPhoneNumber/NBAsYouTypeFormatter.m; sourceTree = SOURCE_ROOT; };
-		E7DF608B1A10C5EA000CCD52 /* NBNumberFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBNumberFormat.h; path = Vendors/LibPhoneNumber/NBNumberFormat.h; sourceTree = SOURCE_ROOT; };
-		E7DF608C1A10C5EA000CCD52 /* NBNumberFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBNumberFormat.m; path = Vendors/LibPhoneNumber/NBNumberFormat.m; sourceTree = SOURCE_ROOT; };
-		E7DF608D1A10C5EA000CCD52 /* NBPhoneMetaData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneMetaData.h; path = Vendors/LibPhoneNumber/NBPhoneMetaData.h; sourceTree = SOURCE_ROOT; };
-		E7DF608E1A10C5EA000CCD52 /* NBPhoneMetaData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneMetaData.m; path = Vendors/LibPhoneNumber/NBPhoneMetaData.m; sourceTree = SOURCE_ROOT; };
-		E7DF608F1A10C5EA000CCD52 /* NBPhoneNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumber.h; path = Vendors/LibPhoneNumber/NBPhoneNumber.h; sourceTree = SOURCE_ROOT; };
-		E7DF60901A10C5EA000CCD52 /* NBPhoneNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneNumber.m; path = Vendors/LibPhoneNumber/NBPhoneNumber.m; sourceTree = SOURCE_ROOT; };
-		E7DF60911A10C5EA000CCD52 /* NBPhoneNumberDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumberDefines.h; path = Vendors/LibPhoneNumber/NBPhoneNumberDefines.h; sourceTree = SOURCE_ROOT; };
-		E7DF60921A10C5EA000CCD52 /* NBPhoneNumberDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumberDesc.h; path = Vendors/LibPhoneNumber/NBPhoneNumberDesc.h; sourceTree = SOURCE_ROOT; };
-		E7DF60931A10C5EA000CCD52 /* NBPhoneNumberDesc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneNumberDesc.m; path = Vendors/LibPhoneNumber/NBPhoneNumberDesc.m; sourceTree = SOURCE_ROOT; };
-		E7DF60941A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = NBPhoneNumberMetadata.plist; path = Vendors/LibPhoneNumber/NBPhoneNumberMetadata.plist; sourceTree = SOURCE_ROOT; };
-		E7DF60951A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = NBPhoneNumberMetadataForTesting.plist; path = Vendors/LibPhoneNumber/NBPhoneNumberMetadataForTesting.plist; sourceTree = SOURCE_ROOT; };
-		E7DF60961A10C5EA000CCD52 /* NBPhoneNumberUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NBPhoneNumberUtil.h; path = Vendors/LibPhoneNumber/NBPhoneNumberUtil.h; sourceTree = SOURCE_ROOT; };
-		E7DF60971A10C5EA000CCD52 /* NBPhoneNumberUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NBPhoneNumberUtil.m; path = Vendors/LibPhoneNumber/NBPhoneNumberUtil.m; sourceTree = SOURCE_ROOT; };
-		E7DF60981A10C5EA000CCD52 /* NSArray+NBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray+NBAdditions.h"; path = "Vendors/LibPhoneNumber/NSArray+NBAdditions.h"; sourceTree = SOURCE_ROOT; };
-		E7DF60991A10C5EA000CCD52 /* NSArray+NBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray+NBAdditions.m"; path = "Vendors/LibPhoneNumber/NSArray+NBAdditions.m"; sourceTree = SOURCE_ROOT; };
 		E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DiallingCodes.plist; sourceTree = "<group>"; };
 		E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmojiLikeCollectionViewCell.swift; sourceTree = "<group>"; };
 		E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseUsernameViewController.swift; sourceTree = "<group>"; };
+		E7F628DF1AA8B907009329DE /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -214,6 +196,7 @@
 				E769F2631A8A3C5900E17DCB /* UIKit.framework in Frameworks */,
 				E769F2611A8A210000E17DCB /* ImageIO.framework in Frameworks */,
 				E70A8DA51A29D82C0062D446 /* MessageUI.framework in Frameworks */,
+				E7F628E01AA8B907009329DE /* FBSDKMessengerShareKit.framework in Frameworks */,
 				E7DF60A41A10C645000CCD52 /* CoreTelephony.framework in Frameworks */,
 				E7F0017F1A02A26A00F71017 /* MediaPlayer.framework in Frameworks */,
 				E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */,
@@ -256,6 +239,7 @@
 			children = (
 				E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */,
 				E720345E1A6A759C0058175B /* EditUsernameViewController.swift */,
+				E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -271,6 +255,14 @@
 				E7B4EB601A4EA25100B69A2A /* stronger.wav */,
 			);
 			name = Sound;
+			sourceTree = "<group>";
+		};
+		E73A23DE1AA0B0DE00C65B7A /* Tuto Video */ = {
+			isa = PBXGroup;
+			children = (
+				E72ED24B1AAA4DB200505A56 /* peekee_tuto.mp4 */,
+			);
+			name = "Tuto Video";
 			sourceTree = "<group>";
 		};
 		E758CF281A1CF48000318F45 /* TransitionManagers */ = {
@@ -366,6 +358,7 @@
 		E7665E5E19E6EF3F003DAAF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E7F628DF1AA8B907009329DE /* FBSDKMessengerShareKit.framework */,
 				E769F2621A8A3C5900E17DCB /* UIKit.framework */,
 				E769F2601A8A210000E17DCB /* ImageIO.framework */,
 				E74660D21A56FD0B00D4C5BB /* libPods-Peekee-APAddressBook.a */,
@@ -410,6 +403,7 @@
 		E78548C61A1B5336001F83FC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E73A23DE1AA0B0DE00C65B7A /* Tuto Video */,
 				E725BC901A40A84800275C2B /* Sound */,
 				E78548C71A1B535A001F83FC /* Fonts */,
 			);
@@ -486,6 +480,7 @@
 				E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */,
 				E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */,
 				E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */,
+				E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */,
 			);
 			name = SignUp;
 			sourceTree = "<group>";
@@ -494,33 +489,8 @@
 			isa = PBXGroup;
 			children = (
 				E7834C7C1A1A41B200CDB32D /* MBProgressHUD */,
-				E7DF60881A10C5A0000CCD52 /* LibPhoneNumber */,
 			);
 			name = Vendors;
-			sourceTree = "<group>";
-		};
-		E7DF60881A10C5A0000CCD52 /* LibPhoneNumber */ = {
-			isa = PBXGroup;
-			children = (
-				E7DF60891A10C5EA000CCD52 /* NBAsYouTypeFormatter.h */,
-				E7DF608A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m */,
-				E7DF608B1A10C5EA000CCD52 /* NBNumberFormat.h */,
-				E7DF608C1A10C5EA000CCD52 /* NBNumberFormat.m */,
-				E7DF608D1A10C5EA000CCD52 /* NBPhoneMetaData.h */,
-				E7DF608E1A10C5EA000CCD52 /* NBPhoneMetaData.m */,
-				E7DF608F1A10C5EA000CCD52 /* NBPhoneNumber.h */,
-				E7DF60901A10C5EA000CCD52 /* NBPhoneNumber.m */,
-				E7DF60911A10C5EA000CCD52 /* NBPhoneNumberDefines.h */,
-				E7DF60921A10C5EA000CCD52 /* NBPhoneNumberDesc.h */,
-				E7DF60931A10C5EA000CCD52 /* NBPhoneNumberDesc.m */,
-				E7DF60941A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist */,
-				E7DF60951A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist */,
-				E7DF60961A10C5EA000CCD52 /* NBPhoneNumberUtil.h */,
-				E7DF60971A10C5EA000CCD52 /* NBPhoneNumberUtil.m */,
-				E7DF60981A10C5EA000CCD52 /* NSArray+NBAdditions.h */,
-				E7DF60991A10C5EA000CCD52 /* NSArray+NBAdditions.m */,
-			);
-			name = LibPhoneNumber;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -622,6 +592,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E72ED24C1AAA58F500505A56 /* peekee_tuto.mp4 in Resources */,
 				E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */,
 				E74C1DF61A56F5F7002F86CC /* (null) in Resources */,
 				E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */,
@@ -631,12 +602,10 @@
 				E7AB74811A9B792E00EEA0D8 /* Space_Notification1.wav in Resources */,
 				E7B4EB641A4EA25100B69A2A /* stronger.wav in Resources */,
 				E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */,
-				E7DF609F1A10C5EA000CCD52 /* NBPhoneNumberMetadata.plist in Resources */,
 				E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */,
 				E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */,
 				E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */,
 				E7665E3B19E5A3AB003DAAF8 /* Images.xcassets in Resources */,
-				E7DF60A01A10C5EA000CCD52 /* NBPhoneNumberMetadataForTesting.plist in Resources */,
 				E74C1DF71A56F5F7002F86CC /* (null) in Resources */,
 				E7B4EB631A4EA25100B69A2A /* harder.wav in Resources */,
 				E7B4EB611A4EA25100B69A2A /* better.wav in Resources */,
@@ -709,12 +678,9 @@
 				E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */,
 				E7BA499E1A2F54A800DB1C96 /* inboxTableViewCell.swift in Sources */,
 				E70A55BA1A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift in Sources */,
-				E7DF609D1A10C5EA000CCD52 /* NBPhoneNumber.m in Sources */,
 				E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */,
-				E7DF609C1A10C5EA000CCD52 /* NBPhoneMetaData.m in Sources */,
 				E7C9168419F8F7F60094710D /* DoubleInboxCollectionViewCell.swift in Sources */,
 				E7DF60861A10B6E8000CCD52 /* PhoneNumberViewController.swift in Sources */,
-				E7DF60A21A10C5EA000CCD52 /* NSArray+NBAdditions.m in Sources */,
 				E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */,
 				E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */,
 				E76F9E5C1A3A11A700D02A5D /* TransitionPikiManager.swift in Sources */,
@@ -722,11 +688,10 @@
 				E720345F1A6A759C0058175B /* EditUsernameViewController.swift in Sources */,
 				E727F7021A5B0D3500BB8B0B /* WalkthroughViewController.swift in Sources */,
 				E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */,
-				E7DF609B1A10C5EA000CCD52 /* NBNumberFormat.m in Sources */,
 				E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */,
 				E7B255911A3F5F2A00B540E6 /* TransitionFriendManager.swift in Sources */,
 				E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */,
-				E7DF609E1A10C5EA000CCD52 /* NBPhoneNumberDesc.m in Sources */,
+				E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */,
 				E7665E5D19E6E6E9003DAAF8 /* RBResizer.swift in Sources */,
 				E7C3B32D1A24858D0059F78D /* ChooseReceiversViewController.swift in Sources */,
 				E7834C7F1A1A41CF00CDB32D /* MBProgressHUD.m in Sources */,
@@ -734,9 +699,8 @@
 				E7AE5D791A41CA1800A77A91 /* FirstPageViewController.swift in Sources */,
 				E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */,
 				E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */,
+				E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */,
 				E7C9168019F7D71D0094710D /* InboxCollectionViewCell.swift in Sources */,
-				E7DF609A1A10C5EA000CCD52 /* NBAsYouTypeFormatter.m in Sources */,
-				E7DF60A11A10C5EA000CCD52 /* NBPhoneNumberUtil.m in Sources */,
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
 				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,
 				E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */,
@@ -817,8 +781,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pikichat";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pikichat";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -831,7 +795,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6b8d620b-d10f-4705-b2c1-970fe4162c4b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -902,8 +866,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Pikichat";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Pikichat";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -916,7 +880,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "6b8d620b-d10f-4705-b2c1-970fe4162c4b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

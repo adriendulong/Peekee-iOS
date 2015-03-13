@@ -253,7 +253,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                                 
                                 
                                 //Associate the user in Mixpanel
-                                Mixpanel.sharedInstance().createAlias(PFUser.currentUser().objectId, forDistinctID: Mixpanel.sharedInstance().distinctId)
+                                Mixpanel.sharedInstance().identify(PFUser.currentUser().objectId)
                                 if self.phoneNumber != nil{
                                     Mixpanel.sharedInstance().people.set(["$phone" : self.phoneNumber!])
                                 }

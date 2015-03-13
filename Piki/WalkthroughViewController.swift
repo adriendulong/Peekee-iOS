@@ -1,6 +1,6 @@
 //
 //  WalkthroughViewController.swift
-//  Peekee
+//  Pleek
 //
 //  Created by Adrien Dulong on 05/01/2015.
 //  Copyright (c) 2015 PikiChat. All rights reserved.
@@ -114,42 +114,6 @@ class WalkthroughCollectionViewCell : UICollectionViewCell{
         
         switch type{
         case 0:
-            //Set Icon Image
-            iconImageView!.image = UIImage(named: "walk_icon_one")
-            
-            //Set Main Image
-            mainImageView!.image = UIImage(named: "walk_main_image_one")
-            
-            //Title
-            titleLabel!.text =  NSLocalizedString("Receive and send pics & vids.", comment : "")
-            
-            //Subtitle
-            subtitleLabel!.text = NSLocalizedString("With friends, family, and dogs. 🐶", comment : "With friends, family, and dogs. 🐶")
-        case 1:
-            //Set Icon Image
-            iconImageView!.image = UIImage(named: "walk_icon_two")
-            
-            //Set Main Image
-            mainImageView!.image = UIImage(named: "walk_main_image_two")
-            
-            //Title
-            titleLabel!.text = NSLocalizedString("React with your camera", comment : "React with your camera.")
-            
-            //Subtitle
-            subtitleLabel!.text = NSLocalizedString("Like and comment with pics & vids. ✨", comment : "Like and comment with pics & vids. ✨") 
-        case 2:
-            //Set Icon Image
-            iconImageView!.image = UIImage(named: "walk_icon_three")
-            
-            //Set Main Image
-            mainImageView!.image = UIImage(named: "walk_main_image_three")
-            
-            //Title
-            titleLabel!.text = NSLocalizedString("Share awesome mosaics.", comment : "Share awesome mozaics.")  
-            
-            //Subtitle
-            subtitleLabel!.text = NSLocalizedString("On Snapchat, Insta, Twitter... 🚀", comment : "On Snapchat, Insta, Twitter... 🚀")
-        case 3:
             
             lastCellView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 55))
             lastCellView!.backgroundColor = UIColor(red: 62/255, green: 80/255, blue: 180/255, alpha: 1.0)
@@ -236,13 +200,93 @@ class WalkthroughCollectionViewCell : UICollectionViewCell{
             fourthLabel.text = NSLocalizedString("Only phone number for human verification", comment :"Only phone number for human verification")
             listInfosView!.addSubview(fourthLabel)
             
+
             
         default:
-            //Set Icon Image
-            iconImageView!.image = UIImage(named: "walk_icon_one")
+            lastCellView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 55))
+            lastCellView!.backgroundColor = UIColor(red: 62/255, green: 80/255, blue: 180/255, alpha: 1.0)
+            contentView.addSubview(lastCellView!)
             
-            //Set Main Image
-            mainImageView!.image = UIImage(named: "walk_main_image_one")
+            toplastCell = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: 22))
+            toplastCell!.backgroundColor = Utils().primaryColorDark
+            lastCellView!.addSubview(toplastCell!)
+            
+            iconLastCell = UIImageView(frame: CGRect(x: 0, y: 60, width: UIScreen.mainScreen().bounds.width, height: 36))
+            iconLastCell!.contentMode = UIViewContentMode.Center
+            iconLastCell!.image = UIImage(named: "cloud_icon")
+            lastCellView!.addSubview(iconLastCell!)
+            
+            titleLastCell = UILabel(frame: CGRect(x: 0, y: iconLastCell!.frame.origin.y + iconLastCell!.frame.height + 5, width: UIScreen.mainScreen().bounds.width, height: 29))
+            titleLastCell!.text = NSLocalizedString("No Bullshit.", comment : "No Bullshit.")
+            titleLastCell!.textColor = UIColor.whiteColor()
+            titleLastCell!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+            titleLastCell!.textAlignment = NSTextAlignment.Center
+            lastCellView!.addSubview(titleLastCell!)
+            
+            miniseparatorLastCell = UIView(frame: CGRect(x: UIScreen.mainScreen().bounds.width/2 - 28, y: titleLastCell!.frame.origin.y + titleLastCell!.frame.height + 15, width: 56, height: 2))
+            miniseparatorLastCell!.backgroundColor = Utils().secondColor
+            lastCellView!.addSubview(miniseparatorLastCell!)
+            
+            listInfosView = UIView(frame: CGRect(x: UIScreen.mainScreen().bounds.width/2 - 125, y: miniseparatorLastCell!.frame.origin.y + miniseparatorLastCell!.frame.height + 55, width: 250, height: 190))
+            listInfosView!.backgroundColor = UIColor.clearColor()
+            lastCellView!.addSubview(listInfosView!)
+            
+            var spaceBetweenToDo:CGFloat = 25
+            if Utils().isIphone4(){
+                spaceBetweenToDo = 20
+            }
+            else if Utils().isIphone5(){
+                spaceBetweenToDo = 25
+            }
+            else if Utils().isIphone6Plus(){
+                spaceBetweenToDo = 50
+            }
+            else{
+                spaceBetweenToDo = 35
+            }
+            
+            
+            let checkIconOne:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+            checkIconOne.image = UIImage(named: "todo_icon")
+            listInfosView!.addSubview(checkIconOne)
+            
+            let firstLabel:UILabel = UILabel(frame: CGRect(x: checkIconOne.frame.origin.x + checkIconOne.frame.width + 20, y: checkIconOne.frame.origin.y, width: 210, height: 22))
+            firstLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
+            firstLabel.textColor = UIColor.whiteColor()
+            firstLabel.text = NSLocalizedString("Short signup", comment : "Short signup")
+            listInfosView!.addSubview(firstLabel)
+            
+            let checkIconTwo:UIImageView = UIImageView(frame: CGRect(x: 0, y: spaceBetweenToDo + checkIconOne.frame.height, width: 24, height: 24))
+            checkIconTwo.image = UIImage(named: "todo_icon")
+            listInfosView!.addSubview(checkIconTwo)
+            
+            let secondLabel:UILabel = UILabel(frame: CGRect(x: checkIconTwo.frame.origin.x + checkIconTwo.frame.width + 20, y: checkIconTwo.frame.origin.y, width: 210, height: 22))
+            secondLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
+            secondLabel.textColor = UIColor.whiteColor()
+            secondLabel.adjustsFontSizeToFitWidth = true
+            secondLabel.text = NSLocalizedString("No Facebook connect", comment : "No Facebook connect")
+            listInfosView!.addSubview(secondLabel)
+            
+            let checkIconThree:UIImageView = UIImageView(frame: CGRect(x: 0, y: (spaceBetweenToDo + checkIconOne.frame.height) * 2, width: 24, height: 24))
+            checkIconThree.image = UIImage(named: "todo_icon")
+            listInfosView!.addSubview(checkIconThree)
+            
+            let thirdLabel:UILabel = UILabel(frame: CGRect(x: checkIconThree.frame.origin.x + checkIconThree.frame.width + 20, y: checkIconThree.frame.origin.y, width: 210, height: 22))
+            thirdLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
+            thirdLabel.textColor = UIColor.whiteColor()
+            thirdLabel.text = NSLocalizedString("No email address", comment : "No email address")
+            listInfosView!.addSubview(thirdLabel)
+            
+            let checkIconFour:UIImageView = UIImageView(frame: CGRect(x: 0, y: (spaceBetweenToDo + checkIconOne.frame.height) * 3, width: 24, height: 24))
+            checkIconFour.image = UIImage(named: "todo_icon")
+            listInfosView!.addSubview(checkIconFour)
+            
+            let fourthLabel:UILabel = UILabel(frame: CGRect(x: checkIconFour.frame.origin.x + checkIconFour.frame.width + 20, y: checkIconFour.frame.origin.y, width: 210, height: 40))
+            fourthLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
+            fourthLabel.textColor = UIColor.whiteColor()
+            fourthLabel.numberOfLines = 2
+            fourthLabel.text = NSLocalizedString("Only phone number for human verification", comment :"Only phone number for human verification")
+            listInfosView!.addSubview(fourthLabel)
         }
         
         
@@ -300,7 +344,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         arrowImageView.image = UIImage(named: "next_arrow")
         signMeUpButton!.addSubview(arrowImageView)
         
-        signMeUpButton!.transform = CGAffineTransformMakeTranslation(0, 55)
+        //signMeUpButton!.transform = CGAffineTransformMakeTranslation(0, 55)
         
         //Set Layout collection view
         //Collection View Layout
@@ -319,7 +363,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         collectionView!.showsHorizontalScrollIndicator = false
         collectionView!.showsVerticalScrollIndicator = false
         collectionView!.bounces = false
-        
+        collectionView!.scrollEnabled = false
+
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -330,7 +375,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     // MARK : Collection View DataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return 1
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {

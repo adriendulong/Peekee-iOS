@@ -1,6 +1,6 @@
 /* 
   Localizable.strings
-  Peekee
+  Pleek
 
   Created by Adrien Dulong on 17/01/2015.
   Copyright (c) 2015 PikiChat. All rights reserved.
@@ -46,8 +46,8 @@
 "Let's GO!" = "Hadi BAŞLA!";
 
 // MARK: Tuto Overlay
-"Find more friends to get more Peekees" = "Daha fazla Peekee almak için daha çok arkadaş bul";
-"This is a PEEKEE 🍩" = "Bu bir PEEKEE 🍩";
+"Find more friends to get more Pleeks" = "Daha fazla Pleeks almak için daha çok arkadaş bul";
+"This is a PLEEK 🍩" = "Bu bir PLEEK 🍩";
 "Add your own reaction" = "Kendi reaksiyonunu ekle";
 "This is a reaction 🎉" = "Bu bir reaksiyon 🎉";
 
@@ -58,45 +58,45 @@
 "Don't miss the next pictures from your friends 😁" = "Sonraki resimleri arkadaşlarından kaçırma 😁";
 
 // MARK: Main Menu
-"Peekee" = "Peekee";
+"Pleek" = "Pleek";
 "NEW" = "YENİ";
 "HIDE" = "GİZLE";
 "DELETE" = "SİL";
-"Are you sure you want to delete this Peekee? There is no way to get back then." = "Bu Peekee'yi silmek istediğinden emin misin? Geri getirmenin bir yolu yok.";
+"Are you sure you want to delete this Pleek? There is no way to get back then." = "Bu Pleek'yi silmek istediğinden emin misin? Geri getirmenin bir yolu yok.";
 
 // MARK: Find Friends
 "%d FRIENDS" = "%d ARKADAŞLAR";
 "Search a user" = "Kullanıcı ara";
 "FIND" = "BUL";
 "FRIENDS" = "ARKADAŞLAR";
-"FRIENDS ON PEEKEE" = "PEEKEE'DEKİ ARKADAŞLAR";
-"FRIENDS NOT YET ON PEEKEE" = "HENÜZ PEEKEE'DE OLMAYAN ARKADAŞLAR";
+"FRIENDS ON PLEEK" = "PLEEK'DEKİ ARKADAŞLAR";
+"FRIENDS NOT YET ON PLEEK" = "HENÜZ PLEEK'DE OLMAYAN ARKADAŞLAR";
 "SendInvitSMS" = "SendInvitSMS";
 "LOOKING FOR FRIENDS" = "ARKADAŞLAR ARANIYOR";
 
-// MARK: Peekee View
+// MARK: Pleek View
 "%d friends" = "%d arkadaşlar";
 "%d friend" = "%d arkadaş";
 "More" = "Daha fazla";
-"More actions for this Peekee" = "Bu Peekee için daha fazla işlem";
-"Report this Peekee" = "Bu Peekee'yi raporla";
+"More actions for this Pleek" = "Bu Pleek için daha fazla işlem";
+"Report this Pleek" = "Bu Pleek'yi raporla";
 "ADD A FRIEND" = "ARKADAŞ EKLE";
 "MUTE THIS FRIEND" = "BU ARKADAŞI SUSTUR";
 "UNMUTE THIS USER" = "BU KULLANICIYI KONUŞTUR";
 "To %d people" = "To %d kişi";
-"Problem while reporting this Peekee. Please try again later" = "Peekee raporlanırken bir sorun oluştu. Lütfen daha sonra tekrar deneyin";
-"This Peekee has been reported. Thank you." = "Bu Peekee raporlandı. Teşekkür ederiz.";
+"Problem while reporting this Pleek. Please try again later" = "Pleek raporlanırken bir sorun oluştu. Lütfen daha sonra tekrar deneyin";
+"This Pleek has been reported. Thank you." = "Bu Pleek raporlandı. Teşekkür ederiz.";
 "DELETE" = "SİL";
 "REPORT" = "RAPORLA";
 
 // MARK: MOZAIC
 "SEND" = "GÖNDER";
-"%@ on Peekee" = "%@ Peekee'de";
+"%@ on Pleek" = "%@ Pleek'de";
 "%d+ replies on the app" = "uygulamada %d+ cevap var";
 "Share" = "Paylaş";
-"AlertNotEnoughReact" = "Üzgünüm, ancak mozaiğinizi oluşturmak için bu Peekee'de en az 6 cevabınız olmalı! Kendi mozaiğinizi oluşturmak için kendinize birkaç cevap göndermeyi deneyin!";
+"AlertNotEnoughReact" = "Üzgünüm, ancak mozaiğinizi oluşturmak için bu Pleek'de en az 6 cevabınız olmalı! Kendi mozaiğinizi oluşturmak için kendinize birkaç cevap göndermeyi deneyin!";
 
-// MARK: New Peekee
+// MARK: New Pleek
 "Search" = "Ara";
 "Send to..." = "Kişisine gönder...";
 "RECENT" = "EN SON";
@@ -104,7 +104,7 @@
 "SEND TO EVERYONE" = "HERKESE GÖNDER";
 "EVERYONE" = "HERKES";
 "SELECTED" = "SEÇİLİ";
-"We had a problem while sending your Peekee, please try again later" = "Peekee'nizi gönderirken bir sorun oluştu, lütfen daha sonra tekrar deneyin";
+"We had a problem while sending your Pleek, please try again later" = "Pleek'nizi gönderirken bir sorun oluştu, lütfen daha sonra tekrar deneyin";
 "%d SELECTED" = "%d SEÇİLİ";
 
 // MARK: Settings
@@ -133,7 +133,7 @@
 
 // MARK: Add Friends First
 "Add your friends! 👫" = "Arkadaşlarını ekle! 👫";
-"Choose at least your 5 best friends. We'll keep you posted when they join the app!" = "En az %d en yakın arkadaşını seç. Uygulamaya katıldıklarında sana haber vereceğiz!";
+"Choose at least your %d best friends. We'll keep you posted when they join the app!" = "En az %d en yakın arkadaşını seç. Uygulamaya katıldıklarında sana haber vereceğiz!";
 "ON THE APP" = "UYGULAMADA";
 "ON YOUR PHONE CONTACTS" = "TELEFON KİŞİLERİNDE";
 "ALL" = "TÜMÜ";
@@ -145,7 +145,7 @@
 "Confirmation" = "Onay";
 "Are you sure you want to invite all your contacts?" = "Tüm kişilerini davet etmek istediğinden emin misin?";
 "Friends" = "Arkadaşlar";
-"Still %d to go! You need them to enjoy Peekee!" = "Hala %d süre var! Onları Peekee ile eğlendirmen gerek!";
+"Still %d to go! You need them to enjoy Pleek!" = "Hala %d süre var! Onları Pleek ile eğlendirmen gerek!";
 
 // MARK: V1.01
 "From" = "From";

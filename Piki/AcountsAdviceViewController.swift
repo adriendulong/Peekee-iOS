@@ -1,6 +1,6 @@
 //
 //  AcountsAdviceViewController.swift
-//  Peekee
+//  Pleek
 //
 //  Created by Adrien Dulong on 07/01/2015.
 //  Copyright (c) 2015 PikiChat. All rights reserved.

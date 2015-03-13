@@ -261,10 +261,20 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
             if error != nil {
                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                 
-                var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-                    message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                if Utils().iOS8{
+                    var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                else{
+                    var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"),
+                        delegate: nil,
+                        cancelButtonTitle: "Ok")
+                    alertView.show()
+                }
+                
             }
             else{
                 var userInfos:PFObject = PFObject(className: "UserInfos")
@@ -316,10 +326,21 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                     }
                     else{
                         user.saveEventually()
-                        var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-                            message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        
+                        if Utils().iOS8{
+                            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
+                                message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
+                        }
+                        else{
+                            var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
+                                message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"),
+                                delegate: nil,
+                                cancelButtonTitle: "Ok")
+                            alertView.show()
+                        }
+                        
                     }
                     
                     
@@ -365,7 +386,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
     
     func openTerms(){
         
-        UIApplication.sharedApplication().openURL(NSURL(string: "http://peekeeapp.com/terms")!)
+        UIApplication.sharedApplication().openURL(NSURL(string: "http://pleekapp.com/terms")!)
         
     }
     

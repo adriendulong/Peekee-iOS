@@ -10,7 +10,7 @@ import Foundation
 import Social
 
 
-class MainViewController : UIViewController, UIScrollViewDelegate, PikiControllerProtocol, TakePhotoProtocol, UITableViewDelegate, UITableViewDataSource, InboxCellProtocol, SearchFriendsProtocol{
+class MainViewController : UIViewController, UIScrollViewDelegate, PikiControllerProtocol, TakePhotoProtocol, UITableViewDelegate, UITableViewDataSource, InboxCellProtocol, SearchFriendsProtocol, TutoProtocol, UIAlertViewDelegate{
     
     //Graphic element form the grid view
     var refreshControl:UIRefreshControl = UIRefreshControl()
@@ -45,9 +45,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     
     var overlayTutoView:UIView?
     
-    //HIDE or DELETE Peekee
+    //HIDE or DELETE Pleek
     var pikiToDelete:PFObject?
     var positionPeekeeToDelete:Int?
+    
+    var popUpShowTuto:UIView?
+    var showTutoFirst:Bool = false
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -77,7 +80,11 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                     
                     if !(PFUser.currentUser()["hasShownOverlayMenu"] as Bool){
                         showTutoOverlay()
+                        self.showTutoFirst = true
+                        askShowTutoVideo()
                     }
+                    
+                    
                 }
                 else{
                     showTutoOverlay()
@@ -88,14 +95,17 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             self.performSegueWithIdentifier("showRecommended", sender: self)
         }
         
-        
-        
        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("getPikis"), name: "reloadPikis", object: nil)
+        
+        
+        if Utils().iOS7{
+            self.tableView.frame = CGRect(x: 0, y: self.tableView.frame.origin.y - 20, width: self.tableView.frame.width, height: self.tableView.frame.height)
+        }
         
         self.setNeedsStatusBarAppearanceUpdate()
         
@@ -141,9 +151,13 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         
         var tapGestureParrot = UITapGestureRecognizer(target: self, action: Selector("shareTwitter"))
+        var tapGestureParrotSimple = UITapGestureRecognizer(target: self, action: Selector("showVideo"))
+        tapGestureParrot.numberOfTapsRequired = 2
+        tapGestureParrotSimple.requireGestureRecognizerToFail(tapGestureParrot)
         let parrotView:UIView = UIView(frame: CGRect(x: 15, y: 0, width: 90, height: topBarView.frame.height))
         parrotView.backgroundColor = UIColor.clearColor()
         parrotView.addGestureRecognizer(tapGestureParrot)
+        parrotView.addGestureRecognizer(tapGestureParrotSimple)
         topBarView.addSubview(parrotView)
         
         let parrotImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 34, height: parrotView.frame.height))
@@ -153,7 +167,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         //var tapGestureParrotLabel = UITapGestureRecognizer(target: self, action: Selector("shareTwitter"))
         let pikiLabel:UILabel = UILabel(frame: CGRect(x: parrotImageView.frame.width + 15, y: 0, width: 80, height: parrotView.frame.height))
-        pikiLabel.text = NSLocalizedString("Peekee", comment : "Peekee")
+        pikiLabel.text = NSLocalizedString("Pleek", comment : "Pleek")
         pikiLabel.textColor = UIColor.whiteColor()
         //pikiLabel.addGestureRecognizer(tapGestureParrotLabel)
         pikiLabel.userInteractionEnabled = false
@@ -281,6 +295,16 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             }
             
             
+            
+        }
+        else if segue.identifier == "showVideoTuto"{
+            var tutController: TutoVideoViewController = segue.destinationViewController as TutoVideoViewController
+            tutController.delegate = self
+            
+            if showTutoFirst {
+                self.showTutoFirst = false
+                tutController.firstTimePlay = true
+            }
             
         }
         
@@ -782,78 +806,91 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     // MARK: Inbox Cell Protocol
     
     func deletePiki(cell: inboxTableViewCell) {
-        var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to delete this Peekee? There is no way to get back then.", comment : "Are you sure you want to delete this Peekee? There is no way to get back then."), preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-            self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-        }))
-        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-            println("Yes")
+        
+        if Utils().iOS8{
+            var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+            }))
+            alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                println("Yes")
+                
+                //Delete or Hide
+                let userPiki:PFUser = self.pikiToDelete!["user"] as PFUser
+                
+                //Delete
+                if userPiki.objectId == (PFUser.currentUser() as PFUser).objectId{
+                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
+                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
+                            if error != nil {
+                                
+                                let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
+                                    delegate: nil, cancelButtonTitle: "OK")
+                                alert.show()
+                                
+                                println("Error : \(error.localizedDescription)")
+                                
+                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                            }
+                            else{
+                                
+                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
+                                
+                                var requestPiki:PFQuery = PFQuery(className: "Piki")
+                                requestPiki.orderByDescending("lastUpdate")
+                                requestPiki.includeKey("user")
+                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
+                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
+                                
+                                requestPiki.findObjectsInBackground()
+                                
+                            }
+                    })
+                }
+                    //Hide
+                else{
+                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
+                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
+                            if error != nil {
+                                
+                                let alert = UIAlertView(title: "Error", message: "Problem while hiding this Pleek. Please try again later.",
+                                    delegate: nil, cancelButtonTitle: "OK")
+                                alert.show()
+                                
+                                println("Error : \(error.localizedDescription)")
+                                
+                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                            }
+                            else{
+                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
+                                
+                                var requestPiki:PFQuery = PFQuery(className: "Piki")
+                                requestPiki.orderByDescending("lastUpdate")
+                                requestPiki.includeKey("user")
+                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
+                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
+                                
+                                requestPiki.findObjectsInBackground()
+                                
+                            }
+                    })
+                }
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else{
+            var alertView = UIAlertView(title: "Confirmation",
+                message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."),
+                delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
+                otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
             
-            //Delete or Hide
-            let userPiki:PFUser = self.pikiToDelete!["user"] as PFUser
-            
-            //Delete
-            if userPiki.objectId == (PFUser.currentUser() as PFUser).objectId{
-                PFCloud.callFunctionInBackground("hideOrRemovePiki",
-                    withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
-                        if error != nil {
-                            
-                            let alert = UIAlertView(title: "Error", message: "Problem while deleting this Peekee. Please try again later.",
-                                delegate: nil, cancelButtonTitle: "OK")
-                            alert.show()
-                            
-                            println("Error : \(error.localizedDescription)")
-                            
-                            self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-                            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-                        }
-                        else{
-                            
-                            let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                            
-                            var requestPiki:PFQuery = PFQuery(className: "Piki")
-                            requestPiki.orderByDescending("lastUpdate")
-                            requestPiki.includeKey("user")
-                            requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-                            requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
-                            
-                            requestPiki.findObjectsInBackground()
-                            
-                        }
-                })
-            }
-            //Hide
-            else{
-                PFCloud.callFunctionInBackground("hideOrRemovePiki",
-                    withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
-                        if error != nil {
-                            
-                            let alert = UIAlertView(title: "Error", message: "Problem while hiding this Peekee. Please try again later.",
-                                delegate: nil, cancelButtonTitle: "OK")
-                            alert.show()
-                            
-                            println("Error : \(error.localizedDescription)")
-                            
-                            self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-                            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-                        }
-                        else{
-                            let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                            
-                            var requestPiki:PFQuery = PFQuery(className: "Piki")
-                            requestPiki.orderByDescending("lastUpdate")
-                            requestPiki.includeKey("user")
-                            requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-                            requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
-                            
-                            requestPiki.findObjectsInBackground()
-                            
-                        }
-                })
-            }
-        }))
-        self.presentViewController(alert, animated: true, completion: nil)
+            alertView.tag = 1
+            alertView.show()
+        }
+
         
         var indexPath:NSIndexPath = self.tableView.indexPathForCell(cell)!
         
@@ -1223,7 +1260,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             labelTutoFriends.adjustsFontSizeToFitWidth = true
             labelTutoFriends.font = UIFont(name: Utils().customGothamBol, size: 24.0)
             labelTutoFriends.textColor = UIColor.whiteColor()
-            labelTutoFriends.text = NSLocalizedString("Find more friends to get more Peekees", comment : "Find more friends to get more Peekees")
+            labelTutoFriends.text = NSLocalizedString("Find more friends to get more Pleeks", comment : "Find more friends to get more Pleeks")
             overlayTutoView!.addSubview(labelTutoFriends)
             
             let labelTutoPeekee = UILabel(frame: CGRect(x: linePeekee.frame.origin.x + linePeekee.frame.width + 5, y: linePeekee.frame.origin.y + 30, width: self.view.frame.width - (linePeekee.frame.origin.x + linePeekee.frame.width + 5), height: 22))
@@ -1231,7 +1268,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             labelTutoPeekee.font = UIFont(name: Utils().customGothamBol, size: 24.0)
             labelTutoPeekee.textColor = UIColor.whiteColor()
             labelTutoPeekee.adjustsFontSizeToFitWidth = true
-            labelTutoPeekee.text = NSLocalizedString("This is a PEEKEE 🍩", comment : "This is a PEEKEE 🍩") 
+            labelTutoPeekee.text = NSLocalizedString("This is a PLEEK 🍩", comment : "This is a PLEEK 🍩")
             overlayTutoView!.addSubview(labelTutoPeekee)
             
             let labelSplash = UILabel(frame: CGRect(x: labelTutoFriends.frame.origin.x + labelTutoFriends.frame.width - 10, y: labelTutoFriends.center.y - 10, width: 30, height: 30))
@@ -1266,7 +1303,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             
             var composer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
 
-            composer.setInitialText("Hey @Peekeeapp I just clicked on your awesome icon! #itouchedpeekee")
+            composer.setInitialText("Hey @Pleekapp I just clicked on your awesome icon! #itouchedpleek")
             composer.addURL(NSURL(string: Utils().websiteUrl))
             
             var imageToShare:UIImage? = Utils().getShareUsernameImage()
@@ -1311,46 +1348,348 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     
     
     func setName(){
-        
-        var alert = UIAlertController(title: NSLocalizedString("Edit your name", comment : "Edit your name"), message: NSLocalizedString("To help your friend to find you please set your real name.", comment : "To help your friend to find you please set your real name."), preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addTextFieldWithConfigurationHandler { (textfield : UITextField!) -> Void in
-            textfield.placeholder =  NSLocalizedString("Your real name", comment : "Your real name")
-        }
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment : "Cancel"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-            
-            var alertLater = UIAlertController(title: NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), preferredStyle: UIAlertControllerStyle.Alert)
-            alertLater.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
-            self.presentViewController(alertLater, animated: true, completion: nil)
-            
-        }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-            
-            var realName:String = (alert.textFields!.first! as UITextField).text
-            
-            if countElements(realName) > 3 && countElements(realName) < 30{
-                PFUser.currentUser()["name"] = realName
-                PFUser.currentUser().saveEventually()
-                
-                Mixpanel.sharedInstance().people.set(["Name" : realName])
+        if Utils().iOS8{
+            var alert = UIAlertController(title: NSLocalizedString("Edit your name", comment : "Edit your name"), message: NSLocalizedString("To help your friend to find you please set your real name.", comment : "To help your friend to find you please set your real name."), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addTextFieldWithConfigurationHandler { (textfield : UITextField!) -> Void in
+                textfield.placeholder =  NSLocalizedString("Your real name", comment : "Your real name")
+            }
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment : "Cancel"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
                 
                 var alertLater = UIAlertController(title: NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), preferredStyle: UIAlertControllerStyle.Alert)
                 alertLater.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
                 self.presentViewController(alertLater, animated: true, completion: nil)
-            }
-            else{
-                var alertProblem = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Your real name must have at least 3 characters and can have 30 characters max.", comment : "Your real name must have at least 3 characters and can have 30 characters max."), preferredStyle: UIAlertControllerStyle.Alert)
-                alertProblem.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-                    self.presentViewController(alert, animated: true, completion: nil)
-                }))
-                self.presentViewController(alertProblem, animated: true, completion: nil)
-            }
-            
-            
-            
-            
-        }))
-        self.presentViewController(alert, animated: true, completion: nil)
+                
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                
+                var realName:String = (alert.textFields!.first! as UITextField).text
+                
+                if countElements(realName) > 3 && countElements(realName) < 30{
+                    PFUser.currentUser()["name"] = realName
+                    PFUser.currentUser().saveEventually()
+                    
+                    Mixpanel.sharedInstance().people.set(["Name" : realName])
+                    
+                    var alertLater = UIAlertController(title: NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), preferredStyle: UIAlertControllerStyle.Alert)
+                    alertLater.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+                    self.presentViewController(alertLater, animated: true, completion: nil)
+                }
+                else{
+                    var alertProblem = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Your real name must have at least 3 characters and can have 30 characters max.", comment : "Your real name must have at least 3 characters and can have 30 characters max."), preferredStyle: UIAlertControllerStyle.Alert)
+                    alertProblem.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+                        self.presentViewController(alert, animated: true, completion: nil)
+                    }))
+                    self.presentViewController(alertProblem, animated: true, completion: nil)
+                }
+                
+                
+                
+                
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else{
+            var alertView = UIAlertView(title:  "Real Name",
+                message: "To help your friends to find you please set your real name in the settings of the app.",
+                delegate: self, cancelButtonTitle: NSLocalizedString("Cancel", comment : "Cancel"),
+                otherButtonTitles: NSLocalizedString("Ok", comment : "Ok"))
+            alertView.alertViewStyle = UIAlertViewStyle.PlainTextInput
+            alertView.tag = 2
+            alertView.show()
+        }
+        
         
     }
+    
+    
+    func testMuteAll(){
+        
+        PFCloud.callFunctionInBackground("callMuteAll", withParameters: ["test" : "rien"])
+    }
+    
+    
+    //MARK : Tuto Video
+    
+    func showVideo(){
+        self.performSegueWithIdentifier("showVideoTuto", sender: self)
+    }
+    
+    func askShowTutoVideo(){
+        
+        if overlayView == nil {
+            let tapGestureLeavePopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUpTuto"))
+            overlayView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            overlayView!.backgroundColor = UIColor.blackColor()
+            overlayView!.alpha = 0.0
+            overlayView!.addGestureRecognizer(tapGestureLeavePopUp)
+            self.view.addSubview(overlayView!)
+        }
+        
+        if popUpShowTuto == nil {
+            
+            
+            
+            popUpShowTuto = UIView(frame: CGRect(x: 0, y: 0, width: 240, height: 284))
+            popUpShowTuto!.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
+            popUpShowTuto!.center = self.view.center
+            popUpShowTuto!.layer.cornerRadius = 5
+            popUpShowTuto!.clipsToBounds = true
+            self.view.addSubview(popUpShowTuto!)
+            
+            //let header
+            let header:UIView = UIView(frame: CGRect(x: 0, y: 0, width: popUpShowTuto!.frame.width, height: 48))
+            header.backgroundColor = Utils().secondColor
+            popUpShowTuto!.addSubview(header)
+            
+            let labelBigTime:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: header.frame.width, height: header.frame.height))
+            labelBigTime.textAlignment = NSTextAlignment.Center
+            labelBigTime.font = UIFont(name: Utils().customFontSemiBold, size: 22)
+            labelBigTime.textColor = UIColor.whiteColor()
+            labelBigTime.text = NSLocalizedString("SOME HELP?!", comment : "SOME HELP?!")
+            labelBigTime.tag = 12
+            header.addSubview(labelBigTime)
+            
+            let dividerHorizontal:UIView = UIView(frame: CGRect(x: 0, y: 226, width: popUpShowTuto!.frame.width, height: 1))
+            dividerHorizontal.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            popUpShowTuto!.addSubview(dividerHorizontal)
+            
+            let dividerVertical:UIView = UIView(frame: CGRect(x: popUpShowTuto!.frame.width/2, y: 226, width: 1, height: popUpShowTuto!.frame.height - 226))
+            dividerVertical.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            popUpShowTuto!.addSubview(dividerVertical)
+            
+            let tapGestureQuitPopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUpTuto"))
+            let quitImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 226, width: popUpShowTuto!.frame.width/2, height: popUpShowTuto!.frame.height - 226))
+            quitImageView.contentMode = UIViewContentMode.Center
+            quitImageView.userInteractionEnabled = true
+            quitImageView.image = UIImage(named: "close_popup_icon")
+            quitImageView.addGestureRecognizer(tapGestureQuitPopUp)
+            popUpShowTuto!.addSubview(quitImageView)
+            
+            let unlockFriendsIcon:UIImageView = UIImageView(frame: CGRect(x: 0, y: 78, width: popUpShowTuto!.frame.width, height: 34))
+            unlockFriendsIcon.contentMode = UIViewContentMode.Center
+            unlockFriendsIcon.image = UIImage(named: "unlock_friends_icon")
+            //popUpShowTuto!.addSubview(unlockFriendsIcon)
+            
+            let tvLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 78, width: popUpShowTuto!.frame.width, height: 40))
+            tvLabel.font = UIFont(name: Utils().customFontSemiBold, size: 45)
+            tvLabel.textAlignment = NSTextAlignment.Center
+            tvLabel.text = "📺"
+            popUpShowTuto!.addSubview(tvLabel)
+            
+            
+            let validateAction:UIButton = UIButton(frame: CGRect(x: popUpShowTuto!.frame.width/2, y: 226, width: popUpShowTuto!.frame.width/2, height: popUpShowTuto!.frame.height - 226))
+            validateAction.addTarget(self, action: Selector("leavePopUpTutoShowVideo"), forControlEvents: UIControlEvents.TouchUpInside)
+            validateAction.setImage(UIImage(named: "validate_pop_up"), forState: UIControlState.Normal)
+            popUpShowTuto!.addSubview(validateAction)
+            
+            let labelPopUp:UILabel = UILabel(frame: CGRect(x: 18, y: 136, width: popUpShowTuto!.frame.width - 36, height: 70))
+            labelPopUp.numberOfLines = 3
+            labelPopUp.textAlignment = NSTextAlignment.Center
+            labelPopUp.adjustsFontSizeToFitWidth = true
+            labelPopUp.font = UIFont(name: Utils().customFontNormal, size: 24.0)
+            labelPopUp.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            labelPopUp.text = NSLocalizedString("Do you want to watch a simple video to understand Pleek?", comment : "Do you want to watch a simple video to understand Pleek?")
+            popUpShowTuto!.addSubview(labelPopUp)
+            
+            
+        }
+        
+        self.overlayView!.hidden = false
+        self.popUpShowTuto!.transform =  CGAffineTransformMakeScale(0, 0)
+        
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            options: nil,
+            animations: { () -> Void in
+                self.overlayView!.alpha = 0.5
+                self.popUpShowTuto!.transform = CGAffineTransformIdentity
+            }) { (finisehd) -> Void in
+                
+        }
+        
+        
+    }
+    
+    func leavePopUpTuto(){
+        
+        UIView.animateWithDuration(0.1,
+            animations: { () -> Void in
+                self.overlayView!.alpha = 0
+                self.popUpShowTuto!.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                
+                
+            }) { (finished) -> Void in
+                self.popUpShowTuto!.transform =  CGAffineTransformMakeScale(0, 0)
+                self.popUpShowTuto!.removeFromSuperview()
+                self.popUpShowTuto = nil
+                self.overlayView!.removeFromSuperview()
+                self.overlayView = nil
+                
+                
+                let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
+                    delegate: nil, cancelButtonTitle: "Ok")
+                alert.show()
+        }
+        
+    }
+    
+    
+    func leavePopUpTutoShowVideo(){
+        
+        UIView.animateWithDuration(0.1,
+            animations: { () -> Void in
+                self.overlayView!.alpha = 0
+                self.popUpShowTuto!.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                
+                
+            }) { (finished) -> Void in
+                self.popUpShowTuto!.transform =  CGAffineTransformMakeScale(0, 0)
+                self.popUpShowTuto!.removeFromSuperview()
+                self.popUpShowTuto = nil
+                self.overlayView!.removeFromSuperview()
+                self.overlayView = nil
+                
+                self.showVideo()
+                
+        }
+        
+    }
+    
+    func letsSayWhereVideo(){
+        let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
+            delegate: nil, cancelButtonTitle: "Ok")
+        alert.show()
+    }
+    
+    
+    
+    // MARK : Alert View Delegate
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if alertView.tag == 1{
+            
+            // No Remove
+            if buttonIndex == 0{
+                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+            }
+            //REmove
+            else{
+                //Delete or Hide
+                let userPiki:PFUser = self.pikiToDelete!["user"] as PFUser
+                
+                //Delete
+                if userPiki.objectId == (PFUser.currentUser() as PFUser).objectId{
+                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
+                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
+                            if error != nil {
+                                
+                                let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
+                                    delegate: nil, cancelButtonTitle: "OK")
+                                alert.show()
+                                
+                                println("Error : \(error.localizedDescription)")
+                                
+                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                            }
+                            else{
+                                
+                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
+                                
+                                var requestPiki:PFQuery = PFQuery(className: "Piki")
+                                requestPiki.orderByDescending("lastUpdate")
+                                requestPiki.includeKey("user")
+                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
+                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
+                                
+                                requestPiki.findObjectsInBackground()
+                                
+                            }
+                    })
+                }
+                    //Hide
+                else{
+                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
+                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
+                            if error != nil {
+                                
+                                let alert = UIAlertView(title: "Error", message: "Problem while hiding this Pleek. Please try again later.",
+                                    delegate: nil, cancelButtonTitle: "OK")
+                                alert.show()
+                                
+                                println("Error : \(error.localizedDescription)")
+                                
+                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                            }
+                            else{
+                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
+                                
+                                var requestPiki:PFQuery = PFQuery(className: "Piki")
+                                requestPiki.orderByDescending("lastUpdate")
+                                requestPiki.includeKey("user")
+                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
+                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
+                                
+                                requestPiki.findObjectsInBackground()
+                                
+                            }
+                    })
+                }
+            }
+            
+            println("Button Index : \(buttonIndex)")
+            
+        }
+        else if alertView.tag == 2{
+            if buttonIndex == 1{
+                var textField:UITextField = alertView.textFieldAtIndex(0)!
+                println("Text field text : \(textField.text)")
+                
+                var realName:String = textField.text
+                
+                if countElements(realName) > 3 && countElements(realName) < 30{
+                    PFUser.currentUser()["name"] = realName
+                    PFUser.currentUser().saveEventually()
+                    
+                    Mixpanel.sharedInstance().people.set(["Name" : realName])
+                    
+                    var alertView = UIAlertView(title:  NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), delegate: nil, cancelButtonTitle:  NSLocalizedString("Ok", comment : "Ok"))
+                    
+                    alertView.show()
+                }
+                else{
+                    
+                    var alertView = UIAlertView(title:  NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("Your real name must have at least 3 characters and can have 30 characters max.", comment : "Your real name must have at least 3 characters and can have 30 characters max."),
+                        delegate: self, cancelButtonTitle:NSLocalizedString("Ok", comment : "Ok"))
+                    alertView.tag = 3
+                    alertView.show()
+                    
+                }
+            }
+            else{
+                
+                var alertView = UIAlertView(title:  NSLocalizedString("Later", comment : "Later"), message: NSLocalizedString("If you want to change your name anytime later go to the settings from the friends screen.", comment : "If you want to change your name anytime later go to the settings from the friends screen."), delegate: nil, cancelButtonTitle:  NSLocalizedString("Ok", comment : "Ok"))
+                
+                alertView.show()
+            }
+            
+        }
+        
+        else if alertView.tag == 3{
+            var alertView = UIAlertView(title:  "Real Name",
+                message: "To help your friends to find you please set your real name in the settings of the app.",
+                delegate: self, cancelButtonTitle: NSLocalizedString("Cancel", comment : "Cancel"),
+                otherButtonTitles: NSLocalizedString("Ok", comment : "Ok"))
+            alertView.alertViewStyle = UIAlertViewStyle.PlainTextInput
+            alertView.tag = 2
+            alertView.show()
+        }
+    }
+    
+    
+    
     
 }

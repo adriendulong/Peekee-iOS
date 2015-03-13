@@ -18,6 +18,7 @@ protocol ReactsCellProtocol {
     func cellBigger(cell : ReactsCollectionViewCell)
     func cellSmaller(cell : ReactsCollectionViewCell)
     func removeReact(cell: ReactsCollectionViewCell)
+    func shareOneVsOne(react : PFObject)
 }
 
 class insideReactCell : UICollectionViewCell{
@@ -117,10 +118,15 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     var mainPeekee:PFObject!
     var isInBigMode:Bool = false
     
-    var addFriendsView:UIView!
-    var moreInfosIconeUserImageView:UIImageView?
-    var moreInfosUsernameLabel:UILabel?
-    var moreInfosUserAdd:UILabel?
+    var moreInfosView:UIView!
+    
+    var moreInfosAddUserView:UIView?
+    var moreInfosPreviewView:UIView?
+    var moreInfosIconAdd:UIImageView?
+    var moreInfosIconPreview:UIImageView?
+    var moreInfosLabelAdd:UILabel?
+    var moreInfosLabelPreview:UILabel?
+    var separatorMoreInfos:UIView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -185,7 +191,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         
         backgoundOverlayView = UIView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
         backgoundOverlayView!.backgroundColor = UIColor.blackColor()
-        backgoundOverlayView!.alpha = 0.4
+        backgoundOverlayView!.alpha = 0.3
         overlayCameraView.addSubview(backgoundOverlayView!)
         
         emojiImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
@@ -265,11 +271,9 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         readVideoImageView.contentMode = UIViewContentMode.Center
         contentView.addSubview(readVideoImageView)
         
-        var addGestureFriends = UITapGestureRecognizer(target: self, action: Selector("addFriends"))
-        addFriendsView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        addFriendsView.backgroundColor = Utils().secondColor
-        addFriendsView.addGestureRecognizer(addGestureFriends)
-        contentView.addSubview(addFriendsView)
+        moreInfosView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        moreInfosView.backgroundColor = UIColor(red: 34/255, green: 33/255, blue: 37/255, alpha: 1.0)
+        contentView.addSubview(moreInfosView)
         
         
         
@@ -663,12 +667,17 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
                         
                         dispatch_async(dispatch_get_main_queue(), { ()->() in
                             
-                            self.loadIndicator!.hidden = true
                             
-                            self.playerLayer.player = player
-                            self.playerView.hidden = false
-                            self.readVideoImageView.hidden = true
-                            player.play()
+                            if (self.delegate as PikiViewController).isViewLoaded() && ((self.delegate as PikiViewController).view.window != nil) {
+                                self.loadIndicator!.hidden = true
+                                
+                                self.playerLayer.player = player
+                                self.playerView.hidden = false
+                                self.readVideoImageView.hidden = true
+                                player.play()
+                            }
+                            
+                            
                         })
                     }
                     
@@ -917,67 +926,98 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         }
     }
     
+    func seePreview(){
+        
+        if react != nil{
+            if react!["user"] != nil{
+                self.delegate!.shareOneVsOne(react!)
+            }
+            
+        }
+        
+    }
+    
     
     func showMoreInfos(){
         
         let reactUser:PFUser = self.react!["user"] as PFUser
         
-        if moreInfosIconeUserImageView == nil{
-            moreInfosIconeUserImageView = UIImageView(frame: CGRectMake(0, 0, addFriendsView.frame.width, 60))
-            moreInfosIconeUserImageView!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2)
-            moreInfosIconeUserImageView!.contentMode = UIViewContentMode.Center
-            moreInfosIconeUserImageView!.image = UIImage(named: "people_icon")
-            addFriendsView.addSubview(moreInfosIconeUserImageView!)
+        if moreInfosAddUserView == nil{
+            var tapGestureMoreFriends:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("addFriends"))
+            
+            moreInfosAddUserView = UIView(frame: CGRect(x: 0, y: 0, width: moreInfosView.frame.width, height: moreInfosView.frame.width))
+            moreInfosAddUserView!.backgroundColor = UIColor.clearColor()
+            moreInfosAddUserView!.addGestureRecognizer(tapGestureMoreFriends)
+            moreInfosView.addSubview(moreInfosAddUserView!)
+            
+            moreInfosIconAdd = UIImageView(frame: CGRect(x: 0, y: moreInfosAddUserView!.frame.height/3, width: moreInfosAddUserView!.frame.width, height: 30))
+            moreInfosIconAdd!.contentMode = UIViewContentMode.Center
+            moreInfosIconAdd!.image = UIImage(named: "add_icon_big_react")
+            moreInfosAddUserView!.addSubview(moreInfosIconAdd!)
+            
+            moreInfosLabelAdd = UILabel(frame: CGRect(x: 0, y: 0, width: moreInfosAddUserView!.frame.width, height: 30))
+            moreInfosLabelAdd!.center = CGPoint(x: moreInfosAddUserView!.frame.width/2, y: moreInfosAddUserView!.frame.height/3 * 2)
+            moreInfosLabelAdd!.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
+            moreInfosLabelAdd!.textColor = UIColor.whiteColor()
+            moreInfosLabelAdd!.adjustsFontSizeToFitWidth = true
+            moreInfosLabelAdd!.textAlignment = NSTextAlignment.Center
+            moreInfosAddUserView!.addSubview(moreInfosLabelAdd!)
+            
         }
         else{
-            moreInfosIconeUserImageView!.frame = CGRectMake(0, 0, addFriendsView.frame.width, 60)
-            moreInfosIconeUserImageView!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2)
+            moreInfosAddUserView!.frame = CGRect(x: 0, y: 0, width: moreInfosView.frame.width, height: moreInfosView.frame.width)
+            moreInfosIconAdd!.frame = CGRect(x: 0, y: moreInfosAddUserView!.frame.height/3, width: moreInfosAddUserView!.frame.width, height: 30)
+            moreInfosLabelAdd!.center = CGPoint(x: moreInfosAddUserView!.frame.width/2, y: moreInfosAddUserView!.frame.height/3 * 2)
         }
         
+        moreInfosLabelAdd!.text = "@\(reactUser.username)"
         
-        if moreInfosUsernameLabel == nil{
-            moreInfosUsernameLabel = UILabel(frame: CGRectMake(0, 0, addFriendsView.frame.width, 30))
-            moreInfosUsernameLabel!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 + 30)
-            moreInfosUsernameLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
-            moreInfosUsernameLabel!.textColor = UIColor.whiteColor()
-            moreInfosUsernameLabel!.adjustsFontSizeToFitWidth = true
-            moreInfosUsernameLabel!.textAlignment = NSTextAlignment.Center
-            moreInfosUsernameLabel!.text = "@\(reactUser.username)"
-            addFriendsView.addSubview(moreInfosUsernameLabel!)
+        if moreInfosPreviewView == nil{
+            var tapGestureMorePreview:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("seePreview"))
+            
+            moreInfosPreviewView = UIView(frame: CGRect(x: 0, y: moreInfosView.frame.width, width: moreInfosView.frame.width, height: moreInfosView.frame.width))
+            moreInfosPreviewView!.backgroundColor = UIColor.clearColor()
+            moreInfosPreviewView!.addGestureRecognizer(tapGestureMorePreview)
+            moreInfosView.addSubview(moreInfosPreviewView!)
+            
+            moreInfosIconPreview = UIImageView(frame: CGRect(x: 0, y: moreInfosPreviewView!.frame.height/3, width: moreInfosPreviewView!.frame.width, height: 30))
+            moreInfosIconPreview!.contentMode = UIViewContentMode.Center
+            moreInfosIconPreview!.image = UIImage(named: "eye_big_react")
+            moreInfosPreviewView!.addSubview(moreInfosIconPreview!)
+            
+            moreInfosLabelPreview = UILabel(frame: CGRect(x: 0, y: 0, width: moreInfosAddUserView!.frame.width, height: 30))
+            moreInfosLabelPreview!.center = CGPoint(x: moreInfosPreviewView!.frame.width/2, y: moreInfosPreviewView!.frame.height/3 * 2)
+            moreInfosLabelPreview!.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
+            moreInfosLabelPreview!.adjustsFontSizeToFitWidth = true
+            moreInfosLabelPreview!.textColor = UIColor.whiteColor()
+            moreInfosLabelPreview!.textAlignment = NSTextAlignment.Center
+            moreInfosPreviewView!.addSubview(moreInfosLabelPreview!)
+            
         }
         else{
-            moreInfosUsernameLabel!.frame = CGRectMake(0, 0, addFriendsView.frame.width, 30)
-            moreInfosUsernameLabel!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 + 30)
+            moreInfosPreviewView!.frame = CGRect(x: 0, y: moreInfosView.frame.width, width: moreInfosView.frame.width, height: moreInfosView.frame.width)
+            moreInfosIconPreview!.frame = CGRect(x: 0, y: moreInfosPreviewView!.frame.height/3, width: moreInfosAddUserView!.frame.width, height: 30)
+            moreInfosLabelPreview!.center = CGPoint(x: moreInfosPreviewView!.frame.width/2, y: moreInfosPreviewView!.frame.height/3 * 2)
         }
         
+        moreInfosLabelPreview!.text = "Preview"
         
-        if moreInfosUserAdd == nil{
-            moreInfosUserAdd = UILabel(frame: CGRectMake(0, 0, addFriendsView.frame.width, 30))
-            moreInfosUserAdd!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 - 30)
-            moreInfosUserAdd!.font = UIFont(name: Utils().customFontSemiBold, size: 26)
-            moreInfosUserAdd!.textColor = UIColor.whiteColor()
-            moreInfosUserAdd!.adjustsFontSizeToFitWidth = true
-            moreInfosUserAdd!.textAlignment = NSTextAlignment.Center
-            moreInfosUserAdd!.text = "Add"
-            addFriendsView.addSubview(moreInfosUserAdd!)
-        }
-        else{
-            moreInfosUserAdd!.frame = CGRectMake(0, 0, addFriendsView.frame.width, 30)
-            moreInfosUserAdd!.center = CGPoint(x: addFriendsView.frame.width/2, y: addFriendsView.frame.height/2 - 30)
-        }
+        separatorMoreInfos = UIView(frame: CGRect(x: 0, y: moreInfosView.frame.height/2, width: moreInfosView.frame.width, height: 2))
+        separatorMoreInfos!.backgroundColor = UIColor(red: 24/255, green: 23/255, blue: 27/255, alpha: 1.0)
+        moreInfosView!.addSubview(separatorMoreInfos!)
         
         
         
         if Utils().isUserAFriend(reactUser){
-            moreInfosUserAdd!.hidden = true
+            moreInfosIconAdd!.image = UIImage(named: "added_icon_big_react")
         }
         else{
-            moreInfosUserAdd!.hidden = false
+            moreInfosIconAdd!.image = UIImage(named: "add_icon_big_react")
         }
         
         
-        moreInfosUsernameLabel!.hidden = false
-        moreInfosIconeUserImageView!.hidden = false
+        /*moreInfosUsernameLabel!.hidden = false
+        moreInfosIconeUserImageView!.hidden = false*/
         
         
     }

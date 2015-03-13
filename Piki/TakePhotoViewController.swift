@@ -1145,7 +1145,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         }
         
         if canOpenSettings{
-            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", preferredStyle: UIAlertControllerStyle.Alert)
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", comment : "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 
@@ -1154,7 +1154,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             self.presentViewController(alert, animated: true, completion: nil)
         }
         else{
-            var alert = UIAlertController(title: "Error", message: "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Peekee", preferredStyle: UIAlertControllerStyle.Alert)
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek", comment : "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
