@@ -16,7 +16,7 @@ protocol ReactsCellProtocol {
     func hideUsernamesreact()
     func removeReact(react : AnyObject, isReport : Bool)
     func cellBigger(cell : ReactsCollectionViewCell)
-    func cellSmaller(cell : ReactsCollectionViewCell)
+    func cellSmaller(cell : ReactsCollectionViewCell) -> BFTask
     func removeReact(cell: ReactsCollectionViewCell)
     func shareOneVsOne(react : PFObject)
 }
@@ -86,14 +86,14 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     var delegate:ReactsCellProtocol? = nil
     
-    let reactImage:UIImageView!
-    let previewCameraView:UIView!
+    var reactImage:UIImageView!
+    var previewCameraView:UIView!
     var playerLayer:AVPlayerLayer!
     var playerView:UIView!
     //let player:AVPlayer!
-    let overlayCameraView:UIView!
-    let emojiImageView:UIImageView!
-    let recordVideoBar:UIView?
+    var overlayCameraView:UIView!
+    var emojiImageView:UIImageView!
+    var recordVideoBar:UIView?
     var textViewOverPhoto:UITextView?
     var backgoundOverlayView:UIView?
     var react:PFObject?
@@ -128,8 +128,9 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     var moreInfosLabelPreview:UILabel?
     var separatorMoreInfos:UIView?
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    var hasLoaded:Bool = false
+    
+    func loadCell(){
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("newVideoStarted:"), name: "startNewVideo", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("scrollStarted"), name: "scrollStarted", object: nil)
@@ -146,7 +147,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         
         
         //Preview Camera View
-        previewCameraView = UIView(frame: contentView.frame)
+        previewCameraView = UIView(frame: self.contentView.frame)
         contentView.addSubview(previewCameraView)
         previewCameraView.hidden = true
         
@@ -161,10 +162,10 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         //contentView.addSubview(emptyCaseImageView!)
         
         //Image of the React
-        reactImage = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+        reactImage = UIImageView(frame: CGRect(x: 0, y: 0, width: self.contentView.frame.size.width, height: self.contentView.frame.size.height))
         contentView.addSubview(reactImage)
         
-
+        
         
         playerView = UIView(frame:  CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
         
@@ -191,7 +192,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         
         backgoundOverlayView = UIView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
         backgoundOverlayView!.backgroundColor = UIColor.blackColor()
-        backgoundOverlayView!.alpha = 0.3
+        backgoundOverlayView!.alpha = 0.1
         overlayCameraView.addSubview(backgoundOverlayView!)
         
         emojiImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
@@ -239,7 +240,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         //contentView.addGestureRecognizer(panGesture)
         
         
-        //Delete View 
+        //Delete View
         //deleteView = UIView(frame: CGRect(x: -frame.width, y: 0, width: frame.width, height: frame.height))
         //deleteView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
         //contentView.addSubview(deleteView)
@@ -271,18 +272,17 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         readVideoImageView.contentMode = UIViewContentMode.Center
         contentView.addSubview(readVideoImageView)
         
+        moreInfosAddUserView = nil
+        moreInfosPreviewView = nil
         moreInfosView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         moreInfosView.backgroundColor = UIColor(red: 34/255, green: 33/255, blue: 37/255, alpha: 1.0)
         contentView.addSubview(moreInfosView)
         
-        
+        hasLoaded = true
         
     }
     
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
+
     func startRecording(){
         
         contentView.addSubview(recordVideoBar!)
@@ -404,7 +404,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         println("Double Tap")
         if react != nil{
             if react!["user"] != nil{
-                self.delegate!.seeUserWhoPosted(react!["user"] as PFUser)
+                self.delegate!.seeUserWhoPosted(react!["user"] as! PFUser)
             }
             
         }
@@ -431,7 +431,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         
         if react != nil{
             if react!["user"] != nil{
-                let username = (react!["user"] as PFUser).username
+                let username = (react!["user"] as! PFUser).username!
                 self.usernameLabel!.text = "@\(username)"
                 self.usernameLabel!.hidden = false
             }
@@ -454,7 +454,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as insideReactCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! insideReactCell
         
         cell.parentCell = self
         cell.loadCell(indexPath.item)
@@ -470,7 +470,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if self.react != nil{
-            NSNotificationCenter.defaultCenter().postNotificationName("scrollCell", object: nil, userInfo: ["exceptReact" : self.react!.objectId])
+            NSNotificationCenter.defaultCenter().postNotificationName("scrollCell", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
         }
         
     }
@@ -485,61 +485,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
                 else{
                     self.delegate!.cellSmaller(self)
                 }
-                
-                /*if self.react!["video"] != nil{
-                dispatch_async(dispatch_get_main_queue(), { ()->() in
-                self.loadIndicator!.hidden = false
-                self.loadIndicator!.startAnimating()
-                self.readVideoImageView.hidden = true
-                })
-                
-                
-                let videoFile:PFFile = self.react!["video"] as PFFile
-                
-                videoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
-                
-                
-                var fileManager:NSFileManager = NSFileManager()
-                if data.writeToFile("\(NSTemporaryDirectory())_\(self.react!.objectId).mov", atomically: false){
-                
-                
-                var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.react!.objectId).mov")
-                var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
-                var player:AVPlayer = AVPlayer(playerItem: playerItem)
-                player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                
-                
-                
-                
-                
-                NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-                
-                dispatch_async(dispatch_get_main_queue(), { ()->() in
-                
-                self.loadIndicator!.hidden = true
-                
-                self.playerLayer.player = player
-                self.playerView.hidden = false
-                self.readVideoImageView.hidden = true
-                player.play()
-                })
-                }
-                
-                
-                })
-                }
-                else{
-                dispatch_async(dispatch_get_main_queue(), { ()->() in
-                if !self.isInBigMode{
-                self.delegate!.cellBigger(self)
-                }
-                else{
-                self.delegate!.cellSmaller(self)
-                }
-                
-                })
-                
-                }*/
+
             }
             else if self.reactVideoURL != nil{
                 dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
@@ -578,7 +524,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     func scrollCell(notification : NSNotification){
-        let userInfo:Dictionary<String,String!> = notification.userInfo as Dictionary<String,String!>
+        let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
         
         if let theReact = self.react {
             
@@ -593,14 +539,14 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     func removeReact(){
         
-        let currentUser:PFUser = PFUser.currentUser()
+        let currentUser:PFUser = PFUser.currentUser()!
         if self.react != nil{
             let reactUser:PFUser? = self.react!["user"] as? PFUser
             
             if reactUser?.objectId == currentUser.objectId{
                 self.delegate!.removeReact(self.react!, isReport: false)
             }
-            else if currentUser.objectId == (self.mainPeekee!["user"] as PFUser).objectId{
+            else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId{
                 self.delegate!.removeReact(self.react!, isReport: false)
             }
             else{
@@ -629,7 +575,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         
         //NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil)
         if self.react != nil{
-            NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exceptReact" : self.react!.objectId])
+            NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
         }
         else if self.reactVideoURL != nil{
             NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exectpURL" : self.reactVideoURL!])
@@ -645,13 +591,13 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
                 })
                 
                 
-                let videoFile:PFFile = self.react!["video"] as PFFile
+                let videoFile:PFFile = self.react!["video"] as! PFFile
                 
-                videoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                videoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
                     
                     
                     var fileManager:NSFileManager = NSFileManager()
-                    if data.writeToFile("\(NSTemporaryDirectory())_\(self.react!.objectId).mov", atomically: false){
+                    if data!.writeToFile("\(NSTemporaryDirectory())_\(self.react!.objectId).mov", atomically: false){
                         
                         
                         var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.react!.objectId).mov")
@@ -668,7 +614,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
                         dispatch_async(dispatch_get_main_queue(), { ()->() in
                             
                             
-                            if (self.delegate as PikiViewController).isViewLoaded() && ((self.delegate as PikiViewController).view.window != nil) {
+                            if (self.delegate as! PikiViewController).isViewLoaded() && ((self.delegate as! PikiViewController).view.window != nil) {
                                 self.loadIndicator!.hidden = true
                                 
                                 self.playerLayer.player = player
@@ -698,7 +644,6 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         insideCollectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.None, animated: false)
         
         if react != nil{
-            println("React")
             if react!["video"] != nil{
                 readVideoImageView.hidden = false
             }
@@ -716,7 +661,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
             if self.react != nil{
                 dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
                     
-                    let outpuPath:NSString = "\(NSTemporaryDirectory())_\(self.react!.objectId).mov"
+                    let outpuPath:String = "\(NSTemporaryDirectory())_\(self.react!.objectId).mov"
                     let outputURL:NSURL = NSURL(fileURLWithPath: outpuPath)!
                     var fileManager:NSFileManager = NSFileManager()
                     
@@ -766,13 +711,13 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     
     func videoDidEnd(notification : NSNotification){
-        var player:AVPlayerItem = notification.object as AVPlayerItem
+        var player:AVPlayerItem = notification.object as! AVPlayerItem
         player.seekToTime(kCMTimeZero)
     }
     
     
     func updateDeleteSign(){
-        let currentUser:PFUser = PFUser.currentUser()
+        let currentUser:PFUser = PFUser.currentUser()!
         if react != nil{
             let reactUser:PFUser? = self.react!["user"] as? PFUser
             
@@ -783,7 +728,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
                 if reactUser?.objectId == currentUser.objectId{
                     cell!.iconImageView.image = UIImage(named: "delete_react_icon")
                 }
-                else if currentUser.objectId == (self.mainPeekee!["user"] as PFUser).objectId{
+                else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId!{
                     cell!.iconImageView.image = UIImage(named: "delete_react_icon")
                 }
                 else{
@@ -806,7 +751,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     func getLabelReportOrDelete() -> String{
-        let currentUser:PFUser = PFUser.currentUser()
+        let currentUser:PFUser = PFUser.currentUser()!
         if react != nil{
             let reactUser:PFUser? = self.react!["user"] as? PFUser
             
@@ -814,7 +759,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
             if reactUser?.objectId == currentUser.objectId{
                 return NSLocalizedString("DELETE", comment : "")
             }
-            else if currentUser.objectId == (self.mainPeekee!["user"] as PFUser).objectId{
+            else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId{
                 return NSLocalizedString("DELETE", comment : "")
             }
             else{
@@ -833,7 +778,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     func getNameImageReportOrDelete() -> String{
         
-        let currentUser:PFUser = PFUser.currentUser()
+        let currentUser:PFUser = PFUser.currentUser()!
         if react != nil{
             let reactUser:PFUser? = self.react!["user"] as? PFUser
             
@@ -841,7 +786,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
             if reactUser?.objectId == currentUser.objectId{
                 return "delete_react_icon"
             }
-            else if currentUser.objectId == (self.mainPeekee!["user"] as PFUser).objectId{
+            else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId{
                 return "delete_react_icon"
             }
             else{
@@ -866,7 +811,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     func newVideoStarted(notification : NSNotification){
         
-         let userInfo:Dictionary<String,String!> = notification.userInfo as Dictionary<String,String!>
+         let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
 
         if let theReact = self.react {
             
@@ -920,7 +865,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     func addFriends(){
         if react != nil{
             if react!["user"] != nil{
-                self.delegate!.seeUserWhoPosted(react!["user"] as PFUser)
+                self.delegate!.seeUserWhoPosted(react!["user"] as! PFUser)
             }
             
         }
@@ -939,8 +884,9 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     
     func showMoreInfos(){
+
         
-        let reactUser:PFUser = self.react!["user"] as PFUser
+        let reactUser:PFUser = self.react!["user"] as! PFUser
         
         if moreInfosAddUserView == nil{
             var tapGestureMoreFriends:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("addFriends"))
@@ -970,7 +916,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
             moreInfosLabelAdd!.center = CGPoint(x: moreInfosAddUserView!.frame.width/2, y: moreInfosAddUserView!.frame.height/3 * 2)
         }
         
-        moreInfosLabelAdd!.text = "@\(reactUser.username)"
+        moreInfosLabelAdd!.text = "@\(reactUser.username!)"
         
         if moreInfosPreviewView == nil{
             var tapGestureMorePreview:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("seePreview"))

@@ -146,13 +146,13 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
             finalString.lowercaseString
             
             if Utils().usernameValid(finalString){
-                var userQuery:PFQuery = PFUser.query()
+                var userQuery:PFQuery = PFUser.query()!
                 userQuery.whereKey("username", equalTo: finalString.lowercaseString)
                 userQuery.findObjectsInBackgroundWithBlock({ (users, error) -> Void in
                     if error == nil {
                         MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                         //Username already exists
-                        if users.count > 0{
+                        if users!.count > 0{
                             let alert = UIAlertView(title: "Error", message: NSLocalizedString("Sorry but this username is already taken. Please choose an other one", comment :"Sorry but this username is already taken. Please choose an other one"),
                                 delegate: nil, cancelButtonTitle: "OK")
                             alert.show()
@@ -161,13 +161,13 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
                             //Change Username
                             println("change username")
                             
-                            var currentUser = PFUser.currentUser()
-                            currentUser.username = finalText
-                            currentUser.password = finalText
+                            var currentUser = PFUser.currentUser()!
+                            currentUser.username = finalText as String!
+                            currentUser.password = finalText as String!
                             
                             currentUser.saveInBackgroundWithBlock({ (succeeded, error) -> Void in
                                 if error != nil{
-                                    println("Error : \(error.localizedDescription)")
+                                    println("Error : \(error!.localizedDescription)")
                                     let alert = UIAlertView(title: "Error", message: NSLocalizedString("Problem while updating your username. Please try again later.", comment :"Problem while updating your username. Please try again later."),
                                         delegate: nil, cancelButtonTitle: "OK")
                                     alert.show()
@@ -213,10 +213,10 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
     
     func changeName(){
         
-        PFUser.currentUser()["name"] = usernameTextField.text
+        PFUser.currentUser()!["name"] = usernameTextField.text
         
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        PFUser.currentUser().saveInBackgroundWithBlock { (succeed, error) -> Void in
+        PFUser.currentUser()!.saveInBackgroundWithBlock { (succeed, error) -> Void in
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             if error != nil{
                 let alert = UIAlertView(title: "Error", message: NSLocalizedString("Error while editing your name. Please try again later.", comment :"Error while editing your name. Please try again later."),

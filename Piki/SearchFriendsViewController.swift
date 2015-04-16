@@ -33,20 +33,22 @@ class ContactPhoneTableViewCell : UITableViewCell {
         self.contact = contact
         
         if actionButton == nil {
-            actionButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 50, y: 0, width: 45, height: 60))
+            actionButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 110, y: 0, width: 100, height: 60))
             actionButton!.addTarget(self, action: Selector("inviteContact:"), forControlEvents: UIControlEvents.TouchUpInside)
             contentView.addSubview(actionButton!)
         }
        
         
-        actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
+        actionButton!.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 110, y: 0, width: 100, height: 60)
+        actionButton!.setImage(UIImage(named: "sms_invit_gif"), forState: UIControlState.Normal)
         
         self.backgroundColor = UIColor.whiteColor()
         
         if nameContactLabel == nil {
-            nameContactLabel = UILabel(frame: CGRect(x: 15, y: 0, width: 300, height: 60))
+            nameContactLabel = UILabel(frame: CGRect(x: 15, y: 0, width: UIScreen.mainScreen().bounds.width - 125, height: 60))
             nameContactLabel.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
             nameContactLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            nameContactLabel.adjustsFontSizeToFitWidth = true
             self.addSubview(nameContactLabel)
             
         }
@@ -72,14 +74,16 @@ class ContactPhoneTableViewCell : UITableViewCell {
         
         if userInfos != nil {
 
+            actionButton!.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 55, y: 0, width: 45, height: 60)
             actionButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
             
-            if self.searchController!.isUserAlreadyAdded(userInfos!["userObjectId"]! as String){
+            if contains(Utils().getAppDelegate().friendsIdList, userInfos!["userObjectId"]! as String){
                 actionButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
             }
         }
         else{
-            actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
+            actionButton!.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 110, y: 0, width: 100, height: 60)
+            actionButton!.setImage(UIImage(named: "sms_invit_gif"), forState: UIControlState.Normal)
         }
         
     }
@@ -89,13 +93,13 @@ class ContactPhoneTableViewCell : UITableViewCell {
         self.contact = contactUserInfo["contact"] as? APContact
         
         if actionButton == nil {
-            actionButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 50, y: 0, width: 45, height: 60))
+            actionButton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 55, y: 0, width: 45, height: 60))
             actionButton!.addTarget(self, action: Selector("inviteContact:"), forControlEvents: UIControlEvents.TouchUpInside)
             contentView.addSubview(actionButton!)
         }
         
-        
-        actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
+        actionButton!.frame = CGRect(x: UIScreen.mainScreen().bounds.width - 55, y: 0, width: 45, height: 60)
+        actionButton!.setImage(UIImage(named: "sms_invit_gif"), forState: UIControlState.Normal)
         
         self.backgroundColor = UIColor.whiteColor()
         
@@ -140,12 +144,12 @@ class ContactPhoneTableViewCell : UITableViewCell {
             
             actionButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
             
-            if self.searchController!.isUserAlreadyAdded(userInfos!["userObjectId"]! as String){
+            if contains(Utils().getAppDelegate().friendsIdList, userInfos!["userObjectId"]! as String){
                 actionButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
             }
         }
         else{
-            actionButton!.setImage(UIImage(named: "sms_not_sent_icon"), forState: UIControlState.Normal)
+            actionButton!.setImage(UIImage(named: "sms_invit_gif"), forState: UIControlState.Normal)
         }
     }
     
@@ -160,7 +164,7 @@ class ContactPhoneTableViewCell : UITableViewCell {
         if userInfos != nil{
             
             
-            if !self.searchController!.isUserAlreadyAdded(userInfos!["userObjectId"]! as String){
+            if !contains(Utils().getAppDelegate().friendsIdList, userInfos!["userObjectId"]! as String){
                 
                 loadIndicator!.startAnimating()
                 
@@ -171,15 +175,15 @@ class ContactPhoneTableViewCell : UITableViewCell {
                         
                     }
                     else{
+                        Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "search_friend"])
                         
                         self.searchController!.getAllUsersFromContacts()
-                        self.searchController!.friends.append(task.result as PFUser)
+                        self.searchController!.addUserInFriendsList(task.result as! PFUser)
                         self.searchController!.sortFriends()
                         self.searchController!.tableView.reloadData()
-                        NSNotificationCenter.defaultCenter().postNotificationName("updateContacts", object: nil)
                         
                         
-                        self.searchController!.friendsSelectorLabel!.text = "\(self.searchController!.getNumberOfFriends()) FRIENDS"
+                        self.searchController!.friendsSelectorLabel!.text = "\(self.searchController!.getNumberOfFriends())"
                         UIView.animateWithDuration(0.2,
                             animations: { () -> Void in
                                 self.searchController!.friendsSelectorLabel!.textColor = Utils().secondColor
@@ -205,6 +209,42 @@ class ContactPhoneTableViewCell : UITableViewCell {
         }
         
     }
+}
+
+class SearchUserTableViewCell : UITableViewCell {
+    
+    var user:PFUser?
+    var searchUsernameLabel:UILabel?
+    var loadIndicator:UIActivityIndicatorView?
+    
+    func loadItemLoading(searchUsername : String, isSearching : Bool){
+        
+        if searchUsernameLabel == nil{
+            searchUsernameLabel = UILabel(frame: CGRect(x: 20, y: 0, width: UIScreen.mainScreen().bounds.width - 40, height: 60))
+            searchUsernameLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+            searchUsernameLabel!.textColor = UIColor.blackColor()
+            contentView.addSubview(searchUsernameLabel!)
+        }
+        
+        searchUsernameLabel!.text = "@\(searchUsername)"
+        
+        if loadIndicator == nil{
+            loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+            loadIndicator!.tintColor = Utils().secondColor
+            loadIndicator!.center = CGPoint(x: UIScreen.mainScreen().bounds.width - 20 , y: 30)
+            loadIndicator!.hidesWhenStopped = true
+            self.addSubview(loadIndicator!)
+        }
+        
+        if isSearching{
+            loadIndicator!.startAnimating()
+        }
+        else{
+            loadIndicator!.stopAnimating()
+        }
+        
+    }
+    
 }
 
 
@@ -246,7 +286,7 @@ class PikiUserTableViewCell : UITableViewCell {
                 self.addSubview(secondLabel!)
             }
             secondLabel!.hidden = false
-            secondLabel!.text = "@\(user.username)"
+            secondLabel!.text = "@\(user.username!)"
         }
         else{
             usernameLabel!.frame = CGRect(x: 15, y: 0, width: 300, height: 60)
@@ -255,7 +295,7 @@ class PikiUserTableViewCell : UITableViewCell {
                 secondLabel!.hidden = true
             }
             
-            usernameLabel!.text = "@\(user.username)"
+            usernameLabel!.text = "@\(user.username!)"
             
         }
         
@@ -294,8 +334,8 @@ class PikiUserTableViewCell : UITableViewCell {
         
         self.backgroundColor = UIColor.whiteColor()
         
-        var username:String = contactInfos["username"] as String
-        var isSearching:Bool = contactInfos["searching"] as Bool
+        var username:String = contactInfos["username"] as! String
+        var isSearching:Bool = contactInfos["searching"] as! Bool
         
         if usernameLabel == nil {
             usernameLabel = UILabel(frame: CGRect(x: 15, y: 0, width: 300, height: 60))
@@ -348,7 +388,7 @@ class PikiUserTableViewCell : UITableViewCell {
         if Utils().isUserAFriend(user!){
             
             
-            Utils().removeFriend(self.user!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+            Utils().removeFriend(self.user!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 self.loadIndicator!.stopAnimating()
                 if task.error != nil{
                     
@@ -365,21 +405,22 @@ class PikiUserTableViewCell : UITableViewCell {
         }
         else{
             //Not a friend, friend him
-            Utils().addFriend(self.user!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+            Utils().addFriend(self.user!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 self.loadIndicator!.stopAnimating()
                 if task.error != nil{
                     
                 }
                 else{
+                    self.addUserButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
                     
+                    Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "search_friend"])
                     self.searchController!.getAllUsersFromContacts()
-                    self.searchController!.friends.append(task.result as PFUser)
+                    self.searchController!.addUserInFriendsList(task.result as! PFUser)
                     self.searchController!.sortFriends()
                     self.searchController!.tableView.reloadData()
-                    NSNotificationCenter.defaultCenter().postNotificationName("updateContacts", object: nil)
                     
                     
-                    self.searchController!.friendsSelectorLabel!.text = "\(self.searchController!.getNumberOfFriends()) FRIENDS"
+                    self.searchController!.friendsSelectorLabel!.text = "\(self.searchController!.getNumberOfFriends())"
                     UIView.animateWithDuration(0.2,
                         animations: { () -> Void in
                             self.searchController!.friendsSelectorLabel!.textColor = Utils().secondColor
@@ -393,7 +434,7 @@ class PikiUserTableViewCell : UITableViewCell {
                             })
                     })
                     
-                    self.addUserButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
+                    
                 }
                 
                 self.addUserButton!.hidden = false
@@ -410,41 +451,57 @@ class PikiUserTableViewCell : UITableViewCell {
 
 class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate {
 
-    @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var quitButton: UIButton!
-    @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var searchTopBarView: UIView!
     @IBOutlet weak var typeFriendsSelectorView: UIView!
     @IBOutlet weak var tableView: UITableView!
-    var cancelSearchButton:UIButton?
-    
-    
-    @IBOutlet weak var topRightViewBar: UIView!
     
     var pikiUsersFound:Array<AnyObject> = []
     var contactsPhone:Array<APContact> = []
     var sortedContactsPhone:Array<APContact> = []
     var usersWhoAddedMe:Array<PFUser> = []
     var usersIAlreadyAddedFriendship:Array<PFUser> = []
-    var friends:Array<PFUser> = []
+    
     
     let addressBook = APAddressBook()
     var pikiUsersFromPhoneContacts:Array<[String : String]> = Array<[String : String]>()
     var contactsWithUserInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
     var regionLabel:String?
+
     
-    var findSelectorLabel:UILabel?
-    var friendsSelectorLabel:UILabel?
-    var indicatorView:UIView?
-    
-    var printMode = 0
     var delegate:SearchFriendsProtocol? = nil
-    
     var unlockContactsBar:UIView?
     var firstUserUnlock:Bool?
-    
     var lookingForFriendsOnPeekee:Bool = false
+    var headerLabel:UILabel!
+    
+    //Friends
+    var friends:Array<PFUser> = []
     var isLoadingMore:Bool = false
+    
+    //Recipients
+    var recipients:Array<PFUser> = []
+    var isLoadingMoreRecipients:Bool = false
+    
+    //SEARCH
+    var searchButton:UIButton!
+    var cancelSearchButton:UIButton?
+    var searchTextField: UITextField!
+    var searchLayer:UIView!
+    var backgroundSearchLayer:UIView!
+    var searchTableView:UITableView!
+    var usernameInSearch:String?
+    var usernameUserFound:PFUser?
+    var isSearchingUser:Bool = false
+    
+    //TABS
+    var printMode = 0
+    var findSelectorLabel:UILabel?
+    var friendsSelectorLabel:UILabel?
+    var friendsSelectorLabelBottom:UILabel!
+    var recipientsSelectorLabel:UILabel?
+    var recipientsSelectorLabelBottom:UILabel!
+    var indicatorView:UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -467,27 +524,61 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         self.view.addSubview(backStatusBar)
         
         tableView.backgroundColor = UIColor.whiteColor()
-        topRightViewBar!.backgroundColor = Utils().primaryColorDark
         
-        cancelSearchButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 80, y: 22, width: 70, height: 40))
-        cancelSearchButton!.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelSearchButton!.setTitleColor(Utils().greyColor, forState: UIControlState.Normal)
-        cancelSearchButton!.titleLabel?.font = UIFont(name: Utils().customFont, size: 18.0)
+        //TopBar Main Label
+        headerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: searchTopBarView.frame.height))
+        headerLabel.textAlignment = NSTextAlignment.Center
+        headerLabel.font = UIFont(name: Utils().customFontSemiBold, size: 24.0)
+        headerLabel.textColor = UIColor.whiteColor()
+        headerLabel.text = "Friends"
+        searchTopBarView.addSubview(headerLabel)
+        
+        //Cancel the search button
+        cancelSearchButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 40, y: 0, width: 40, height: searchTopBarView.frame.height))
+        cancelSearchButton!.setImage(UIImage(named: "quit_search"), forState: UIControlState.Normal)
         cancelSearchButton!.addTarget(self, action: Selector("cancelSearch:"), forControlEvents: UIControlEvents.TouchUpInside)
         cancelSearchButton!.hidden = true
-        //self.view.addSubview(cancelSearchButton!)
+        searchTopBarView.addSubview(cancelSearchButton!)
         
         searchTopBarView.backgroundColor = Utils().primaryColor
         typeFriendsSelectorView.backgroundColor = UIColor.whiteColor()
         
+        //Set the search button
+        searchButton = UIButton(frame: CGRect(x: self.view.frame.width - 60, y: 0, width: 40, height: searchTopBarView.frame.height))
+        searchButton.setImage(UIImage(named: "search_icon"), forState: UIControlState.Normal)
+        searchButton!.setImage(UIImage(named: "search_icon"), forState: UIControlState.Disabled)
+        searchButton.addTarget(self, action: Selector("enterSearch"), forControlEvents: UIControlEvents.TouchUpInside)
+        searchTopBarView.addSubview(searchButton)
+        
+        //Search Text Field
+        var xPositionTextField:CGFloat = self.searchButton.frame.width + 10
+        searchTextField = UITextField(frame: CGRect(x: xPositionTextField, y: 0, width: self.view.frame.width - xPositionTextField - 40, height: searchTopBarView.frame.height))
+        searchTextField.hidden = true
         searchTextField.backgroundColor = Utils().primaryColor
+        searchTextField.autocapitalizationType = UITextAutocapitalizationType.None
         searchTextField.delegate = self
-        searchTextField.placeholder = NSLocalizedString("Search a user", comment : "Search a user")
+        searchTextField.tintColor = Utils().secondColor
+        searchTextField.placeholder = "username"
         searchTextField.textColor = UIColor.whiteColor()
         searchTextField.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
+        searchTextField.autocorrectionType = UITextAutocorrectionType.No
         //searchTextField.addTarget(self, action: Selector("changedText:"), forControlEvents: UIControlEvents.EditingChanged)
         searchTextField.returnKeyType = UIReturnKeyType.Search
         searchTextField.keyboardAppearance = UIKeyboardAppearance.Light
+        searchTopBarView.addSubview(searchTextField)
+        
+       
+        
+        
+        
+        var leftViewSearch:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: searchTextField.frame.size.height))
+        var labelStart:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: leftViewSearch.frame.width, height: leftViewSearch.frame.height))
+        labelStart.font = UIFont(name: Utils().customFontSemiBold, size: 24)
+        labelStart.textColor = UIColor.whiteColor()
+        labelStart.text = "@"
+        leftViewSearch.addSubview(labelStart)
+        searchTextField.leftView = leftViewSearch
+        searchTextField.leftViewMode = UITextFieldViewMode.Always
       
         
         //Unlock bar if user doid not authorize access contacts
@@ -511,18 +602,15 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         typeFriendsSelectorView.frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: 50)
         
-        var leftViewSearch:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: searchTextField.frame.size.height))
-        var loupeImageView:UIImageView = UIImageView(frame: CGRect(x: leftViewSearch.frame.size.width/2 - 6, y: leftViewSearch.frame.size.height/2 - 6, width: 16, height: 16))
-        loupeImageView.image = UIImage(named: "search_icon")
-        leftViewSearch.addSubview(loupeImageView)
-        searchTextField.leftView = leftViewSearch
-        searchTextField.leftViewMode = UITextFieldViewMode.Always
         
         
         
         
+        //Select Category to print
+        
+        //FIND TAB
         var gestureFindSelection:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("findSelection:"))
-        let findSelectorView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.typeFriendsSelectorView.frame.width/2, height: self.typeFriendsSelectorView.frame.height))
+        let findSelectorView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.typeFriendsSelectorView.frame.width/3, height: self.typeFriendsSelectorView.frame.height))
         findSelectorView.backgroundColor = UIColor.whiteColor()
         findSelectorView.addGestureRecognizer(gestureFindSelection)
         typeFriendsSelectorView.addSubview(findSelectorView)
@@ -530,26 +618,59 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         findSelectorLabel = UILabel(frame: CGRect(x: 0, y: 0, width: findSelectorView.frame.width, height: findSelectorView.frame.height))
         findSelectorLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 18)
         findSelectorLabel!.textColor = Utils().primaryColor
-        findSelectorLabel!.text = NSLocalizedString("FIND", comment : "FIND")
+        findSelectorLabel!.text = "FIND"
         findSelectorLabel!.textAlignment = NSTextAlignment.Center
         findSelectorView.addSubview(findSelectorLabel!)
         
+        //FRIEND TAB
         var gestureFriendsSelection:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("friendsSelection:"))
-        let friendsSelectorView:UIView = UIView(frame: CGRect(x: self.typeFriendsSelectorView.frame.width/2, y: 0, width: self.typeFriendsSelectorView.frame.width/2, height: self.typeFriendsSelectorView.frame.height))
+        let friendsSelectorView:UIView = UIView(frame: CGRect(x: self.typeFriendsSelectorView.frame.width/3, y: 0, width: self.typeFriendsSelectorView.frame.width/3, height: self.typeFriendsSelectorView.frame.height))
         friendsSelectorView.backgroundColor = UIColor.whiteColor()
         friendsSelectorView.addGestureRecognizer(gestureFriendsSelection)
         typeFriendsSelectorView.addSubview(friendsSelectorView)
         
-        friendsSelectorLabel = UILabel(frame: CGRect(x: 0, y: 0, width: friendsSelectorView.frame.width, height: friendsSelectorView.frame.height))
-        friendsSelectorLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 18)
+        friendsSelectorLabel = UILabel(frame: CGRect(x: 0, y: 0, width: friendsSelectorView.frame.width, height: friendsSelectorView.frame.height/2 + 10))
+        friendsSelectorLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
         friendsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
         let nbFriendsFormat = String(format: NSLocalizedString("%d FRIENDS", comment : "%d FRIENDS"), getNumberOfFriends())
-        friendsSelectorLabel!.text = nbFriendsFormat
+        friendsSelectorLabel!.text = "\(getNumberOfFriends())"
         friendsSelectorLabel!.textAlignment = NSTextAlignment.Center
         friendsSelectorLabel!.adjustsFontSizeToFitWidth = true
         friendsSelectorView.addSubview(friendsSelectorLabel!)
         
-        indicatorView = UIView(frame: CGRect(x: 0, y: typeFriendsSelectorView!.frame.height - 2, width: typeFriendsSelectorView!.frame.width/2, height: 2))
+        friendsSelectorLabelBottom = UILabel(frame: CGRect(x: 0, y: friendsSelectorView.frame.height/2, width: friendsSelectorView.frame.width, height: friendsSelectorView.frame.height/2))
+        friendsSelectorLabelBottom.font = UIFont(name: Utils().customFontSemiBold, size: 12)
+        friendsSelectorLabelBottom.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+        friendsSelectorLabelBottom.text = "YOU ADDED"
+        friendsSelectorLabelBottom.textAlignment = NSTextAlignment.Center
+        friendsSelectorLabelBottom.adjustsFontSizeToFitWidth = true
+        friendsSelectorView.addSubview(friendsSelectorLabelBottom)
+        
+        //RECIPIENTS TAB
+        var gestureRecipientsSelection:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("recipientsSelection:"))
+        let recipientsSelectorView:UIView = UIView(frame: CGRect(x: self.typeFriendsSelectorView.frame.width/3 * 2, y: 0, width: self.typeFriendsSelectorView.frame.width/3, height: self.typeFriendsSelectorView.frame.height))
+        recipientsSelectorView.backgroundColor = UIColor.whiteColor()
+        recipientsSelectorView.addGestureRecognizer(gestureRecipientsSelection)
+        typeFriendsSelectorView.addSubview(recipientsSelectorView)
+        
+        recipientsSelectorLabel = UILabel(frame: CGRect(x: 0, y: 0, width: recipientsSelectorView.frame.width, height: recipientsSelectorView.frame.height/2 + 10))
+        recipientsSelectorLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+        recipientsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+        recipientsSelectorLabel!.text = "\(getNumberOfRecipients())"
+        recipientsSelectorLabel!.textAlignment = NSTextAlignment.Center
+        recipientsSelectorLabel!.adjustsFontSizeToFitWidth = true
+        recipientsSelectorView.addSubview(recipientsSelectorLabel!)
+        
+        recipientsSelectorLabelBottom = UILabel(frame: CGRect(x: 0, y: recipientsSelectorView.frame.height/2, width: recipientsSelectorView.frame.width, height: recipientsSelectorView.frame.height/2))
+        recipientsSelectorLabelBottom.font = UIFont(name: Utils().customFontSemiBold, size: 12)
+        recipientsSelectorLabelBottom.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+        recipientsSelectorLabelBottom.text = "ADDED YOU"
+        recipientsSelectorLabelBottom.textAlignment = NSTextAlignment.Center
+        recipientsSelectorLabelBottom.adjustsFontSizeToFitWidth = true
+        recipientsSelectorView.addSubview(recipientsSelectorLabelBottom)
+        
+        //INDICATOR SELECTION
+        indicatorView = UIView(frame: CGRect(x: 0, y: typeFriendsSelectorView!.frame.height - 2, width: typeFriendsSelectorView!.frame.width/3, height: 2))
         indicatorView!.backgroundColor = Utils().secondColor
         typeFriendsSelectorView!.addSubview(indicatorView!)
         
@@ -560,7 +681,27 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         shadowImageView.image = stretchShadowImage
         self.view.addSubview(shadowImageView)
         
+        //SEARCH LAYER//
+        searchLayer = UIView(frame: CGRect(x: 0, y: searchTopBarView.frame.origin.y + searchTopBarView.frame.height, width: self.view.frame.width, height: self.view.frame.height - (searchTopBarView.frame.origin.y + searchTopBarView.frame.height)))
+        searchLayer.backgroundColor = UIColor.clearColor()
+        searchLayer.alpha = 0.0
+        self.view.addSubview(searchLayer)
         
+        //White Background search Layer
+        backgroundSearchLayer = UIView(frame: CGRect(x: 0, y: 0, width: searchLayer.frame.width, height: searchLayer.frame.height))
+        backgroundSearchLayer.backgroundColor = UIColor.whiteColor()
+        backgroundSearchLayer.alpha = 0.85
+        searchLayer.addSubview(backgroundSearchLayer)
+        
+        //Table view search layer
+        searchTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: searchLayer.frame.height))
+        searchTableView.delegate = self
+        searchTableView.dataSource = self
+        searchTableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        searchTableView.registerClass(SearchUserTableViewCell.self, forCellReuseIdentifier: "SearchCell")
+        searchTableView.registerClass(PikiUserTableViewCell.self, forCellReuseIdentifier: "PikiUserCell")
+        searchTableView.hidden = true
+        searchLayer.addSubview(searchTableView)
         
         //We arrive first time in the view
         if firstUserUnlock != nil{
@@ -583,12 +724,15 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         //Get friends in the app
         getFriends()
+        getRecipients()
         
         
         
     }
     
-    
+    override func viewWillDisappear(animated: Bool) {
+        Utils().updateUser()
+    }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent
@@ -606,53 +750,48 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if printMode == 0 {
-            var nbSection:Int = 1
-            
-            if pikiUsersFound.count > 0{
-                nbSection++
-            }
-            
-            if contactsWithUserInfos.count > 0{
-                nbSection++
-            }
-            
-            if self.lookingForFriendsOnPeekee{
-                nbSection++
-            }
-            
-
-            return nbSection
-        }
-        else{
+        if tableView == searchTableView{
             return 1
         }
+        else{
+            if printMode == 0 {
+                var nbSection:Int = 2
+                
+                if contactsWithUserInfos.count > 0{
+                    nbSection++
+                }
+                
+                if self.lookingForFriendsOnPeekee{
+                    nbSection++
+                }
+                
+                
+                return nbSection
+            }
+            else{
+                return 2
+            }
+        }
+        
         
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if printMode == 0 {
-            if section == 0{
-                if pikiUsersFound.count > 0{
-                    return pikiUsersFound.count
+        if tableView == searchTableView{
+            return 1
+        }
+        else{
+            if printMode == 0 {
+                if section == 0{
+                    return 1
+                    
                 }
-                else if contactsWithUserInfos.count > 0{
-                    return contactsWithUserInfos.count
-                }
-                else if self.lookingForFriendsOnPeekee{
-                    return 0
-                }
-                else{
-                    return sortedContactsPhone.count
-                }
-            }
-            else if section == 1{
-                if self.lookingForFriendsOnPeekee{
-                    return 0
-                }
-                else if pikiUsersFound.count > 0{
+                else if section == 1{
                     if contactsWithUserInfos.count > 0{
                         return contactsWithUserInfos.count
+                    }
+                    else if self.lookingForFriendsOnPeekee{
+                        return 0
                     }
                     else{
                         return sortedContactsPhone.count
@@ -661,73 +800,97 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 else{
                     return sortedContactsPhone.count
                 }
+            }
+            else if printMode == 1{
+                if section == 0{
+                    return 1
+                }
+                else{
+                    return friends.count
+                }
                 
             }
             else{
-                return sortedContactsPhone.count
+                if section == 0{
+                    return 1
+                }
+                else{
+                    return recipients.count
+                }
             }
         }
-        else{
-            return friends.count
-        }
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        
-        if printMode == 0{
-            if indexPath.section == 0{
-                if pikiUsersFound.count > 0{
-                    var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as PikiUserTableViewCell
+        if tableView == searchTableView{
+            
+            if self.usernameUserFound == nil{
+                var searchCell:SearchUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("SearchCell") as! SearchUserTableViewCell
+                
+                if usernameInSearch != nil{
+                    searchCell.loadItemLoading(usernameInSearch!, isSearching: self.isSearchingUser)
+                }
+                else{
+                    searchCell.loadItemLoading("", isSearching: self.isSearchingUser)
+                }
+                
+                
+                return searchCell
+            }
+            else{
+                var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as! PikiUserTableViewCell
+                
+                cell.loadItem(self.usernameUserFound!, searchController: self)
+                
+                
+                return cell
+            }
+            
+        }
+        else{
+            if printMode == 0{
+                if indexPath.section == 0{
+                    var cell:UITableViewCell = UITableViewCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 61))
+                    cell.backgroundColor = UIColor(red: 237/255, green: 246/255, blue: 254/255, alpha: 1.0)
                     
-                    if pikiUsersFound[indexPath.row].isKindOfClass(PFUser){
-                        println("USER")
-                        cell.loadItem(pikiUsersFound[indexPath.row] as PFUser, searchController: self)
-                    }
-                    else{
-                        cell.loadItemSearch(pikiUsersFound[indexPath.row] as [String : AnyObject])
-                    }
+                    var certifiedLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 80, height: 61))
+                    certifiedLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16)
+                    certifiedLabel.textColor = UIColor(red: 33/255, green: 150/255, blue: 243/255, alpha: 1.0)
+                    certifiedLabel.textAlignment = NSTextAlignment.Center
+                    certifiedLabel.adjustsFontSizeToFitWidth = true
+                    certifiedLabel.text = "TAP TO VIEW POPULAR ACCOUNTS"
+                    cell.addSubview(certifiedLabel)
+                    
+                    var certifiedIcon:UIImageView = UIImageView(frame: CGRect(x: self.view.frame.width - 45, y: 0, width: 30, height: 61))
+                    certifiedIcon.contentMode = UIViewContentMode.Center
+                    certifiedIcon.image = UIImage(named: "certified_badge")
+                    cell.addSubview(certifiedIcon)
+                    
+                    var certifiedImages:UIImageView = UIImageView(frame: CGRect(x: 0, y: 13, width: 67, height: 48))
+                    certifiedImages.contentMode = UIViewContentMode.Center
+                    certifiedImages.image = UIImage(named: "certified_images")
+                    cell.addSubview(certifiedImages)
                     
                     
                     cell.selectionStyle = UITableViewCellSelectionStyle.None
+                    
                     return cell
                 }
-                else if contactsWithUserInfos.count > 0{
-                    var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
-                    
-                    var contactUserInfo = contactsWithUserInfos[indexPath.row]
-                    
-                    
-                    
-                    cellContact.loadUserContact(contactUserInfo, searchController: self)
-                    cellContact.selectionStyle = UITableViewCellSelectionStyle.None
-                    return cellContact
-                }
-                else{
-                    var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
-                    
-                    cellContact.userInfos = nil
-                    cellContact.loadContact(sortedContactsPhone[indexPath.row], searchController: self)
-                    cellContact.selectionStyle = UITableViewCellSelectionStyle.None
-                    return cellContact
-                }
-                
-            }
-            else if indexPath.section == 1{
-                
-                if pikiUsersFound.count > 0{
+                else if indexPath.section == 1{
                     if contactsWithUserInfos.count > 0{
-                        var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
+                        var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as! ContactPhoneTableViewCell
                         
                         var contactUserInfo = contactsWithUserInfos[indexPath.row]
-                        cellContact.userInfos = contactUserInfo["userInfos"] as? [String : String]
                         
-                        cellContact.loadContact(contactUserInfo["contact"] as APContact, searchController: self)
+                        
+                        
+                        cellContact.loadUserContact(contactUserInfo, searchController: self)
                         cellContact.selectionStyle = UITableViewCellSelectionStyle.None
                         return cellContact
                     }
                     else{
-                        var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
+                        var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as! ContactPhoneTableViewCell
                         
                         cellContact.userInfos = nil
                         cellContact.loadContact(sortedContactsPhone[indexPath.row], searchController: self)
@@ -737,7 +900,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                 }
                 else{
-                    var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
+                    
+                    var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as! ContactPhoneTableViewCell
                     
                     cellContact.userInfos = nil
                     cellContact.loadContact(sortedContactsPhone[indexPath.row], searchController: self)
@@ -745,58 +909,133 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     return cellContact
                 }
             }
-            else{
-                var cellContact:ContactPhoneTableViewCell = tableView.dequeueReusableCellWithIdentifier("ContactCell") as ContactPhoneTableViewCell
-                
-                cellContact.userInfos = nil
-                cellContact.loadContact(sortedContactsPhone[indexPath.row], searchController: self)
-                cellContact.selectionStyle = UITableViewCellSelectionStyle.None
-                return cellContact
-            }
-        }
-        else{
-            var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as PikiUserTableViewCell
-            cell.loadItem(friends[indexPath.row], searchController: self)
-            cell.selectionStyle = UITableViewCellSelectionStyle.None
-            
-            
-            if indexPath.row == (friends.count - 10){
-                if friends.count > 0 && !isLoadingMore{
-                    if friends.count % 100 == 0{
-                        println("Load More")
-                        isLoadingMore = true
-                        getMoreFriends()
+            else if printMode == 1{
+                if indexPath.section == 0{
+                    var cell:UITableViewCell = UITableViewCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 61))
+                    cell.backgroundColor = UIColor(red: 255/255, green: 252/255, blue: 224/255, alpha: 1.0)
+                    
+                    var certifiedLabel:UILabel = UILabel(frame: CGRect(x: 45, y: 0, width: self.view.frame.width - 60, height: 61))
+                    certifiedLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16)
+                    certifiedLabel.textColor = UIColor(red: 249/255, green: 168/255, blue: 37/255, alpha: 1.0)
+                    certifiedLabel.adjustsFontSizeToFitWidth = true
+                    certifiedLabel.text = "You'll receive their pics & vids"
+                    cell.addSubview(certifiedLabel)
+                    
+                    var receiveIcon:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 20, height: 61))
+                    receiveIcon.contentMode = UIViewContentMode.Center
+                    receiveIcon.image = UIImage(named: "receivers_icon")
+                    cell.addSubview(receiveIcon)
+                    
+                    var separatorView:UIView = UIView(frame: CGRect(x: 0, y: 60, width: self.view.frame.width, height: 1))
+                    separatorView.backgroundColor = UIColor(red: 249/255, green: 168/255, blue: 37/255, alpha: 1.0)
+                    cell.addSubview(separatorView)
+                    
+                    cell.selectionStyle = UITableViewCellSelectionStyle.None
+                    
+                    return cell
+                }
+                else{
+                    var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as! PikiUserTableViewCell
+                    cell.loadItem(friends[indexPath.row], searchController: self)
+                    cell.selectionStyle = UITableViewCellSelectionStyle.None
+                    
+                    
+                    if indexPath.row == (friends.count - 10){
+                        if friends.count > 0 && !isLoadingMore{
+                            if friends.count % 100 == 0{
+                                println("Load More")
+                                isLoadingMore = true
+                                getMoreFriends()
+                            }
+                        }
                     }
+                    
+                    return cell
+                }
+                
+            }
+            else{
+                if indexPath.section == 0{
+                    var cell:UITableViewCell = UITableViewCell(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 61))
+                    cell.backgroundColor = UIColor(red: 255/255, green: 252/255, blue: 224/255, alpha: 1.0)
+                    
+                    var certifiedLabel:UILabel = UILabel(frame: CGRect(x: 45, y: 0, width: self.view.frame.width - 60, height: 61))
+                    certifiedLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16)
+                    certifiedLabel.textColor = UIColor(red: 249/255, green: 168/255, blue: 37/255, alpha: 1.0)
+                    certifiedLabel.adjustsFontSizeToFitWidth = true
+                    certifiedLabel.text = "They will see your public pics & vids."
+                    cell.addSubview(certifiedLabel)
+                    
+                    var receiveIcon:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 20, height: 61))
+                    receiveIcon.contentMode = UIViewContentMode.Center
+                    receiveIcon.image = UIImage(named: "sender_icon")
+                    cell.addSubview(receiveIcon)
+                    
+                    var separatorView:UIView = UIView(frame: CGRect(x: 0, y: 60, width: self.view.frame.width, height: 1))
+                    separatorView.backgroundColor = UIColor(red: 249/255, green: 168/255, blue: 37/255, alpha: 1.0)
+                    cell.addSubview(separatorView)
+                    
+                    cell.selectionStyle = UITableViewCellSelectionStyle.None
+                    
+                    return cell
+                }
+                else{
+                    var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as! PikiUserTableViewCell
+                    cell.loadItem(recipients[indexPath.row], searchController: self)
+                    cell.selectionStyle = UITableViewCellSelectionStyle.None
+                    
+                    
+                    if indexPath.row == (recipients.count - 10){
+                        if recipients.count > 0 && !isLoadingMoreRecipients{
+                            if recipients.count % 100 == 0{
+                                isLoadingMoreRecipients = true
+                                getMoreFriends()
+                            }
+                        }
+                    }
+                    
+                    return cell
                 }
             }
-            
-            
-            
-            return cell
-            
-            
         }
+        
+        
 
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if printMode == 0{
-            
-            if self.lookingForFriendsOnPeekee{
-                if section == 0{
-                    return 64
+        if tableView == searchTableView{
+            return 0
+        }
+        else{
+            if printMode == 0{
+                
+                if self.lookingForFriendsOnPeekee{
+                    if section == 1{
+                        return 64
+                    }
+                    else if section > 1 {
+                        return 32
+                    }
+                    else{
+                        return 0
+                    }
                 }
                 else{
-                    return 32
+                    if section > 0{
+                        return 32
+                    }
+                    else{
+                        return 0
+                    }
+                    
                 }
             }
             else{
-                return 32
+                return 0
             }
         }
-        else{
-            return 0
-        }
+        
         
     }
     
@@ -817,10 +1056,9 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         if printMode == 0{
             if section == 0{
-                if pikiUsersFound.count > 0 {
-                    labelHeader.text = NSLocalizedString("PLEEK USER", comment : "PLEEK USER")
-                }
-                else if contactsWithUserInfos.count > 0{
+            }
+            else if section == 1{
+                if contactsWithUserInfos.count > 0{
                     labelHeader.text = NSLocalizedString("FRIENDS ON PLEEK", comment : "FRIENDS ON PLEEK")
                 }
                 else if self.lookingForFriendsOnPeekee{
@@ -844,61 +1082,10 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 
             }
-            else if section == 1{
-                if pikiUsersFound.count > 0 {
-                    if contactsWithUserInfos.count > 0{
-                        labelHeader.text = NSLocalizedString("FRIENDS ON PLEEK", comment : "FRIENDS ON PLEEK")
-                    }
-                    else if self.lookingForFriendsOnPeekee{
-                        
-                        labelHeader.text = NSLocalizedString("LOOKING FOR FRIENDS", comment : "LOOKING FOR FRIENDS")
-                        viewHeader.backgroundColor = Utils().secondColor
-                        labelHeader.textAlignment = NSTextAlignment.Center
-                        viewHeader.frame = CGRect(x: 15, y: 0, width: self.view.frame.size.width, height: 64)
-                        
-                        backLabel.backgroundColor = Utils().secondColor
-                        
-                        var loadIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
-                        loadIndicator.tintColor = UIColor.whiteColor()
-                        loadIndicator.center = CGPoint(x: viewHeader.frame.width/2, y: viewHeader.frame.height/2 + viewHeader.frame.height/4 - 3)
-                        loadIndicator.hidesWhenStopped = true
-                        loadIndicator.startAnimating()
-                        viewHeader.addSubview(loadIndicator)
-                    }
-                    else{
-                        labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
-                    }
-                }
-                else{
-                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
-                }
-                /*
-                
-                if contactsWithUserInfos.count > 0{
-                    labelHeader.text = NSLocalizedString("FRIENDS ON PEEKEE", comment : "FRIENDS ON PEEKEE")
-                }
-                else if self.lookingForFriendsOnPeekee{
-                    
-                    labelHeader.text = NSLocalizedString("LOOKING FOR FRIENDS", comment : "LOOKING FOR FRIENDS")
-                    viewHeader.backgroundColor = Utils().secondColor
-                    labelHeader.textAlignment = NSTextAlignment.Center
-                    viewHeader.frame = CGRect(x: 15, y: 0, width: self.view.frame.size.width, height: 64)
-                    
-                    backLabel.backgroundColor = Utils().secondColor
-                    
-                    var loadIndicator:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
-                    loadIndicator.tintColor = UIColor.whiteColor()
-                    loadIndicator.center = CGPoint(x: viewHeader.frame.width/2, y: viewHeader.frame.height/2 + viewHeader.frame.height/4 - 3)
-                    loadIndicator.hidesWhenStopped = true
-                    loadIndicator.startAnimating()
-                    viewHeader.addSubview(loadIndicator)
-                }
-                else{
-                    labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PEEKEE", comment : "FRIENDS NOT YET ON PEEKEE")
-                }*/
-            }
             else{
+
                 labelHeader.text = NSLocalizedString("FRIENDS NOT YET ON PLEEK", comment : "FRIENDS NOT YET ON PLEEK")
+
             }
         }
         else{
@@ -913,7 +1100,18 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        
+        if tableView == searchTableView{
+            
+        }
+        else{
+            if printMode == 0 && indexPath.section == 0{
+                self.performSegueWithIdentifier("certifiedAccounts", sender: self)
+            }
+            
+            tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        }
+        
     }
     
     
@@ -921,104 +1119,62 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     * TextField Delegate
     */
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        
-        if printMode == 1{
-            printMode = 0
-            self.tableView.reloadData()
-            
-            UIView.animateWithDuration(0.4,
-                delay: 0,
-                usingSpringWithDamping: 0.5,
-                initialSpringVelocity: 10.0,
-                options: nil,
-                animations: { () -> Void in
-                    self.findSelectorLabel!.textColor = Utils().primaryColor
-                    self.friendsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-                    self.indicatorView!.transform = CGAffineTransformIdentity
-                }) { (finished) -> Void in
-                    println("Show Find")
-                    
-            }
-        }
+
         
         var finalText:NSString = textField.text as NSString
         finalText = finalText.stringByReplacingCharactersInRange(range, withString: string).lowercaseString
         
         var textLessWhite:String = finalText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
+
+        self.usernameUserFound = nil
+        self.searchTableView.reloadData()
         
-        pikiUsersFound.removeAll(keepCapacity: false)
         
-        if countElements(textLessWhite) > 0{
-            if countElements(textLessWhite) > 1 {
-                var contactInfo = ["username" : textLessWhite, "searching" : true]
-                pikiUsersFound.append(contactInfo)
-            }
-            else{
-                var contactInfo = ["username" : textLessWhite, "searching" : false]
-                pikiUsersFound.append(contactInfo)
-            }
+        if count(textLessWhite) > 2 {
             
-        }
-        
-        
-        self.tableView.reloadData()
-        
-        
-        
-        if countElements(textLessWhite) > 1 {
+            self.isSearchingUser = true
+            self.usernameInSearch = textLessWhite
+            self.searchTableView.reloadData()
             
-            //Sort phone Contacts
-            if printMode == 0{
+            self.searchTableView.hidden = false
+            
+            //Get user with this exact username
+            
+            self.searchUserWithUsername(textLessWhite).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                self.isSearchingUser = false
+                var finalText:NSString = textField.text as NSString
+                var textLessWhiteNow:String = finalText.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).lowercaseString
                 
-                
-                
-                sortedContactsPhone.removeAll(keepCapacity: false)
-                
-                for contact in contactsPhone{
-                    if contact.compositeName != nil {
-                        var stringName:NSString = NSString(string: contact.compositeName.lowercaseString)
-                        if stringName.rangeOfString(textLessWhite).length > 0{
-                            sortedContactsPhone.append(contact)
-                        }
-                    }
-                    
+                var canChange:Bool = false
+                if textLessWhite == textLessWhiteNow{
+                    canChange = true
                 }
                 
-                tableView.reloadData()
-            }
-            
-            
-            
-            getUserWithUsername(textLessWhite).continueWithBlock { (task : BFTask!) -> AnyObject! in
                 if task.error != nil{
+                    self.searchTableView.reloadData()
+                }
+                else if task.result != nil{
+                    if canChange{
+                        self.usernameUserFound = task.result as? PFUser
+                        self.searchTableView.reloadData()
+                    }
                     
                 }
                 else{
-                    if task.result.count > 0{
-                        var users:Array<PFUser> = task.result as Array<PFUser>
-                        println("\(users)")
-                        self.pikiUsersFound = users
-                        self.tableView.reloadData()
+                    if canChange{
+                        self.usernameUserFound = nil
+                        self.searchTableView.reloadData()
                     }
-                    else{
-                        self.pikiUsersFound.removeAll(keepCapacity: false)
-                        var contactInfo = ["username" : textLessWhite, "searching" : false]
-                        self.pikiUsersFound.append(contactInfo)
-                        self.tableView.reloadData()
-                    }
-                    
-                    
                 }
                 
                 return nil
-            }
+            })
             
         }
         else{
-            sortedContactsPhone = contactsPhone
-            self.tableView.reloadData()
+            self.searchTableView.hidden = true
         }
+
         
         return true
     }
@@ -1053,65 +1209,40 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
     }
     
-    func cancelSearch(sender : UIButton){
-        
-        sortedContactsPhone = contactsPhone
-        searchTextField.text = ""
-        
-        pikiUsersFound.removeAll()
-        tableView.reloadData()
-        
-        searchTextField.resignFirstResponder()
-        cancelSearchButton!.hidden = true
-        
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.searchTextField.frame = CGRect(x: 50, y: self.searchTextField.frame.origin.y, width: self.view.frame.size.width - 100, height: self.searchTextField.frame.size.height)
-            self.searchTextField.layer.cornerRadius = 15
-        }) { (finished) -> Void in
-            self.quitButton.hidden = false
-            self.settingsButton.hidden = false
-        }
-        
-    }
+    
     
     @IBAction func changeSelection(sender: AnyObject) {
         tableView.reloadData()
     }
     
-    /*
-    * Server functions
-    */
     
-    func getUserWithUsername(username : String) -> BFTask{
-        var successful = BFTaskCompletionSource()
+    //MARK: GET FRIENDS
+    
+    func addUserInFriendsList(user : PFUser){
         
+        var canAdd:Bool = true
         
-        var userQuery:PFQuery = PFUser.query()
-        userQuery.whereKey("username", equalTo: username)
-        userQuery.findObjectsInBackgroundWithBlock({ (users, error) -> Void in
-            if error == nil {
-                successful.setResult(users)
+        for friend in self.friends{
+            if friend.objectId == user.objectId{
+                canAdd = false
+                break
             }
-            else{
-                successful.setError(error)
-            }
-        })
+        }
         
-        return successful.task
+        if canAdd{
+            self.friends.append(user)
+        }
+        
     }
     
-    
-    
-    //GET ALL USER FRIENDS
     func getFriends(){
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
-        
-        if arrayFriendsId != nil{
-            var queryFriends:PFQuery = PFUser.query()
-            queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
+        Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
+            
+            var queryFriends:PFQuery = PFUser.query()!
+            queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
             queryFriends.orderByAscending("username")
-            queryFriends.cachePolicy = kPFCachePolicyCacheThenNetwork
+            queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
             queryFriends.limit = 100
             
             queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
@@ -1119,7 +1250,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                 }
                 else{
-                    self.friends = friends as Array<PFUser>
+                    self.friends = friends as! Array<PFUser>
                     
                     if self.printMode == 1{
                         self.tableView.reloadData()
@@ -1127,22 +1258,25 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                 }
             }
+            
+            return nil
+
         }
+        
+        
 
     }
     
     func getMoreFriends(){
         
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
-        
-        
-        if arrayFriendsId != nil {
-            var queryFriends:PFQuery = PFUser.query()
-            queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
+        Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
+            
+            var queryFriends:PFQuery = PFUser.query()!
+            queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
             queryFriends.orderByAscending("username")
             queryFriends.limit = 100
-            queryFriends.skip = friends.count
+            queryFriends.skip = self.friends.count
             
             queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
                 if error != nil {
@@ -1152,7 +1286,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     var indexPathToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
                     
-                    for friend in friends as Array<PFUser>{
+                    for friend in friends as! Array<PFUser>{
                         self.friends.append(friend)
                         indexPathToInsert.append(NSIndexPath(forRow: self.friends.count - 1, inSection: 0))
                     }
@@ -1165,6 +1299,9 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                 }
             }
+            
+            return nil
+            
         }
         
     }
@@ -1172,61 +1309,73 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func checkContactsOnPiki(){
         
-        var phoneNumbers:Array<String> = []
         
-        let networkInfo = CTTelephonyNetworkInfo()
-        let carrier = networkInfo.subscriberCellularProvider
-        
-        
-        
-        let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
-        
-        
-        
-        for contact in self.contactsPhone{
+        dispatch_async(dispatch_get_global_queue(0, 0), {
+            var phoneNumbers:Array<String> = []
             
-            for tel in contact.phones{
+            let networkInfo = CTTelephonyNetworkInfo()
+            let carrier = networkInfo.subscriberCellularProvider
+            
+            
+            
+            let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
+            
+            
+            
+            for contact in self.contactsPhone{
                 
-                if (tel as? String) != nil {
+                for tel in contact.phones{
                     
-                    if countElements(tel as String) > 6{
-                        var errorPointer:NSError?
-                        var number:NBPhoneNumber? = phoneUtil.parse(tel as String, defaultRegion:regionLabel!, error:&errorPointer)
-                        if errorPointer == nil {
-                            if phoneUtil.isValidNumber(number!){
-                                
-                                var errorPhone:NSError?
-                                let phoneNumber:String? = phoneUtil.format(number, numberFormat: NBEPhoneNumberFormatE164, error: &errorPhone)
-                                
-                                if errorPhone == nil {
-                                    phoneNumbers.append(phoneNumber!)
+                    if (tel as? String) != nil {
+                        
+                        if count(tel as! String) > 6{
+                            var errorPointer:NSError?
+                            var number:NBPhoneNumber? = phoneUtil.parse(tel as! String, defaultRegion:self.regionLabel!, error:&errorPointer)
+                            if errorPointer == nil {
+                                if phoneUtil.isValidNumber(number!){
+                                    
+                                    var errorPhone:NSError?
+                                    let phoneNumber:String? = phoneUtil.format(number, numberFormat: NBEPhoneNumberFormatE164, error: &errorPhone)
+                                    
+                                    if errorPhone == nil {
+                                        phoneNumbers.append(phoneNumber!)
+                                    }
+                                    
+                                    
                                 }
-                                
-                                
                             }
                         }
                     }
+                    
+                    
+                    
+                    
+                    
                 }
-                
-                
-                
-                
                 
             }
             
-        }
+            
+            
+            PFCloud.callFunctionInBackground("checkContactOnPiki", withParameters: ["phoneNumbers" : phoneNumbers]) { (pikiUsers, error) -> Void in
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    if error != nil {
+                        println("Error getting piki Users : \(error!.localizedDescription)")
+                        self.lookingForFriendsOnPeekee = false
+                        self.tableView.reloadData()
+                    }
+                    else{
+                        self.pikiUsersFromPhoneContacts = pikiUsers as! Array<[String : String]>
+                        self.getAllUsersFromContacts()
+                    }
+                })
+                
+                
+            }
+        })
         
-        PFCloud.callFunctionInBackground("checkContactOnPiki", withParameters: ["phoneNumbers" : phoneNumbers]) { (pikiUsers, error) -> Void in
-            if error != nil {
-                println("Error getting piki Users : \(error.localizedDescription)")
-                self.lookingForFriendsOnPeekee = false
-                self.tableView.reloadData()
-            }
-            else{
-                self.pikiUsersFromPhoneContacts = pikiUsers as Array<[String : String]>
-                self.getAllUsersFromContacts()
-            }
-        }
+        
         
     }
     
@@ -1241,35 +1390,47 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             var tempContactsWithUserInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
             
             
-            var friendsUser:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
-            
-            
-            if friendsUser == nil{
-                friendsUser = []
-            }
+            var friendsUserId:Array<String>? = Utils().getAppDelegate().friendsIdList
+            var usersFromContacts:Array<[String : String]> = Array<[String : String]>()
+            var arrayPhoneUsers:Array<String> = Array<String>()
             
             for userInfos in self.pikiUsersFromPhoneContacts{
-                
-                if  !contains(friendsUser!, userInfos["userObjectId"]!){
+                if !contains(friendsUserId!, userInfos["userObjectId"]!){
+                    var idUser = userInfos["userObjectId"]!
                     
-                    for contact in self.contactsPhone{
-                        
-                        for phone in contact.phones{
-                            
-                            let formatedPhone:String? = self.getFormattedPhoneNumber(phone as String)
-                            if  formatedPhone != nil {
+                    usersFromContacts.append(userInfos)
+                    
+                    if userInfos["phoneNumber"] != nil{
+                        arrayPhoneUsers.append(userInfos["phoneNumber"]!)
+                    }
+                }
+            }
+            
+            
+            for contact in self.contactsPhone{
+                
+                for phone in contact.phones{
+                    
+                    
+                    let formatedPhone:String? = self.getFormattedPhoneNumber(phone as! String)
+                    
+                    if formatedPhone != nil{
+                        if contains(arrayPhoneUsers, formatedPhone!){
+                            for userInfos in usersFromContacts{
+                                
                                 if userInfos["phoneNumber"] == formatedPhone{
                                     tempContactsWithUserInfos.append(["userInfos" : userInfos, "contact" : contact])
                                 }
+                                
                             }
-                            
                         }
-                        
                     }
                     
                 }
                 
             }
+            
+            
             
             
             
@@ -1297,7 +1458,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
         var errorPointer:NSError?
         
-        if countElements(numberString) > 4{
+        if count(numberString) > 4{
             var number:NBPhoneNumber? = phoneUtil.parse(numberString, defaultRegion:regionLabel!, error:&errorPointer)
             if errorPointer == nil {
                 if phoneUtil.isValidNumber(number){
@@ -1316,8 +1477,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             
             for phone in contact.phones{
                 
-                if getFormattedPhoneNumber(phone as String) != nil {
-                    if userInfos["phoneNumber"] == getFormattedPhoneNumber(phone as String){
+                if getFormattedPhoneNumber(phone as! String) != nil {
+                    if userInfos["phoneNumber"] == getFormattedPhoneNumber(phone as! String){
                         return userInfos
                     }
                 }
@@ -1332,21 +1493,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func isUserAlreadyAdded(user : PFUser) -> Bool{
         
-        for userId in PFUser.currentUser()["usersFriend"] as Array<String>{
+        for userId in PFUser.currentUser()!["usersFriend"] as! Array<String>{
             if user.objectId == userId{
-                
-                return true
-            }
-        }
-        
-        return false
-        
-    }
-    
-    func isUserAlreadyAdded(idUser : String) -> Bool{
-        
-        for userId in PFUser.currentUser()["usersFriend"] as Array<String>{
-            if idUser == userId{
                 
                 return true
             }
@@ -1380,14 +1528,9 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
         switch (result.value) {
-        case MessageComposeResultCancelled.value:
-            println("Canceled")
-            
-        case MessageComposeResultFailed.value:
-            println("Failed")
             
         case MessageComposeResultSent.value:
-            println("Sent")
+            Mixpanel.sharedInstance().track("Send SMS", properties: ["nb_recipients" : controller.recipients.count])
             
         default:
             break
@@ -1412,7 +1555,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         if Utils().iOS8{
             if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
             }
         }
         else{
@@ -1429,12 +1572,9 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         
     }
-
-    @IBAction func goSettings(sender: AnyObject) {
-
-        
-    }
     
+    //MARK: TAB
+
     func findSelection(gesture : UITapGestureRecognizer){
         
         printMode = 0
@@ -1448,7 +1588,11 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             animations: { () -> Void in
                 self.findSelectorLabel!.textColor = Utils().primaryColor
                 self.friendsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-                self.indicatorView!.transform = CGAffineTransformIdentity
+                self.recipientsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+                self.friendsSelectorLabelBottom.textColor = Utils().greyNotSelected
+                self.recipientsSelectorLabelBottom.textColor = Utils().greyNotSelected
+                
+                self.indicatorView!.frame = CGRect(x: 0, y: self.indicatorView!.frame.origin.y, width: self.indicatorView!.frame.width, height: self.indicatorView!.frame.height)
             }) { (finished) -> Void in
                 println("Show Find")
                 
@@ -1470,10 +1614,40 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             animations: { () -> Void in
                 self.friendsSelectorLabel!.textColor = Utils().primaryColor
                 self.findSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-                self.indicatorView!.transform = CGAffineTransformMakeTranslation(self.view.frame.width/2, 0)
+                self.recipientsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+                self.friendsSelectorLabelBottom.textColor = Utils().lightBlue
+                self.recipientsSelectorLabelBottom.textColor = Utils().greyNotSelected
+                
+                
+                self.indicatorView!.frame = CGRect(x: self.view.frame.width/3, y: self.indicatorView!.frame.origin.y, width: self.indicatorView!.frame.width, height: self.indicatorView!.frame.height)
         }) { (finished) -> Void in
             println("Show Friends")
             
+        }
+        
+    }
+    
+    func recipientsSelection(gesture : UITapGestureRecognizer){
+        
+        printMode = 2
+        self.tableView.reloadData()
+        
+        UIView.animateWithDuration(0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.5,
+            initialSpringVelocity: 10.0,
+            options: nil,
+            animations: { () -> Void in
+                self.recipientsSelectorLabel!.textColor = Utils().primaryColor
+                self.friendsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+                self.findSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
+                self.friendsSelectorLabelBottom.textColor = Utils().greyNotSelected
+                self.recipientsSelectorLabelBottom.textColor = Utils().lightBlue
+                
+                self.indicatorView!.frame = CGRect(x: self.view.frame.width/3 * 2, y: self.indicatorView!.frame.origin.y, width: self.indicatorView!.frame.width, height: self.indicatorView!.frame.height)
+            }) { (finished) -> Void in
+                println("Show Recipients")
+                
         }
         
     }
@@ -1548,8 +1722,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             break
             
         case APAddressBookAccess.Denied:
-            // Access denied or restricted by privacy settings
-            // TODO : Say to the user to grant access in settings
+            contactsDenied()
             break
         }
         
@@ -1575,8 +1748,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 if (contacts != nil) {
                     //self.memoryStorage().addItems(contacts)
                     //println("Contacts : \(contacts)")
-                    self.contactsPhone = contacts as Array<APContact>
-                    self.sortedContactsPhone = contacts as Array<APContact>
+                    self.contactsPhone = contacts as! Array<APContact>
+                    self.sortedContactsPhone = contacts as! Array<APContact>
                     
                     if self.printMode == 0{
                         self.lookingForFriendsOnPeekee = true
@@ -1596,19 +1769,241 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     
-    func getNumberOfFriends() -> Int{
+    func getNumberOfFriends() -> String{
     
-        let user:PFUser = PFUser.currentUser()
-        let friendsUser : Array<String> = PFUser.currentUser()["usersFriend"] as Array<String>
+        let friendsUser : Array<String> = Utils().getAppDelegate().friendsIdList
         
-        return friendsUser.count
+        return Utils().formatNumber(friendsUser.count)
     
     }
     
+    func getNumberOfRecipients() -> String{
+        
+        if PFUser.currentUser()!["nbRecipients"] != nil{
+            return Utils().formatNumber(PFUser.currentUser()!["nbRecipients"] as! Int)
+        }
+        else{
+            return "0"
+        }
+
+        
+    }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    //MARK: GET RECIPIENTS
+    
+    func getRecipients(){
+        
+        var queryFriends = PFQuery(className: "Friend")
+        queryFriends.whereKey("friend", equalTo: PFUser.currentUser()!)
+        queryFriends.limit = 100
+        queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
+        queryFriends.orderByDescending("createdAt")
+        queryFriends.includeKey("user")
+        
+        queryFriends.findObjectsInBackgroundWithBlock { (recipientsObjects, error) -> Void in
+            if error != nil {
+                
+            }
+            else{
+                self.recipients.removeAll(keepCapacity: false)
+                
+                for recipientObject in recipientsObjects!{
+                    self.recipients.append(recipientObject["user"] as! PFUser)
+                }
+                
+                if self.printMode == 2{
+                    self.tableView.reloadData()
+                }
+                
+            }
+        }
+    }
+    
+    func getMoreRecipients(){
+        
+        var queryFriends = PFQuery(className: "Friend")
+        queryFriends.whereKey("friend", equalTo: PFUser.currentUser()!)
+        queryFriends.limit = 100
+        queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
+        queryFriends.orderByDescending("createdAt")
+        queryFriends.includeKey("user")
+        queryFriends.skip = recipients.count
+        
+        queryFriends.findObjectsInBackgroundWithBlock { (recipientsObjects, error) -> Void in
+            if error != nil {
+                
+            }
+            else{
+                
+                var indexPathToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
+                
+                if self.printMode == 2{
+                    for recipient in recipientsObjects as! Array<PFObject>{
+                        self.recipients.append(recipient["user"] as! PFUser)
+                        indexPathToInsert.append(NSIndexPath(forRow: self.recipients.count - 1, inSection: 0))
+                    }
+                    
+                    
+                    self.tableView.insertRowsAtIndexPaths(indexPathToInsert, withRowAnimation: UITableViewRowAnimation.Fade)
+                }
+                
+                self.isLoadingMoreRecipients = false
+                
+            }
+        }
+        
+    }
+
+    
+    //MARK : Search Transition
+    
+    func enterSearch(){
+        
+        var xFinal:CGFloat = 10
+        var xtranslation:CGFloat = self.searchButton.frame.origin.x - xFinal
+        
+        self.headerLabel.hidden = true
+        self.searchButton.enabled = false
+        
+        UIView.animateWithDuration(0.3,
+            animations: { () -> Void in
+                self.quitButton.alpha = 0.0
+                self.searchButton.transform = CGAffineTransformMakeTranslation(-xtranslation, 0)
+                self.searchLayer.alpha = 1.0
+                
+        }) { (finished) -> Void in
+            self.searchButton.hidden = false
+            self.searchTextField.hidden = false
+            self.cancelSearchButton!.hidden = false
+            self.searchTextField.becomeFirstResponder()
+        }
+        
+    }
+    
+    func cancelSearch(sender : UIButton){
+        
+        searchTextField.text = ""
+        searchTextField.resignFirstResponder()
+        searchTextField.hidden = true
+        cancelSearchButton!.hidden = true
+        self.searchTableView.hidden = true
+        self.usernameUserFound = nil
+        self.usernameInSearch = nil
         
         
-        return true
+        UIView.animateWithDuration(0.3, animations: { () -> Void in
+            self.searchButton.transform = CGAffineTransformIdentity
+            self.searchLayer.alpha = 0.0
+            self.quitButton.alpha = 1.0
+            
+            }) { (finished) -> Void in
+                self.searchButton.enabled = true
+                self.headerLabel.hidden = false
+        }
+        
+    }
+    
+    
+    //MARK: SEARCH
+    
+    //Search a user with this username in my friends
+    func searchFriendWithUsername(username : String) -> BFTask{
+        
+        var completionTask:BFTaskCompletionSource = BFTaskCompletionSource()
+        var findInLocalFriends:Bool = false
+        
+        for friend in friends{
+            if  NSString(string: username).containsString(friend.username!){
+                findInLocalFriends = true
+                completionTask.setResult(friend)
+                break
+            }
+        }
+        
+        
+        //If not in local friends, find it on server
+        if !findInLocalFriends{
+            Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
+                
+                if task.error != nil{
+                    completionTask.setError(task.error)
+                }
+                else{
+                    var queryFriends:PFQuery = PFUser.query()!
+                    queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
+                    queryFriends.whereKey("username", containsString: username)
+                    queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
+                    queryFriends.limit = 100
+                    
+                    queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
+                        if error != nil {
+                            completionTask.setError(error)
+                        }
+                        else{
+                            completionTask.setResult(friends)
+                            
+                        }
+                    }
+                }
+                
+                
+                return nil
+                
+            }
+        }
+        
+        return completionTask.task
+    }
+
+    
+    //Searcha user with this exact username
+    func searchUserWithUsername(username : String) -> BFTask{
+        
+        var completionTask:BFTaskCompletionSource = BFTaskCompletionSource()
+        
+        var queryFriends:PFQuery = PFUser.query()!
+        queryFriends.whereKey("username", equalTo: username)
+        queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
+        
+        queryFriends.getFirstObjectInBackgroundWithBlock {(user, error) -> Void in
+            if error != nil {
+                completionTask.setError(error)
+            }
+            else{
+                completionTask.setResult(user)
+                
+            }
+        }
+        
+        return completionTask.task
+    }
+    
+    
+    //MARK: Contacts Denied
+    
+    func contactsDenied(){
+        
+        var canOpenSettings:Bool = false
+        
+        switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
+        case .OrderedSame, .OrderedDescending:
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: "To find friends on Pleek you need to grant access to your contacts. Do you want to go to the settings to give access to your contacts?", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                
+                self.openSettings()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        case .OrderedAscending:
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: "To find friends on Pleek you need to grant access to your contacts. Please go to Settings > Confidentiality > Contacts and allow it for Pleek", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    func openSettings(){
+        UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
     }
 }

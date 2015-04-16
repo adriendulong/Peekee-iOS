@@ -68,6 +68,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var appVersionLabel: UILabel!
     
     var changeUsernameChosen:Bool = true
+    var documentInteractionController:UIDocumentInteractionController?
     
     override func viewDidLoad() {
         
@@ -102,7 +103,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: Table View DataSource
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 4
+        return 3
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -148,9 +149,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section{
         case 0:
-            return 3
+            return 4
         case 1:
-            return 2
+            return 1
         case 2:
             return 2
         case 3:
@@ -162,7 +163,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         
-        var cell:SettingsTableViewCell = tableView.dequeueReusableCellWithIdentifier("SettingsCell") as SettingsTableViewCell
+        var cell:SettingsTableViewCell = tableView.dequeueReusableCellWithIdentifier("SettingsCell") as! SettingsTableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.secondLabel.hidden = true
         
@@ -176,7 +177,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.mainSwitch.hidden = true
                 cell.secondLabel.hidden = false
                 cell.emojiImageView.image = UIImage(named: "username_emoji")
-                cell.secondLabel.text = "@\(PFUser.currentUser().username)"
+                cell.secondLabel.text = "@\(PFUser.currentUser()!.username!)"
             case 1:
                 cell.mainLabel.transform = CGAffineTransformMakeTranslation(0, -10)
                 cell.secondLabel.transform = CGAffineTransformMakeTranslation(0, -5)
@@ -185,8 +186,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.secondLabel.hidden = false
                 cell.emojiImageView.image = UIImage(named: "name_emoji")
                 
-                if PFUser.currentUser()["name"] != nil{
-                    cell.secondLabel.text = PFUser.currentUser()["name"] as? String
+                if PFUser.currentUser()!["name"] != nil{
+                    cell.secondLabel.text = PFUser.currentUser()!["name"] as? String
                 }
                 else{
                     cell.secondLabel.text = "undefined"
@@ -195,9 +196,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 
             case 2:
                 cell.mainLabel.transform = CGAffineTransformIdentity
-                cell.mainLabel.text = NSLocalizedString("Recommended accounts", comment : "Recommended accounts")
+                cell.mainLabel.text = "Popular accounts"
                 cell.emojiImageView.image = UIImage(named: "recommand_emoji")
                 cell.mainSwitch.hidden = true
+                
+            case 3:
+                cell.mainLabel.text = "Create my Pleek ID"
+                cell.mainLabel.transform = CGAffineTransformIdentity
+                cell.emojiImageView.image = UIImage(named: "share_emoji")
+                cell.mainSwitch.hidden = true
+                
             default:
                 cell.mainLabel.text = NSLocalizedString("Change Username", comment : "Change Username")
                 cell.mainSwitch.hidden = true
@@ -212,11 +220,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.mainLabel.transform = CGAffineTransformIdentity
                 cell.mainSwitch.onTintColor = Utils().secondColor
                 cell.updateSwitch()
-            case 1:
-                cell.mainLabel.text = NSLocalizedString("Silent Mode", comment : "Silent Mode")
-                cell.mainLabel.transform = CGAffineTransformIdentity
-                cell.emojiImageView.image = UIImage(named: "notification_emoji")
-                cell.mainSwitch.hidden = true
 
             default:
                 cell.mainLabel.text = NSLocalizedString("Notifications", comment : "Notifications")
@@ -247,12 +250,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         case 3:
             switch indexPath.row{
             case 0:
-                cell.mainLabel.text = NSLocalizedString("Share the app", comment : "Share the app")
+                //cell.mainLabel.text = NSLocalizedString("Share the app", comment : "Share the app")
+                cell.mainLabel.text = "Create my Pleek ID"
                 cell.mainLabel.transform = CGAffineTransformIdentity
                 cell.emojiImageView.image = UIImage(named: "share_emoji")
                 cell.mainSwitch.hidden = true
             default:
-                cell.mainLabel.text = NSLocalizedString("Share the app", comment : "Share the app")
+                cell.mainLabel.text = "Create my Pleek ID"
+                //cell.mainLabel.text = NSLocalizedString("Share the app", comment : "Share the app")
                 cell.mainLabel.transform = CGAffineTransformIdentity
                 cell.mainSwitch.hidden = true
             }
@@ -282,23 +287,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 self.performSegueWithIdentifier("changeUsername", sender: self)
                 
             case 2:
-                //self.performSegueWithIdentifier("muteAllMode", sender: self)
                 self.performSegueWithIdentifier("showRecommendedAccounts", sender: self)
+                
+            case 3:
+                shareTheApp()
+                
             default:
                 self.performSegueWithIdentifier("changeUsername", sender: self)
-            }
-            
-        case 1:
-            
-            switch indexPath.row{
-            case 0:
-                println("coucou")
-                
-            case 1:
-                self.performSegueWithIdentifier("muteAllMode", sender: self)
-
-            default:
-                println("coucou")
             }
         case 2:
             switch indexPath.row{
@@ -313,8 +308,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             switch indexPath.row{
             case 0:
                 shareTheApp()
-            case 1:
-                println("coucou")
             default:
                 println("coucou")
             }
@@ -363,12 +356,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func shareTheApp(){
         
-        let someText:String = "Download Pleek! Communicate with your friends through beaufitul photos mozaics!"
+        
+        let someText:String = "Add me on #Pleek"
         let google:NSURL = NSURL(string: Utils().shareAppUrl)!
+        var image:UIImage = Utils().buildPleekId()
         
         // let's add a String and an NSURL
         let activityViewController = UIActivityViewController(
-            activityItems: [someText, google],
+            activityItems: [someText, google, image],
             applicationActivities: nil)
         self.navigationController!.presentViewController(activityViewController,
             animated: true, 
@@ -414,9 +409,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if segue.identifier == "changeUsername"{
             
-            var targetController:EditUsernameViewController = segue.destinationViewController as EditUsernameViewController
+            var targetController:EditUsernameViewController = segue.destinationViewController as! EditUsernameViewController
             targetController.changeUsernameChosen = self.changeUsernameChosen
         }
         
     }
+    
+
+    
+    
+    
+    
 }

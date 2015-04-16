@@ -5,6 +5,7 @@ target 'Peekee' do
 pod 'APAddressBook/Swift'
 pod 'Parse'
 pod 'ParseUI'
+pod 'Facebook-iOS-SDK'
 pod 'Mixpanel'
 pod 'ParseCrashReporting'
 pod "Animated-Gif-iOS"

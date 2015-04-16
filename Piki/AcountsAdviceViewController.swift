@@ -62,7 +62,7 @@ class AccountsTableViewCell : UITableViewCell{
         
         if actionbutton == nil{
             actionbutton = UIButton(frame: CGRect(x: UIScreen.mainScreen().bounds.width - 60, y: 16, width: 40, height: 41))
-            actionbutton.setImage(UIImage(named: "add_friend_first_screen"), forState: UIControlState.Normal)
+            actionbutton.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
             actionbutton.addTarget(self, action: Selector("addFriend"), forControlEvents: UIControlEvents.TouchUpInside)
             contentView.addSubview(actionbutton)
         }
@@ -87,20 +87,20 @@ class AccountsTableViewCell : UITableViewCell{
         
         
         if !alreadyAdded {
-            actionbutton.setImage(UIImage(named: "add_friend_first_screen"), forState: UIControlState.Normal)
+            actionbutton.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
         }
         else{
-            actionbutton.setImage(UIImage(named: "friend_added_first_screen"), forState: UIControlState.Normal)
+            actionbutton.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
         }
         
         //Set with user infos
-        usernameLabel.text = "@\(self.user.username)"
+        usernameLabel.text = "@\(self.user.username!)"
         descriptionLabel.text = self.user["recommendDescription"] as? String
         
         let imageFile:PFFile? = self.user["recommendPicture"] as? PFFile
         if imageFile != nil{
             imageFile!.getDataInBackgroundWithBlock({ (data, error) -> Void in
-                self.accountImageView.image = UIImage(data: data)
+                self.accountImageView.image = UIImage(data: data!)
             })
         }
         
@@ -113,7 +113,7 @@ class AccountsTableViewCell : UITableViewCell{
         
         if !self.alreadyAdded{
             self.delegate.addFriend(self.user)
-            actionbutton.setImage(UIImage(named: "friend_added_first_screen"), forState: UIControlState.Normal)
+            actionbutton.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
         }
         
         
@@ -137,8 +137,11 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     var recommandedUsers:Array<PFUser> = Array<PFUser>()
     var usersAdded:Array<PFUser> = Array<PFUser>()
     var regionLabel:String?
+    var recommendedAccountsAdded:Int = 0
     
     override func viewDidLoad() {
+        
+        Mixpanel.sharedInstance().track("Recommended Accounts View")
         
         titleLabel.text = NSLocalizedString("Surprise", comment :"Surprise")
         
@@ -207,7 +210,12 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
         else{
             regionLabel = "us"
         }
-
+        
+        if count(regionLabel!) < 1{
+            regionLabel = "us"
+        }
+        
+        println("Region Label : \(regionLabel)")
         getRecommendedUsers()
         
         //Shadow for bottom button
@@ -230,7 +238,7 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell:AccountsTableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as AccountsTableViewCell
+        let cell:AccountsTableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! AccountsTableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         cell.loadCell(recommandedUsers[indexPath.row], alreadyAdded: isUserAlreadyAdded(recommandedUsers[indexPath.row]), cellDelegate : self)
@@ -244,14 +252,24 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     func getRecommendedUsers(){
         
-        var userQuery:PFQuery = PFUser.query()
-        userQuery.whereKey("isRecommend", equalTo: true)
-        userQuery.whereKey("recommendLocalisation", equalTo: self.regionLabel!)
-        userQuery.orderByAscending("recommendOrder")
-        userQuery.findObjectsInBackgroundWithBlock({ (users, error) -> Void in
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        
+        println("Region label : \(self.regionLabel!)")
+        
+        var userRecommendedQuery:PFQuery = PFQuery(className: "Certified")
+        userRecommendedQuery.whereKey("recommendLocalisation", equalTo: self.regionLabel!)
+        userRecommendedQuery.orderByAscending("recommendOrder")
+        userRecommendedQuery.whereKey("isRecommend", equalTo: true)
+        userRecommendedQuery.includeKey("user")
+        userRecommendedQuery.findObjectsInBackgroundWithBlock({ (certifieds, error) -> Void in
+            MBProgressHUD.hideHUDForView(self.view, animated: true)
+            
             if error == nil {
-                
-                self.recommandedUsers = users as Array<PFUser>
+                println("Certifieds : \(certifieds)")
+                self.recommandedUsers.removeAll(keepCapacity: false)
+                for certified in certifieds!{
+                    self.recommandedUsers.append(certified["user"] as! PFUser)
+                }
             }
             else{
             }
@@ -265,7 +283,8 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     func addFriend(user: PFUser) {
         
-        println("Add friend : \(user.objectId) & \(user.username)")
+        Mixpanel.sharedInstance().track("Add Recommended Account", properties: ["username" : user.username!])
+        recommendedAccountsAdded = recommendedAccountsAdded + 1
         
         var bgTaskIdentifierAddFriend:UIBackgroundTaskIdentifier?
         
@@ -275,11 +294,13 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
             bgTaskIdentifierAddFriend = UIBackgroundTaskInvalid
         })
         
-        Utils().addFriend(user.objectId).continueWithBlock { (task) -> AnyObject! in
+        Utils().addFriend(user.objectId!).continueWithBlock { (task) -> AnyObject! in
             if task.error != nil{
                 
             }
             else{
+                
+                Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "recommended_accounts"])
                 self.usersAdded.append(user)
             }
             
@@ -302,7 +323,7 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
             
         }
         
-        for userAddedId in PFUser.currentUser()["usersFriend"] as Array<String>{
+        for userAddedId in Utils().getAppDelegate().friendsIdList{
             if userAddedId == user.objectId{
                 return true
             }
@@ -316,11 +337,11 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     func goLeave(){
         
-        PFUser.currentUser()["hasSeenRecommanded"] = true
-        PFUser.currentUser().saveInBackgroundWithBlock { (finished, error) -> Void in
-            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
-                println("UPDATE USER")
-            })
+        Mixpanel.sharedInstance().track("Close Recommended Account", properties: ["nd_added" : recommendedAccountsAdded])
+        
+        PFUser.currentUser()!["hasSeenRecommanded"] = true
+        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+            Utils().updateUser()
         }
         
         self.dismissViewControllerAnimated(true, completion: { () -> Void in

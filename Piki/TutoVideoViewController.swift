@@ -22,7 +22,7 @@ class TutoVideoViewController : UIViewController{
     
     override func viewDidLoad() {
         
-        
+        Mixpanel.sharedInstance().track("Tuto Video")
         
         var filePath:String? = NSBundle.mainBundle().pathForResource("peekee_tuto", ofType: "mp4")
         

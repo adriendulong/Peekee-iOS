@@ -165,19 +165,21 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
     
     
     func updateDeleteIcon(){
-        
         if self.peekee != nil{
             
-            let userPeekee:PFUser = self.peekee!["user"] as PFUser
+            let userPeekee:PFUser? = self.peekee!["user"] as? PFUser
             
-            //Delete Icon
-            if userPeekee.objectId == (PFUser.currentUser()).objectId{
-                self.deleteLabel!.text = NSLocalizedString("DELETE", comment: "DELETE")
+            if userPeekee != nil{
+                //Delete Icon
+                if userPeekee!.objectId == (PFUser.currentUser())!.objectId{
+                    self.deleteLabel!.text = NSLocalizedString("DELETE", comment: "DELETE")
+                }
+                    //Hide Icon
+                else{
+                    self.deleteLabel!.text = NSLocalizedString("HIDE", comment: "HIDE")
+                }
             }
-            //Hide Icon
-            else{
-                self.deleteLabel!.text = NSLocalizedString("HIDE", comment: "HIDE")
-            }
+            
             
             
             
@@ -259,7 +261,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         
         if gestureRecognizer.isKindOfClass(UIPanGestureRecognizer){
             
-            let uiPanGesture:UIPanGestureRecognizer = gestureRecognizer as UIPanGestureRecognizer
+            let uiPanGesture:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
             let velocity:CGPoint = uiPanGesture.velocityInView(self)
             
             return fabs(velocity.y) < fabs(velocity.x)

@@ -46,7 +46,7 @@ class CountriesTableViewController : UITableViewController{
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("countryCell") as UITableViewCell
+        var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("countryCell") as! UITableViewCell
         
         cell.textLabel?.text = countriesInfos[indexPath.row]["countryName"]
         

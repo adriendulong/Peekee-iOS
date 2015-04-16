@@ -11,8 +11,12 @@ import Foundation
 
 class EmojiLikeCollectionViewCell : UICollectionViewCell {
     
-    let emojiImage:UIImageView!
-    let backViewGray:UIView!
+
+    func load(){
+        
+    }
+    
+    /*
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +33,6 @@ class EmojiLikeCollectionViewCell : UICollectionViewCell {
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
+    }*/
     
 }

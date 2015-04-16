@@ -323,6 +323,8 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     
     
     override func viewDidLoad() {
+        
+        Mixpanel.sharedInstance().track("Welcome View")
 
         self.view.backgroundColor = UIColor(red: 62/255, green: 80/255, blue: 180/255, alpha: 1.0)
         
@@ -380,7 +382,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as WalkthroughCollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! WalkthroughCollectionViewCell
         
         cell.loadCell(indexPath.item)
         
@@ -398,7 +400,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         //In the second screen anim image to the top
         if getPositionWalk() == 1{
             
-            let cell:WalkthroughCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as WalkthroughCollectionViewCell
+            let cell:WalkthroughCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as! WalkthroughCollectionViewCell
             cell.animImage(0.0)
             
         }
@@ -420,7 +422,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
         //In the second screen anim image to the top
         if actualPosition == 1{
             
-            let cell:WalkthroughCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as WalkthroughCollectionViewCell
+            let cell:WalkthroughCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as! WalkthroughCollectionViewCell
             cell.animImage(0.0)
             
         }
@@ -440,7 +442,7 @@ class WalkthroughViewController : UIViewController, UICollectionViewDataSource, 
     func getPositionWalk() -> Int{
         var position:Int = 0
         
-        let indexPathVisible:Array<NSIndexPath> = collectionView!.indexPathsForVisibleItems() as Array<NSIndexPath>
+        let indexPathVisible:Array<NSIndexPath> = collectionView!.indexPathsForVisibleItems() as! Array<NSIndexPath>
         
         if indexPathVisible.count > 0{
             position = indexPathVisible[0].item

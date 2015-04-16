@@ -5,7 +5,8 @@
 #import <Parse/Parse.h>
 #import <Bolts/Bolts.h>
 #import <ParseUI/ParseUI.h> 
-#import <FacebookSDK/FacebookSDK.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKShareKit/FBSDKShareKit.h>
 #import "NBPhoneNumberUtil.h"
 #import "NBPhoneNumber.h"
 #import "NBAsYouTypeFormatter.h"
@@ -15,3 +16,4 @@
 #import <FBSDKMessengerShareKit/FBSDKMessengerShareKit.h>
 #import "UIImageView+AnimatedGif.h"
 #import "AnimatedGif.h"
+#import "AppsFlyerTracker.h"

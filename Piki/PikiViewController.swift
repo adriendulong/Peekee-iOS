@@ -29,8 +29,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     private let PlayerRateKey = "rate"
     private var asset: AVAsset!
     
-    let transitionManager = TransitionPikiManager()
-    
     var collectionView: UICollectionView?
     var mainPhotoView : UIView?
     var mainPhotoImageView:UIImageView?
@@ -150,6 +148,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     var shareMessengerReactView:UIView?
     var gifURLLastReact:NSURL?
+    var isPublicPleek:Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,7 +157,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             println("NIL")
         }
         
-        FBAppEvents.logEvent(FBAppEventNameViewedContent)
+        FBSDKAppEvents.logEvent(FBSDKAppEventNameViewedContent)
         Mixpanel.sharedInstance().track("View Piki")
         
         self.view.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
@@ -217,17 +216,26 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         backLeftView.addSubview(usernameLabel)
         if self.mainPiki!["user"] != nil {
 
-            var user = self.mainPiki!["user"] as PFUser
+            var user = self.mainPiki!["user"] as! PFUser
             
             if user["name"] != nil{
-                usernameLabel.text = "@\(user.username)"
-            }
-            else{
-                var name:String = user["name"] as String
+                var name:String = user["name"] as! String
                 usernameLabel.text = "\(name)"
             }
+            else{
+                usernameLabel.text = "@\(user.username!)"
+            }
             
             
+        }
+        
+        
+        //IsPublic
+        if self.mainPiki!["isPublic"] != nil {
+            isPublicPleek = self.mainPiki!["isPublic"] as! Bool
+        }
+        else{
+            isPublicPleek = true
         }
         
         let backImageView:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 8, height: 60))
@@ -293,24 +301,33 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let nbPeopleButton:UIButton = UIButton(frame: CGRect(x: 10, y: 0, width: 200, height: nbPeopleView!.frame.height))
         nbPeopleButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         nbPeopleButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
-        recipients = self.mainPiki!["recipients"] as? Array<String>
-        if recipients != nil {
-            if recipients!.count > 1{
-                let nbFriendsFormat = String(format: NSLocalizedString("%d friends", comment : "%d friends"), recipients!.count)
-                nbPeopleButton.setTitle(nbFriendsFormat, forState: UIControlState.Normal)
-            }
-            else{
-                let nbFriendsFormat = String(format: NSLocalizedString("%d friend", comment : "%d friend"), recipients!.count)
-                nbPeopleButton.setTitle(nbFriendsFormat, forState: UIControlState.Normal)
-            }
-            
+        
+        if isPublicPleek{
+            nbPeopleButton.setTitle("🌍 Public", forState: UIControlState.Normal)
         }
         else{
-            nbPeopleButton.setTitle(" friends", forState: UIControlState.Normal)
+            nbPeopleButton.addTarget(self, action: Selector("seeFriends:"), forControlEvents: UIControlEvents.TouchUpInside)
+            recipients = self.mainPiki!["recipients"] as? Array<String>
+            if recipients != nil {
+                if recipients!.count > 1{
+                    let nbFriendsFormat = String(format: NSLocalizedString("%d friends", comment : "%d friends"), recipients!.count)
+                    nbPeopleButton.setTitle(nbFriendsFormat, forState: UIControlState.Normal)
+                }
+                else{
+                    let nbFriendsFormat = String(format: NSLocalizedString("%d friend", comment : "%d friend"), recipients!.count)
+                    nbPeopleButton.setTitle(nbFriendsFormat, forState: UIControlState.Normal)
+                }
+                
+            }
+            else{
+                nbPeopleButton.setTitle("🔒 friends", forState: UIControlState.Normal)
+            }
         }
+        
+        
         nbPeopleButton.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 22)
         nbPeopleButton.titleLabel!.textAlignment = NSTextAlignment.Left
-        nbPeopleButton.addTarget(self, action: Selector("seeFriends:"), forControlEvents: UIControlEvents.TouchUpInside)
+        
         nbPeopleView!.addSubview(nbPeopleButton)
         
         var moreButton = UIButton(frame: CGRect(x: nbPeopleView!.frame.width - 50, y: 0, width: 35, height: nbPeopleView!.frame.height))
@@ -338,6 +355,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         nbReactLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 35, height: nbReactInBarView.frame.height))
         nbReactLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 18)
         nbReactLabel!.textColor = UIColor.whiteColor()
+        nbReactLabel!.adjustsFontSizeToFitWidth = true
         nbReactLabel!.textAlignment = NSTextAlignment.Center
         
         let nbReact = self.mainPiki!["nbReaction"] as? Int
@@ -369,14 +387,21 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let nbPeopleInBarLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 35, height: nbFriendsInBarView.frame.height))
         nbPeopleInBarLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18)
         nbPeopleInBarLabel.textColor = UIColor.whiteColor()
+        nbPeopleInBarLabel.adjustsFontSizeToFitWidth = true
         nbPeopleInBarLabel.textAlignment = NSTextAlignment.Center
-        if recipients != nil {
-            nbPeopleInBarLabel.text = "\(recipients!.count)"
-            
+        if isPublicPleek{
+            nbPeopleInBarLabel.text = "🌍"
         }
         else{
-            nbPeopleInBarLabel.text = "0"
+            if recipients != nil {
+                nbPeopleInBarLabel.text = "\(recipients!.count)"
+                
+            }
+            else{
+                nbPeopleInBarLabel.text = "0"
+            }
         }
+        
         nbFriendsInBarView.addSubview(nbPeopleInBarLabel)
         
         
@@ -394,10 +419,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         nbreactsView!.addSubview(mainPikiPreview!)
         if self.mainPiki!["smallPiki"] != nil{
-            mainPikiPreview!.file = self.mainPiki!["smallPiki"] as PFFile
+            mainPikiPreview!.file = self.mainPiki!["smallPiki"] as? PFFile
         }
         else if self.mainPiki!["previewImage"] != nil{
-            mainPikiPreview!.file = self.mainPiki!["previewImage"] as PFFile
+            mainPikiPreview!.file = self.mainPiki!["previewImage"] as? PFFile
         }
         
         mainPikiPreview!.loadInBackground()
@@ -406,7 +431,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         //Reply Button
         replyButton = UIButton(frame: CGRect(x: self.view.frame.width - 103, y: self.view.frame.height - 108, width: 75, height: 80))
-        replyButton.setImage(UIImage(named: "reply_button"), forState: UIControlState.Normal)
+        replyButton.setImage(UIImage(named: "reply_button_v2"), forState: UIControlState.Normal)
         replyButton.addTarget(self, action: Selector("replyPeekee"), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(replyButton)
         
@@ -478,18 +503,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             emojiButton.center = CGPoint(x: replyButton.center.x, y: replyButton.center.y)
             emojiButton.setImage(UIImage(named: "text_emoji_button"), forState: UIControlState.Normal)
         
-            /*switch i {
-            case 0:
-                emojiButton.setImage(UIImage(named: "text_emoji_button"), forState: UIControlState.Normal)
-            case 1:
-                emojiButton.setImage(UIImage(named: "awesome_icon"), forState: UIControlState.Normal)
-            case 2:
-                emojiButton.setImage(UIImage(named: "cute_icon"), forState: UIControlState.Normal)
-            case 3:
-                emojiButton.setImage(UIImage(named: "fuck_icon"), forState: UIControlState.Normal)
-            default:
-                emojiButton.setImage(UIImage(named: "awesome_icon"), forState: UIControlState.Normal)
-            }*/
             
             emojiButton.transform = CGAffineTransformMakeScale(0, 0)
             emojiButton.addTarget(self, action: Selector("selectEmoji:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -522,7 +535,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         backCameraActionView.clipsToBounds = true
         backCameraActionView.alpha = 0.4
         backCameraActionView.hidden = true
-        self.view.addSubview(backCameraActionView)
+        //self.view.addSubview(backCameraActionView)
         self.view.addSubview(cameraActionButton!)
         
         
@@ -574,9 +587,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         getLastMem()
         
         
-        self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject!, error : NSError!) -> Void in
+        self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject?, error : NSError?) -> Void in
             if error == nil{
-                let nbReact = updatedMainPiki["nbReaction"] as? Int
+                let nbReact = updatedMainPiki!["nbReaction"] as? Int
                 if nbReact != nil{
                     self.nbReactLabel!.text = "\(nbReact!)"
                 }
@@ -600,9 +613,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         //See if show tuto overlay
-        if PFUser.currentUser()["hasShownOverlayPeekee"] != nil{
+        if PFUser.currentUser()!["hasShownOverlayPeekee"] != nil{
             
-            if !(PFUser.currentUser()["hasShownOverlayPeekee"] as Bool){
+            if !(PFUser.currentUser()!["hasShownOverlayPeekee"] as! Bool){
                 showOverlayTuto()
             }
         }
@@ -624,9 +637,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func refresh(){
         
-        self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject!, error : NSError!) -> Void in
+        self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject?, error : NSError?) -> Void in
             if error == nil{
-                let nbReact = updatedMainPiki["nbReaction"] as? Int
+                let nbReact = updatedMainPiki!["nbReaction"] as? Int
                 if nbReact != nil{
                     self.nbReactLabel!.text = "\(nbReact!)"
                 }
@@ -728,7 +741,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if collectionView == self.collectionView! {
             if indexPath.section == 0{
                 
-                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MainCell", forIndexPath: indexPath) as MainPeekeeCollectionViewCell
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MainCell", forIndexPath: indexPath) as! MainPeekeeCollectionViewCell
                 
                 if self.mainPiki != nil {
                     
@@ -744,7 +757,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     
                     file!.getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error == nil {
-                            let image:UIImage = UIImage(data: data)!
+                            let image:UIImage = UIImage(data: data!)!
                             self.mainPekeeImage = image
                             cell.mainImageView.image = image
                         }
@@ -759,15 +772,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             cell.loadIndicator.hidden = false
                             cell.loadIndicator.startAnimating()
                             
-                            let videoFile:PFFile = mainPiki!["video"] as PFFile
+                            let videoFile:PFFile = mainPiki!["video"] as! PFFile
                             
                             
-                            videoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                            videoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
                                 
                                 if data != nil{
                                     if self.mainPiki != nil{
                                         var fileManager:NSFileManager = NSFileManager()
-                                        if data.writeToFile("\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov", atomically: false){
+                                        if data!.writeToFile("\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov", atomically: false){
                                             
                                             
                                             var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov")
@@ -812,7 +825,11 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
             }
             else{
-                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as ReactsCollectionViewCell
+                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ReactsCollectionViewCell
+                if !cell.hasLoaded{
+                    cell.loadCell()
+                }
+                
                 
                 cell.ownPosition = indexPath.item
                 cell.mainPeekee = self.mainPiki!
@@ -870,18 +887,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         cell.react = self.pikiReacts[indexPath.item-1] as? PFObject
                         cell.updateDeleteSign()
                         
-                        var pikiReact:PFObject = self.pikiReacts[indexPath.item-1] as PFObject
+                        var pikiReact:PFObject = self.pikiReacts[indexPath.item-1] as! PFObject
                         //React is a photo
                         if (pikiReact["photo"] != nil){
                             cell.playerView.hidden = true
                             
-                            var file:PFFile = pikiReact["photo"] as PFFile
+                            var file:PFFile = pikiReact["photo"] as! PFFile
                             file.getDataInBackgroundWithBlock({ (data, error) -> Void in
                                 if error == nil {
-                                    var arrayIndex:Array<NSIndexPath> = collectionView.indexPathsForVisibleItems() as Array<NSIndexPath>
+                                    var arrayIndex:Array<NSIndexPath> = collectionView.indexPathsForVisibleItems() as! Array<NSIndexPath>
                                     if contains(arrayIndex, indexPath){
                                         cell.backImageView!.hidden = true
-                                        let imageReact:UIImage? = UIImage(data : data)
+                                        let imageReact:UIImage? = UIImage(data : data!)
                                         if imageReact != nil{
                                             cell.reactImage.image = imageReact
                                             cell.reactImage.hidden = false
@@ -889,7 +906,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                         
                                     }
                                     else{
-                                        println("index not in the array")
                                     }
                                 }
                                 else{
@@ -907,13 +923,13 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             cell.playerView.hidden = true
                             //Load preview image first
                             if pikiReact["previewImage"] != nil{
-                                var file:PFFile = pikiReact["previewImage"] as PFFile
+                                var file:PFFile = pikiReact["previewImage"] as! PFFile
                                 file.getDataInBackgroundWithBlock({ (data, error) -> Void in
                                     if error == nil {
-                                        var arrayIndex:Array<NSIndexPath> = collectionView.indexPathsForVisibleItems() as Array<NSIndexPath>
+                                        var arrayIndex:Array<NSIndexPath> = collectionView.indexPathsForVisibleItems() as! Array<NSIndexPath>
                                         if contains(arrayIndex, indexPath){
                                             
-                                            let imageReact:UIImage = UIImage(data : data)!
+                                            let imageReact:UIImage = UIImage(data : data!)!
                                             cell.backImageView!.hidden = true
                                             cell.reactImage.image = imageReact
                                             cell.reactImage.hidden = false
@@ -927,7 +943,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         }
                     }
                     else{
-                        var pikiInfos:[String : AnyObject] = self.pikiReacts[indexPath.item-1] as [String : AnyObject]
+                        var pikiInfos:[String : AnyObject] = self.pikiReacts[indexPath.item-1] as! [String : AnyObject]
                         
                         cell.playerView.hidden = true
                         if pikiInfos["photo"] != nil {
@@ -973,15 +989,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
         }
         else{
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellMem", forIndexPath: indexPath) as MemCollectionViewCell
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellMem", forIndexPath: indexPath) as! MemCollectionViewCell
 
             cell.iconImageView.image = nil
             cell.loadIndicator.startAnimating()
             
-            var fileMem = self.mems[indexPath.item]["image"] as PFFile
-            fileMem.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+            var fileMem = self.mems[indexPath.item]["image"] as! PFFile
+            fileMem.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 cell.loadIndicator.stopAnimating()
-                cell.iconImageView.image = UIImage(data: data)
+                cell.iconImageView.image = UIImage(data: data!)
                 
             })
             
@@ -1005,7 +1021,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     self.changeCameraPosition()
                 }
                 else{
-                    let cell:ReactsCollectionViewCell = self.collectionView?.cellForItemAtIndexPath(indexPath) as ReactsCollectionViewCell
+                    let cell:ReactsCollectionViewCell = self.collectionView?.cellForItemAtIndexPath(indexPath) as! ReactsCollectionViewCell
                     if !cell.playerView.hidden{
                         
                         muteAllVideosExcept(indexPath)
@@ -1028,7 +1044,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 }
             }
             else{
-                var cellMain:MainPeekeeCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(indexPath) as MainPeekeeCollectionViewCell
+                var cellMain:MainPeekeeCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(indexPath) as! MainPeekeeCollectionViewCell
                 
                 if cellMain.playerLayer.player != nil{
                     
@@ -1052,7 +1068,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             
             
-            if (self.memCollectionView!.cellForItemAtIndexPath(indexPath) as MemCollectionViewCell).iconImageView.image != nil{
+            if (self.memCollectionView!.cellForItemAtIndexPath(indexPath) as! MemCollectionViewCell).iconImageView.image != nil{
                 
                 if positionMemShowed != nil{
                     
@@ -1096,8 +1112,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     }
                 }
                 
-                
-                return CGSize(width: self.view.frame.width, height: 0)
+                return CGSize(width: self.view.frame.width, height: 50)
+                //return CGSize(width: self.view.frame.width, height: 0)
                 
             }
             else{
@@ -1135,7 +1151,19 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         reusableView!.addSubview(parrotLoad!)
                     }
                     
-                    parrotLoad!.hidden = false
+                    
+                    
+                    if pikiReacts.count > 30{
+                        let nbReact = self.mainPiki!["nbReaction"] as? Int
+                        if nbReact != nil{
+                            if nbReact > pikiReacts.count{
+                                parrotLoad!.hidden = false
+                            }
+                        }
+                    }
+                    else{
+                        parrotLoad!.hidden = true
+                    }
                     
                     
                     let options = UIViewAnimationOptions.Autoreverse | UIViewAnimationOptions.Repeat | UIViewAnimationOptions.CurveLinear
@@ -1259,19 +1287,22 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             var reactACL:PFACL = PFACL()
                             
                             
-                            if isPublic!{
+                            if self.isPublicPleek{
                                 reactACL.setPublicReadAccess(true)
                             }
                             else{
-                                for userId in self.mainPiki!["recipients"] as Array<String>{
-                                    reactACL.setReadAccess(true, forUserId: userId)
+                                if self.mainPiki!["recipients"] != nil{
+                                    for userId in self.mainPiki!["recipients"] as! Array<String>{
+                                        reactACL.setReadAccess(true, forUserId: userId)
+                                    }
                                 }
+                                
                             }
                             
-                            reactACL.setWriteAccess(true, forUser: PFUser.currentUser())
+                            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
                             
                             if self.mainPiki!["user"] != nil {
-                                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as PFUser)
+                                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
                             }
                             
                             newReact.ACL = reactACL
@@ -1284,10 +1315,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             })
                             
                             
-                            newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+                            newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError?) -> Void in
                                 if succeeded{
                                     Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Photo Sent" : 1])
-                                    FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Photo"])
+                                    FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Photo"])
                                     Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Photo"])
                                     
                                     println("NEw REact : \(newReact)")
@@ -1359,7 +1390,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         var authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
         
         if authStatus == AVAuthorizationStatus.Authorized{
-            println("Already AUTH")
             //configureDevice()
             audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
             var errAudio : NSError? = nil
@@ -1400,7 +1430,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             
             var imageOutputTemp = AVCaptureStillImageOutput()
-            imageOutputTemp.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+            imageOutputTemp.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
             if captureSession.canAddOutput(imageOutputTemp){
                 println("Capture add image output")
                 imageOutput = imageOutputTemp
@@ -1469,7 +1499,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             
                             
                             self.imageOutput = AVCaptureStillImageOutput()
-                            self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+                            self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
                             if self.captureSession.canAddOutput(self.imageOutput){
                                 self.captureSession.addOutput(self.imageOutput)
                             }
@@ -1594,7 +1624,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
             
             
-            var videoCaptureDeviceInput:AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(tempCaptureDevice, error: nil) as AVCaptureDeviceInput
+            var videoCaptureDeviceInput:AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(tempCaptureDevice, error: nil) as! AVCaptureDeviceInput
             
             self.captureSession.removeInput(self.captureDeviceInput!)
             
@@ -1621,7 +1651,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         
-        imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+        imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError?) -> Void in
             println(succeeded)
             }, progressBlock: { (progress:Int32) -> Void in
             println(progress)
@@ -1638,21 +1668,21 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         var requestPiki:PFQuery = PFQuery(className: "Piki")
         requestPiki.orderByDescending("createdAt")
-        requestPiki.getFirstObjectInBackgroundWithBlock { (piki : PFObject!, error : NSError!) -> Void in
+        requestPiki.getFirstObjectInBackgroundWithBlock { (piki : PFObject?, error : NSError?) -> Void in
             
             if piki != nil{
                 
                 //If there is already a Piki, see if it is the same
                 if self.mainPiki != nil {
-                    if self.mainPiki!.objectId != piki.objectId{
-                        self.mainPiki = piki
-                        var file:PFFile = piki["photo"] as PFFile
+                    if self.mainPiki!.objectId != piki!.objectId!{
+                        self.mainPiki = piki!
+                        var file:PFFile = piki!["photo"] as! PFFile
                         
                         self.getLastReact()
                         
-                        file.getDataInBackgroundWithBlock({ (imageData : NSData!, error : NSError!) -> Void in
+                        file.getDataInBackgroundWithBlock({ (imageData : NSData?, error : NSError?) -> Void in
                             if error == nil {
-                                self.mainPhotoImageView!.image = UIImage(data: imageData)
+                                self.mainPhotoImageView!.image = UIImage(data: imageData!)
                             }
                         })
                     }
@@ -1661,14 +1691,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     }
                 }
                 else{
-                    self.mainPiki = piki
-                    var file:PFFile = piki["photo"] as PFFile
+                    self.mainPiki = piki!
+                    var file:PFFile = piki!["photo"] as! PFFile
                     
                     self.getLastReact()
                     
-                    file.getDataInBackgroundWithBlock({ (imageData : NSData!, error : NSError!) -> Void in
+                    file.getDataInBackgroundWithBlock({ (imageData : NSData?, error : NSError?) -> Void in
                         if error == nil {
-                            self.mainPhotoImageView!.image = UIImage(data: imageData)
+                            self.mainPhotoImageView!.image = UIImage(data: imageData!)
                         }
                     })
                 }
@@ -1685,13 +1715,13 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if self.mainPiki != nil {
             var requestReacts:PFQuery = PFQuery(className: "React")
             requestReacts.orderByDescending("createdAt")
-            requestReacts.whereKey("Piki", equalTo: self.mainPiki)
+            requestReacts.whereKey("Piki", equalTo: self.mainPiki!)
         
             
-            requestReacts.findObjectsInBackgroundWithBlock { (reacts : [AnyObject]!, error : NSError!) -> Void in
+            requestReacts.findObjectsInBackgroundWithBlock { (reacts : [AnyObject]?, error : NSError?) -> Void in
                 if error == nil{
                     self.videoReacts.removeAll(keepCapacity: false)
-                    self.pikiReacts = reacts as Array<PFObject>
+                    self.pikiReacts = reacts as! Array<PFObject>
                     self.collectionView!.reloadData()
                     self.collectionView?.layoutIfNeeded()
                 }
@@ -1753,7 +1783,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         //self.uploadImage(self.getPhotoWithLikeOverlay(squareImage))
                         let finalImage:UIImage = self.getPhotoWithLikeOverlay(squareImage)
                         
-                        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+                        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
                         cameraCell.overlayCameraView.hidden = true
                         
                         self.deselectAllEmojis()
@@ -1784,10 +1814,23 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                 newReact["Piki"] = self.mainPiki!
                                 newReact["user"] = PFUser.currentUser()
                                 var reactACL:PFACL = PFACL()
-                                reactACL.setPublicReadAccess(true)
-                                reactACL.setWriteAccess(true, forUser: PFUser.currentUser())
+                                
+                                
+                                if self.isPublicPleek{
+                                    reactACL.setPublicReadAccess(true)
+                                }
+                                else{
+                                    if self.mainPiki!["recipients"] != nil{
+                                        for userId in self.mainPiki!["recipients"] as! Array<String>{
+                                            reactACL.setReadAccess(true, forUserId: userId)
+                                        }
+                                    }
+                                    
+                                }
+                                
+                                reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
                                 if self.mainPiki!["user"] != nil {
-                                    reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as PFUser)
+                                    reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
                                 }
                                 
                                 newReact.ACL = reactACL
@@ -1800,7 +1843,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                 })
                                 
                                 
-                                newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+                                newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
                                     if succeeded{
                                         
                                         var reactName:String?
@@ -1810,18 +1853,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                             reactName = self.mems[self.positionMemShowed!]["name"] as? String
                                             
                                             if reactName != nil{
-                                                FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji", "Meme Name" : reactName!])
+                                                FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji", "Meme Name" : reactName!])
                                                 Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji", "Meme Name" : reactName!])
                                             }
                                             else{
-                                                FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
+                                                FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
                                                 Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
                                             }
                                             
                                             
                                         }
                                         else{
-                                            FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
+                                            FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
                                             Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
                                         }
                                         
@@ -1899,9 +1942,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         var overlayView = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: image.size))
         overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.4
+        overlayView.alpha = 0.1
         
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         
         let size:CGSize = CGSize(width: cameraCell.frame.size.width * UIScreen.mainScreen().scale, height: cameraCell.frame.size.width * UIScreen.mainScreen().scale)
         
@@ -1960,12 +2003,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         var selectedCell:ReactsCollectionViewCell?
         
         
-        for cell in collectionView!.visibleCells() as Array<UICollectionViewCell>{
+        for cell in collectionView!.visibleCells() as! Array<UICollectionViewCell>{
             
             let indexPathCell = collectionView!.indexPathForCell(cell as UICollectionViewCell)
             if indexPathCell!.section == 1{
                 if indexPathCell!.item == 0{
-                    selectedCell = cell as ReactsCollectionViewCell
+                    selectedCell = cell as? ReactsCollectionViewCell
                     
                 }
             }
@@ -2038,12 +2081,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             println("Error : \(error.localizedDescription)")
         }
         
-        for cell in collectionView!.visibleCells() as Array<UICollectionViewCell>{
+        for cell in collectionView!.visibleCells() as! Array<UICollectionViewCell>{
             
             let indexPathCell = collectionView!.indexPathForCell(cell as UICollectionViewCell)
             if indexPathCell!.section == 1{
                 if indexPathCell!.item == 0{
-                    (cell as ReactsCollectionViewCell).recordVideoBar!.removeFromSuperview()
+                    (cell as! ReactsCollectionViewCell).recordVideoBar!.removeFromSuperview()
                 }
             }
             
@@ -2074,7 +2117,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     println("Error : \(error.localizedDescription)")
                 }
                 else{
-                    var finalURL = task.result as NSURL
+                    var finalURL = task.result as! NSURL
                     let screenImage:UIImage = Utils().getImageFrameFromVideo(finalURL)
                     var imageData:NSData = UIImageJPEGRepresentation(screenImage, 0.8)
                     
@@ -2130,7 +2173,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     
                     
                     let previewFile:PFFile = PFFile(name: "photo.jpg", data: imageData)
-                    previewFile.saveInBackgroundWithBlock({ (succeeded : Bool, error : NSError!) -> Void in
+                    previewFile.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
                         
                         }, progressBlock: { (progress : Int32) -> Void in
                         println("Preview : \(progress)")
@@ -2138,7 +2181,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     
                     
                     var newVideoReact:PFObject = PFObject(className: "React")
-                    self.imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+                    self.imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
                         if succeeded{
                             //self.pikiReacts.insert(newVideoReact, atIndex: 0)
                             //self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 0)])
@@ -2167,28 +2210,31 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         newVideoReact["user"] = PFUser.currentUser()
                         var reactACL:PFACL = PFACL()
                         
-                        if isPublic!{
+                        if self.isPublicPleek{
                             reactACL.setPublicReadAccess(true)
                         }
                         else{
-                            for userId in self.mainPiki!["recipients"] as Array<String>{
-                                reactACL.setReadAccess(true, forUserId: userId)
+                            if self.mainPiki!["recipients"] != nil{
+                                for userId in self.mainPiki!["recipients"] as! Array<String>{
+                                    reactACL.setReadAccess(true, forUserId: userId)
+                                }
                             }
+                            
                         }
                         
                         
-                        reactACL.setWriteAccess(true, forUser: PFUser.currentUser())
+                        reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
                         if self.mainPiki!["user"] != nil {
-                            reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as PFUser)
+                            reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
                         }
                         newVideoReact.ACL = reactACL
                     }
                     
                     
-                    newVideoReact.saveInBackgroundWithBlock({ (success :Bool, error : NSError!) -> Void in
+                    newVideoReact.saveInBackgroundWithBlock({ (success :Bool, error) -> Void in
                         if success{
                             Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Video Sent" : 1])
-                            FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Video"])
+                            FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Video"])
                             Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Video"])
 
                             var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
@@ -2262,7 +2308,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     */
     
     func videoDidEnd(notification : NSNotification){
-        var player:AVPlayerItem = notification.object as AVPlayerItem
+        var player:AVPlayerItem = notification.object as! AVPlayerItem
         player.seekToTime(kCMTimeZero)
     }
 
@@ -2320,7 +2366,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
         
         if indexPathBig != nil{
-            self.cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as ReactsCollectionViewCell)
+            self.cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as! ReactsCollectionViewCell)
         }
         
     }
@@ -2354,7 +2400,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
-            for cell in self.collectionView!.visibleCells() as Array<ReactsCollectionViewCell> {
+            for cell in self.collectionView!.visibleCells() as! Array<ReactsCollectionViewCell> {
                 
                 let indexPath:NSIndexPath? = self.collectionView!.indexPathForCell(cell)
                 
@@ -2362,7 +2408,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     if index.item > 0{
                         
                         if self.pikiReacts[index.item - 1].isKindOfClass(PFObject){
-                            let pikiReact:PFObject = self.pikiReacts[index.item-1] as PFObject
+                            let pikiReact:PFObject = self.pikiReacts[index.item-1] as! PFObject
                             
                             if pikiReact["video"] != nil{
 
@@ -2391,13 +2437,13 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                     })
                                 }
                                 else{
-                                    let videoFile:PFFile = pikiReact["video"] as PFFile
+                                    let videoFile:PFFile = pikiReact["video"] as! PFFile
                                     
-                                    videoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                                    videoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
                                         
                                         
                                         var fileManager:NSFileManager = NSFileManager()
-                                        if data.writeToFile("\(NSTemporaryDirectory())_\(pikiReact.objectId).mov", atomically: false){
+                                        if data!.writeToFile("\(NSTemporaryDirectory())_\(pikiReact.objectId).mov", atomically: false){
                                             
                                             
                                             var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(pikiReact.objectId).mov")
@@ -2426,12 +2472,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         }
                             
                         else{
-                            var pikiInfos:[String : AnyObject] = self.pikiReacts[index.item-1] as [String : AnyObject]
+                            var pikiInfos:[String : AnyObject] = self.pikiReacts[index.item-1] as! [String : AnyObject]
                             
                             if pikiInfos["videoPath"] != nil {
                                 cell.iconInfo!.hidden = false
                                 
-                                var playerItem:AVPlayerItem = AVPlayerItem(URL: pikiInfos["videoPath"] as NSURL)
+                                var playerItem:AVPlayerItem = AVPlayerItem(URL: pikiInfos["videoPath"] as! NSURL)
                                 var player:AVPlayer = AVPlayer(playerItem: playerItem)
                                 player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
                                 player.muted = true
@@ -2469,18 +2515,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         println("Pause and mute")
         
         dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
-            for cell in self.collectionView!.visibleCells() as Array<UICollectionViewCell>{
+            for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
                 
                 
                 let indexPath:NSIndexPath? = self.collectionView!.indexPathForCell(cell)
                 
                 if indexPath!.section > 0{
                     if indexPath != nil {
-                        if (cell as ReactsCollectionViewCell).playerLayer.player != nil{
+                        if (cell as! ReactsCollectionViewCell).playerLayer.player != nil{
                             
                             dispatch_async(dispatch_get_main_queue(), {
-                                (cell as ReactsCollectionViewCell).playerLayer.player.pause()
-                                (cell as ReactsCollectionViewCell).playerLayer.player = nil
+                                (cell as! ReactsCollectionViewCell).playerLayer.player.pause()
+                                (cell as! ReactsCollectionViewCell).playerLayer.player = nil
                             })
                             
                             
@@ -2489,12 +2535,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 }
                 else{
                     if indexPath != nil {
-                        if (cell as MainPeekeeCollectionViewCell).playerLayer.player != nil{
+                        if (cell as! MainPeekeeCollectionViewCell).playerLayer.player != nil{
                             
                             dispatch_async(dispatch_get_main_queue(), {
-                                (cell as MainPeekeeCollectionViewCell).playerLayer.player.pause()
-                                (cell as MainPeekeeCollectionViewCell).loadIndicator.hidden = true
-                                (cell as MainPeekeeCollectionViewCell).readVideoIcon.hidden = false
+                                (cell as! MainPeekeeCollectionViewCell).playerLayer.player.pause()
+                                (cell as! MainPeekeeCollectionViewCell).loadIndicator.hidden = true
+                                (cell as! MainPeekeeCollectionViewCell).readVideoIcon.hidden = false
                             })
                             
                             
@@ -2511,10 +2557,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func muteAllVideos(){
         
         dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
-            for cell in self.collectionView!.visibleCells() as Array<UICollectionViewCell>{
+            for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
                 
                 if cell.isKindOfClass(ReactsCollectionViewCell){
-                    let cellReact : ReactsCollectionViewCell = cell as ReactsCollectionViewCell
+                    let cellReact : ReactsCollectionViewCell = cell as! ReactsCollectionViewCell
                     if cellReact.playerLayer.player != nil{
                         cellReact.playerLayer.player.muted = true
                         dispatch_async(dispatch_get_main_queue(), {
@@ -2524,7 +2570,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     }
                 }
                 else{
-                    let cellReact : MainPeekeeCollectionViewCell = cell as MainPeekeeCollectionViewCell
+                    let cellReact : MainPeekeeCollectionViewCell = cell as! MainPeekeeCollectionViewCell
                     if cellReact.playerLayer.player != nil {
                         cellReact.playerLayer.player.muted = true
                         cellReact.playerLayer.player.pause()
@@ -2543,12 +2589,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func muteAllVideosExcept(indexPath : NSIndexPath){
         
         dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
-            for cell in self.collectionView!.visibleCells() as Array<UICollectionViewCell>{
+            for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
                 
                 
                 if cell.isKindOfClass(ReactsCollectionViewCell){
                     
-                    let cellReact : ReactsCollectionViewCell = cell as ReactsCollectionViewCell
+                    let cellReact : ReactsCollectionViewCell = cell as! ReactsCollectionViewCell
                     
                     if self.collectionView!.indexPathForCell(cellReact)?.item != indexPath.item{
                         if cellReact.playerLayer.player != nil{
@@ -2585,11 +2631,11 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if sender.state == UIGestureRecognizerState.Began{
 
             //Create temporary URL to record to
-            let outpuPath:NSString = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
+            let outpuPath:String = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
             let outputURL:NSURL = NSURL(fileURLWithPath: outpuPath)!
             var fileManager:NSFileManager = NSFileManager()
             
-            for cell in collectionView!.visibleCells() as Array<UICollectionViewCell>{
+            for cell in collectionView!.visibleCells() as! Array<UICollectionViewCell>{
                 
                 let indexPathCell = collectionView!.indexPathForCell(cell as UICollectionViewCell)
                 if indexPathCell!.section == 1{
@@ -2597,7 +2643,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         
                         
                         
-                        (cell as ReactsCollectionViewCell).startRecording()
+                        (cell as! ReactsCollectionViewCell).startRecording()
                         timerReact = NSTimer(timeInterval: 5, target: self, selector: Selector("endRecording"), userInfo: nil, repeats: false)
                         NSRunLoop.currentRunLoop().addTimer(timerReact!, forMode: NSRunLoopCommonModes)
                     }
@@ -2685,10 +2731,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func updateReactRequest(){
         var requestReact:PFQuery = PFQuery(className: "React")
-        requestReact.whereKey("Piki", equalTo: mainPiki)
+        requestReact.whereKey("Piki", equalTo: mainPiki!)
         requestReact.orderByDescending("createdAt")
         requestReact.limit = 50
-        requestReact.cachePolicy = kPFCachePolicyNetworkOnly
+        requestReact.cachePolicy = PFCachePolicy.NetworkOnly
         requestReact.includeKey("user")
         
         requestReact.findObjectsInBackgroundWithBlock { (reacts, error) -> Void in
@@ -2700,10 +2746,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func getReacts(){
         
         var requestReact:PFQuery = PFQuery(className: "React")
-        requestReact.whereKey("Piki", equalTo: mainPiki)
+        requestReact.whereKey("Piki", equalTo: mainPiki!)
         requestReact.orderByDescending("createdAt")
         requestReact.limit = 50
-        requestReact.cachePolicy = kPFCachePolicyCacheThenNetwork
+        requestReact.cachePolicy = PFCachePolicy.CacheThenNetwork
         requestReact.includeKey("user")
         
         requestReact.findObjectsInBackgroundWithBlock { (reacts, error) -> Void in
@@ -2714,7 +2760,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             else{
                 
                 if self.pikiReacts.count == 0{
-                    self.pikiReacts = reacts as Array<PFObject>
+                    self.pikiReacts = reacts as! Array<PFObject>
                     
                     for react in self.pikiReacts{
                     }
@@ -2724,7 +2770,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 }
                 else{
                     var nbReactToInsert:Int = 0
-                    for react in reacts as Array<PFObject> {
+                    for react in reacts as! Array<PFObject> {
                         var alreadyIn:Bool = false
                         for actualReact in self.pikiReacts{
                             
@@ -2786,7 +2832,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         var firstTimeDone:Bool = false
         
         var requestReact:PFQuery = PFQuery(className: "React")
-        requestReact.whereKey("Piki", equalTo: mainPiki)
+        requestReact.whereKey("Piki", equalTo: mainPiki!)
         requestReact.orderByDescending("createdAt")
         requestReact.limit = 50
         requestReact.skip = skipNumber
@@ -2810,7 +2856,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 else{
                     
                     if self.pikiReacts.count == 0{
-                        self.pikiReacts = reacts as Array<PFObject>
+                        self.pikiReacts = reacts as! Array<PFObject>
                         
                         for react in self.pikiReacts{
                         }
@@ -2819,7 +2865,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     }
                     else{
                         var nbReactToInsert:Int = 0
-                        for react in reacts as Array<PFObject> {
+                        for react in reacts as! Array<PFObject> {
                             var alreadyIn:Bool = false
                             for actualReact in self.pikiReacts{
                                 if react.objectId == actualReact.objectId{
@@ -2901,7 +2947,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if segue.identifier == "showRecipients"{
             captureSession.stopRunning()
             pauseAndMuteAllVideos()
-            var listRecipientsController:ListRecipientsViewController = segue.destinationViewController as ListRecipientsViewController
+            var listRecipientsController:ListRecipientsViewController = segue.destinationViewController as! ListRecipientsViewController
             listRecipientsController.mainPiki = self.mainPiki!
             
         }
@@ -2920,14 +2966,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         cameraCell.textViewOverPhoto!.becomeFirstResponder()
         cameraCell.textViewOverPhoto!.text = ""
         
     }
     
     func leaveTextMode(){
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         cameraCell.overlayCameraView!.hidden = true
         cameraCell.textViewOverPhoto!.resignFirstResponder()
         deselectAllEmojis()
@@ -2962,7 +3008,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         let info:NSDictionary = notification.userInfo!
         let keyboardSize = info.objectForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue().size
-        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         
         
         self.nbPeopleView!.hidden = true
@@ -3019,7 +3065,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             button.hidden = false
         }
         
-       let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+       let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         
         
         UIView.animateWithDuration(animationDuration, animations: { () -> Void in
@@ -3042,7 +3088,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func dismissKeyboard(gesture : UITapGestureRecognizer){
         
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         cameraCell.textViewOverPhoto!.resignFirstResponder()
         cameraCell.overlayCameraView!.hidden = true
         
@@ -3122,10 +3168,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             newReact["Piki"] = self.mainPiki!
                             newReact["user"] = PFUser.currentUser()
                             var reactACL:PFACL = PFACL()
-                            reactACL.setPublicReadAccess(true)
-                            reactACL.setWriteAccess(true, forUser: PFUser.currentUser())
+                            if self.isPublicPleek{
+                                reactACL.setPublicReadAccess(true)
+                            }
+                            else{
+                                if self.mainPiki!["recipients"] != nil{
+                                    for userId in self.mainPiki!["recipients"] as! Array<String>{
+                                        reactACL.setReadAccess(true, forUserId: userId)
+                                    }
+                                }
+                                
+                            }
+                            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
                             if self.mainPiki!["user"] != nil {
-                                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as PFUser)
+                                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
                             }
                             
                             newReact.ACL = reactACL
@@ -3141,10 +3197,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             
                             
                             
-                            newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+                            newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
                                 if succeeded{
                                     Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Text Sent" : 1])
-                                    FBAppEvents.logEvent("Send React", parameters: ["React Type" : "Text"])
+                                    FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Text"])
                                     Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Text"])
                                     
                                     //Push notif
@@ -3215,18 +3271,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     func printUsernamesreact(){
-        for cell in self.collectionView!.visibleCells() as Array<UICollectionViewCell>{
+        for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
             if cell.isKindOfClass(ReactsCollectionViewCell){
-                (cell as ReactsCollectionViewCell).showUsername()
+                (cell as! ReactsCollectionViewCell).showUsername()
             }
             
         }
     }
     
     func hideUsernamesreact(){
-        for cell in self.collectionView!.visibleCells() as Array<UICollectionViewCell>{
+        for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
             if cell.isKindOfClass(ReactsCollectionViewCell){
-                (cell as ReactsCollectionViewCell).hideUserName()
+                (cell as! ReactsCollectionViewCell).hideUserName()
             }
             
         }
@@ -3241,8 +3297,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 self.removeReactFromList(react)
             }
             
-            var reactObject: PFObject = react as PFObject
-            PFCloud.callFunctionInBackground("reportOrRemoveReact ", withParameters: ["reactId" : reactObject.objectId]) { (result, error) -> Void in
+            var reactObject: PFObject = react as! PFObject
+            PFCloud.callFunctionInBackground("reportOrRemoveReact ", withParameters: ["reactId" : reactObject.objectId!]) { (result, error) -> Void in
                 if error != nil {
                     if isReport{
                         let alert = UIAlertView(title: "Error", message: "Problem while reporting this react. Please try again later",
@@ -3294,57 +3350,73 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         var cellToReduce:ReactsCollectionViewCell?
         if indexPathBig != nil{
             cellToReduce = self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as? ReactsCollectionViewCell
-            cellSmaller(cellToReduce!)
+            cellSmaller(cellToReduce!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                self.makeItBigger(cell)
+                
+                return nil
+            })
+        }
+        else{
+            makeItBigger(cell)
         }
         
-        self.indexPathBig = self.collectionView!.indexPathForCell(cell)
         
-        self.collectionView!.performBatchUpdates({ () -> Void in
-            self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
-        }, completion: { (finished) -> Void in
-            
-            self.collectionView!.collectionViewLayout.invalidateLayout()
-            
-            
-            UIView.transitionWithView(cell, duration: 0.5, options: nil,
-                animations: { () -> Void in
-                    
-                    cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.width, (self.view.frame.width - 2)/3 * 2)
-                    //cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, (self.view.frame.width - 2)/3 * 2, (self.view.frame.width - 2)/3 * 2)
-                    cell.reactImage.frame = CGRectMake(0, 0, (cell.frame.width - 2)/3 * 2, (cell.frame.width - 2)/3 * 2)
-                    //cell.reactImage.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
-                    cell.usernameLabel!.frame = CGRectMake(0,cell.reactImage.frame.height - 25, cell.reactImage.frame.width, 25)
-                    cell.playerView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                    cell.playerLayer.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                    cell.loadIndicator!.center = cell.playerView.center
-                    cell.readVideoImageView.center = cell.playerView.center
-                    cell.insideCollectionView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                    cell.moreInfosView.frame = CGRectMake(cell.reactImage.frame.width + 1, 0, cell.frame.width - cell.reactImage.frame.width - 1, cell.frame.height)
-                    cell.moreInfosView.alpha = 1.0
-                    
-                    
-                    
-                    cell.insideCollectionView.reloadData()
-                }, completion: { (finisehd) -> Void in
-                    cell.showMoreInfos()
-                    
-                    if cell.separatorMoreInfos != nil{
-                        cell.separatorMoreInfos!.alpha = 1.0
-                    }
-                    
-                    cell.isInBigMode = true
-                    self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
-                    cell.startVideo()
-                    NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
-            })
-        })
         
         
         
         
     }
     
-    func cellSmaller(cell : ReactsCollectionViewCell){
+    func makeItBigger(cell : ReactsCollectionViewCell){
+        
+        self.indexPathBig = self.collectionView!.indexPathForCell(cell)
+        
+        
+        self.collectionView!.performBatchUpdates({ () -> Void in
+            self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
+            }, completion: { (finished) -> Void in
+                self.collectionView!.collectionViewLayout.invalidateLayout()
+                
+                
+                UIView.transitionWithView(cell, duration: 0.5, options: nil,
+                    animations: { () -> Void in
+                        
+                        cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.width, (self.view.frame.width - 2)/3 * 2)
+                        //cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, (self.view.frame.width - 2)/3 * 2, (self.view.frame.width - 2)/3 * 2)
+                        cell.reactImage.frame = CGRectMake(0, 0, (cell.frame.width - 2)/3 * 2, (cell.frame.width - 2)/3 * 2)
+                        //cell.reactImage.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
+                        cell.usernameLabel!.frame = CGRectMake(0,cell.reactImage.frame.height - 25, cell.reactImage.frame.width, 25)
+                        cell.playerView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
+                        cell.playerLayer.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
+                        cell.loadIndicator!.center = cell.playerView.center
+                        cell.readVideoImageView.center = cell.playerView.center
+                        cell.insideCollectionView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
+                        cell.moreInfosView.frame = CGRectMake(cell.reactImage.frame.width + 1, 0, cell.frame.width - cell.reactImage.frame.width - 1, cell.frame.height)
+                        cell.moreInfosView.alpha = 1.0
+                        
+                        
+                        
+                        cell.insideCollectionView.reloadData()
+                    }, completion: { (finisehd) -> Void in
+                        cell.showMoreInfos()
+                        
+                        if cell.separatorMoreInfos != nil{
+                            cell.separatorMoreInfos!.alpha = 1.0
+                        }
+                        
+                        cell.isInBigMode = true
+                        self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
+                        cell.startVideo()
+                        NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
+                })
+        })
+        
+        
+        
+    }
+    
+    func cellSmaller(cell : ReactsCollectionViewCell) -> BFTask{
+        var completionTask = BFTaskCompletionSource()
         
         self.indexPathBig = nil
         self.collectionView!.collectionViewLayout.invalidateLayout()
@@ -3370,9 +3442,13 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 cell.moreInfosView.frame = CGRectMake(0, 0, 0, 0)
                 cell.separatorMoreInfos!.alpha = 0.0
                 
-            }, completion: { (finisehd) -> Void in
+            }, completion: { (finished) -> Void in
                 cell.isInBigMode = false
+                
+                completionTask.setResult(finished)
         })
+        
+        return completionTask.task
         
     }
     
@@ -3380,7 +3456,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if indexPathBig != nil{
             
-            cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as ReactsCollectionViewCell)
+            cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as! ReactsCollectionViewCell)
             
         }
         
@@ -3448,7 +3524,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             usernameLabel.textAlignment = NSTextAlignment.Center
             usernameLabel.font = UIFont(name: Utils().customFontNormal, size: 24)
             usernameLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-            usernameLabel.text = "@\(user.username)"
+            usernameLabel.text = "@\(user.username!)"
             usernameLabel.tag = 10
             popUpView!.addSubview(usernameLabel)
             
@@ -3468,18 +3544,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         self.popUpView!.transform =  CGAffineTransformMakeScale(0, 0)
-        let labelUsername:UILabel = popUpView!.viewWithTag(10) as UILabel
-        labelUsername.text = "@\(user.username)"
-        let labelHeader:UILabel = popUpView!.viewWithTag(12) as UILabel
+        let labelUsername:UILabel = popUpView!.viewWithTag(10) as! UILabel
+        labelUsername.text = "@\(user.username!)"
+        let labelHeader:UILabel = popUpView!.viewWithTag(12) as! UILabel
         
-        let actionButton:UIButton = popUpView!.viewWithTag(11) as UIButton
+        let actionButton:UIButton = popUpView!.viewWithTag(11) as! UIButton
         
         if Utils().isUserAFriend(user){
             actionButton.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
             labelHeader.text = NSLocalizedString("REMOVE A FRIEND", comment : "REMOVE A FRIEND")
         }
         else{
-            actionButton.setImage(UIImage(named: "add_friends_icon_pop_up"), forState: UIControlState.Normal)
+            actionButton.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
             labelHeader.text = NSLocalizedString("ADD A FRIEND", comment : "ADD A FRIEND")
         }
         
@@ -3509,22 +3585,22 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     func addFriendFromPopUp(){
-        (self.popUpView!.viewWithTag(13) as UIActivityIndicatorView).startAnimating()
-        (self.popUpView!.viewWithTag(11) as UIButton).hidden = true
+        (self.popUpView!.viewWithTag(13) as! UIActivityIndicatorView).startAnimating()
+        (self.popUpView!.viewWithTag(11) as! UIButton).hidden = true
         
         if userPopUp != nil {
             
             if Utils().isUserAFriend(userPopUp!){
                 
-                Utils().removeFriend(userPopUp!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                    (self.popUpView!.viewWithTag(13) as UIActivityIndicatorView).stopAnimating()
-                    (self.popUpView!.viewWithTag(11) as UIButton).hidden = false
+                Utils().removeFriend(userPopUp!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                    (self.popUpView!.viewWithTag(13) as! UIActivityIndicatorView).stopAnimating()
+                    (self.popUpView!.viewWithTag(11) as! UIButton).hidden = false
                     if task.error != nil{
                         
                     }
                     else{
-                        (self.popUpView!.viewWithTag(11) as UIButton).setImage(UIImage(named: "add_friends_icon_pop_up"), forState: UIControlState.Normal)
-                        (self.popUpView!.viewWithTag(12) as UILabel).text = NSLocalizedString("ADD A FRIEND", comment : "ADD A FRIEND")
+                        (self.popUpView!.viewWithTag(11) as! UIButton).setImage(UIImage(named: "add_friends_icon_pop_up"), forState: UIControlState.Normal)
+                        (self.popUpView!.viewWithTag(12) as! UILabel).text = NSLocalizedString("ADD A FRIEND", comment : "ADD A FRIEND")
                     }
                     
                     return nil
@@ -3532,15 +3608,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
             else{
                 //Not a friend, friend him
-                Utils().addFriend(self.userPopUp!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                    (self.popUpView!.viewWithTag(13) as UIActivityIndicatorView).stopAnimating()
-                    (self.popUpView!.viewWithTag(11) as UIButton).hidden = false
+                Utils().addFriend(self.userPopUp!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                    (self.popUpView!.viewWithTag(13) as! UIActivityIndicatorView).stopAnimating()
+                    (self.popUpView!.viewWithTag(11) as! UIButton).hidden = false
                     if task.error != nil{
                         
                     }
                     else{
-                        (self.popUpView!.viewWithTag(11) as UIButton).setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
-                        (self.popUpView!.viewWithTag(12) as UILabel).text = NSLocalizedString("REMOVE A FRIEND", comment : "REMOVE A FRIEND")
+                        Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "big_react"])
+                        
+                        (self.popUpView!.viewWithTag(11) as! UIButton).setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
+                        (self.popUpView!.viewWithTag(12) as! UILabel).text = NSLocalizedString("REMOVE A FRIEND", comment : "REMOVE A FRIEND")
                     }
                     
                     return nil
@@ -3559,15 +3637,21 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         var task = BFTaskCompletionSource()
         
-        let userPiki:PFUser = self.mainPiki!["user"] as PFUser
-        PFCloud.callFunctionInBackground("sendPushNewComment", withParameters:["recipients":self.mainPiki!["recipients"], "isPublic" : isPublic, "pikiId" : self.mainPiki!.objectId, "ownerId" : userPiki.objectId]) {
-            (result: AnyObject!, error: NSError!) -> Void in
+        let userPiki:PFUser = self.mainPiki!["user"] as! PFUser
+        
+        var recipients:Array<String> = Array<String>()
+        if !isPublicPleek{
+            recipients = self.mainPiki!["recipients"] as! Array<String>
+        }
+        
+        PFCloud.callFunctionInBackground("sendPushNewComment", withParameters:["recipients":recipients, "isPublic" : isPublic, "pikiId" : self.mainPiki!.objectId!, "ownerId" : userPiki.objectId!]) {
+            (result, error) -> Void in
             
             if error != nil{
-                task.setError(error)
+                task.setError(error!)
             }
             else{
-                task.setResult(result)
+                task.setResult(result!)
             }
 
         }
@@ -3582,10 +3666,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func setURL(react : PFObject, cell : ReactsCollectionViewCell){
         
-        let videoFile:PFFile = react["video"] as PFFile
+        let videoFile:PFFile = react["video"] as! PFFile
         
-        var remoteUrl: NSURL? = NSURL(string: videoFile.url)
-        if remoteUrl? != nil && remoteUrl?.scheme? != nil {
+        var remoteUrl: NSURL? = NSURL(string: videoFile.url!)
+        if remoteUrl != nil && remoteUrl!.scheme != nil {
             if let asset = AVURLAsset(URL: remoteUrl, options: nil) {
                 let keys: [String] = [PlayerTracksKey, PlayerPlayableKey, PlayerDurationKey]
                 
@@ -3665,7 +3749,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     func saveAssetForReact(asset : AVURLAsset, react : PFObject){
-        playerItmes.append(["reactId" : react.objectId, "asset" : asset])
+        playerItmes.append(["reactId" : react.objectId!, "asset" : asset])
     }
     
     func isAssetExisting(react : PFObject) -> Bool{
@@ -3736,7 +3820,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             overlayTuto.addSubview(restScreenOverlay)
             
             let imageButton  = UIImageView(frame: CGRect(x: replyButton!.frame.origin.x, y: replyButton!.frame.origin.y, width: replyButton!.frame.width, height: replyButton!.frame.height))
-            imageButton.image = UIImage(named: "reply_button")
+            imageButton.image = UIImage(named: "reply_button_v2")
             overlayTuto.addSubview(imageButton)
             
             let lineReact = UIImageView(frame: CGRect(x: cameraOverlay.frame.width + 5, y: cameraOverlay.frame.origin.y - 100, width: 6, height: 113))
@@ -3774,9 +3858,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
         }
         
-        PFUser.currentUser()["hasShownOverlayPeekee"] = true
-        PFUser.currentUser().saveInBackgroundWithBlock { (finished, error) -> Void in
-            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+        PFUser.currentUser()!["hasShownOverlayPeekee"] = true
+        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+            PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                 println("UPDATE USER")
             })
         }
@@ -3816,7 +3900,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 if !reactIncrement.isKindOfClass(PFObject){
                     
-                    if (reactIncrement["id"] as Int) == (react["id"] as Int){
+                    if (reactIncrement["id"] as! Int) == (react["id"] as! Int){
                         position = j
                     }
                 }
@@ -3848,7 +3932,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Report this Pleek", comment : "Report this Pleek"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 PFCloud.callFunctionInBackground("reportPiki ",
-                    withParameters: ["pikiId" : self.mainPiki!.objectId], block: { (result, error) -> Void in
+                    withParameters: ["pikiId" : self.mainPiki!.objectId!], block: { (result, error) -> Void in
                         if error != nil{
                             let alert = UIAlertView(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Problem while reporting this Pleek. Please try again later", comment :"Problem while reporting this Pleek. Please try again later") ,
                                 delegate: nil, cancelButtonTitle: "OK")
@@ -3889,7 +3973,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func replyPeekee(){
         
         if indexPathBig != nil{
-            self.cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as ReactsCollectionViewCell)
+            self.cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as! ReactsCollectionViewCell)
         }
         
         
@@ -4005,10 +4089,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
         
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         
         if cameraCell.textViewOverPhoto!.isFirstResponder(){
-            var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+            var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
             cameraCell.textViewOverPhoto!.resignFirstResponder()
             cameraCell.overlayCameraView!.hidden = true
             deselectAllEmojis()
@@ -4183,7 +4267,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func hideEmojis(){
         backCameraActionView.hidden = false
         backEmojiButtonSelected.hidden = true
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         cameraCell.overlayCameraView.hidden = true
         cameraCell.emojiImageView.hidden = true
         cameraCell.textViewOverPhoto!.hidden = true
@@ -4194,19 +4278,19 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     func hideMem(){
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         cameraCell.overlayCameraView.hidden = true
         cameraCell.emojiImageView.hidden = true
         cameraCell.textViewOverPhoto!.hidden = true
     }
     
     func showMem(position : Int){
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         
         cameraCell.textViewOverPhoto!.hidden = true
         cameraCell.emojiImageView!.hidden = false
         cameraCell.overlayCameraView.hidden = true
-        cameraCell.emojiImageView.image = (self.memCollectionView.cellForItemAtIndexPath(NSIndexPath(forItem: position, inSection: 0)) as MemCollectionViewCell).iconImageView.image
+        cameraCell.emojiImageView.image = (self.memCollectionView.cellForItemAtIndexPath(NSIndexPath(forItem: position, inSection: 0)) as! MemCollectionViewCell).iconImageView.image
         
         self.isMemShowed = true
     }
@@ -4214,7 +4298,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func showEmojis(position: Int){
         
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as ReactsCollectionViewCell
+        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
         
         cameraCell.textViewOverPhoto!.hidden = true
         
@@ -4252,7 +4336,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func showShareView(isMozaic : Bool){
         
-        var isPleekPublic:Bool = self.mainPiki!["isPublic"] as Bool
+        
+        var isPleekPublic:Bool? = self.mainPiki!["isPublic"] as? Bool
+        
+        if isPleekPublic == nil{
+            isPleekPublic = false
+        }
         
         
         shareOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
@@ -4285,7 +4374,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         bottomShareView!.addSubview(buttonQuit)
         
         // SMS Share
-        if isMozaic || !isPleekPublic || !Utils().facebookMessengerActivated{
+        if isMozaic || !isPleekPublic! || !Utils().facebookMessengerActivated{
             let shareSMSButton = UIButton(frame: CGRect(x: 30, y: 79, width: 64, height: 64))
             shareSMSButton.setImage(UIImage(named: "sms_share_icon"), forState: UIControlState.Normal)
             shareSMSButton.addTarget(self, action: Selector("shareSms"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -4415,7 +4504,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func shareInstagram(){
         
         
-        Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Instagram"])
+        
         
         let instagramURL : NSURL = NSURL(string: "instagram://app")!
         
@@ -4431,6 +4520,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
                 share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+                
+                Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Instagram", "is_mozaic" : false])
             }
             else if viewToBuildImage != nil{
                 viewToBuildImage!.transform = CGAffineTransformIdentity
@@ -4439,6 +4530,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
                 viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+                
+                Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Instagram", "is_mozaic" : true])
             }
             
             
@@ -4501,7 +4594,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if okTwitter{
             
-            Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Twitter"])
             
             var composer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
             
@@ -4514,6 +4606,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
                 share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+                
+                Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Twitter", "is_mozaic" : false])
             }
             else if viewToBuildImage != nil{
                 viewToBuildImage!.transform = CGAffineTransformIdentity
@@ -4522,6 +4616,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
                 viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+                
+                Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Twitter", "is_mozaic" : true])
             }
             
             
@@ -4553,6 +4649,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             let scale:CGFloat = imageContainerView!.frame.height / share1vs1View!.frame.height
             share1vs1View!.transform = CGAffineTransformMakeScale(scale, scale)
+            
+            Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Facebook", "is_mozaic" : false])
         }
         else if viewToBuildImage != nil{
             viewToBuildImage!.transform = CGAffineTransformIdentity
@@ -4561,32 +4659,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             let scale:CGFloat = imageContainerView!.frame.height / viewToBuildImage!.frame.height
             viewToBuildImage!.transform = CGAffineTransformMakeScale(scale, scale)
+            
+            Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Facebook", "is_mozaic" : true])
         }
         
-        var params : FBPhotoParams = FBPhotoParams()
-        params.photos = [image!]
-
+        var photo:FBSDKSharePhoto = FBSDKSharePhoto(image: image, userGenerated: true)
+        var content:FBSDKSharePhotoContent = FBSDKSharePhotoContent()
+        content.photos = [photo]
         
         
-        if FBDialogs.canPresentShareDialogWithPhotos() {
-            
-            Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Facebook"])
-            
-            FBDialogs.presentShareDialogWithPhotoParams(params,
-                clientState: nil,
-                handler: { (appCall, result, error) -> Void in
-                    if error != nil{
-                        println("\(error.description)")
-                        
-                    }
-                    else{
-                        println("Result : \(result)")
-                    }
-            })
-        }
-        else{
-            
-        }
+        FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: nil)
+        
+        
     }
     
     func shareMessenger(){
@@ -4607,17 +4691,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 }
                 else{
                     pleekImage = task.result as? UIImage
-                    println("We have pleekImage")
                     
                     if self.indexPathBig != nil{
                         var reactObject:AnyObject = self.pikiReacts[self.indexPathBig!.item - 1]
-                        println("We have index path big")
                         
                         
                         if reactObject.isKindOfClass(PFObject){
-                            println("Index path big is class PFObject")
                             
-                            Utils().getImagePleekOrReact(reactObject as PFObject).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                            Utils().getImagePleekOrReact(reactObject as! PFObject).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                                 if task.error != nil{
                                     println("Error react Image: \(task.error)")
                                     MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
@@ -4632,13 +4713,11 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                         if taskGif.error != nil{
                                             //Error
                                             
-                                            println("Error Gif : \(taskGif.error)")
                                         }
                                         else{
-                                            println("url of gif : \(taskGif.result)")
-                                            var urlGif : NSURL = (taskGif.result as NSURL)
-                                            println("Pth gig \(urlGif.path)")
-                                            Utils().shareFBMessenger((taskGif.result as NSURL).path!, pleekId: self.mainPiki!.objectId, context : nil)
+                                            Mixpanel.sharedInstance().track("Share", properties: ["Canal" : "Messenger", "is_mozaic" : false])
+                                            var urlGif : NSURL = (taskGif.result as! NSURL)
+                                            Utils().shareFBMessenger((taskGif.result as! NSURL).path!, pleekId: self.mainPiki!.objectId!, context : nil)
                                         }
                                         
                                         return nil
@@ -4668,7 +4747,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         else if self.gifURLLastReact != nil{
             self.quitShareMessenger()
             
-            Utils().shareFBMessenger(self.gifURLLastReact!.path!, pleekId: self.mainPiki!.objectId, context : (UIApplication.sharedApplication().delegate as AppDelegate)._replyMessengerContext)
+            Utils().shareFBMessenger(self.gifURLLastReact!.path!, pleekId: self.mainPiki!.objectId!, context : (UIApplication.sharedApplication().delegate as! AppDelegate)._replyMessengerContext)
         }
         
         
@@ -4905,16 +4984,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         viewMainPeekeeContainer.addSubview(iconPeekee)
         
         //User label
-        let userMainPeekee = self.mainPiki!["user"] as PFUser
+        let userMainPeekee = self.mainPiki!["user"] as! PFUser
         var userLabel = UILabel(frame: CGRect(x: iconPeekee.frame.origin.x + iconPeekee.frame.width + 20, y: iconPeekee.frame.origin.y, width: viewMainPeekeeContainer.frame.width - (iconPeekee.frame.origin.x + iconPeekee.frame.width + 20 + 10), height: 30))
         userLabel.font = UIFont(name: Utils().customFontSemiBold, size: 24.0)
         userLabel.textColor = UIColor.whiteColor()
-        let onPeekeeFormat = String(format: NSLocalizedString("%@ on Pleek", comment : "%@ on Pleek"), userMainPeekee.username)
+        let onPeekeeFormat = String(format: NSLocalizedString("%@ on Pleek", comment : "%@ on Pleek"), userMainPeekee.username!)
         userLabel.text = onPeekeeFormat
         viewMainPeekeeContainer.addSubview(userLabel)
         
         //Label when
-        var creationDate:NSDate = self.mainPiki!.createdAt
+        var creationDate:NSDate = self.mainPiki!.createdAt!
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "MMMM dd, yyyy - h:mm a" // superset of OP's format
@@ -4928,10 +5007,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         //PeekeeInfos VIew
         var peekeeInfosView = UIView(frame: CGRect(x: 0, y: 750, width: 250, height: 250))
-        peekeeInfosView.backgroundColor = Utils().secondColor
+        peekeeInfosView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
         viewToBuildImage!.addSubview(peekeeInfosView)
         
-        var labelNbReply:UILabel = UILabel(frame: CGRect(x: 15, y: 0, width: peekeeInfosView.frame.width - 30, height: peekeeInfosView.frame.height))
+        var labelNbReply:UILabel = UILabel(frame: CGRect(x: 15, y: 60, width: peekeeInfosView.frame.width - 30, height: peekeeInfosView.frame.height - 40))
         labelNbReply.numberOfLines = 2
         labelNbReply.adjustsFontSizeToFitWidth = true
         labelNbReply.font = UIFont(name: Utils().customFontSemiBold, size: 36.0)
@@ -4944,17 +5023,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         //Apple Icon
         var appleIcon = UIImageView(frame: CGRect(x: 89, y: 195, width: 20, height: 24))
         appleIcon.image = UIImage(named: "apple_icon")
-        peekeeInfosView.addSubview(appleIcon)
+        //peekeeInfosView.addSubview(appleIcon)
         
         //Android Icon
         var androidIcon = UIImageView(frame: CGRect(x: 137, y: 195, width: 20, height: 24))
         androidIcon.image = UIImage(named: "android_icon")
-        peekeeInfosView.addSubview(androidIcon)
+        //peekeeInfosView.addSubview(androidIcon)
         
         //Reply Icon
-        var replyIcon = UIImageView(frame: CGRect(x: 0, y: 40, width: peekeeInfosView.frame.width, height: 25))
+        var replyIcon = UIImageView(frame: CGRect(x: 0, y: 50, width: peekeeInfosView.frame.width, height: 40))
         replyIcon.contentMode = UIViewContentMode.Center
-        replyIcon.image = UIImage(named: "reply_icon_share")
+        replyIcon.image = UIImage(named: "app_icon")
         peekeeInfosView.addSubview(replyIcon)
         
         //Set the image
@@ -4972,18 +5051,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         else{
             if self.mainPiki!["photo"] != nil{
-                var filePeekee:PFFile = mainPiki!["photo"] as PFFile
+                var filePeekee:PFFile = mainPiki!["photo"] as! PFFile
                 filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
                     if data != nil{
-                        mainPikiView.image = UIImage(data: data)
+                        mainPikiView.image = UIImage(data: data!)
                     }
                 })
             }
             else{
-                var filePeekee:PFFile = mainPiki!["previewImage"] as PFFile
+                var filePeekee:PFFile = mainPiki!["previewImage"] as! PFFile
                 filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
                     if data != nil{
-                        mainPikiView.image = UIImage(data: data)
+                        mainPikiView.image = UIImage(data: data!)
                         
                         var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: mainPikiView.frame.width/3, height: mainPikiView.frame.width/3))
                         playImage.center = mainPikiView.center
@@ -5196,15 +5275,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 if react.isKindOfClass(PFObject){
                     
-                    let reactObject:PFObject = react as PFObject
+                    let reactObject:PFObject = react as! PFObject
                     if reactObject["photo"] != nil {
                         
-                        let photoFile:PFFile = reactObject["photo"] as PFFile
+                        let photoFile:PFFile = reactObject["photo"] as! PFFile
                         photoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
                             if error == nil{
                                 if arrayImageViewReact.count > 0{
                                     let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
-                                    imageViewNow.image = UIImage(data: data)
+                                    imageViewNow.image = UIImage(data: data!)
                                     nbReactDone++
                                 }
                                 
@@ -5215,12 +5294,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         })
                     }
                     else{
-                        let photoFile:PFFile = reactObject["previewImage"] as PFFile
+                        let photoFile:PFFile = reactObject["previewImage"] as! PFFile
                         photoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
                             if error == nil{
                                 if arrayImageViewReact.count > 0{
                                     let imageViewNow:UIImageView = arrayImageViewReact.removeAtIndex(arrayImageViewReact.count - 1)
-                                    imageViewNow.image = UIImage(data: data)
+                                    imageViewNow.image = UIImage(data: data!)
                                     
                                     var playImage = UIImageView(frame: CGRect(x: 0, y: 0, width: imageViewNow.frame.width/3, height: imageViewNow.frame.width/3))
                                     playImage.center = imageViewNow.center
@@ -5238,7 +5317,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 }
                 else{
                     
-                    var pikiInfos:[String : AnyObject] = react as [String : AnyObject]
+                    var pikiInfos:[String : AnyObject] = react as! [String : AnyObject]
                     
                     
                     if pikiInfos["photo"] != nil {
@@ -5281,14 +5360,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
         switch (result.value) {
-        case MessageComposeResultCancelled.value:
-            println("Canceled")
-            
-        case MessageComposeResultFailed.value:
-            println("Failed")
-            
         case MessageComposeResultSent.value:
-            println("Sent")
+            
+            if controller.recipients != nil{
+                Mixpanel.sharedInstance().track("Send SMS", properties: ["nb_recipients" : controller.recipients.count])
+            }
+            else{
+                Mixpanel.sharedInstance().track("Send SMS")
+            }
+            
             
         default:
             break
@@ -5324,7 +5404,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         for react in self.pikiReacts{
             if !react.isKindOfClass(PFObject){
                 if react["id"] != nil{
-                    var intIdTemp:Int = react["id"] as Int
+                    var intIdTemp:Int = react["id"] as! Int
                     
                     if intIdTemp == intId{
                         peekeePosition = position
@@ -5375,7 +5455,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         self.leaveReply()
         
-        self.shareOnMessengerDirectReact(pikiInfos["photo"] as UIImage)
+        self.shareOnMessengerDirectReact(pikiInfos["photo"] as! UIImage)
         
     }
     
@@ -5393,7 +5473,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         if Utils().iOS8{
             if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
             }
         }
         else{
@@ -5420,24 +5500,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         var canOpenSettings:Bool = false
         
-        if UIApplicationOpenSettingsURLString != nil{
-            canOpenSettings = true
-        }
-        
-        if canOpenSettings{
+        switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
+        case .OrderedSame, .OrderedDescending:
             var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", comment : "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 
                 self.openSettings()
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-        else{
+        case .OrderedAscending:
             var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek", comment : "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
+    
         
     }
     
@@ -5453,12 +5529,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         var queryMem:PFQuery = PFQuery(className: "stickers")
         queryMem.orderByAscending("priorite")
-        queryMem.findObjectsInBackgroundWithBlock { (mems, error : NSError!) -> Void in
+        queryMem.findObjectsInBackgroundWithBlock { (mems, error) -> Void in
             if error != nil{
                 
             }
             else{
-                self.mems = mems as Array<PFObject>
+                self.mems = mems as! Array<PFObject>
                 self.memCollectionView.reloadData()
             }
             
@@ -5480,18 +5556,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         var mainImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: share1vs1View!.frame.width, height: share1vs1View!.frame.height))
         
         if self.mainPiki!["photo"] != nil{
-            var filePeekee:PFFile = mainPiki!["photo"] as PFFile
+            var filePeekee:PFFile = mainPiki!["photo"] as! PFFile
             filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if data != nil{
-                    mainImageView.image = UIImage(data: data)
+                    mainImageView.image = UIImage(data: data!)
                 }
             })
         }
         else{
-            var filePeekee:PFFile = mainPiki!["previewImage"] as PFFile
+            var filePeekee:PFFile = mainPiki!["previewImage"] as! PFFile
             filePeekee.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if data != nil{
-                    mainImageView.image = UIImage(data: data)
+                    mainImageView.image = UIImage(data: data!)
                 }
             })
         }
@@ -5511,18 +5587,18 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         reactImageView.layer.cornerRadius = 4
         
         if react["photo"] != nil{
-            var fileReact:PFFile = react["photo"] as PFFile
+            var fileReact:PFFile = react["photo"] as! PFFile
             fileReact.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if data != nil{
-                    reactImageView.image = UIImage(data: data)
+                    reactImageView.image = UIImage(data: data!)
                 }
             })
         }
         else{
-            var fileReact:PFFile = react["previewImage"] as PFFile
+            var fileReact:PFFile = react["previewImage"] as! PFFile
             fileReact.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if data != nil{
-                    reactImageView.image = UIImage(data: data)
+                    reactImageView.image = UIImage(data: data!)
                 }
             })
         }
@@ -5541,9 +5617,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         share1vs1View!.addSubview(labelWho)
         
         
-        var userReact:PFUser = react["user"] as PFUser
-        var userPiki:PFUser = self.mainPiki!["user"] as PFUser
-        labelWho.text = "@\(userReact.username) to @\(userPiki.username) on Pleek"
+        var userReact:PFUser = react["user"] as! PFUser
+        var userPiki:PFUser = self.mainPiki!["user"] as! PFUser
+        labelWho.text = "@\(userReact.username!) to @\(userPiki.username!) on Pleek"
         
         
         
@@ -5601,15 +5677,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     
                 }
                 else{
-                    Utils().buildGifShareMessenger((task.result as UIImage), reactImage: reactImage, otherReact: nil).continueWithBlock({ (taskGif : BFTask!) -> AnyObject! in
+                    Utils().buildGifShareMessenger((task.result as! UIImage), reactImage: reactImage, otherReact: nil).continueWithBlock({ (taskGif : BFTask!) -> AnyObject! in
                         
                         if taskGif.error != nil{
                             //Error
                             println("Error Gif : \(taskGif.error)")
                         }
                         else{
-                            self.gifURLLastReact = (taskGif.result as NSURL)
-                            var animatedGif : AnimatedGif = AnimatedGif.getAnimationForGifAtUrl((taskGif.result as NSURL))
+                            self.gifURLLastReact = (taskGif.result as! NSURL)
+                            var animatedGif : AnimatedGif = AnimatedGif.getAnimationForGifAtUrl((taskGif.result as! NSURL))
                             animatedGifView.setAnimatedGif(animatedGif, startImmediately: true)
                             
                         }

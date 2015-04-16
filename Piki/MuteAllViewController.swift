@@ -36,7 +36,7 @@ class MuteAllFriendsTableViewCell : UITableViewCell{
         
         if Utils().isUserMuted(friend){
             self.usernameLabel.textColor = self.secondLabel.textColor
-            muteButton.setImage(UIImage(named: "muted_icon"), forState: UIControlState.Normal)
+            //muteButton.setImage(UIImage(named: "muted_icon"), forState: UIControlState.Normal)
         }
         else{
             self.usernameLabel.textColor = UIColor.blackColor()
@@ -99,7 +99,7 @@ class MuteAllFriendsTableViewCell : UITableViewCell{
         if Utils().isUserMuted(self.friend!){
             
             // Unmute
-            Utils().unMuteFriend(self.friend!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+            Utils().unMuteFriend(self.friend!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 self.activityIndicator.stopAnimating()
                 self.muteButton.hidden = false
                 if task.error != nil{
@@ -118,7 +118,7 @@ class MuteAllFriendsTableViewCell : UITableViewCell{
         }
         else{
             
-            Utils().muteFriend(self.friend!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+            Utils().muteFriend(self.friend!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 self.activityIndicator.stopAnimating()
                 self.muteButton.hidden = false
                 if task.error != nil{
@@ -126,7 +126,7 @@ class MuteAllFriendsTableViewCell : UITableViewCell{
                 }
                 else{
                     self.usernameLabel.textColor = self.secondLabel.textColor
-                    self.muteButton.setImage(UIImage(named: "muted_icon"), forState: UIControlState.Normal)
+                    //self.muteButton.setImage(UIImage(named: "muted_icon"), forState: UIControlState.Normal)
                 }
                 
                 return nil
@@ -161,16 +161,16 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
         self.tableView.hidden = true
         
         // Update user
-        PFUser.currentUser().fetchInBackgroundWithBlock { (user, error) -> Void in
+        PFUser.currentUser()!.fetchInBackgroundWithBlock { (user, error) -> Void in
             
-            if PFUser.currentUser()["isMuteModeEnabled"] != nil{
+            if PFUser.currentUser()!["isMuteModeEnabled"] != nil{
                 
                 
-                if (PFUser.currentUser()["isMuteModeEnabled"] as Bool){
+                if (PFUser.currentUser()!["isMuteModeEnabled"] as! Bool){
                     
-                    if PFUser.currentUser()["endMuteAllJob"] != nil{
+                    if PFUser.currentUser()!["endMuteAllJob"] != nil{
                         // Is in activation
-                        if !(PFUser.currentUser()["endMuteAllJob"] as Bool){
+                        if !(PFUser.currentUser()!["endMuteAllJob"] as! Bool){
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (activating)", comment : "Silent Mode Status (activating)")
                         }
                         else{
@@ -189,9 +189,9 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
-                    if PFUser.currentUser()["endunmuteAllJob"] != nil{
+                    if PFUser.currentUser()!["endunmuteAllJob"] != nil{
                         // Is in activation
-                        if !(PFUser.currentUser()["endunmuteAllJob"] as Bool){
+                        if !(PFUser.currentUser()!["endunmuteAllJob"] as! Bool){
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (stopping)", comment : "Silent Mode Status (stopping)")
                         }
                         else{
@@ -250,10 +250,10 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
-                    PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+                    PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                         
-                        PFUser.currentUser()["isMuteModeEnabled"] = true
-                        PFUser.currentUser().saveInBackgroundWithBlock({ (succedded, error) -> Void in
+                        PFUser.currentUser()!["isMuteModeEnabled"] = true
+                        PFUser.currentUser()!.saveInBackgroundWithBlock({ (succedded, error) -> Void in
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (activating)", comment : "Silent Mode Status (activating)")
                             
                             // Alert User it can take a while, he will receive a notification when the operation is completed
@@ -289,12 +289,12 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
-                    PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+                    PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                         
                         self.tableView.hidden = true
                         
-                        PFUser.currentUser()["isMuteModeEnabled"] = false
-                        PFUser.currentUser().saveInBackgroundWithBlock({ (succedded, error) -> Void in
+                        PFUser.currentUser()!["isMuteModeEnabled"] = false
+                        PFUser.currentUser()!.saveInBackgroundWithBlock({ (succedded, error) -> Void in
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (stopping)", comment : "Silent Mode Status (stopping)")
                             
                             // Alert User it can take a while, he will receive a notification when the operation is completed
@@ -331,14 +331,14 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell:MuteAllFriendsTableViewCell = tableView.dequeueReusableCellWithIdentifier("muteAllCell") as MuteAllFriendsTableViewCell
+        var cell:MuteAllFriendsTableViewCell = tableView.dequeueReusableCellWithIdentifier("muteAllCell") as! MuteAllFriendsTableViewCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         cell.loadCell(self.friends[indexPath.row])
         
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
+        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
         if arrayFriendsId!.count > friends.count{
-            if indexPath.row == (friends.count - 10){
+            if indexPath.row == (friends.count - 20){
                 if friends.count > 0 && !isLoadingMore{
                     if friends.count % 100 == 0{
                         println("Load More")
@@ -356,7 +356,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        var cell:MuteAllFriendsTableViewCell = tableView.cellForRowAtIndexPath(indexPath) as MuteAllFriendsTableViewCell
+        var cell:MuteAllFriendsTableViewCell = tableView.cellForRowAtIndexPath(indexPath) as! MuteAllFriendsTableViewCell
         cell.muteSelect()
         
     }
@@ -366,13 +366,13 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     
     func getFriends(){
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
+        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
         
         if arrayFriendsId != nil{
-            var queryFriends:PFQuery = PFUser.query()
+            var queryFriends:PFQuery = PFUser.query()!
             queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
             queryFriends.orderByAscending("username")
-            queryFriends.cachePolicy = kPFCachePolicyCacheThenNetwork
+            queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
             queryFriends.limit = 100
             
             queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
@@ -380,7 +380,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                     
                 }
                 else{
-                    self.friends = friends as Array<PFUser>
+                    self.friends = friends as! Array<PFUser>
                     self.tableView.reloadData()
                     
                 }
@@ -393,15 +393,20 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     func getMoreFriends(){
         
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
+        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
+        var finalArrayFriends:Array<String> = Array<String>()
         
+        
+        finalArrayFriends = arrayFriendsId!.filter(friendsNotAlready)
+        
+        println("Size friends : \(arrayFriendsId!.count), size filtered : \(finalArrayFriends.count)")
         
         if arrayFriendsId != nil {
-            var queryFriends:PFQuery = PFUser.query()
-            queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
+            var queryFriends:PFQuery = PFUser.query()!
+            queryFriends.whereKey("objectId", containedIn: finalArrayFriends)
             queryFriends.orderByAscending("username")
             queryFriends.limit = 100
-            queryFriends.skip = friends.count
+            //queryFriends.skip = friends.count
             
             queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
                 if error != nil {
@@ -409,17 +414,40 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
+                    
+                    
                     var indexPathToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
                     
-                    for friend in friends as Array<PFUser>{
+                    for friend in friends as! Array<PFUser>{
                         self.friends.append(friend)
                         indexPathToInsert.append(NSIndexPath(forRow: self.friends.count - 1, inSection: 0))
+                        
                     }
-
                     
+                    self.tableView.insertRowsAtIndexPaths(indexPathToInsert, withRowAnimation: UITableViewRowAnimation.Fade)
+
+                    self.isLoadingMore = false
                 }
             }
         }
+        
+    }
+    
+    
+    func friendsNotAlready(objectId:String) -> Bool{
+        
+        var present:Bool = true
+        
+        for friend in friends{
+            
+            if friend.objectId == objectId{
+                return false
+            }
+            
+        }
+        
+        
+        return present
         
     }
     

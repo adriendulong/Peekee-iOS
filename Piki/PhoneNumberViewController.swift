@@ -62,6 +62,8 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        Mixpanel.sharedInstance().track("Phone Number View")
+        
         if UIScreen.mainScreen().bounds.height < 500{
             verticalSpaceConstraint.constant = 0
         }
@@ -126,7 +128,6 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         phoneNumberTextField!.tintColor = Utils().secondColor
         phoneNumberTextField!.adjustsFontSizeToFitWidth = true
         phoneNumberTextField!.keyboardType = UIKeyboardType.PhonePad
-        phoneNumberTextField!.becomeFirstResponder()
         phoneNumberActionView!.addSubview(phoneNumberTextField!)
         
         let underBarPhoneNumber:UIView = UIView(frame: CGRect(x: 0, y: phoneNumberActionView!.frame.height - 1, width: phoneNumberActionView!.frame.width, height: 1))
@@ -209,6 +210,8 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         else{
             println("test nil")
         }
+        
+        
         
         //NetworkInfos
         let networkInfo = CTTelephonyNetworkInfo()
@@ -377,9 +380,9 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                                     self.presentViewController(alert, animated: true, completion: nil)
                                 }
                                 else{
-                                    var result:AnyObject = object[0]
+                                    var result:AnyObject = object![0]
                                     println("All : \(result)")
-                                    var code:Int = result["randomNumber"] as Int
+                                    var code:Int = result["randomNumber"] as! Int
                                     
                                     if let username: String? = result["username"] as? String{
                                         self.username = username
@@ -463,7 +466,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         
         
         if finalText.length > 2{
-            if isCorrectPhoneNumber(finalText){
+            if isCorrectPhoneNumber(finalText as String){
                 phoneNumberValid = true
                 validatePhoneView!.backgroundColor = Utils().secondColor
             }
@@ -506,7 +509,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         
         if segue.identifier == "verificationCode"{
             
-            var nextController:VerificationCodePhoneViewController = segue.destinationViewController as VerificationCodePhoneViewController
+            var nextController:VerificationCodePhoneViewController = segue.destinationViewController as! VerificationCodePhoneViewController
             nextController.verificationCode = self.verificationCode
             nextController.phoneNumber = self.finalFormatedNumber
             nextController.keyboardSize = self.keyboardSize
@@ -518,8 +521,8 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         }
         else if segue.identifier == "listCountry"{
             
-            var navController:UINavigationController = segue.destinationViewController as UINavigationController
-            var listCountriesViewController:CountriesTableViewController = navController.viewControllers[0] as CountriesTableViewController
+            var navController:UINavigationController = segue.destinationViewController as! UINavigationController
+            var listCountriesViewController:CountriesTableViewController = navController.viewControllers[0] as! CountriesTableViewController
             listCountriesViewController.countriesInfos = self.countriesInfos
             listCountriesViewController.delegate = self
             

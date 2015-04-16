@@ -28,53 +28,71 @@
 #define COCOAPODS_POD_AVAILABLE_Bolts
 #define COCOAPODS_VERSION_MAJOR_Bolts 1
 #define COCOAPODS_VERSION_MINOR_Bolts 1
-#define COCOAPODS_VERSION_PATCH_Bolts 3
+#define COCOAPODS_VERSION_PATCH_Bolts 4
 
 // Facebook-iOS-SDK
 #define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK
-#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK 3
-#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK 21
+#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK 4
+#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK 0
 #define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK 1
+
+// Facebook-iOS-SDK/CoreKit
+#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_CoreKit
+#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_CoreKit 4
+#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_CoreKit 0
+#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_CoreKit 1
+
+// Facebook-iOS-SDK/CoreKit/no-arc
+#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_CoreKit_no_arc
+#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_CoreKit_no_arc 4
+#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_CoreKit_no_arc 0
+#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_CoreKit_no_arc 1
+
+// Facebook-iOS-SDK/LoginKit
+#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_LoginKit
+#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_LoginKit 4
+#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_LoginKit 0
+#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_LoginKit 1
+
+// Facebook-iOS-SDK/ShareKit
+#define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK_ShareKit
+#define COCOAPODS_VERSION_MAJOR_Facebook_iOS_SDK_ShareKit 4
+#define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_ShareKit 0
+#define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_ShareKit 1
 
 // Mixpanel
 #define COCOAPODS_POD_AVAILABLE_Mixpanel
 #define COCOAPODS_VERSION_MAJOR_Mixpanel 2
-#define COCOAPODS_VERSION_MINOR_Mixpanel 6
-#define COCOAPODS_VERSION_PATCH_Mixpanel 2
+#define COCOAPODS_VERSION_MINOR_Mixpanel 7
+#define COCOAPODS_VERSION_PATCH_Mixpanel 3
 
 // Mixpanel/MPCategoryHelpers
 #define COCOAPODS_POD_AVAILABLE_Mixpanel_MPCategoryHelpers
 #define COCOAPODS_VERSION_MAJOR_Mixpanel_MPCategoryHelpers 2
-#define COCOAPODS_VERSION_MINOR_Mixpanel_MPCategoryHelpers 6
-#define COCOAPODS_VERSION_PATCH_Mixpanel_MPCategoryHelpers 2
+#define COCOAPODS_VERSION_MINOR_Mixpanel_MPCategoryHelpers 7
+#define COCOAPODS_VERSION_PATCH_Mixpanel_MPCategoryHelpers 3
 
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse
 #define COCOAPODS_VERSION_MAJOR_Parse 1
-#define COCOAPODS_VERSION_MINOR_Parse 6
+#define COCOAPODS_VERSION_MINOR_Parse 7
 #define COCOAPODS_VERSION_PATCH_Parse 1
 
 // ParseCrashReporting
 #define COCOAPODS_POD_AVAILABLE_ParseCrashReporting
 #define COCOAPODS_VERSION_MAJOR_ParseCrashReporting 1
-#define COCOAPODS_VERSION_MINOR_ParseCrashReporting 6
+#define COCOAPODS_VERSION_MINOR_ParseCrashReporting 7
 #define COCOAPODS_VERSION_PATCH_ParseCrashReporting 1
-
-// ParseFacebookUtils
-#define COCOAPODS_POD_AVAILABLE_ParseFacebookUtils
-#define COCOAPODS_VERSION_MAJOR_ParseFacebookUtils 1
-#define COCOAPODS_VERSION_MINOR_ParseFacebookUtils 6
-#define COCOAPODS_VERSION_PATCH_ParseFacebookUtils 1
 
 // ParseUI
 #define COCOAPODS_POD_AVAILABLE_ParseUI
 #define COCOAPODS_VERSION_MAJOR_ParseUI 1
-#define COCOAPODS_VERSION_MINOR_ParseUI 0
-#define COCOAPODS_VERSION_PATCH_ParseUI 2
+#define COCOAPODS_VERSION_MINOR_ParseUI 1
+#define COCOAPODS_VERSION_PATCH_ParseUI 3
 
 // libPhoneNumber-iOS
 #define COCOAPODS_POD_AVAILABLE_libPhoneNumber_iOS
 #define COCOAPODS_VERSION_MAJOR_libPhoneNumber_iOS 0
 #define COCOAPODS_VERSION_MINOR_libPhoneNumber_iOS 8
-#define COCOAPODS_VERSION_PATCH_libPhoneNumber_iOS 3
+#define COCOAPODS_VERSION_PATCH_libPhoneNumber_iOS 4
 

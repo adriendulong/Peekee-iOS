@@ -9,244 +9,44 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Piki/PhoneNumberViewController.swift"
-            timestampString = "447504837.276895"
+            filePath = "Piki/SearchFriendsViewController.swift"
+            timestampString = "450719520.975465"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
-            landmarkName = "textField(_:shouldChangeCharactersInRange:replacementString:)"
+            startingLineNumber = "1723"
+            endingLineNumber = "1723"
+            landmarkName = "unlockFriendsAfterTap()"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PhoneNumberViewController.textField (Peekee.PhoneNumberViewController)(ObjectiveC.UITextField, shouldChangeCharactersInRange : C._NSRange, replacementString : Swift.String) -&gt; Swift.Bool"
+                  symbolName = "Peekee.SearchFriendsViewController.unlockFriendsAfterTap (Peekee.SearchFriendsViewController)() -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PhoneNumberViewController.swift"
-                  timestampString = "447519545.941603"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/SearchFriendsViewController.swift"
+                  timestampString = "450808740.636848"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "447"
-                  endingLineNumber = "447"
-                  offsetFromSymbolStart = "236">
+                  startingLineNumber = "1725"
+                  endingLineNumber = "1725"
+                  offsetFromSymbolStart = "68">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PhoneNumberViewController.textField (Peekee.PhoneNumberViewController)(ObjectiveC.UITextField, shouldChangeCharactersInRange : C._NSRange, replacementString : Swift.String) -&gt; Swift.Bool"
+                  symbolName = "@objc Peekee.SearchFriendsViewController.unlockFriendsAfterTap (Peekee.SearchFriendsViewController)() -&gt; ()"
                   moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PhoneNumberViewController.swift"
-                  timestampString = "447519545.941751"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/SearchFriendsViewController.swift"
+                  timestampString = "450808740.637027"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "447"
-                  endingLineNumber = "447"
-                  offsetFromSymbolStart = "252">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PhoneNumberViewController.swift"
-            timestampString = "447504921.420853"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "451"
-            endingLineNumber = "451"
-            landmarkName = "textField(_:shouldChangeCharactersInRange:replacementString:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PhoneNumberViewController.swift"
-            timestampString = "447505870.17926"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "551"
-            endingLineNumber = "551"
-            landmarkName = "isCorrectPhoneNumber(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PhoneNumberViewController.swift"
-            timestampString = "447505058.421606"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "466"
-            endingLineNumber = "466"
-            landmarkName = "textField(_:shouldChangeCharactersInRange:replacementString:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PhoneNumberViewController.textField (Peekee.PhoneNumberViewController)(ObjectiveC.UITextField, shouldChangeCharactersInRange : C._NSRange, replacementString : Swift.String) -&gt; Swift.Bool"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PhoneNumberViewController.swift"
-                  timestampString = "447519545.943375"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "466"
-                  endingLineNumber = "466"
-                  offsetFromSymbolStart = "1188">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PhoneNumberViewController.textField (Peekee.PhoneNumberViewController)(ObjectiveC.UITextField, shouldChangeCharactersInRange : C._NSRange, replacementString : Swift.String) -&gt; Swift.Bool"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PhoneNumberViewController.swift"
-                  timestampString = "447519545.943496"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "466"
-                  endingLineNumber = "466"
-                  offsetFromSymbolStart = "1308">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PhoneNumberViewController.swift"
-            timestampString = "447505870.17926"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
-            landmarkName = "isCorrectPhoneNumber(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "447694001.855135"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2788"
-            endingLineNumber = "2788"
-            landmarkName = "getMoreReacts()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "447694001.855135"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "959"
-            endingLineNumber = "959"
-            landmarkName = "collectionView(_:cellForItemAtIndexPath:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.collectionView (Peekee.PikiViewController)(ObjectiveC.UICollectionView, cellForItemAtIndexPath : ObjectiveC.NSIndexPath) -&gt; ObjectiveC.UICollectionViewCell"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "447519545.944938"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "950"
-                  endingLineNumber = "950"
-                  offsetFromSymbolStart = "12420">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.collectionView (Peekee.PikiViewController)(ObjectiveC.UICollectionView, cellForItemAtIndexPath : ObjectiveC.NSIndexPath) -&gt; ObjectiveC.UICollectionViewCell"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "447519545.945055"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "950"
-                  endingLineNumber = "950"
-                  offsetFromSymbolStart = "12496">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Piki/PikiViewController.swift"
-            timestampString = "447694001.855135"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "961"
-            endingLineNumber = "961"
-            landmarkName = "collectionView(_:cellForItemAtIndexPath:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.collectionView (Peekee.PikiViewController)(ObjectiveC.UICollectionView, cellForItemAtIndexPath : ObjectiveC.NSIndexPath) -&gt; ObjectiveC.UICollectionViewCell"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "447519545.94565"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "952"
-                  endingLineNumber = "952"
-                  offsetFromSymbolStart = "12756">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Peekee.PikiViewController.collectionView (Peekee.PikiViewController)(ObjectiveC.UICollectionView, cellForItemAtIndexPath : ObjectiveC.NSIndexPath) -&gt; ObjectiveC.UICollectionViewCell"
-                  moduleName = "Peekee"
-                  urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/PikiViewController.swift"
-                  timestampString = "447519545.945766"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "952"
-                  endingLineNumber = "952"
-                  offsetFromSymbolStart = "12808">
+                  startingLineNumber = "1725"
+                  endingLineNumber = "1725"
+                  offsetFromSymbolStart = "72">
                </Location>
             </Locations>
          </BreakpointContent>

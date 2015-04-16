@@ -50,7 +50,7 @@ class ContactCell: UITableViewCell {
         
         println("Userinfos : \(userInfos)")
         
-        var userInfosDic:[String : String] = userInfos["userInfos"] as [String : String]
+        var userInfosDic:[String : String] = userInfos["userInfos"] as! [String : String]
         var usernameString = userInfosDic["username"]
         username.text = "@\(usernameString!)"
         
@@ -122,13 +122,15 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     override func viewDidLoad() {
         
+        Mixpanel.sharedInstance().track("First Add Friends View")
+        
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if defaults.objectForKey("mandatoryFriends") != nil{
-            self.mandatoryStep = defaults.objectForKey("mandatoryFriends") as Bool
+            self.mandatoryStep = defaults.objectForKey("mandatoryFriends") as! Bool
         }
         
         if defaults.objectForKey("numberToAdd") != nil{
-            self.limitFriendsInvit = defaults.objectForKey("numberToAdd") as Int
+            self.limitFriendsInvit = defaults.objectForKey("numberToAdd") as! Int
         }
         
         titleLabel.text = NSLocalizedString("Add your friends! 👫", comment :"Add your friends! 👫")
@@ -252,12 +254,12 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:ContactCell = tableView.dequeueReusableCellWithIdentifier("Cell") as ContactCell
+        var cell:ContactCell = tableView.dequeueReusableCellWithIdentifier("Cell") as! ContactCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         if indexPath.section == 0{
             var contactInfos = contactsWithUserInfos[indexPath.row]
-            var userInfos:[String : String] = contactInfos["userInfos"] as [String : String]
+            var userInfos:[String : String] = contactInfos["userInfos"] as! [String : String]
             
             cell.loadCellWithUserInfos(contactsWithUserInfos[indexPath.row], isSelected : isUserSelected(userInfos))
         }
@@ -272,12 +274,12 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         if indexPath.section == 0{
             
             var contactInfos = contactsWithUserInfos[indexPath.row]
-            var userInfos:[String : String] = contactInfos["userInfos"] as [String : String]
+            var userInfos:[String : String] = contactInfos["userInfos"] as! [String : String]
             var objectIdUser:String = userInfos["userObjectId"]!
             
             if !contains(usersSelected, objectIdUser){
                 usersSelected.append(objectIdUser)
-                var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ContactCell
                 cell.select()
                 self.tableView.reloadData()
                 
@@ -296,7 +298,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 
                 if index != nil{
                     usersSelected.removeAtIndex(index!)
-                    var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                    var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ContactCell
                     cell.deselect()
                     self.tableView.reloadData()
                 }
@@ -310,7 +312,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             
             if !contains(contactsSelected, contact){
                 contactsSelected.append(contact)
-                var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ContactCell
                 cell.select()
                 self.tableView.reloadData()
             }
@@ -328,7 +330,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 
                 if index != nil{
                     contactsSelected.removeAtIndex(index!)
-                    var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as ContactCell
+                    var cell:ContactCell = self.tableView.cellForRowAtIndexPath(indexPath) as! ContactCell
                     cell.deselect()
                     self.tableView.reloadData()
                 }
@@ -415,7 +417,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
                 if (contacts != nil) {
 
-                    self.contactsPhone = contacts as Array<APContact>
+                    self.contactsPhone = contacts as! Array<APContact>
                     self.lookingForFriendsOnPeekee = true
                     self.tableView.reloadData()
                     
@@ -452,9 +454,9 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 
                 if (tel as? String) != nil {
                     
-                    if countElements(tel as String) > 6{
+                    if count(tel as! String) > 6{
                         var errorPointer:NSError?
-                        var number:NBPhoneNumber? = phoneUtil.parse(tel as String, defaultRegion:regionLabel!, error:&errorPointer)
+                        var number:NBPhoneNumber? = phoneUtil.parse(tel as! String, defaultRegion:regionLabel!, error:&errorPointer)
                         if errorPointer == nil {
                             if phoneUtil.isValidNumber(number!){
                                 
@@ -481,13 +483,12 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         PFCloud.callFunctionInBackground("checkContactOnPiki", withParameters: ["phoneNumbers" : phoneNumbers]) { (pikiUsers, error) -> Void in
             if error != nil {
-                println("Error getting piki Users : \(error.localizedDescription)")
                 self.lookingForFriendsOnPeekee = false
                 self.tableView.reloadData()
             }
             else{
                 println("Piki users : \(pikiUsers)")
-                self.pikiUsersFromPhoneContacts = pikiUsers as Array<[String : String]>
+                self.pikiUsersFromPhoneContacts = pikiUsers as! Array<[String : String]>
                 self.getAllUsersFromContacts()
             }
         }
@@ -501,35 +502,47 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             var tempContactsWithUserInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
             
             
-            var friendsUser:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
-            
-            
-            if friendsUser == nil{
-                friendsUser = []
-            }
+            var friendsUserId:Array<String>? = Utils().getAppDelegate().friendsIdList
+            var usersFromContacts:Array<[String : String]> = Array<[String : String]>()
+            var arrayPhoneUsers:Array<String> = Array<String>()
             
             for userInfos in self.pikiUsersFromPhoneContacts{
-                
-                if  !contains(friendsUser!, userInfos["userObjectId"]!){
+                if !contains(friendsUserId!, userInfos["userObjectId"]!){
+                    var idUser = userInfos["userObjectId"]!
                     
-                    for contact in self.contactsPhone{
-                        
-                        for phone in contact.phones{
-                            
-                            let formatedPhone:String? = self.getFormattedPhoneNumber(phone as String)
-                            if  formatedPhone != nil {
+                    usersFromContacts.append(userInfos)
+                    
+                    if userInfos["phoneNumber"] != nil{
+                        arrayPhoneUsers.append(userInfos["phoneNumber"]!)
+                    }
+                }
+            }
+            
+            
+            for contact in self.contactsPhone{
+                
+                for phone in contact.phones{
+                    
+                    
+                    let formatedPhone:String? = self.getFormattedPhoneNumber(phone as! String)
+                    
+                    if formatedPhone != nil{
+                        if contains(arrayPhoneUsers, formatedPhone!){
+                            for userInfos in usersFromContacts{
+                                
                                 if userInfos["phoneNumber"] == formatedPhone{
                                     tempContactsWithUserInfos.append(["userInfos" : userInfos, "contact" : contact])
                                 }
+                                
                             }
-                            
                         }
-                        
                     }
                     
                 }
                 
             }
+            
+            
             
             
             
@@ -551,7 +564,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         let phoneUtil:NBPhoneNumberUtil = NBPhoneNumberUtil()
         var errorPointer:NSError?
         
-        if countElements(numberString) > 4{
+        if count(numberString) > 4{
             var number:NBPhoneNumber? = phoneUtil.parse(numberString, defaultRegion:regionLabel!, error:&errorPointer)
             if errorPointer == nil {
                 if phoneUtil.isValidNumber(number){
@@ -591,10 +604,12 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                         tasks.addObject(Utils().addFriend(user))
                         
                     }
-                    BFTask(forCompletionOfAllTasks:tasks).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                    BFTask(forCompletionOfAllTasks:tasks as Array<AnyObject>).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                         
                         println("finished adding friends")
                         self.invitingUsers = false
+                        
+                        Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "add_first_friend"])
                         
                         if !self.invitingUsers && !self.invitingContacts{
                             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
@@ -656,7 +671,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             }
             else{
                 
-                
+                Mixpanel.sharedInstance().track("Skip Invit", properties: ["is_big_one" : true])
                 
                 
                 // Leave
@@ -692,6 +707,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         }
         else{
             // Leave
+            Mixpanel.sharedInstance().track("Skip Invit", properties: ["is_big_one" : false])
             goLeave()
         }
         
@@ -704,29 +720,38 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         switch (result.value) {
         case MessageComposeResultCancelled.value:
             //Send from server
-            println("Canceled")
             self.sendSmsFromSeverTo(getArrayOfNumbersForContacts(contactsSelected))
             
         case MessageComposeResultFailed.value:
             //Send from Server
             self.sendSmsFromSeverTo(getArrayOfNumbersForContacts(contactsSelected))
+            Mixpanel.sharedInstance().track("Send SMS Server", properties: ["nb_recipients" : getArrayOfNumbersForContacts(contactsSelected).count])
             
         case MessageComposeResultSent.value:
             println("Sent")
+            if controller.recipients != nil{
+                Mixpanel.sharedInstance().track("Send SMS", properties: ["nb_recipients" : controller.recipients.count])
+            }
+            else{
+                Mixpanel.sharedInstance().track("Send SMS")
+            }
+            
             
         default:
             break
         }
         
-        controller.dismissViewControllerAnimated(true, completion: nil)
+        controller.dismissViewControllerAnimated(true, completion: { () -> Void in
+            self.invitingContacts = false
+            
+            if !self.invitingUsers && !self.invitingContacts{
+                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                self.goLeave()
+            }
+        })
         
         
-        self.invitingContacts = false
         
-        if !self.invitingUsers && !self.invitingContacts{
-            MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-            self.goLeave()
-        }
         
         
         
@@ -755,7 +780,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         if Utils().iOS8{
             if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser().username), withAlternateFilename: "invitationGif.gif")
+                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
             }
         }
         else{
@@ -784,7 +809,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             
             for phone in contact.phones{
                 
-                if let phoneNumber = self.getFormattedPhoneNumber(phone as String){
+                if let phoneNumber = self.getFormattedPhoneNumber(phone as! String){
                     allNumberFormatted.append(phoneNumber)
                 }
                 
@@ -809,7 +834,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
             
             for phone in contact.phones{
                 
-                if let phoneNumber = self.getFormattedPhoneNumber(phone as String){
+                if let phoneNumber = self.getFormattedPhoneNumber(phone as! String){
                     allNumberFormatted.append(phoneNumber)
                 }
                 
@@ -838,7 +863,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         PFCloud.callFunctionInBackground("sendInviteSMS",
             withParameters: ["phoneNumberTab" : contactsNumber]) { (result, error) -> Void in
                 if error != nil {
-                    println("Error : \(error.localizedDescription)")
+                    println("Error : \(error!.localizedDescription)")
                 }
                 
                 UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierSendSMS)
@@ -953,11 +978,9 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     func goLeave(){
         
-        PFUser.currentUser()["hasSeenFriends"] = true
-        PFUser.currentUser().saveInBackgroundWithBlock { (finished, error) -> Void in
-            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
-                println("UPDATE USER")
-            })
+        PFUser.currentUser()!["hasSeenFriends"] = true
+        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+            Utils().updateUser()
         }
         
         self.dismissViewControllerAnimated(true, completion: { () -> Void in

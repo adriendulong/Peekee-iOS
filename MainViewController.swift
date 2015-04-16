@@ -12,6 +12,8 @@ import Social
 
 class MainViewController : UIViewController, UIScrollViewDelegate, PikiControllerProtocol, TakePhotoProtocol, UITableViewDelegate, UITableViewDataSource, InboxCellProtocol, SearchFriendsProtocol, TutoProtocol, UIAlertViewDelegate{
     
+    var loadPikisLimit:Int = 20
+    
     //Graphic element form the grid view
     var refreshControl:UIRefreshControl = UIRefreshControl()
     
@@ -23,12 +25,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     var pikiToPass:PFObject?
     var reactsToPass:Array<PFObject> = Array<PFObject>()
     var needToRefreshReacts:Bool = false
-    
-    var transitionView:UIView?
-    
-    let transitionManager = TransitionManager()
-    let transitionPikiManager = TransitionPikiManager()
-    let transitionFriendManager = TransitionFriendManager()
+
     
     
     //V2 UI/UX
@@ -52,6 +49,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     var popUpShowTuto:UIView?
     var showTutoFirst:Bool = false
     
+    var isLoadingMore:Bool = false
+    
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -62,23 +61,23 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     override func viewDidAppear(animated: Bool) {
 
         //See if show Recommend Accounts
-        if PFUser.currentUser()["hasSeenRecommanded"] != nil{
-            if !(PFUser.currentUser()["hasSeenRecommanded"] as Bool){
+        if PFUser.currentUser()!["hasSeenRecommanded"] != nil{
+            if !(PFUser.currentUser()!["hasSeenRecommanded"] as! Bool){
                 
                 self.performSegueWithIdentifier("showRecommended", sender: self)
                 
             }
-            else if PFUser.currentUser()["hasSeenFriends"] == nil {
+            else if PFUser.currentUser()!["hasSeenFriends"] == nil {
                 //self.performSegueWithIdentifier("showFriends", sender: self)
             }
-            else if !(PFUser.currentUser()["hasSeenFriends"] as Bool){
+            else if !(PFUser.currentUser()!["hasSeenFriends"] as! Bool){
                 self.performSegueWithIdentifier("showFriends", sender: self)
             }
             else{
                 //See if show tuto overlay
-                if PFUser.currentUser()["hasShownOverlayMenu"] != nil{
+                if PFUser.currentUser()!["hasShownOverlayMenu"] != nil{
                     
-                    if !(PFUser.currentUser()["hasShownOverlayMenu"] as Bool){
+                    if !(PFUser.currentUser()!["hasShownOverlayMenu"] as! Bool){
                         showTutoOverlay()
                         self.showTutoFirst = true
                         askShowTutoVideo()
@@ -100,8 +99,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("getPikis"), name: "reloadPikis", object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updatePikis"), name: "reloadPikis", object: nil)
         
         if Utils().iOS7{
             self.tableView.frame = CGRect(x: 0, y: self.tableView.frame.origin.y - 20, width: self.tableView.frame.width, height: self.tableView.frame.height)
@@ -114,7 +112,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         tableView.addSubview(refreshControl)
 
         
-        getPikis()
+        getPikis(true)
         
         self.view.backgroundColor = UIColor.whiteColor()
 
@@ -135,6 +133,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         let topBarView:UIView = UIView(frame: CGRect(x: 0, y: 20, width: self.view.frame.size.width, height: 60))
         topBarView.backgroundColor = Utils().primaryColor
         self.view.addSubview(topBarView)
+    
         
         
         //View top Right friends
@@ -148,6 +147,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         friendIcon.contentMode  = UIViewContentMode.Center
         friendIcon.image = UIImage(named: "friends_icon")
         friendsView.addSubview(friendIcon)
+        
+        //Go settings
+        let settingsButton:UIButton = UIButton(frame: CGRect(x: friendsView.frame.origin.x - 50, y: 0, width: 40, height: topBarView.frame.height))
+        settingsButton.setImage(UIImage(named: "settings_icon"), forState: UIControlState.Normal)
+        settingsButton.addTarget(self, action: Selector("goSettings"), forControlEvents: UIControlEvents.TouchUpInside)
+        topBarView.addSubview(settingsButton)
         
         
         var tapGestureParrot = UITapGestureRecognizer(target: self, action: Selector("shareTwitter"))
@@ -203,11 +208,6 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         self.view.addSubview(newPikiButton)
         
         
-        transitionView = UIView(frame: self.view.bounds)
-        transitionView!.backgroundColor = UIColor.blackColor()
-        transitionView!.hidden = true
-        self.view.addSubview(transitionView!)
-        
     }
 
     
@@ -237,30 +237,133 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     * SERVER FUNCTIONS
     */
     
-    func getPikis(){
+    func getPikis(withCache: Bool){
         
-        let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-        
-        var requestPiki:PFQuery = PFQuery(className: "Piki")
-        requestPiki.orderByDescending("lastUpdate")
-        requestPiki.includeKey("user")
-        requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-        requestPiki.cachePolicy = kPFCachePolicyCacheThenNetwork
-        
-        requestPiki.findObjectsInBackgroundWithBlock { (pikis : [AnyObject]!, error : NSError!) -> Void in
-            if error != nil{
-                println("Error getting the last pikis")
-                
+        //Get the list of friends : to get the pleek from them
+        var friendsObjects:Array<PFUser> = Array<PFUser>()
+        Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
+            if task.error == nil{
+                friendsObjects = Utils().getListOfUserObjectFromJoinObject(task.result as! Array<PFObject>)
+            }
+            
+            friendsObjects.append(PFUser(withoutDataWithObjectId: PFUser.currentUser()!.objectId))
+            
+            //Get the pleek of the friends list
+            var requestPiki:PFQuery = PFQuery(className: "Piki")
+            requestPiki.orderByDescending("lastUpdate")
+            requestPiki.includeKey("user")
+            requestPiki.whereKey("user", containedIn: friendsObjects)
+            requestPiki.whereKey("objectId", notContainedIn: Utils().getHidesPleek())
+            
+            if withCache{
+                requestPiki.cachePolicy = PFCachePolicy.CacheThenNetwork
             }
             else{
-                self.lastPikis = pikis as Array<PFObject>
-                self.tableView.reloadData()
-                self.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: UITableViewScrollPosition.Top, animated: false)
-                self.refreshControl.endRefreshing()
+                requestPiki.cachePolicy = PFCachePolicy.NetworkElseCache
             }
+            
+            
+            requestPiki.limit = self.loadPikisLimit
+            
+            requestPiki.findObjectsInBackgroundWithBlock { (pikis : [AnyObject]?, error : NSError?) -> Void in
+                if error != nil{
+                    println("Error : \(error!.localizedDescription)")
+                    
+                }
+                else{
+                    self.lastPikis = pikis as! Array<PFObject>
+                    
+                    self.refreshControl.endRefreshing()
+                    self.tableView.reloadData()
+                    
+                }
+            }
+            
+            return nil
         }
         
         
+        
+        
+        
+        
+        
+    }
+    
+    
+    func getMorePikis(){
+        
+        var friendsObjects:Array<PFUser> = Array<PFUser>()
+        Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
+            if task.error == nil{
+                friendsObjects = Utils().getListOfUserObjectFromJoinObject(task.result as! Array<PFObject>)
+            }
+            
+            //Add my own id to get my own pleek
+            friendsObjects.append(PFUser(withoutDataWithObjectId: PFUser.currentUser()!.objectId))
+            
+            //Get the pleek
+            var requestPiki:PFQuery = PFQuery(className: "Piki")
+            requestPiki.orderByDescending("lastUpdate")
+            requestPiki.includeKey("user")
+            requestPiki.whereKey("user", containedIn: friendsObjects)
+            requestPiki.whereKey("objectId", notContainedIn: Utils().getHidesPleek())
+            requestPiki.limit = self.loadPikisLimit
+            requestPiki.skip = self.lastPikis.count
+
+            requestPiki.findObjectsInBackgroundWithBlock { (pikis : [AnyObject]?, error : NSError?) -> Void in
+                if error != nil{
+                    println("Error getting the last pikis : \(error!.localizedDescription)")
+                    
+                }
+                else{
+                    var indexPathToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
+                    
+                    for piki in pikis!{
+                        self.lastPikis.append(piki as! PFObject)
+                        indexPathToInsert.append(NSIndexPath(forRow: self.lastPikis.count - 1, inSection: 0))
+                        
+                    }
+                    
+                    self.tableView.insertRowsAtIndexPaths(indexPathToInsert, withRowAnimation: UITableViewRowAnimation.Fade)
+
+                    self.isLoadingMore = false
+                }
+            }
+            
+            
+            return nil
+        }
+        
+        
+        
+    }
+    
+    func getPikisWithoutUpdate(){
+        
+        var friendsObjects:Array<PFUser> = Array<PFUser>()
+        Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
+            if task.error == nil{
+                friendsObjects = Utils().getListOfUserObjectFromJoinObject(task.result as! Array<PFObject>)
+            }
+            
+            friendsObjects.append(PFUser(withoutDataWithObjectId: PFUser.currentUser()!.objectId))
+            
+            //Get the pleek of the friends list
+            var requestPiki:PFQuery = PFQuery(className: "Piki")
+            requestPiki.orderByDescending("lastUpdate")
+            requestPiki.includeKey("user")
+            requestPiki.whereKey("user", containedIn: friendsObjects)
+            requestPiki.whereKey("objectId", notContainedIn: Utils().getHidesPleek())
+            requestPiki.cachePolicy = PFCachePolicy.NetworkOnly
+            
+            requestPiki.limit = self.loadPikisLimit
+            
+            requestPiki.findObjectsInBackgroundWithBlock { (pikis : [AnyObject]?, error : NSError?) -> Void in
+            }
+            
+            return nil
+        }
     }
     
     
@@ -273,7 +376,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
 
             //let navController:UINavigationController = segue.destinationViewController as UINavigationController
             
-            var pikiViewController:PikiViewController = segue.destinationViewController as PikiViewController
+            var pikiViewController:PikiViewController = segue.destinationViewController as! PikiViewController
             pikiViewController.mainPiki = self.pikiToPass
             pikiViewController.pikiReacts = self.reactsToPass
             
@@ -281,12 +384,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         }
         else if segue.identifier == "takePhoto"{
          
-            var navController:UINavigationController = segue.destinationViewController as UINavigationController
-            var takePhotoController:TakePhotoViewController = navController.viewControllers[0] as TakePhotoViewController
+            var navController:UINavigationController = segue.destinationViewController as! UINavigationController
+            var takePhotoController:TakePhotoViewController = navController.viewControllers[0] as! TakePhotoViewController
             takePhotoController.delegate = self
         }
         else if segue.identifier == "searchUsers"{
-            var searchController: SearchFriendsViewController = segue.destinationViewController as SearchFriendsViewController
+            var searchController: SearchFriendsViewController = segue.destinationViewController as! SearchFriendsViewController
             searchController.delegate = self
             
             if firstUserUnlock != nil {
@@ -298,7 +401,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             
         }
         else if segue.identifier == "showVideoTuto"{
-            var tutController: TutoVideoViewController = segue.destinationViewController as TutoVideoViewController
+            var tutController: TutoVideoViewController = segue.destinationViewController as! TutoVideoViewController
             tutController.delegate = self
             
             if showTutoFirst {
@@ -318,7 +421,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     */
     
     func refresh(){
-        getPikis()
+        getPikis(false)
     }
     
     
@@ -332,7 +435,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         
         if updateAll{
-            getPikis()
+            getPikis(false)
         }
         else{
             
@@ -364,7 +467,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     func updatePikis() {
         
         
-        getPikis()
+        getPikis(false)
     }
     
     
@@ -389,7 +492,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     */
     
     func newPiki(){
-       getPikis()
+       getPikis(false)
         
     }
     
@@ -423,7 +526,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var pikiCell:inboxTableViewCell = tableView.dequeueReusableCellWithIdentifier("inboxCell") as inboxTableViewCell
+        var pikiCell:inboxTableViewCell = tableView.dequeueReusableCellWithIdentifier("inboxCell") as! inboxTableViewCell
         pikiCell.delegate = self
         pikiCell.selectionStyle = UITableViewCellSelectionStyle.None
         pikiCell.mainContent!.transform = CGAffineTransformIdentity
@@ -437,14 +540,14 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         if lastPikis[indexPath.item]["smallPiki"] != nil{
             
-            (lastPikis[indexPath.item]["smallPiki"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+            (lastPikis[indexPath.item]["smallPiki"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if error != nil {
                     
                 }
                 else{
-                    let arrayIndex:Array<NSIndexPath> = tableView.indexPathsForVisibleRows() as Array<NSIndexPath>
+                    let arrayIndex:Array<NSIndexPath> = tableView.indexPathsForVisibleRows() as! Array<NSIndexPath>
                     if contains(arrayIndex, indexPath){
-                        pikiCell.imagePikiPreview!.image = UIImage(data: data)
+                        pikiCell.imagePikiPreview!.image = UIImage(data: data!)
                         pikiCell.backTempImagePiki!.hidden = true
                         pikiCell.imagePikiPreview!.hidden = false
                     }
@@ -452,14 +555,14 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             })
         }
         else if lastPikis[indexPath.item]["photo"] != nil{
-            (lastPikis[indexPath.item]["photo"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+            (lastPikis[indexPath.item]["photo"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if error != nil {
                     
                 }
                 else{
-                    let arrayIndex:Array<NSIndexPath> = tableView.indexPathsForVisibleRows() as Array<NSIndexPath>
+                    let arrayIndex:Array<NSIndexPath> = tableView.indexPathsForVisibleRows() as! Array<NSIndexPath>
                     if contains(arrayIndex, indexPath){
-                        pikiCell.imagePikiPreview!.image = UIImage(data: data)
+                        pikiCell.imagePikiPreview!.image = UIImage(data: data!)
                         pikiCell.backTempImagePiki!.hidden = true
                         pikiCell.imagePikiPreview!.hidden = false
                     }
@@ -468,14 +571,14 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         }
         else if lastPikis[indexPath.item]["previewImage"] != nil{
             pikiCell.videoIcon.hidden = false
-            (lastPikis[indexPath.item]["previewImage"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+            (lastPikis[indexPath.item]["previewImage"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                 if error != nil {
                     
                 }
                 else{
-                    let arrayIndex:Array<NSIndexPath> = tableView.indexPathsForVisibleRows() as Array<NSIndexPath>
+                    let arrayIndex:Array<NSIndexPath> = tableView.indexPathsForVisibleRows() as! Array<NSIndexPath>
                     if contains(arrayIndex, indexPath){
-                        pikiCell.imagePikiPreview!.image = UIImage(data: data)
+                        pikiCell.imagePikiPreview!.image = UIImage(data: data!)
                         pikiCell.backTempImagePiki!.hidden = true
                         pikiCell.imagePikiPreview!.hidden = false
                     }
@@ -485,13 +588,13 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         
         if lastPikis[indexPath.item]["user"] != nil {
-            var user:PFUser = lastPikis[indexPath.item]["user"] as PFUser
+            var user:PFUser = lastPikis[indexPath.item]["user"] as! PFUser
             
             if user["name"] != nil{
-                pikiCell.usernameLabel!.attributedText = getLabelUsername(user["name"] as String)
+                pikiCell.usernameLabel!.attributedText = getLabelUsername(user["name"] as! String)
             }
             else{
-                pikiCell.usernameLabel!.attributedText = getLabelUsername(user.username)
+                pikiCell.usernameLabel!.attributedText = getLabelUsername(user.username!)
             }
             
         }
@@ -508,19 +611,19 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         if self.lastPikis[indexPath.item]["nbReaction"] != nil {
             
-            let nbreact:Int = self.lastPikis[indexPath.item]["nbReaction"] as Int
+            let nbreact:Int = self.lastPikis[indexPath.item]["nbReaction"] as! Int
             
             if nbreact > 2{
                 
                 if lastPikis[indexPath.item]["react1"] != nil {
                     pikiCell.firstPreviewReact!.hidden = false
                     
-                    (lastPikis[indexPath.item]["react1"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    (lastPikis[indexPath.item]["react1"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error != nil{
                             
                         }
                         else{
-                            pikiCell.firstPreviewReact!.image = UIImage(data: data)
+                            pikiCell.firstPreviewReact!.image = UIImage(data: data!)
                         }
                     })
                     
@@ -532,12 +635,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 if lastPikis[indexPath.item]["react2"] != nil {
                     pikiCell.secondPreviewReact!.hidden = false
                     
-                    (lastPikis[indexPath.item]["react2"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    (lastPikis[indexPath.item]["react2"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error != nil{
                             
                         }
                         else{
-                            pikiCell.secondPreviewReact!.image = UIImage(data: data)
+                            pikiCell.secondPreviewReact!.image = UIImage(data: data!)
                         }
                     })
                     
@@ -548,12 +651,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 if lastPikis[indexPath.item]["react3"] != nil {
                     pikiCell.thirdPreviewReact!.hidden = false
                     
-                    (lastPikis[indexPath.item]["react3"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    (lastPikis[indexPath.item]["react3"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error != nil{
                             
                         }
                         else{
-                            pikiCell.thirdPreviewReact!.image = UIImage(data: data)
+                            pikiCell.thirdPreviewReact!.image = UIImage(data: data!)
                         }
                     })
                     
@@ -573,12 +676,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 if lastPikis[indexPath.item]["react1"] != nil {
                     pikiCell.firstPreviewReact!.hidden = false
                     
-                    (lastPikis[indexPath.item]["react1"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    (lastPikis[indexPath.item]["react1"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error != nil{
                             
                         }
                         else{
-                            pikiCell.firstPreviewReact!.image = UIImage(data: data)
+                            pikiCell.firstPreviewReact!.image = UIImage(data: data!)
                         }
                     })
                     
@@ -589,12 +692,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 if lastPikis[indexPath.item]["react2"] != nil {
                     pikiCell.secondPreviewReact!.hidden = false
                     
-                    (lastPikis[indexPath.item]["react2"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    (lastPikis[indexPath.item]["react2"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error != nil{
                             
                         }
                         else{
-                            pikiCell.secondPreviewReact!.image = UIImage(data: data)
+                            pikiCell.secondPreviewReact!.image = UIImage(data: data!)
                         }
                     })
                     
@@ -608,12 +711,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 if lastPikis[indexPath.item]["react1"] != nil {
                     pikiCell.firstPreviewReact!.hidden = false
                     
-                    (lastPikis[indexPath.item]["react1"] as PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    (lastPikis[indexPath.item]["react1"] as! PFFile).getDataInBackgroundWithBlock({ (data, error) -> Void in
                         if error != nil{
                             
                         }
                         else{
-                            pikiCell.firstPreviewReact!.image = UIImage(data: data)
+                            pikiCell.firstPreviewReact!.image = UIImage(data: data!)
                         }
                     })
                     
@@ -645,11 +748,11 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         if Utils().hasEverViewThisPiki(self.lastPikis[indexPath.item]){
             if Utils().getInfosLastPikiView(self.lastPikis[indexPath.item])["nbReaction"] != nil {
-                var nbReactLastTime:Int = Utils().getInfosLastPikiView(self.lastPikis[indexPath.item])["nbReaction"] as Int
+                var nbReactLastTime:Int = Utils().getInfosLastPikiView(self.lastPikis[indexPath.item])["nbReaction"] as! Int
                 
                 if self.lastPikis[indexPath.item]["nbReaction"] != nil{
-                    var dif:Int = self.lastPikis[indexPath.item]["nbReaction"] as Int - nbReactLastTime
-                    var nbInteraction = self.lastPikis[indexPath.item]["nbReaction"] as Int
+                    var dif:Int = self.lastPikis[indexPath.item]["nbReaction"] as! Int - nbReactLastTime
+                    var nbInteraction = self.lastPikis[indexPath.item]["nbReaction"] as! Int
                     
                     if dif > 0{
                         
@@ -725,7 +828,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             }
             else{
                 if self.lastPikis[indexPath.item]["nbReaction"] != nil{
-                    var nbInteraction = self.lastPikis[indexPath.item]["nbReaction"] as Int
+                    var nbInteraction = self.lastPikis[indexPath.item]["nbReaction"] as! Int
                     
                     if nbInteraction > 3{
                         pikiCell.moreInfosViewIndicator!.hidden = false
@@ -777,14 +880,24 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             
         }
         
+        
+        
+        //Load more
+        if indexPath.row == (lastPikis.count - 5){
+            if lastPikis.count > 0 && !isLoadingMore{
+                isLoadingMore = true
+                getMorePikis()
+            }
+        }
+        
         return pikiCell
     }
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         self.pikiToPass = lastPikis[indexPath.row]
-        if allPikisReacts[lastPikis[indexPath.row].objectId] != nil {
-            self.reactsToPass = allPikisReacts[lastPikis[indexPath.row].objectId] as Array<PFObject>
+        if allPikisReacts[lastPikis[indexPath.row].objectId!] != nil {
+            self.reactsToPass = allPikisReacts[lastPikis[indexPath.row].objectId!] as! Array<PFObject>
         }
         
         
@@ -817,66 +930,59 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 println("Yes")
                 
                 //Delete or Hide
-                let userPiki:PFUser = self.pikiToDelete!["user"] as PFUser
+                let userPiki:PFUser = self.pikiToDelete!["user"] as! PFUser
                 
                 //Delete
-                if userPiki.objectId == (PFUser.currentUser() as PFUser).objectId{
-                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
-                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
+                if userPiki.objectId == (PFUser.currentUser()! as PFUser).objectId{
+                    PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
+                        withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
                             if error != nil {
                                 
                                 let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
                                     delegate: nil, cancelButtonTitle: "OK")
                                 alert.show()
                                 
-                                println("Error : \(error.localizedDescription)")
+                                println("Error : \(error!.localizedDescription)")
                                 
                                 self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
                                 self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
                             }
                             else{
                                 
-                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                                
-                                var requestPiki:PFQuery = PFQuery(className: "Piki")
-                                requestPiki.orderByDescending("lastUpdate")
-                                requestPiki.includeKey("user")
-                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
-                                
-                                requestPiki.findObjectsInBackground()
+                                self.getPikisWithoutUpdate()
                                 
                             }
                     })
                 }
                     //Hide
                 else{
-                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
-                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
-                            if error != nil {
-                                
-                                let alert = UIAlertView(title: "Error", message: "Problem while hiding this Pleek. Please try again later.",
-                                    delegate: nil, cancelButtonTitle: "OK")
-                                alert.show()
-                                
-                                println("Error : \(error.localizedDescription)")
-                                
-                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-                            }
-                            else{
-                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                                
-                                var requestPiki:PFQuery = PFQuery(className: "Piki")
-                                requestPiki.orderByDescending("lastUpdate")
-                                requestPiki.includeKey("user")
-                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
-                                
-                                requestPiki.findObjectsInBackground()
-                                
-                            }
-                    })
+                    if (self.pikiToDelete!["isPublic"] as! Bool){
+                        Utils().hidePleek(self.pikiToDelete!.objectId!)
+                        self.getPikisWithoutUpdate()
+                    }
+                    else{
+                        PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
+                            withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
+                                if error != nil {
+                                    
+                                    let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
+                                        delegate: nil, cancelButtonTitle: "OK")
+                                    alert.show()
+                                    
+                                    println("Error : \(error!.localizedDescription)")
+                                    
+                                    self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                                    self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                                }
+                                else{
+                                    
+                                    self.getPikisWithoutUpdate()
+                                    
+                                }
+                        })
+                    }
+                    
+                    
                 }
             }))
             self.presentViewController(alert, animated: true, completion: nil)
@@ -1279,9 +1385,9 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             self.view.addSubview(overlayTutoView!)
         }
         
-        PFUser.currentUser()["hasShownOverlayMenu"] = true
-        PFUser.currentUser().saveInBackgroundWithBlock { (finished, error) -> Void in
-            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+        PFUser.currentUser()!["hasShownOverlayMenu"] = true
+        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+            PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                 println("UPDATE USER")
             })
         }
@@ -1333,13 +1439,13 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         
         var mutableString:NSMutableAttributedString = NSMutableAttributedString(string: totalLabel)
         
-        mutableString.addAttribute(NSFontAttributeName, value: UIFont(name: Utils().customFontSemiBold, size: 16.0)!, range: NSRange(location: 0,length: countElements(fromLabel)))
+        mutableString.addAttribute(NSFontAttributeName, value: UIFont(name: Utils().customFontSemiBold, size: 16.0)!, range: NSRange(location: 0,length: count(fromLabel)))
         
-        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0), range: NSRange(location: 0,length: countElements(fromLabel)))
+        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0), range: NSRange(location: 0,length: count(fromLabel)))
     
-        mutableString.addAttribute(NSFontAttributeName, value: UIFont(name: Utils().customFontSemiBold, size: 24.0)!, range: NSRange(location: countElements(fromLabel),length: countElements(totalLabel) - countElements(fromLabel)))
+        mutableString.addAttribute(NSFontAttributeName, value: UIFont(name: Utils().customFontSemiBold, size: 24.0)!, range: NSRange(location: count(fromLabel),length: count(totalLabel) - count(fromLabel)))
         
-        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0), range: NSRange(location: countElements(fromLabel),length: countElements(totalLabel) - countElements(fromLabel)))
+        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0), range: NSRange(location: count(fromLabel),length: count(totalLabel) - count(fromLabel)))
         
         return mutableString
         
@@ -1362,11 +1468,11 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 
-                var realName:String = (alert.textFields!.first! as UITextField).text
+                var realName:String = (alert.textFields!.first! as! UITextField).text
                 
-                if countElements(realName) > 3 && countElements(realName) < 30{
-                    PFUser.currentUser()["name"] = realName
-                    PFUser.currentUser().saveEventually()
+                if count(realName) > 3 && count(realName) < 30{
+                    PFUser.currentUser()!["name"] = realName
+                    PFUser.currentUser()!.saveEventually()
                     
                     Mixpanel.sharedInstance().people.set(["Name" : realName])
                     
@@ -1488,7 +1594,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             labelPopUp.adjustsFontSizeToFitWidth = true
             labelPopUp.font = UIFont(name: Utils().customFontNormal, size: 24.0)
             labelPopUp.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-            labelPopUp.text = NSLocalizedString("Do you want to watch a simple video to understand Pleek?", comment : "Do you want to watch a simple video to understand Pleek?")
+            labelPopUp.text = NSLocalizedString("Do you want to watch a simple video to understand Pleek?", comment : "Look at this 10 sec' video to get the PLEEK concept?")
             popUpShowTuto!.addSubview(labelPopUp)
             
             
@@ -1556,6 +1662,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     }
     
     func letsSayWhereVideo(){
+        self.showTutoFirst = false
         let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
             delegate: nil, cancelButtonTitle: "Ok")
         alert.show()
@@ -1576,66 +1683,57 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             //REmove
             else{
                 //Delete or Hide
-                let userPiki:PFUser = self.pikiToDelete!["user"] as PFUser
+                let userPiki:PFUser = self.pikiToDelete!["user"] as! PFUser
                 
                 //Delete
-                if userPiki.objectId == (PFUser.currentUser() as PFUser).objectId{
-                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
-                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
+                if userPiki.objectId! == PFUser.currentUser()!.objectId!{
+                    PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
+                        withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result, error) -> Void in
                             if error != nil {
                                 
                                 let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
                                     delegate: nil, cancelButtonTitle: "OK")
                                 alert.show()
                                 
-                                println("Error : \(error.localizedDescription)")
+                                println("Error : \(error!.localizedDescription)")
                                 
                                 self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
                                 self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
                             }
                             else{
                                 
-                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                                
-                                var requestPiki:PFQuery = PFQuery(className: "Piki")
-                                requestPiki.orderByDescending("lastUpdate")
-                                requestPiki.includeKey("user")
-                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
-                                
-                                requestPiki.findObjectsInBackground()
+                                self.getPikisWithoutUpdate()
                                 
                             }
                     })
                 }
                     //Hide
                 else{
-                    PFCloud.callFunctionInBackground("hideOrRemovePiki",
-                        withParameters: ["pikiId" : self.pikiToDelete!.objectId], block: { (result, error) -> Void in
-                            if error != nil {
-                                
-                                let alert = UIAlertView(title: "Error", message: "Problem while hiding this Pleek. Please try again later.",
-                                    delegate: nil, cancelButtonTitle: "OK")
-                                alert.show()
-                                
-                                println("Error : \(error.localizedDescription)")
-                                
-                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-                            }
-                            else{
-                                let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                                
-                                var requestPiki:PFQuery = PFQuery(className: "Piki")
-                                requestPiki.orderByDescending("lastUpdate")
-                                requestPiki.includeKey("user")
-                                requestPiki.whereKey("recipients", equalTo: PFUser.currentUser().objectId)
-                                requestPiki.cachePolicy = kPFCachePolicyNetworkOnly
-                                
-                                requestPiki.findObjectsInBackground()
-                                
-                            }
-                    })
+                    if (self.pikiToDelete!["isPublic"] as! Bool){
+                        Utils().hidePleek(self.pikiToDelete!.objectId!)
+                        self.getPikisWithoutUpdate()
+                    }
+                    else{
+                        PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
+                            withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
+                                if error != nil {
+                                    
+                                    let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
+                                        delegate: nil, cancelButtonTitle: "OK")
+                                    alert.show()
+                                    
+                                    println("Error : \(error!.localizedDescription)")
+                                    
+                                    self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                                    self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                                }
+                                else{
+                                    
+                                    self.getPikisWithoutUpdate()
+                                    
+                                }
+                        })
+                    }
                 }
             }
             
@@ -1649,9 +1747,9 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 
                 var realName:String = textField.text
                 
-                if countElements(realName) > 3 && countElements(realName) < 30{
-                    PFUser.currentUser()["name"] = realName
-                    PFUser.currentUser().saveEventually()
+                if count(realName) > 3 && count(realName) < 30{
+                    PFUser.currentUser()!["name"] = realName
+                    PFUser.currentUser()!.saveEventually()
                     
                     Mixpanel.sharedInstance().people.set(["Name" : realName])
                     
@@ -1690,6 +1788,9 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
     }
     
     
+    func goSettings(){
+        self.performSegueWithIdentifier("goSettings", sender: self)
+    }
     
     
 }

@@ -24,7 +24,7 @@ class Utils {
     let mixpanelProd = "bdde62cd933f58205b7cb98da8a2bca8"
     
     // FB Messenger
-    let facebookMessengerActivated:Bool = false
+    let facebookMessengerActivated:Bool = true
     
     let iOS7 = floor(NSFoundationVersionNumber) <= floor(NSFoundationVersionNumber_iOS_7_1)
     let iOS8 = floor(NSFoundationVersionNumber) > floor(NSFoundationVersionNumber_iOS_7_1)
@@ -50,6 +50,8 @@ class Utils {
     let primaryColorDark:UIColor = UIColor(red: 48/255, green: 63/255, blue: 159/255, alpha: 1.0)
     let secondColor:UIColor = UIColor(red: 255/255, green: 64/255, blue: 129/255, alpha: 1.0)
     let statusBarColor:UIColor = UIColor(red: 31/255, green: 41/255, blue: 103/255, alpha: 1.0)
+    let lightBlue:UIColor = UIColor(red: 151/255, green: 159/255, blue: 213/255, alpha: 1.0)
+    let greyNotSelected:UIColor = UIColor(red: 174/255, green: 181/255, blue: 191/255, alpha: 1.0)
     
     let customFontNormal = "ProximaNova-Light"
     let customFontSemiBold = "ProximaNova-Semibold"
@@ -58,29 +60,17 @@ class Utils {
     let customFont = "HansomFY-Regular"
     
     
+    func getAppDelegate() -> AppDelegate{
+        
+        return (UIApplication.sharedApplication().delegate as! AppDelegate!)
+        
+    }
+    
+    
     func cropPhoto(image : UIImage, yOrigin : CGFloat, screenWidth : CGFloat) -> UIImage{
         
         var ratio = image.size.width / screenWidth
 
-        
-        switch image.imageOrientation{
-        case UIImageOrientation.Up:
-            println("Up")
-        case UIImageOrientation.Down:
-            println("Down")
-        case UIImageOrientation.Left:
-            println("Left")
-        case UIImageOrientation.Right:
-            println("Right")
-        case  UIImageOrientation.UpMirrored:
-            println("Up Mirrored")
-        case UIImageOrientation.DownMirrored:
-            println("Down Mrrored")
-        case UIImageOrientation.LeftMirrored:
-            println("Left Mirrored")
-        case UIImageOrientation.RightMirrored:
-            println("Right Mirrored")
-        }
         
         var cropSquare = CGRectMake(yOrigin * ratio, 0, image.size.width, image.size.width)
 
@@ -106,7 +96,7 @@ class Utils {
 
             var track:AVMutableCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
             let arr = asset.tracksWithMediaType(AVMediaTypeVideo)
-            track.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: arr[0] as AVAssetTrack, atTime: CMTimeMake(Int64(totalDuration), 1), error: nil)
+            track.insertTimeRange(CMTimeRangeMake(kCMTimeZero, asset.duration), ofTrack: arr[0] as! AVAssetTrack, atTime: CMTimeMake(Int64(totalDuration), 1), error: nil)
             
             totalDuration += CMTimeGetSeconds(asset.duration)
             
@@ -132,16 +122,13 @@ class Utils {
             switch exportSession.status{
                 
             case AVAssetExportSessionStatus.Failed:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
             case AVAssetExportSessionStatus.Completed:
-                println("Success Export")
                 successful.setResult(exportURL)
                 
             default:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
  
@@ -160,7 +147,7 @@ class Utils {
         var asset:AVURLAsset = AVURLAsset(URL: url, options: nil)
         var mixComposition:AVMutableComposition = AVMutableComposition()
         var track:AVMutableCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        var assetTrack:AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as AVAssetTrack
+        var assetTrack:AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack
         
         println("Natural Size : \(assetTrack.naturalSize)")
         
@@ -239,16 +226,13 @@ class Utils {
             switch export.status{
                 
             case AVAssetExportSessionStatus.Failed:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
             case AVAssetExportSessionStatus.Completed:
-                println("Success Export")
                 successful.setResult(export.outputURL)
                 
             default:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
@@ -267,7 +251,7 @@ class Utils {
         var asset:AVURLAsset = AVURLAsset(URL: url, options: nil)
         var mixComposition:AVMutableComposition = AVMutableComposition()
         var track:AVMutableCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
-        var assetTrack:AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as AVAssetTrack
+        var assetTrack:AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack
         
         
         
@@ -335,16 +319,13 @@ class Utils {
             switch export.status{
                 
             case AVAssetExportSessionStatus.Failed:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
             case AVAssetExportSessionStatus.Completed:
-                println("Success Export")
                 successful.setResult(export.outputURL)
                 
             default:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
@@ -364,7 +345,7 @@ class Utils {
         var successful = BFTaskCompletionSource()
         
         var asset:AVURLAsset = AVURLAsset(URL: videoURL, options: nil)
-        var assetTrack:AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as AVAssetTrack
+        var assetTrack:AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack
         
         var videoComposition:AVMutableVideoComposition = AVMutableVideoComposition()
         videoComposition.renderSize = assetTrack.naturalSize
@@ -429,16 +410,13 @@ class Utils {
             switch export.status{
                 
             case AVAssetExportSessionStatus.Failed:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
             case AVAssetExportSessionStatus.Completed:
-                println("Success Export")
                 successful.setResult(export.outputURL)
                 
             default:
-                println("Export Failed")
                 var exportAsyncError = NSError(domain: "export", code: 200, userInfo: [NSLocalizedDescriptionKey : "unable to export the video"])
                 successful.setError(exportAsyncError)
                 
@@ -528,14 +506,14 @@ class Utils {
         
         
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(infosPiki, forKey: piki.objectId)
+        defaults.setObject(infosPiki, forKey: piki.objectId!)
         
     }
     
     func hasEverViewThisPiki(piki : PFObject) -> Bool {
         
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if defaults.objectForKey(piki.objectId) != nil{
+        if defaults.objectForKey(piki.objectId!) != nil{
             return true
         }
         else{
@@ -547,8 +525,8 @@ class Utils {
         var infosPiki:[String : AnyObject] = [String : AnyObject]()
         
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if defaults.objectForKey(piki.objectId) != nil{
-            infosPiki = defaults.objectForKey(piki.objectId) as [String : AnyObject]
+        if defaults.objectForKey(piki.objectId!) != nil{
+            infosPiki = defaults.objectForKey(piki.objectId!) as! [String : AnyObject]
             return infosPiki
         }
         else{
@@ -563,35 +541,14 @@ class Utils {
     */
     
     
-    func isUserAFriend(user : PFUser) -> Bool{
-        
-        if PFUser.currentUser() != nil {
-            
-            var arrayFriends:Array<String>? = PFUser.currentUser()["usersFriend"] as? Array<String>
-            if arrayFriends != nil{
-                for friend in arrayFriends!{
-                    
-                    if friend == user.objectId{
-                        return true
-                    }
-                    
-                }
-            }
-            else{
-                return false
-            }
-        }
-        
-        
-        return false
-    }
+    
     
     
     func isUserMuted(user : PFUser) -> Bool{
         
         if PFUser.currentUser() != nil {
             
-            var arrayMuted:Array<String>? = PFUser.currentUser()["usersIMuted"] as? Array<String>
+            var arrayMuted:Array<String>? = PFUser.currentUser()!["usersIMuted"] as? Array<String>
             
             if arrayMuted != nil{
                 for friend in arrayMuted!{
@@ -616,63 +573,6 @@ class Utils {
     */
     
     
-    func addFriend(userId : String) -> BFTask {
-        var successful = BFTaskCompletionSource()
-     
-        
-        PFCloud.callFunctionInBackground("addFriend", withParameters: ["friendId" : userId], block: { (friend, error) -> Void in
-            if error != nil {
-                successful.setError(error)
-            }
-            else{
-                PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
-                    if error != nil{
-                        successful.setError(error)
-                    }
-                    else{
-                        successful.setResult(friend)
-                    }
-                    
-                    PFCloud.callFunctionInBackground("addToLastPublicPiki",
-                        withParameters: ["friendId" : userId],
-                        block: { (result, error) -> Void in
-                            if error == nil{
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)
-                            }
-                    })
-                })
-               
-            }
-        })
-        
-        return successful.task
-    }
-    
-    
-    func removeFriend(userId : String) -> BFTask{
-        var successful = BFTaskCompletionSource()
-        
-        PFCloud.callFunctionInBackground("removeFriend", withParameters: ["friendId" : userId], block: { (result, error) -> Void in
-            if error != nil {
-                successful.setError(error)
-            }
-            else{
-                PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
-                    if error != nil{
-                        successful.setError(error)
-                    }
-                    else{
-                        successful.setResult(user)
-                    }
-                })
-            }
-        })
-        
-        return successful.task
-        
-        
-    }
-    
     
     
     
@@ -685,7 +585,7 @@ class Utils {
                 successful.setError(error)
             }
             else{
-                PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+                PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                     if error != nil{
                         successful.setError(error)
                     }
@@ -709,7 +609,7 @@ class Utils {
                 successful.setError(error)
             }
             else{
-                PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
+                PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                     if error != nil{
                         successful.setError(error)
                     }
@@ -732,11 +632,11 @@ class Utils {
         let stringNS :NSString = NSString(string: NSString(string: string).lowercaseString) 
         let insideStringNS : NSString = NSString(string: insideString)
         
-        let versionHeight:NSString = NSString(string: "8.0")
+        let versionHeight:String = "8.0"
         let currentVersion:NSString = NSString(string: UIDevice.currentDevice().systemVersion)
         
         if currentVersion.compare(versionHeight, options: NSStringCompareOptions.NumericSearch) != NSComparisonResult.OrderedAscending{
-            if stringNS.containsString(insideStringNS){
+            if stringNS.containsString(insideStringNS as String){
                 return true
             }
             else{
@@ -854,7 +754,7 @@ class Utils {
         var valid:Bool = true
         var acceptedCharacters:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890"
         
-        var countUsernameLength:Int = countElements(username)
+        var countUsernameLength:Int = count(username)
         
         for character in username{
             if !contains(acceptedCharacters, character){
@@ -876,20 +776,20 @@ class Utils {
         var kFrameCount:Int = 11
 
 
-        var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFLoopCount : 0]]
+        var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary as String : [kCGImagePropertyGIFLoopCount as String : 0]]
         
         
         var delay:Float = 0.5
-        var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFDelayTime : delay]]
+        var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary as String : [kCGImagePropertyGIFDelayTime as String : delay]]
         
         var documentsDirectoryURL = NSFileManager.defaultManager().URLForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomain: NSSearchPathDomainMask.UserDomainMask, appropriateForURL: nil, create: true, error: nil)
-        var fileURL:NSURL = documentsDirectoryURL!.URLByAppendingPathComponent("animated.gif")
-        
-        var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, UInt(kFrameCount), nil)
+        var fileURL = documentsDirectoryURL!.URLByAppendingPathComponent("animated.gif")
+
+        var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, kFrameCount, nil)
         CGImageDestinationSetProperties(destination, fileProperties as CFDictionaryRef)
         
         for i in 0...(kFrameCount - 1){
-            println("I count : \(i)")
+
             
             
             if iOS8{
@@ -1134,7 +1034,7 @@ class Utils {
     func getShareUsernameImage() -> UIImage?{
         
         var imageToShare:UIImage?
-        var username:String = PFUser.currentUser().username
+        var username:String = PFUser.currentUser()!.username!
         
         var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
         viewToAdd.backgroundColor = Utils().primaryColor
@@ -1169,12 +1069,12 @@ class Utils {
         
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if defaults.objectForKey("nbVisitApp") != nil{
-            var nbVisits:Int = defaults.objectForKey("nbVisitApp") as Int
+            var nbVisits:Int = defaults.objectForKey("nbVisitApp") as! Int
             
             var newNbVisits = nbVisits + 1
             defaults.setObject(newNbVisits, forKey: "nbVisitApp")
             
-            var nbVisitTemp = defaults.objectForKey("nbVisitApp") as Int
+            var nbVisitTemp = defaults.objectForKey("nbVisitApp") as! Int
             println("Nb visits : \(nbVisitTemp)")
             
         }
@@ -1190,7 +1090,7 @@ class Utils {
         
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if defaults.objectForKey("nbVisitApp") != nil{
-            var nbVisits:Int = defaults.objectForKey("nbVisitApp") as Int
+            var nbVisits:Int = defaults.objectForKey("nbVisitApp") as! Int
             
             
             if nbVisits == nbVisitForRealName{
@@ -1244,16 +1144,16 @@ class Utils {
             var kFrameCount:Int = 20
             
             
-            var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFLoopCount : 0]]
+            var fileProperties:[String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary as String : [kCGImagePropertyGIFLoopCount as String : 0 as Int]]
             
             
             var delay:Float = 0.15
-            var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary : [kCGImagePropertyGIFDelayTime : delay]]
+            var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary  as String: [kCGImagePropertyGIFDelayTime as String : delay]]
             
             var documentsDirectoryURL = NSFileManager.defaultManager().URLForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomain: NSSearchPathDomainMask.UserDomainMask, appropriateForURL: nil, create: true, error: nil)
             var fileURL:NSURL = documentsDirectoryURL!.URLByAppendingPathComponent("pleek_messenger.gif")
             
-            var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, UInt(kFrameCount), nil)
+            var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, kFrameCount, nil)
             CGImageDestinationSetProperties(destination, fileProperties as CFDictionaryRef)
             
             
@@ -1503,7 +1403,7 @@ class Utils {
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if defaults.objectForKey("comeFromMessenger") != nil{
             
-            var pleekId:String = defaults.objectForKey("comeFromMessenger") as String
+            var pleekId:String = defaults.objectForKey("comeFromMessenger") as! String
             
             if pleekId == pleek.objectId{
                 return true
@@ -1530,11 +1430,11 @@ class Utils {
         if pleek["photo"] != nil{
             fileMainPleek = pleek["photo"] as? PFFile
             
-            fileMainPleek!.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+            fileMainPleek!.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 
                 if error == nil{
                     println("Get Image without error")
-                    mainPleekImage = UIImage(data: data)
+                    mainPleekImage = UIImage(data: data!)
                     
                     successful.setResult(mainPleekImage!)
                     
@@ -1550,11 +1450,11 @@ class Utils {
         else{
             fileMainPleek = pleek["previewImage"] as? PFFile
             
-            fileMainPleek!.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+            fileMainPleek!.getDataInBackgroundWithBlock({ (data, error) -> Void in
                 
                 if data != nil{
                      println("Get Image without error")
-                    mainPleekImage = UIImage(data: data)
+                    mainPleekImage = UIImage(data: data!)
                     
                     successful.setResult(mainPleekImage!)
                     
@@ -1571,5 +1471,356 @@ class Utils {
         return successful.task
     }
     
+    
+    
+    //MARK : Build Pleek Id
+    
+    func buildPleekId() -> UIImage{
+        
+        var pleekIdImage:UIImage?
+        
+        
+        var mainView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 600, height: 600))
+        var backImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 600, height: 600))
+        backImageView.image = UIImage(named: "pleek_id")
+        mainView.addSubview(backImageView)
+        
+        var usernameLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 470, width: mainView.frame.width, height: 80))
+        usernameLabel.text = "@\(PFUser.currentUser()!.username!)"
+        usernameLabel.font = UIFont(name: customGothamBol, size: 60)
+        usernameLabel.textColor = UIColor.whiteColor()
+        usernameLabel.textAlignment = NSTextAlignment.Center
+        mainView.addSubview(usernameLabel)
+        
+        pleekIdImage = imageWithView(mainView)
+        
+        
+        
+        return pleekIdImage!
+        
+        
+    }
+    
+    //MARK: USER
+    
+    func updateUser() -> BFTask{
+        
+        var updateUserCompletionTask = BFTaskCompletionSource()
+        
+        PFUser.currentUser()!.fetchInBackgroundWithBlock { (user, error) -> Void in
+            
+            if error != nil{
+                updateUserCompletionTask.setError(error!)
+            }
+            else{
+                Mixpanel.sharedInstance().people.set(["Username" : PFUser.currentUser()!.username!])
+                
+                var lastModifFriends:NSDate = PFUser.currentUser()!["lastFriendsModification"] as! NSDate
+                println("Last Modified Friends : \(lastModifFriends)")
+                
+                //If need to be updated we make the request in order to have a cache now
+                if Utils().friendsNeedsToBeUpdated(){
+                    println("update friends")
+                    
+                    self.getFriends(false).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                        if task.error != nil{
+                            updateUserCompletionTask.setError(task.error)
+                        }
+                        else{
+                            self.updateLocalFriendsIdList(task.result as! Array<PFObject>)
+                            self.friendsHaveBeenUpdated()
+                            NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)
+                            
+                            Mixpanel.sharedInstance().people.set(["Nb Friends" : (task.result as! Array<PFObject>).count])
+                            updateUserCompletionTask.setResult(user)
+                        }
+                        
+                        return nil
+                    })
+                }
+                else{
+                    println("friends list ok")
+                }
+                
+                updateUserCompletionTask.setResult(user)
+            }
+            
+            
+            
+            
+        }
+        
+        return updateUserCompletionTask.task
+        
+    }
+    
+    func updateLocalFriendsIdList(friendsObjects : Array<PFObject>){
+        
+        var appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
+        appDelegate.friendsIdList.removeAll(keepCapacity: false)
+        
+        for friendObject in friendsObjects{
+            appDelegate.friendsIdList.append(friendObject["friendId"] as! String)
+        }
+        
+        
+    }
+    
+    func addFriendIdInLocalList(friendId : String){
+        
+        var appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
+        appDelegate.friendsIdList.append(friendId)
+        
+    }
+    
+    func removeFriendIdInLocalList(friendId : String){
+        
+        var appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate!
+        var tempFriendIdList:Array<String> = Array<String>()
+        
+        for friendIdInList in appDelegate.friendsIdList{
+            
+            if friendIdInList != friendId{
+                tempFriendIdList.append(friendIdInList)
+            }
+            
+        }
+        
+        appDelegate.friendsIdList = tempFriendIdList
+        
+        
+    }
+    
+    
+    //MARK: FRIENDS
+    func getListOfFriendIdFromJoinObjects(friendsObjects : Array<PFObject>) -> Array<String>{
+        var friendsId:Array<String> = Array<String>()
+        
+        for friendObject in friendsObjects{
+            friendsId.append(friendObject["friendId"] as! String)
+        }
+        
+        return friendsId
+    }
+    
+    func isUserAFriend(user : PFUser) -> Bool{
+        
+        if contains(getAppDelegate().friendsIdList, user.objectId!){
+            return true
+        }
+        
+        
+        return false
+    }
+    
+    func addFriend(userId : String) -> BFTask {
+        var successful = BFTaskCompletionSource()
+        
+        
+        PFCloud.callFunctionInBackground("addFriendV2", withParameters: ["friendId" : userId], block: { (friend, error) -> Void in
+            if error != nil {
+                successful.setError(error)
+            }
+            else{
+                //Update the user and reload pleek list
+                self.addFriendIdInLocalList(userId)
+                successful.setResult(friend)
+                
+            }
+        })
+        
+        return successful.task
+    }
+    
+    
+    func removeFriend(userId : String) -> BFTask{
+        var successful = BFTaskCompletionSource()
+        
+        PFCloud.callFunctionInBackground("removeFriendV2", withParameters: ["friendId" : userId], block: { (result, error) -> Void in
+            if error != nil {
+                successful.setError(error)
+            }
+            else{
+                //Update the user and reload pleek list
+                self.removeFriendIdInLocalList(userId)
+                successful.setResult(result)
+            }
+        })
+        
+        return successful.task
+        
+        
+    }
+    
+    func friendsNeedsToBeUpdated() -> Bool{
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("lastFriendsUpdate") != nil{
+            
+            var lastFriendsUpdate:NSDate = defaults.objectForKey("lastFriendsUpdate") as! NSDate
+            var userFriendsUpdate:NSDate = PFUser.currentUser()!["lastFriendsModification"] as! NSDate
+            
+            if lastFriendsUpdate.compare(userFriendsUpdate) == NSComparisonResult.OrderedAscending{
+                return true
+            }
+            else{
+                return false
+            }
+            
+        }
+        else{
+            return true
+        }
+        
+    }
+    
+    func friendsHaveBeenUpdated(){
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(NSDate(), forKey: "lastFriendsUpdate")
+    }
+    
+    func addFriendTest(){
+        var friendId:String = "xVZX7rMMZq"
+        
+        PFCloud.callFunctionInBackground("removeFriendV2", withParameters: ["friendId" : friendId]) { (result, error) -> Void in
+            if error != nil{
+                println("Error adding friend : \(error!.localizedDescription)")
+            }
+            else{
+                println("Ok : \(result)")
+            }
+        }
+    }
+    
+    func getRealFriends() -> Array<String>{
+        
+        
+        var realFriends:Array<String> = Array<String>()
+        
+        var allFriends:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
+        var mutedFriends:Array<String>? = PFUser.currentUser()!["usersIMuted"] as? Array<String>
+        
+        if mutedFriends != nil && allFriends != nil{
+            realFriends = allFriends!.filter{!contains(mutedFriends!, $0)}
+        }
+        else if allFriends != nil{
+            realFriends = allFriends!
+        }
+        
+        
+        return realFriends
+        
+    }
+    
+    func getFriends(withCache : Bool) -> BFTask {
+        var friendsCompletionTask = BFTaskCompletionSource()
+        var needToUpdateLocalFriendsList:Bool = false
+        
+        var queryFriends = PFQuery(className: "Friend")
+        queryFriends.whereKey("user", equalTo: PFUser.currentUser()!)
+        queryFriends.limit = 500
+        
+        if withCache{
+            if self.getAppDelegate().friendsIdList.count == 0{
+                needToUpdateLocalFriendsList = true
+            }
+            
+            if queryFriends.hasCachedResult(){
+                queryFriends.cachePolicy = PFCachePolicy.CacheOnly
+            }
+            else{
+                needToUpdateLocalFriendsList = true
+                queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
+            }
+            
+            
+        }
+        else{
+            needToUpdateLocalFriendsList = true
+            queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
+        }
+        
+        queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
+            
+            if error != nil{
+                friendsCompletionTask.setError(error!)
+            }
+            else{
+                self.updateLocalFriendsIdList(friends as! [PFObject])
+                friendsCompletionTask.setResult(friends)
+            }
+            
+        }
+        
+        return friendsCompletionTask.task
+        
+        
+    }
+    
+    func getListOfUserObjectFromJoinObject(joinFriendsObjects : Array<PFObject>) -> Array<PFUser>{
+        
+        var friendsObjects:Array<PFUser> = Array<PFUser>()
+        var friendsId:Array<String> = Array<String>()
+        
+        for joinFriendObject in joinFriendsObjects{
+            
+            friendsId.append(joinFriendObject["friendId"] as! String)
+            
+        }
+        
+        for friendId in friendsId{
+            var friendObject:PFUser = PFUser(withoutDataWithObjectId: friendId)
+            friendsObjects.append(friendObject)
+        }
+        
+        return friendsObjects
+        
+    }
+    
+    
+    //MARK: Hide a pleek
+    
+    func getHidesPleek() -> Array<String>{
+        var pleeksHided:Array<String>? = PFUser.currentUser()!["pleeksHided"] as? Array<String>
+        
+        if pleeksHided == nil{
+            pleeksHided = Array<String>()
+        }
+        
+        return pleeksHided!
+        
+        
+    }
+    
+    func hidePleek(pleekId : String){
+        
+        var pleeksHided:Array<String>? = PFUser.currentUser()!["pleeksHided"] as? Array<String>
+        
+        if pleeksHided == nil{
+            pleeksHided = Array<String>()
+        }
+
+        
+        pleeksHided!.append(pleekId)
+        
+        PFUser.currentUser()!["pleeksHided"] = pleeksHided!
+        
+        PFUser.currentUser()!.saveEventually()
+        
+    }
+    
+    
+    //MARK : Format Number
+    
+    func formatNumber(number : Int) -> String{
+        
+        var formatter = NSNumberFormatter()
+        formatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+        
+        var formattedNumber:String = formatter.stringFromNumber(NSNumber(integer: number))!
+        
+        return formattedNumber
+        
+    }
     
 }

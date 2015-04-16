@@ -28,7 +28,7 @@ class RecipientsPikiCell: UITableViewCell {
         
         nameLabel.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
         nameLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-        nameLabel.text = "@\(user.username)"
+        nameLabel.text = "@\(user.username!)"
         
         loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         loadIndicator!.tintColor = Utils().secondColor
@@ -54,7 +54,7 @@ class RecipientsPikiCell: UITableViewCell {
         
         if Utils().isUserAFriend(user!){
             
-            Utils().removeFriend(self.user!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+            Utils().removeFriend(self.user!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 self.loadIndicator!.stopAnimating()
                 if task.error != nil{
                     
@@ -70,7 +70,7 @@ class RecipientsPikiCell: UITableViewCell {
         }
         else{
             //Not a friend, friend him
-            Utils().addFriend(self.user!.objectId).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+            Utils().addFriend(self.user!.objectId!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 self.loadIndicator!.stopAnimating()
                 if task.error != nil{
                     
@@ -127,18 +127,18 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
         
         //Load piki preview
         if mainPiki!["extraSmallPiki"] != nil{
-            let pikiFile:PFFile = mainPiki!["extraSmallPiki"] as PFFile
+            let pikiFile:PFFile = mainPiki!["extraSmallPiki"] as! PFFile
             pikiFile.getDataInBackgroundWithBlock { (data, error) -> Void in
                 if error == nil {
-                    self.pikiImageView.image = UIImage(data: data)
+                    self.pikiImageView.image = UIImage(data: data!)
                 }
             }
         }
         else{
-            let pikiFile:PFFile = mainPiki!["previewImage"] as PFFile
+            let pikiFile:PFFile = mainPiki!["previewImage"] as! PFFile
             pikiFile.getDataInBackgroundWithBlock { (data, error) -> Void in
                 if error == nil {
-                    self.pikiImageView.image = UIImage(data: data)
+                    self.pikiImageView.image = UIImage(data: data!)
                 }
             }
         }
@@ -173,18 +173,17 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
         var arrayFriendsId:Array<String>? = mainPiki!["recipients"] as? Array<String>
         
         if arrayFriendsId != nil{
-            var queryFriends:PFQuery = PFUser.query()
-            queryFriends.whereKey("objectId", containedIn: arrayFriendsId)
+            var queryFriends:PFQuery = PFUser.query()!
+            queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
             queryFriends.orderByAscending("username")
-            queryFriends.cachePolicy = kPFCachePolicyCacheThenNetwork
+            queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
             
             queryFriends.findObjectsInBackgroundWithBlock { (recipients, error) -> Void in
                 if error != nil {
                     
                 }
                 else{
-                    println("Found \(recipients.count) recipients")
-                    self.recipientsUser = recipients as Array<PFUser>
+                    self.recipientsUser = recipients as! Array<PFUser>
                     self.tableView.reloadData()
                 }
             }
@@ -207,7 +206,7 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell:RecipientsPikiCell = tableView.dequeueReusableCellWithIdentifier("UserRecipientCell") as RecipientsPikiCell
+        var cell:RecipientsPikiCell = tableView.dequeueReusableCellWithIdentifier("UserRecipientCell") as! RecipientsPikiCell
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         

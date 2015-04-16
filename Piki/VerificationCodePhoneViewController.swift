@@ -47,13 +47,19 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
             verticalSpaceConstraint.constant = 0
         }
         
+        
+        Mixpanel.sharedInstance().track("Verification Code View")
+        
         confirmationCodeTextField.hidden = true
         //Notifs when keyboard whox or hide
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
         
         println("Verification code is \(verificationCode) for number \(phoneNumber)")
         
-        phoneFormatter = NBAsYouTypeFormatter(regionCode: self.regionCode!)
+        if self.regionCode != nil{
+            phoneFormatter = NBAsYouTypeFormatter(regionCode: self.regionCode!)
+        }
+        
         
         
         self.view.backgroundColor = Utils().primaryColor
@@ -64,7 +70,15 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         separatorView.backgroundColor = Utils().secondColor
         
         phoneNumberLabel.font = UIFont(name: Utils().customFontNormal, size: 16.0)
-        phoneNumberLabel.text = phoneFormatter!.inputDigit(phoneNumber)
+        
+        if phoneFormatter != nil{
+            phoneNumberLabel.text = phoneFormatter!.inputDigit(phoneNumber)
+        }
+        else{
+            phoneNumberLabel.text = "\(phoneNumber)"
+        }
+        
+        
         phoneNumberLabel.textColor = UIColor(red: 121/255, green: 134/255, blue: 202/255, alpha: 1.0)
         
         containerView.backgroundColor = Utils().primaryColor
@@ -212,25 +226,25 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
             
             
             if textField == codeTextFieldOne{
-                codeTextFieldOne!.text = codeEntered
+                codeTextFieldOne!.text = codeEntered as String
                 codeTextFieldTwo!.becomeFirstResponder()
                 
                 return false
             }
             else if textField == codeTextFieldTwo{
-                codeTextFieldTwo!.text = codeEntered
+                codeTextFieldTwo!.text = codeEntered as String
                 codeTextFieldThree!.becomeFirstResponder()
                 
                 return false
             }
             else if textField == codeTextFieldThree{
-                codeTextFieldThree!.text = codeEntered
+                codeTextFieldThree!.text = codeEntered as String
                 codeTextFieldFour!.becomeFirstResponder()
                 
                 return false
             }
             else{
-                codeTextFieldFour!.text = codeEntered
+                codeTextFieldFour!.text = codeEntered as String
                 var codeString = codeTextFieldOne!.text + codeTextFieldTwo!.text + codeTextFieldThree!.text + codeTextFieldFour!.text
                 println("Validate Code : \(codeString)")
                 
@@ -240,10 +254,10 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                     //If we have a username, the account already exists we connect the user
                     if self.username != nil {
                         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                        PFUser.logInWithUsernameInBackground(self.username, password: self.username, block: { (user , error) -> Void in
+                        PFUser.logInWithUsernameInBackground(self.username!, password: self.username!, block: { (user , error) -> Void in
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                             if error != nil {
-                                println("Error : \(error.localizedDescription)")
+                                println("Error : \(error!.localizedDescription)")
                                 var alert = UIAlertController(title:NSLocalizedString("Error", comment : "Error") ,
                                     message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
                                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
@@ -253,14 +267,16 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                                 
                                 
                                 //Associate the user in Mixpanel
-                                Mixpanel.sharedInstance().identify(PFUser.currentUser().objectId)
+                                Mixpanel.sharedInstance().identify(PFUser.currentUser()!.objectId)
                                 if self.phoneNumber != nil{
                                     Mixpanel.sharedInstance().people.set(["$phone" : self.phoneNumber!])
                                 }
                                 Mixpanel.sharedInstance().track("Log In")
                                 
-                                let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-                                appDelegate.window?.rootViewController = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateInitialViewController() as UINavigationController
+                                Utils().updateUser()
+                                
+                                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                                appDelegate.window?.rootViewController = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateInitialViewController() as! UINavigationController
                             }
                         })
                     }
@@ -327,7 +343,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "chooseUsername"{
             
-            var nextController:ChooseUsernameViewController = segue.destinationViewController as ChooseUsernameViewController
+            var nextController:ChooseUsernameViewController = segue.destinationViewController as! ChooseUsernameViewController
             nextController.keyboardSize = self.keyboardSize
             nextController.phoneNumber = self.phoneNumber
             

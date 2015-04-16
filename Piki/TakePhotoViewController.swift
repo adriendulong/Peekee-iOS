@@ -19,8 +19,6 @@ protocol TakePhotoProtocol {
 class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, AVCaptureFileOutputRecordingDelegate{
     
     var delegate:TakePhotoProtocol? = nil
-    
-    let transitionManager = TransitionManager()
     var cameraView:UIView?
     var cameraTextView:UITextView?
     var topBarView:UIView?
@@ -63,7 +61,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         //prefersStatusBarHidden()
         
         Mixpanel.sharedInstance().track("View Take Photo Screen")
-        FBAppEvents.logEvent("View Take Photo Screen")
+        FBSDKAppEvents.logEvent("View Take Photo Screen")
         
         self.view.backgroundColor = Utils().darkColor
         loadingImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 300, height: 300))
@@ -199,7 +197,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             
             
             
-            let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
+            let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
             
             
             UIView.animateWithDuration(animationDuration, animations: { () -> Void in
@@ -344,7 +342,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             
             
             imageOutput = AVCaptureStillImageOutput()
-            imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+            imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
             if captureSession.canAddOutput(imageOutput){
                 captureSession.addOutput(imageOutput)
             }
@@ -391,7 +389,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                         viewToUse.layer.addSublayer(self.previewLayer)
                         
                         self.imageOutput = AVCaptureStillImageOutput()
-                        self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey)
+                        self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
                         if self.captureSession.canAddOutput(self.imageOutput){
                             self.captureSession.addOutput(self.imageOutput)
                         }
@@ -461,7 +459,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             self.cameraTextView!.hidden = true
             
             //Create temporary URL to record to
-            let outpuPath:NSString = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
+            let outpuPath:String = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
             let outputURL:NSURL = NSURL(fileURLWithPath: outpuPath)!
             var fileManager:NSFileManager = NSFileManager()
 
@@ -550,7 +548,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     println("Error : \(error.localizedDescription)")
                 }
                 else{
-                    var finalURL = task.result as NSURL
+                    var finalURL = task.result as! NSURL
                     
                     self.urlVideoToUpload = finalURL
                     
@@ -589,7 +587,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     
     
     func videoDidEnd(notification : NSNotification){
-        var player:AVPlayerItem = notification.object as AVPlayerItem
+        var player:AVPlayerItem = notification.object as! AVPlayerItem
         player.seekToTime(kCMTimeZero)
     }
     
@@ -651,7 +649,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         
-        var chosenImage:UIImage = info[UIImagePickerControllerEditedImage] as UIImage
+        var chosenImage:UIImage = info[UIImagePickerControllerEditedImage] as! UIImage
         self.dismissViewControllerAnimated(true, completion: nil)
         
         
@@ -673,7 +671,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         var imageData:NSData = UIImageJPEGRepresentation(image, 0.8)
         imageFile = PFFile(name: "photo.jpg", data: imageData)
         
-        imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+        imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
             println(succeeded)
             
             }, progressBlock: { (progress:Int32) -> Void in
@@ -723,7 +721,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             var imageData:NSData = UIImageJPEGRepresentation(finalImage!, 0.8)
             imageFile = PFFile(name: "photo.jpg", data: imageData)
             
-            imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError!) -> Void in
+            imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
                 println(succeeded)
                 
                 }, progressBlock: { (progress:Int32) -> Void in
@@ -743,7 +741,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             self.finalImage = Utils().getImageFrameFromVideo(self.urlVideoToUpload!)
             var imageData:NSData = UIImageJPEGRepresentation(self.finalImage, 0.8)
             self.previewFile = PFFile(name: "photo.jpg", data: imageData)
-            self.previewFile!.saveInBackgroundWithBlock({ (succeeded : Bool, error : NSError!) -> Void in
+            self.previewFile!.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
                 
                 }, progressBlock: { (progress : Int32) -> Void in
                     println("Preview Progress: \(progress)")
@@ -827,7 +825,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             }
             
             
-            var videoCaptureDeviceInput:AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(tempCaptureDevice, error: nil) as AVCaptureDeviceInput
+            var videoCaptureDeviceInput:AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(tempCaptureDevice, error: nil) as! AVCaptureDeviceInput
             
             self.captureSession.removeInput(self.captureDeviceInput!)
             
@@ -913,7 +911,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             
             self.previewImageView!.layer.sublayers = nil
             
-            var nextController:ChooseReceiversViewController = segue.destinationViewController as ChooseReceiversViewController
+            var nextController:ChooseReceiversViewController = segue.destinationViewController as! ChooseReceiversViewController
             nextController.filePiki = self.imageFile
             nextController.finalPhoto = self.finalImage
             nextController.filePreview = self.previewFile
@@ -1137,23 +1135,17 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     
     func camDenied(){
         
-        
         var canOpenSettings:Bool = false
         
-        if UIApplicationOpenSettingsURLString != nil{
-            canOpenSettings = true
-        }
-        
-        if canOpenSettings{
+        switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
+        case .OrderedSame, .OrderedDescending:
             var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", comment : "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
             alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 
                 self.openSettings()
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-        else{
+        case .OrderedAscending:
             var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek", comment : "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek"), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)

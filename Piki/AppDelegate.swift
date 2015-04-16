@@ -20,15 +20,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
     var startTimeSession:NSDate?
     var _messengerUrlHandler:FBSDKMessengerURLHandler?
     var _replyMessengerContext:FBSDKMessengerContext?
+    var friendsIdList:Array<String> = Array<String>()
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        ParseCrashReporting.enable()
+        //ParseCrashReporting.enable()
+        //Parse.enableLocalDatastore()
         
-        
-        //Dev
+        ////Dev
         Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
         Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
          
@@ -41,7 +42,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
 
        
-        
+        //AppsFlyer
+        AppsFlyerTracker.sharedTracker().appsFlyerDevKey = "yDYHfJU4mxGatiELBhyx83"
+        AppsFlyerTracker.sharedTracker().appleAppID = "959354291"
         
         
         //See if present mandatory screen add friends
@@ -50,11 +53,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         if PFUser.currentUser() == nil {
             Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
             
+            
+            /*var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            var phoneViewController:UIViewController = storyboard.instantiateViewControllerWithIdentifier("waitView") as UIViewController
+            //self.window?.makeKeyAndVisible()
+            self.window!.rootViewController = phoneViewController*/
+            
+            
             var storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as UINavigationController
+            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
             //self.window?.makeKeyAndVisible()  
             self.window!.rootViewController = phoneViewController
         
+        }
+        else if PFUser.currentUser()!["userInfos"] == nil{
+            PFUser.logOut()
+            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
+            //self.window?.makeKeyAndVisible()
+            self.window!.rootViewController = phoneViewController
+            
         }
         
         
@@ -86,6 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
 
     func applicationDidBecomeActive(application: UIApplication) {
         
+        AppsFlyerTracker.sharedTracker().trackAppLaunch()
         
         var currentInstallation:PFInstallation = PFInstallation.currentInstallation()
         if (currentInstallation.badge != 0) {
@@ -94,49 +113,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         }
         
         //track open app
-        FBAppEvents.activateApp()
+        FBSDKAppEvents.activateApp()
         Mixpanel.sharedInstance().timeEvent("Session")
         Mixpanel.sharedInstance().people.set(["Last App Open" : NSDate()])
         
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         if PFUser.currentUser() != nil {
-            var navController:UINavigationController = window!.rootViewController as UINavigationController
-            var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-            rootController.updatePikis()
+            var navController:UINavigationController = window!.rootViewController as! UINavigationController
+            var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
+            //rootController.updatePikis()
             
             
-            
-            PFUser.currentUser().fetchInBackgroundWithBlock({ (user, error) -> Void in
-                if error != nil {
-                    
-                }
-                else{
-                    
-                    Utils().nbVisitAppIncrement()
-                    
-                    
-                    
-                    if Utils().isMomentForRealName(){
-                        if PFUser.currentUser()["name"] == nil{
-                            rootController.setName()
-                        }
-                        else if countElements(PFUser.currentUser()["name"] as String) == 0{
-                            rootController.setName()
-                        }
-                        
+            Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                
+                println("Friendlist : \(self.friendsIdList)")
+
+                //If no name and launched the app 10 times : ask for his name
+                Utils().nbVisitAppIncrement()
+                if Utils().isMomentForRealName(){
+                    if PFUser.currentUser()!["name"] == nil{
+                        rootController.setName()
                     }
-                    
-                    let usersFriend = PFUser.currentUser()["usersFriend"] as Array<String>
-                    
-                    
-                    var userFriends:Array<String>? = user["usersFriend"] as? Array<String>
-                    
-                    if userFriends != nil {
-                        Mixpanel.sharedInstance().people.set(["Nb Friends" : userFriends!.count])
-                        Mixpanel.sharedInstance().people.set(["Username" : PFUser.currentUser().username])
+                    else if count(PFUser.currentUser()!["name"] as! String) == 0{
+                        rootController.setName()
                     }
                     
                 }
+                
+                return nil
             })
         }
         
@@ -153,10 +157,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         if PFUser.currentUser() != nil {
             currentInstallation["notificationsEnabled"] = true
             currentInstallation["user"] = PFUser.currentUser()
+            currentInstallation.setDeviceTokenFromData(deviceToken)
+            currentInstallation.saveInBackground()
+        }
+        else{
+            println("Waiting list subscription")
         }
         
-        currentInstallation.setDeviceTokenFromData(deviceToken)
-        currentInstallation.saveInBackground()
+        
     }
     
     
@@ -168,88 +176,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         
         
         if type != nil{
-            switch application.applicationState{
-            case UIApplicationState.Active:
-                println("Active")
-            case UIApplicationState.Background:
-                println("Background")
-            case UIApplicationState.Inactive:
-                println("Inactive")
-            }
             
-            println("Application State : \(application.applicationState)")
             
-            if application.applicationState == UIApplicationState.Background{
+            if (application.applicationState == UIApplicationState.Background || application.applicationState == UIApplicationState.Inactive){
                 switch type! {
                     
-                case "newReact":
+                case "newReact", "newPiki":
                     let pikiId: NSString? = userInfo["pikiId"] as? NSString
                     
                     if pikiId != nil{
-                        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId!)
+                        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId! as String)
                         
                         var queryPiki:PFQuery = PFQuery(className: "Piki")
-                        queryPiki.whereKey("objectId", equalTo: pikiId)
+                        queryPiki.whereKey("objectId", equalTo: pikiId!)
                         queryPiki.includeKey("user")
                         
-                        queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
+                        queryPiki.getFirstObjectInBackgroundWithBlock({ (piki, error) -> Void in
                             if error != nil {
                                 completionHandler(UIBackgroundFetchResult.Failed)
                             }
                             else{
-                                let photoFile:PFFile = pikiObject["photo"] as PFFile
-                                photoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
+                                let photoFile:PFFile = piki!["photo"] as! PFFile
+                                photoFile.getDataInBackgroundWithBlock({ (data : NSData?, error : NSError?) -> Void in
                                     if error != nil {
                                         completionHandler(UIBackgroundFetchResult.Failed)
                                     }
                                     else{
                                         
-                                        //var navController:UINavigationController = self.window!.rootViewController as UINavigationController
-                                        //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-                                        //rootController.goToPiki(pikiObject)
+                                        var navController:UINavigationController = self.window!.rootViewController as! UINavigationController
+                                        var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
+                                        rootController.goToPiki(piki!)
+                                        NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)
                                         completionHandler(UIBackgroundFetchResult.NewData)
                                     }
                                 })
                             }
                         })
-                    }
-                    
-                case "newPiki":
-                    let pikiId: NSString? = userInfo["pikiId"] as? NSString
-                    
-                    if pikiId != nil{
-                        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: pikiId!)
                         
-                        var queryPiki:PFQuery = PFQuery(className: "Piki")
-                        queryPiki.whereKey("objectId", equalTo: pikiId)
-                        queryPiki.includeKey("user")
-                        
-                        queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
-                            if error != nil {
-                                completionHandler(UIBackgroundFetchResult.Failed)
-                            }
-                            else{
-                                let photoFile:PFFile = pikiObject["photo"] as PFFile
-                                photoFile.getDataInBackgroundWithBlock({ (data : NSData!, error : NSError!) -> Void in
-                                    if error != nil {
-                                        completionHandler(UIBackgroundFetchResult.Failed)
-                                    }
-                                    else{
-                                        
-                                        //var navController:UINavigationController = self.window!.rootViewController as UINavigationController
-                                        //var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-                                        //rootController.goToPiki(pikiObject)
-                                        
-                                        completionHandler(UIBackgroundFetchResult.NewData)
-                                    }
-                                })
-                            }
-                        })
+
                     }
-                    
                     
                 default:
-                    println("wrong type")
                     completionHandler(UIBackgroundFetchResult.NoData)
                     
                 }
@@ -278,16 +245,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
                 block: { (result, error ) -> Void in
                     println("Result : \(result)")
                     if error == nil{
-                        var resultDict : [String:AnyObject] = result as [String:AnyObject]
-                        var invitFriends:Bool = resultDict["forceFriends"] as Bool
-                        var limitFriends:Int = resultDict["numberToAdd"] as Int
+                        var resultDict : [String:AnyObject] = result as! [String:AnyObject]
+                        var invitFriends:Bool = resultDict["forceFriends"] as! Bool
+                        var limitFriends:Int = resultDict["numberToAdd"] as! Int
                         
                         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
                         defaults.setObject(invitFriends, forKey: "mandatoryFriends")
                         defaults.setObject(limitFriends, forKey: "numberToAdd")
                     }
                     else{
-                        println("Error : \(error.localizedDescription)")
+                        println("Error : \(error!.localizedDescription)")
                     }
     
             })
@@ -295,12 +262,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         }
     }
     
-    
+    /*
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
         
         if _messengerUrlHandler!.canOpenURL(url, sourceApplication: sourceApplication){
             _messengerUrlHandler!.openURL(url, sourceApplication: sourceApplication)
+        }
+        else{
+            FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+            
+            FBSDKApplicationDelegate.handleOpenURL(url, sourceApplication: sourceApplication, fallbackHandler: { (call : FBSDKApplicationDelegate!) -> Void in
+                
+            })
         }
         
         
@@ -321,7 +295,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         var queryPiki:PFQuery = PFQuery(className: "Piki")
         queryPiki.whereKey("objectId", equalTo: metadata)
         queryPiki.includeKey("user")
-        queryPiki.cachePolicy = kPFCachePolicyCacheElseNetwork
+        queryPiki.cachePolicy = PFCachePolicy.CacheElseNetwork
         
         queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
             if error != nil {
@@ -340,7 +314,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         
         
         
-    }
+    }*/
     
 
 }
