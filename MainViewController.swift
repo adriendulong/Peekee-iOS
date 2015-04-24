@@ -623,7 +623,10 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                             
                         }
                         else{
-                            pikiCell.firstPreviewReact!.image = UIImage(data: data!)
+                            if let finalData = data{
+                                pikiCell.firstPreviewReact!.image = UIImage(data: finalData)
+                            }
+                            
                         }
                     })
                     

@@ -53,16 +53,59 @@ class Utils {
     let lightBlue:UIColor = UIColor(red: 151/255, green: 159/255, blue: 213/255, alpha: 1.0)
     let greyNotSelected:UIColor = UIColor(red: 174/255, green: 181/255, blue: 191/255, alpha: 1.0)
     
+    let darkGrey:UIColor = UIColor(red: 33/255, green: 35/255, blue: 37/255, alpha: 1.0)
+    
     let customFontNormal = "ProximaNova-Light"
     let customFontSemiBold = "ProximaNova-Semibold"
     let customGothamBol = "GothamRounded-Bold"
+    let montserratBold = "Montserrat-Bold"
+    let montserratRegular = "Montserrat-Regular"
     
     let customFont = "HansomFY-Regular"
     
+    //MARK: FONTS REPLIES
+    
+    let fontReplies:[String] = ["BaronNeueBlack", "BrushUp", "DaftBrush", "BanzaiBros", "Higher", "Impact", "VolteBold", "TrendSansFour", "PlasticaPro", "story"]
+    
+    
+    func getFontsWithSize(size:CGFloat) -> [UIFont]{
+        
+        
+        var arrayFont:[UIFont] = [UIFont]()
+        
+        for fontReply in fontReplies{
+            
+            if let fontFound = UIFont(name: fontReply, size: size){
+                arrayFont.append(fontFound)
+            }
+            
+        }
+        
+        return arrayFont
+        
+    }
     
     func getAppDelegate() -> AppDelegate{
         
         return (UIApplication.sharedApplication().delegate as! AppDelegate!)
+        
+    }
+    
+    func resizeSquareImage(image: UIImage, size:CGSize) -> UIImage{
+        
+        if size.width < image.size.width{
+            UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
+            image.drawInRect(CGRectMake(0, 0, size.width, size.height))
+            var newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            return newImage
+        }
+        else{
+            return image
+        }
+        
+        
         
     }
     
@@ -78,6 +121,22 @@ class Utils {
         var imageRef = CGImageCreateWithImageInRect(image.CGImage, cropSquare);
         return UIImage(CGImage: imageRef, scale: 1, orientation: image.imageOrientation)!
         
+    }
+    
+    func cropTop(image : UIImage) -> UIImage{
+        var cropSquare = CGRectMake(0, 0, image.size.width, image.size.width)
+        
+        
+        var imageRef = CGImageCreateWithImageInRect(image.CGImage, cropSquare);
+        return UIImage(CGImage: imageRef, scale: 1, orientation: image.imageOrientation)!
+    }
+    
+    func cropMiddle(image : UIImage) -> UIImage{
+        var cropSquare = CGRectMake((image.size.height - image.size.width)/2, 0, image.size.width, image.size.width)
+        
+        
+        var imageRef = CGImageCreateWithImageInRect(image.CGImage, cropSquare);
+        return UIImage(CGImage: imageRef, scale: 1, orientation: image.imageOrientation)!
     }
     
     func degreesToRadian(degrees : Int) -> CGFloat {
@@ -435,7 +494,7 @@ class Utils {
         var generate1:AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
         generate1.appliesPreferredTrackTransform = true
         
-        var time:CMTime = CMTimeMake(1, 2)
+        var time:CMTime = CMTimeMakeWithSeconds(1, 600)
         var oneRef:CGImageRef = generate1.copyCGImageAtTime(time, actualTime: nil, error: nil)
         var one:UIImage = UIImage(CGImage: oneRef)!
         
@@ -1820,6 +1879,51 @@ class Utils {
         var formattedNumber:String = formatter.stringFromNumber(NSNumber(integer: number))!
         
         return formattedNumber
+        
+    }
+    
+    
+    //MARK: LIKE REACT
+    
+    func likeReact(react : PFObject!, pleek : PFObject!, hasAlreadyLiked : Bool){
+
+        if !hasAlreadyLiked{
+            var likeObject:PFObject = PFObject(className: "Like")
+            var reactCopy:PFObject = PFObject(withoutDataWithClassName:"React", objectId: react.objectId)
+            likeObject["react"] = reactCopy
+            likeObject["piki"] = pleek
+            likeObject["user"] = PFUser.currentUser()
+            
+            var aclLike:PFACL = PFACL()
+            aclLike.setPublicReadAccess(true)
+            aclLike.setWriteAccess(true, forUser: PFUser.currentUser()!)
+            
+            likeObject.ACL = aclLike
+            
+            likeObject.saveEventually { (done, error) -> Void in
+                if error != nil{
+                    println("Error saving like : \(error!.description)")
+                }
+            }
+        }
+        else{
+            var likesQuery:PFQuery = PFQuery(className: "Like")
+            likesQuery.whereKey("user", equalTo: PFUser.currentUser()!)
+            likesQuery.whereKey("piki", equalTo: pleek)
+            likesQuery.whereKey("react", equalTo: react)
+            
+            likesQuery.findObjectsInBackgroundWithBlock { (likes, error) -> Void in
+                if error == nil{
+                    if likes != nil{
+                        
+                        PFObject.deleteAllInBackground(likes, block: nil)
+                    }
+                    
+                }
+            }
+        }
+     
+        
         
     }
     

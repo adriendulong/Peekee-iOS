@@ -14,11 +14,20 @@ class MemCollectionViewCell : UICollectionViewCell{
     var iconImageView:UIImageView!
     var selectedEmoji:Bool!
     var loadIndicator:UIActivityIndicatorView!
+    var selectorImageView:UIImageView!
+    var innerShadowImageView:UIImageView!
+    var labelDemoFont:UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         selectedEmoji = false
+        
+        innerShadowImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        innerShadowImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        innerShadowImageView.hidden = true
+        innerShadowImageView.image = UIImage(named: "inner_shadow_selected_cell")
+        contentView.addSubview(innerShadowImageView)
         
         iconImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         iconImageView.contentMode = UIViewContentMode.ScaleAspectFit
@@ -29,6 +38,20 @@ class MemCollectionViewCell : UICollectionViewCell{
         loadIndicator.hidesWhenStopped = true
         contentView.addSubview(loadIndicator)
         
+        labelDemoFont = UILabel(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+        labelDemoFont.font = UIFont(name: Utils().montserratBold, size: 30)
+        labelDemoFont.textColor = UIColor.whiteColor()
+        labelDemoFont.text = "YO"
+        labelDemoFont.hidden = true
+        labelDemoFont.textAlignment = NSTextAlignment.Center
+        contentView.addSubview(labelDemoFont)
+        
+        contentView.backgroundColor = UIColor(red: 53/255, green: 54/255, blue: 55/255, alpha: 1.0)
+        
+        selectorImageView = UIImageView(frame: CGRect(x: frame.width - 45, y: 10, width: 22, height: 22))
+        selectorImageView.image = UIImage(named: "font_meme_selected")
+        selectorImageView.hidden = true
+        contentView.addSubview(selectorImageView)
         
         
         

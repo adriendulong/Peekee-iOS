@@ -24,7 +24,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-Peekee-LLARingSpinnerView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Peekee-Mixpanel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-Peekee-PBJVision.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -47,42 +57,52 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>14FAA3B87B4FD0D608973404</key>
+		<key>5868817E9089AB5C573AD1C7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>234ABB0F060D61598779EBB1</key>
+		<key>58ADFF16A311EC97B8754E9D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2FCEBF12EA607541F3EBB1CD</key>
+		<key>7A2B2F6C371F1C825B80E1FE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4205A3C11B05072587490272</key>
+		<key>7D5592A2BA6A193E110E9BA9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>999BA9097E43CD6C98CF0960</key>
+		<key>A956A5568A96AD67CC11C142</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BD923A5ECD8C776827607EBF</key>
+		<key>ABE08ED7D139EB6066631F0F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D65B1AA0453DA64312C30E00</key>
+		<key>BD1557F09A02B4515175B3AD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>FA90D5F46A2E6247956D838A</key>
+		<key>E17F052E778B48E2895C5313</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1EC8CE770BC97770FA609AF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F19255E7963B742E4F586913</key>
 		<dict>
 			<key>primary</key>
 			<true/>

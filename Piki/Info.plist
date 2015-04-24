@@ -64,6 +64,18 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
+		<string>story.otf</string>
+		<string>RMUPlasticaPro.otf</string>
+		<string>LatinotypeTrendSansFour.otf</string>
+		<string>IndianTypeFoundryVolteBold.otf</string>
+		<string>Impact.ttf</string>
+		<string>Higher.otf</string>
+		<string>FenotypeBanzaiBros.otf</string>
+		<string>DaftBrush.otf</string>
+		<string>BrushUp.otf</string>
+		<string>BaronNeueBlack.otf</string>
+		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
 		<string>Gotham-Rounded-Bold.ttf</string>
 		<string>HansomFY-Regular_S.otf</string>
 		<string>Proxima-Nova-Light.otf</string>

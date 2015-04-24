@@ -21,6 +21,7 @@ PODS:
     - Bolts (~> 1.0)
     - Facebook-iOS-SDK/CoreKit
   - libPhoneNumber-iOS (0.8.4)
+  - LLARingSpinnerView (0.1.3)
   - Mixpanel (2.7.3):
     - Mixpanel/MPCategoryHelpers (= 2.7.3)
   - Mixpanel/MPCategoryHelpers (2.7.3)
@@ -30,16 +31,19 @@ PODS:
     - Parse (~> 1.7.1)
   - ParseUI (1.1.3):
     - Parse (~> 1.7)
+  - PBJVision (0.4.1)
 
 DEPENDENCIES:
   - Animated-Gif-iOS
   - APAddressBook/Swift
   - Facebook-iOS-SDK
   - libPhoneNumber-iOS
+  - LLARingSpinnerView
   - Mixpanel
   - Parse
   - ParseCrashReporting
   - ParseUI
+  - PBJVision
 
 SPEC CHECKSUMS:
   Animated-Gif-iOS: b3c0d798d2f59bed92b4adddfef6ebb7b80355f2
@@ -47,9 +51,11 @@ SPEC CHECKSUMS:
   Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
   Facebook-iOS-SDK: 6d05532c97e9c542f8d87f94b7f6ee217493d00b
   libPhoneNumber-iOS: dbfc7b4128510a4955df3e5a6f125393fc9ebc2f
+  LLARingSpinnerView: d5f9057460e97989aff1c52a247c6acb62b8d883
   Mixpanel: 1d387d76800e07e953958c62c97fea27f13632dd
   Parse: fa8ec29de6d82035635986c11946299fb1b38316
   ParseCrashReporting: 9aeff8680d500e5e833564fca5b60333f7bb7403
   ParseUI: 1a68e9cebc3bd458eed9605ce7b33d7cc082f473
+  PBJVision: 1d7fb2d44d41eff64cd641ba2b63024da9ab2deb
 
 COCOAPODS: 0.36.3

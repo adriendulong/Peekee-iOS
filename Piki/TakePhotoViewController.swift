@@ -16,7 +16,7 @@ protocol TakePhotoProtocol {
 }
 
 
-class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, AVCaptureFileOutputRecordingDelegate{
+class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, PBJVisionDelegate{
     
     var delegate:TakePhotoProtocol? = nil
     var cameraView:UIView?
@@ -55,6 +55,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     var videoOutput : AVCaptureMovieFileOutput?
     var captureDeviceInput:AVCaptureDeviceInput?
     var audioDeviceInput:AVCaptureDeviceInput?
+    var isPressingRecordButton:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +69,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
         
         //var tapGestureChangeCamera : UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("changeCamera:"))
         cameraView = UIView(frame: self.view.bounds)
@@ -78,6 +78,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
         self.previewImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.width))
         self.previewImageView!.hidden = true
+        self.previewImageView!.contentMode = UIViewContentMode.ScaleAspectFit
         self.view.addSubview(self.previewImageView!)
         
         textViewHidden = UITextView(frame: CGRect(x: 0, y: -100, width: 50, height: 50))
@@ -117,7 +118,11 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         progressBar.transform = CGAffineTransformMakeTranslation(-progressBar.frame.width, 0)
         
         
-        
+        //INIT CAMERA
+        previewLayer = PBJVision.sharedInstance().previewLayer
+        previewLayer!.frame = CGRect(x: 0, y: 0, width: cameraView!.frame.width, height: cameraView!.frame.width)
+        previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
+        cameraView!.layer.addSublayer(previewLayer)
         
     }
     
@@ -136,11 +141,17 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
         }
         
+        cameraTextView!.becomeFirstResponder()
+        prefersStatusBarHidden()
+        setupCamera()
+        
+        /*
+        
         captureSession.sessionPreset = AVCaptureSessionPresetHigh
         let devices = AVCaptureDevice.devices()
         
-        cameraTextView!.becomeFirstResponder()
-        prefersStatusBarHidden()
+        
+        
         
         // Loop through all the capture devices on this phone
         for device in devices {
@@ -159,28 +170,28 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         }
         else{
             beginSession(self.cameraView!)
-        }
+        }*/
     }
     
     override func viewDidAppear(animated: Bool) {
-        println(" Inputs : \(captureSession.inputs.count)")
-        
-        
-        if !captureSession.running{
-            captureSession.startRunning()
-        }
-        
+
         cameraTextView!.becomeFirstResponder()
 
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        //cameraTextField!.resignFirstResponder()
-    }
+
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func setupCamera(){
+        var vision:PBJVision = PBJVision.sharedInstance()
+        vision.delegate = self
+        vision.cameraMode = PBJCameraMode.Photo
+        vision.cameraOrientation = PBJCameraOrientation.Portrait
+        vision.focusMode = PBJFocusMode.ContinuousAutoFocus
+        vision.videoBitRate = 437500 * 8
+        vision.outputFormat = PBJOutputFormat.Square
+        
+        vision.startPreview()
+        
     }
     
     
@@ -262,7 +273,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     
                     self.accessLastLibPhoto()
                     
-                    self.takePhotoButton = UIImageView(frame: CGRect(x: self.view.frame.size.width/2 - 35, y: self.view.frame.size.width - 75, width: 70, height: 70))
+                    self.takePhotoButton = UIImageView(frame: CGRect(x: self.view.frame.size.width/2 - 35, y: self.view.frame.size.width - 75, width: 72, height: 75))
                     self.takePhotoButton!.image = UIImage(named: "capture_button")
                     self.takePhotoButton!.userInteractionEnabled = true
                     
@@ -292,140 +303,16 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
  
     }
     
-    func keyboardWillHide(notification : NSNotification){
-        /*bottomBarView!.hidden = true
-        self.quitButton!.removeFromSuperview()
-        self.libraryButton!.removeFromSuperview()
-        self.takePhotoButton!.removeFromSuperview()
-        
-        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as NSNumber).doubleValue
-        UIView.animateWithDuration(animationDuration) { () -> Void in
-            self.topBarView!.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 0)
-            self.cameraTextField!.frame = CGRect(x: -self.view.frame.size.width, y: self.cameraTextField!.frame.origin.y, width: self.view.frame.size.width, height: 50)
-        }*/
-    }
-    
     
     /*
     * Camera functions
     *
     */
     
-    func beginSession(viewToUse : UIView) {
-        
-        var authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
-        
-        if authStatus == AVAuthorizationStatus.Authorized{
-            //configureDevice()
-            audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-            var errAudio : NSError? = nil
-            audioDeviceInput = AVCaptureDeviceInput(device: audioCaptureDevice, error: &errAudio)
-            
-            if audioDeviceInput != nil {
-                captureSession.addInput(audioDeviceInput)
-            }
-            
-            var err : NSError? = nil
-            captureDeviceInput = AVCaptureDeviceInput(device: captureDevice, error: &err)
-            captureSession.addInput(captureDeviceInput!)
-            
-            if err != nil {
-                println("error: \(err?.localizedDescription)")
-            }
-            
-            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-            
-            previewLayer?.frame = viewToUse.layer.frame
-            viewToUse.layer.addSublayer(previewLayer)
-            
-            
-            
-            imageOutput = AVCaptureStillImageOutput()
-            imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
-            if captureSession.canAddOutput(imageOutput){
-                captureSession.addOutput(imageOutput)
-            }
-            
-            
-            //Movie output
-            videoOutput = AVCaptureMovieFileOutput()
-            let totalSeconds:Float64 = 15
-            let preferedTimeScale:Int32 = 30
-            let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-            videoOutput!.maxRecordedDuration = maxDuration
-            videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
-            if captureSession.canAddOutput(videoOutput!){
-                captureSession.addOutput(videoOutput!)
-            }
-            
-            captureSession.startRunning()
-        }
-        else if authStatus == AVAuthorizationStatus.NotDetermined{
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (succeed) -> Void in
-                if succeed{
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-                        var errAudio : NSError? = nil
-                        self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
-                        
-                        if self.audioDeviceInput != nil {
-                            self.captureSession.addInput(self.audioDeviceInput)
-                        }
-                        
-                        var err : NSError? = nil
-                        self.captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice, error: &err)
-                        self.captureSession.addInput(self.captureDeviceInput!)
-                        
-                        if err != nil {
-                            println("error: \(err?.localizedDescription)")
-                        }
-                        
-                        
-                        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-                        self.previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                        
-                        self.previewLayer?.frame = viewToUse.layer.frame
-                        viewToUse.layer.addSublayer(self.previewLayer)
-                        
-                        self.imageOutput = AVCaptureStillImageOutput()
-                        self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
-                        if self.captureSession.canAddOutput(self.imageOutput){
-                            self.captureSession.addOutput(self.imageOutput)
-                        }
-                        
-                        
-                        //Movie output
-                        self.videoOutput = AVCaptureMovieFileOutput()
-                        let totalSeconds:Float64 = 15
-                        let preferedTimeScale:Int32 = 30
-                        let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-                        self.videoOutput!.maxRecordedDuration = maxDuration
-                        self.videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
-                        if self.captureSession.canAddOutput(self.videoOutput!){
-                            self.captureSession.addOutput(self.videoOutput!)
-                        }
-                        
-                        self.captureSession.startRunning()
-                    })    
-                    
-                }
-                else{
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.camDenied()
-                    })
-                }
-            })
-        }
-        else{
-            self.camDenied()
-        }
-        
-    }
+
     
     func quit(sender : UIButton){
         
-        captureSession.stopRunning()
         
         cameraTextView!.resignFirstResponder()
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -438,7 +325,8 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     func takePhoto(sender : UITapGestureRecognizer){
         
         if previewImageView!.hidden{
-            takePhoto()
+            //takePhoto()
+            PBJVision.sharedInstance().capturePhoto()
         }
         else{
             newPiki()
@@ -452,31 +340,83 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     func recordVideo(longGesture : UILongPressGestureRecognizer){
         
         if longGesture.state == UIGestureRecognizerState.Began{
-            
-            println("Start recording video")
+
+            isPressingRecordButton = true
+            PBJVision.sharedInstance().maximumCaptureDuration = CMTimeMakeWithSeconds(12, 600)
+            PBJVision.sharedInstance().cameraMode = PBJCameraMode.Video
             
             self.cameraTextView!.resignFirstResponder()
             self.cameraTextView!.hidden = true
-            
-            //Create temporary URL to record to
-            let outpuPath:String = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
-            let outputURL:NSURL = NSURL(fileURLWithPath: outpuPath)!
-            var fileManager:NSFileManager = NSFileManager()
 
-            self.startRecordingAnim()
-
-            //Start Recording
-            self.isRecording = true
-            videoOutput!.startRecordingToOutputFileURL(outputURL, recordingDelegate: self)
             
             
         }
         else if longGesture.state == UIGestureRecognizerState.Ended {
+            isPressingRecordButton = false
             
             self.stopRecordingAnim()
             
-            if isRecording{
-                videoOutput!.stopRecording()
+            PBJVision.sharedInstance().endVideoCapture()
+            
+        }
+        
+    }
+    
+    func visionDidStartVideoCapture(vision: PBJVision) {
+        startRecordingAnim()
+    }
+    
+    func visionDidEndVideoCapture(vision: PBJVision) {
+        PBJVision.sharedInstance().cameraMode = PBJCameraMode.Photo
+    }
+    
+    func visionCameraModeDidChange(vision: PBJVision) {
+        if vision.cameraMode == PBJCameraMode.Video{
+
+            if isPressingRecordButton{
+
+                if !PBJVision.sharedInstance().recording{
+                    var timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("startRecordVideo"), userInfo: nil, repeats: false)
+                    
+                }
+            }
+        }
+        
+    }
+    
+    func startRecordVideo(){
+        PBJVision.sharedInstance().startVideoCapture()
+    }
+    
+    func vision(vision: PBJVision, capturedVideo videoDict: [NSObject : AnyObject]?, error: NSError?) {
+        
+        isRecording = false
+        
+        
+        
+        if error != nil{
+            
+            //ALERT PROBLEM RECORDING VIDEO
+            println("PROBLEM : \(error?.description)")
+            
+        }
+        else{
+            
+            
+            var videoPath:NSString? = videoDict![PBJVisionVideoPathKey] as? NSString
+            
+            
+            if videoPath != nil{
+                self.urlVideoToUpload = NSURL(fileURLWithPath: videoPath! as String)
+                
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    
+                    self.passInPreviewModeVideo(NSURL(fileURLWithPath: videoPath! as String)!)
+                    
+                })
+                
+                
             }
             
         }
@@ -495,13 +435,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                 self.progressBar.transform = CGAffineTransformIdentity
         }) { (finished) -> Void in
             self.stopRecordingAnim()
-            
-            if self.isRecording{
-                self.videoOutput!.stopRecording()
-            }
-            
-            
-            
         }
     }
     
@@ -513,77 +446,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
     }
     
-    
-    
-    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
-        
-        self.isRecording = false
-        
-        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
-        
-        if error != nil {
-            println("Error : \(error.localizedDescription)")
-        }
-
-        
-        var recordedSuccessfully = true
-        
-        if error != nil{
-            if error.code != 0{
-                //An error occured
-                var value: AnyObject! = error.userInfo![AVErrorRecordingSuccessfullyFinishedKey]
-                if value != nil{
-                    recordedSuccessfully = value.boolValue
-                }
-                
-            }
-        }
-        
-        
-        if recordedSuccessfully {
-            
-            
-            Utils().cropVideoPeekee(outputFileURL, captureDevice: self.captureDevice!, sizePeekee : CGSize(width : 400, height : 400)).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                if task.error != nil{
-                    println("Error : \(error.localizedDescription)")
-                }
-                else{
-                    var finalURL = task.result as! NSURL
-                    
-                    self.urlVideoToUpload = finalURL
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    
-                        self.passInPreviewModeVideo(finalURL)
-
-                    })
-                    
-                    
-                    //Start a background task
-                    bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
-                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                    })
-                    
-                    
-                    
-                    
-                }
-                
-                return nil
-            })
-            
-        }
-        
-    }
     
     
     func videoDidEnd(notification : NSNotification){
@@ -694,14 +556,12 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             //If Text, add it to the photo
             var imageLabel:UIImage?
             self.cameraTextView!.editable = false
-            println("Image Upload Size : \(imageToUpload?.size)")
             if (self.cameraTextView!.text as NSString).length > 0{
                 UIGraphicsBeginImageContextWithOptions(cameraTextView!.frame.size, false, 0.0);
                 self.cameraTextView!.layer.renderInContext(UIGraphicsGetCurrentContext())
                 imageLabel = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
             }
-            println("Image Label size : \(imageLabel?.size)")
             
             
             var difPos:CGFloat = (imageToUpload!.size.width - self.view.frame.size.width)/2
@@ -714,8 +574,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             }
             finalImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            
-            println("Final Photo Size : \(finalImage!.size)")
             
             
             var imageData:NSData = UIImageJPEGRepresentation(finalImage!, 0.8)
@@ -790,119 +648,41 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     
     
     func changeCamera(sender : UIButton){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            
-            var preferredPosition:AVCaptureDevicePosition = AVCaptureDevicePosition.Unspecified
-            var currentPosition:AVCaptureDevicePosition = self.captureDevice!.position
-            
-            switch currentPosition{
-                
-            case AVCaptureDevicePosition.Unspecified:
-                preferredPosition = AVCaptureDevicePosition.Front
-                
-            case AVCaptureDevicePosition.Front:
-                preferredPosition = AVCaptureDevicePosition.Back
-                
-            case AVCaptureDevicePosition.Back:
-                preferredPosition = AVCaptureDevicePosition.Front
-                
-            default:
-                preferredPosition = AVCaptureDevicePosition.Back
-            }
-            
-            self.captureSession.beginConfiguration()
-            
-            let devices = AVCaptureDevice.devices()
-            var tempCaptureDevice:AVCaptureDevice?
-            for device in devices {
-                // Make sure this particular device supports video
-                if (device.hasMediaType(AVMediaTypeVideo)) {
-                    // Finally check the position and confirm we've got the back camera
-                    if(device.position == preferredPosition) {
-                        tempCaptureDevice = device as? AVCaptureDevice
-                    }
-                }
-            }
-            
-            
-            var videoCaptureDeviceInput:AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(tempCaptureDevice, error: nil) as! AVCaptureDeviceInput
-            
-            self.captureSession.removeInput(self.captureDeviceInput!)
-            
-            if self.captureSession.canAddInput(videoCaptureDeviceInput){
-                self.captureSession.addInput(videoCaptureDeviceInput)
-                self.captureDevice = tempCaptureDevice
-                self.captureDeviceInput = videoCaptureDeviceInput
-            }
-            else{
-                self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice, error: nil))
-            }
-            
-            self.captureSession.commitConfiguration()
-            
+        
+        var vision:PBJVision = PBJVision.sharedInstance()
+        
+        if vision.cameraDevice == PBJCameraDevice.Front{
+            vision.cameraDevice = PBJCameraDevice.Back
+        }
+        else{
+            vision.cameraDevice = PBJCameraDevice.Front
         }
         
     }
     
     
-    /*
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        if previewImageView!.hidden{
-            takePhoto()
-        }
-        else{
-            newPiki()
+    func vision(vision: PBJVision, capturedPhoto photoDict: [NSObject : AnyObject]?, error: NSError?) {
+        
+        if error != nil{
+            //Alert and return
+            return
         }
         
-        return false
-    }*/
-    
-    
-    func takePhoto(){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            var videoConnection : AVCaptureConnection?
-            for connecton in self.imageOutput!.connections {
-                //find a matching input port
-                for port in connecton.inputPorts!{
-                    if port.mediaType == AVMediaTypeVideo {
-                        videoConnection = connecton as? AVCaptureConnection
-                        break //for port
-                    }
-                }
-                
-                if videoConnection  != nil {
-                    break// for connections
-                }
-            }
-            if videoConnection  != nil {
-                self.imageOutput!.captureStillImageAsynchronouslyFromConnection(videoConnection){
-                    (imageSampleBuffer : CMSampleBuffer!, _) in
-                    
-                    let imageDataJpeg = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer)
-                    var pickedImage: UIImage = UIImage(data: imageDataJpeg)!
-                    
-                    var flippedImage:UIImage?
-                    if self.captureDevice!.position == AVCaptureDevicePosition.Front {
-                        flippedImage = UIImage(CGImage: pickedImage.CGImage, scale: pickedImage.scale, orientation: UIImageOrientation.LeftMirrored)
-                    }
-                    else{
-                        flippedImage = pickedImage
-                    }
-                    
-                    var croppedPhoto = Utils().cropPhoto(flippedImage!, yOrigin: 0, screenWidth: self.view.frame.size.width)
-                    var squareImage = RBSquareImageTo(croppedPhoto, CGSize(width: UIScreen.mainScreen().bounds.width * UIScreen.mainScreen().scale, height: UIScreen.mainScreen().bounds.width * UIScreen.mainScreen().scale))
-                    
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.passInPreviewMode(squareImage)
-                    })
-                    
-                    
-                    
-                }
-                
-            }
+        var photoData:NSData? = photoDict![PBJVisionPhotoJPEGKey] as? NSData
+        
+        if photoData != nil{
+            
+            var croppedPhoto = Utils().resizeSquareImage(Utils().cropMiddle(UIImage(data: photoData!)!), size: CGSize(width: 400, height: 400))
+            
+            self.passInPreviewMode(croppedPhoto)
+            PBJVision.sharedInstance().startPreview()
+            
         }
+        else{
+            //Alert and return
+            return
+        }
+        
     }
     
     
@@ -928,7 +708,8 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         //Return Button Take Piki or Send It
         if text == "\n"{
             if previewImageView!.hidden{
-                takePhoto()
+                //takePhoto()
+                PBJVision.sharedInstance().capturePhoto()
             }
             else{
                 newPiki()

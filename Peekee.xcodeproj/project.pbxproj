@@ -37,7 +37,6 @@
 		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
 		E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */; };
 		E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
-		E7665E3B19E5A3AB003DAAF8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3A19E5A3AB003DAAF8 /* Images.xcassets */; };
 		E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
 		E7665E4A19E5A3AB003DAAF8 /* PeekeeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E4919E5A3AB003DAAF8 /* PeekeeTests.swift */; };
 		E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5419E6C42E003DAAF8 /* Utils.swift */; };
@@ -45,13 +44,28 @@
 		E769F2611A8A210000E17DCB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E769F2601A8A210000E17DCB /* ImageIO.framework */; };
 		E769F2631A8A3C5900E17DCB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E769F2621A8A3C5900E17DCB /* UIKit.framework */; };
 		E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */; };
+		E770B9B41AEA33EE00781A0A /* like_react_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = E770B9B31AEA33EE00781A0A /* like_react_sound.wav */; };
 		E77913171AC3C58000E2CE89 /* WaitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77913161AC3C58000E2CE89 /* WaitViewController.swift */; };
+		E77B98F11AE7DB9F002B12C8 /* BaronNeueBlack.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E71AE7DB94002B12C8 /* BaronNeueBlack.otf */; };
+		E77B98F21AE7DB9F002B12C8 /* BrushUp.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E81AE7DB94002B12C8 /* BrushUp.otf */; };
+		E77B98F31AE7DB9F002B12C8 /* DaftBrush.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E91AE7DB94002B12C8 /* DaftBrush.otf */; };
+		E77B98F41AE7DB9F002B12C8 /* FenotypeBanzaiBros.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EA1AE7DB94002B12C8 /* FenotypeBanzaiBros.otf */; };
+		E77B98F51AE7DB9F002B12C8 /* Higher.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EB1AE7DB94002B12C8 /* Higher.otf */; };
+		E77B98F61AE7DB9F002B12C8 /* Impact.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EC1AE7DB94002B12C8 /* Impact.ttf */; };
+		E77B98F71AE7DB9F002B12C8 /* IndianTypeFoundryVolteBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98ED1AE7DB94002B12C8 /* IndianTypeFoundryVolteBold.otf */; };
+		E77B98F81AE7DB9F002B12C8 /* LatinotypeTrendSansFour.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EE1AE7DB94002B12C8 /* LatinotypeTrendSansFour.otf */; };
+		E77B98F91AE7DB9F002B12C8 /* RMUPlasticaPro.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EF1AE7DB94002B12C8 /* RMUPlasticaPro.otf */; };
+		E77B98FA1AE7DB9F002B12C8 /* story.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98F01AE7DB94002B12C8 /* story.otf */; };
 		E7834C7F1A1A41CF00CDB32D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */; };
 		E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
 		E796CB281A5D27F100034F8B /* AcountsAdviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */; };
 		E7A0CCBE1ABC93220025BA62 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCBD1ABC93220025BA62 /* libAppsFlyerLib.a */; };
 		E7A0CCC01ABC97810025BA62 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCBF1ABC97810025BA62 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E7A0CCC21ABC9A5D0025BA62 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCC11ABC9A5D0025BA62 /* iAd.framework */; };
+		E7A46CF71AE6339100CC2609 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */; };
+		E7A46CF81AE6339100CC2609 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */; };
+		E7A46CFA1AE6531600CC2609 /* CameraCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */; };
+		E7A46CFC1AE6BAB700CC2609 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CFB1AE6BAB700CC2609 /* Images.xcassets */; };
 		E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
 		E7AB74811A9B792E00EEA0D8 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
 		E7AB74831A9BC37700EEA0D8 /* MemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */; };
@@ -133,7 +147,6 @@
 		E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PikiViewController.swift; sourceTree = "<group>"; };
 		E7665E3819E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		E7665E3A19E5A3AB003DAAF8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E7665E3D19E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeekeeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E4819E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -144,7 +157,18 @@
 		E769F2601A8A210000E17DCB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		E769F2621A8A3C5900E17DCB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFriendsFirstViewController.swift; sourceTree = "<group>"; };
+		E770B9B31AEA33EE00781A0A /* like_react_sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = like_react_sound.wav; sourceTree = "<group>"; };
 		E77913161AC3C58000E2CE89 /* WaitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaitViewController.swift; sourceTree = "<group>"; };
+		E77B98E71AE7DB94002B12C8 /* BaronNeueBlack.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BaronNeueBlack.otf; sourceTree = "<group>"; };
+		E77B98E81AE7DB94002B12C8 /* BrushUp.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BrushUp.otf; sourceTree = "<group>"; };
+		E77B98E91AE7DB94002B12C8 /* DaftBrush.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = DaftBrush.otf; sourceTree = "<group>"; };
+		E77B98EA1AE7DB94002B12C8 /* FenotypeBanzaiBros.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FenotypeBanzaiBros.otf; sourceTree = "<group>"; };
+		E77B98EB1AE7DB94002B12C8 /* Higher.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Higher.otf; sourceTree = "<group>"; };
+		E77B98EC1AE7DB94002B12C8 /* Impact.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Impact.ttf; sourceTree = "<group>"; };
+		E77B98ED1AE7DB94002B12C8 /* IndianTypeFoundryVolteBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = IndianTypeFoundryVolteBold.otf; sourceTree = "<group>"; };
+		E77B98EE1AE7DB94002B12C8 /* LatinotypeTrendSansFour.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LatinotypeTrendSansFour.otf; sourceTree = "<group>"; };
+		E77B98EF1AE7DB94002B12C8 /* RMUPlasticaPro.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RMUPlasticaPro.otf; sourceTree = "<group>"; };
+		E77B98F01AE7DB94002B12C8 /* story.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = story.otf; sourceTree = "<group>"; };
 		E7834C7D1A1A41CF00CDB32D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = "Vendors/MBProgressHUD-master/MBProgressHUD.h"; sourceTree = SOURCE_ROOT; };
 		E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = "Vendors/MBProgressHUD-master/MBProgressHUD.m"; sourceTree = SOURCE_ROOT; };
 		E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "HansomFY-Regular_S.otf"; path = "Font/HansomFY-Regular_S.otf"; sourceTree = SOURCE_ROOT; };
@@ -153,6 +177,10 @@
 		E7A0CCBD1ABC93220025BA62 /* libAppsFlyerLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAppsFlyerLib.a; sourceTree = "<group>"; };
 		E7A0CCBF1ABC97810025BA62 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		E7A0CCC11ABC9A5D0025BA62 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraCollectionViewCell.swift; sourceTree = "<group>"; };
+		E7A46CFB1AE6BAB700CC2609 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Birdy_Notification2.wav; sourceTree = "<group>"; };
 		E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Space_Notification1.wav; sourceTree = "<group>"; };
 		E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -249,6 +277,7 @@
 		E725BC901A40A84800275C2B /* Sound */ = {
 			isa = PBXGroup;
 			children = (
+				E770B9B31AEA33EE00781A0A /* like_react_sound.wav */,
 				E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */,
 				E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */,
 				E7B4EB5D1A4EA25100B69A2A /* better.wav */,
@@ -303,8 +332,8 @@
 				E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */,
 				E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */,
 				E7665E3719E5A3AB003DAAF8 /* Main.storyboard */,
+				E7A46CFB1AE6BAB700CC2609 /* Images.xcassets */,
 				E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */,
-				E7665E3A19E5A3AB003DAAF8 /* Images.xcassets */,
 				E7665E3119E5A3AB003DAAF8 /* Supporting Files */,
 				E71AEFE01A6AE1EF00377E86 /* Localizable.strings */,
 			);
@@ -383,6 +412,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E77B98E61AE7DB85002B12C8 /* Fonts Replies */ = {
+			isa = PBXGroup;
+			children = (
+				E77B98E71AE7DB94002B12C8 /* BaronNeueBlack.otf */,
+				E77B98E81AE7DB94002B12C8 /* BrushUp.otf */,
+				E77B98E91AE7DB94002B12C8 /* DaftBrush.otf */,
+				E77B98EA1AE7DB94002B12C8 /* FenotypeBanzaiBros.otf */,
+				E77B98EB1AE7DB94002B12C8 /* Higher.otf */,
+				E77B98EC1AE7DB94002B12C8 /* Impact.ttf */,
+				E77B98ED1AE7DB94002B12C8 /* IndianTypeFoundryVolteBold.otf */,
+				E77B98EE1AE7DB94002B12C8 /* LatinotypeTrendSansFour.otf */,
+				E77B98EF1AE7DB94002B12C8 /* RMUPlasticaPro.otf */,
+				E77B98F01AE7DB94002B12C8 /* story.otf */,
+			);
+			name = "Fonts Replies";
+			sourceTree = "<group>";
+		};
 		E7834C7C1A1A41B200CDB32D /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -405,8 +451,11 @@
 		E78548C71A1B535A001F83FC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				E77B98E61AE7DB85002B12C8 /* Fonts Replies */,
 				E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */,
 				E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */,
+				E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */,
+				E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */,
 				E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */,
 				E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */,
 			);
@@ -456,6 +505,7 @@
 				E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */,
 				E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */,
 				E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */,
+				E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */,
 			);
 			name = Piki;
 			sourceTree = "<group>";
@@ -586,6 +636,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E77B98F11AE7DB9F002B12C8 /* BaronNeueBlack.otf in Resources */,
+				E77B98F21AE7DB9F002B12C8 /* BrushUp.otf in Resources */,
+				E77B98F31AE7DB9F002B12C8 /* DaftBrush.otf in Resources */,
+				E77B98F41AE7DB9F002B12C8 /* FenotypeBanzaiBros.otf in Resources */,
+				E77B98F51AE7DB9F002B12C8 /* Higher.otf in Resources */,
+				E77B98F61AE7DB9F002B12C8 /* Impact.ttf in Resources */,
+				E77B98F71AE7DB9F002B12C8 /* IndianTypeFoundryVolteBold.otf in Resources */,
+				E77B98F81AE7DB9F002B12C8 /* LatinotypeTrendSansFour.otf in Resources */,
+				E77B98F91AE7DB9F002B12C8 /* RMUPlasticaPro.otf in Resources */,
+				E77B98FA1AE7DB9F002B12C8 /* story.otf in Resources */,
+				E7A46CF71AE6339100CC2609 /* Montserrat-Bold.ttf in Resources */,
+				E7A46CFC1AE6BAB700CC2609 /* Images.xcassets in Resources */,
+				E7A46CF81AE6339100CC2609 /* Montserrat-Regular.ttf in Resources */,
 				E72ED24C1AAA58F500505A56 /* peekee_tuto.mp4 in Resources */,
 				E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */,
 				E74C1DF61A56F5F7002F86CC /* (null) in Resources */,
@@ -599,11 +662,11 @@
 				E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */,
 				E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */,
 				E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */,
-				E7665E3B19E5A3AB003DAAF8 /* Images.xcassets in Resources */,
 				E74C1DF71A56F5F7002F86CC /* (null) in Resources */,
 				E7B4EB631A4EA25100B69A2A /* harder.wav in Resources */,
 				E7B4EB611A4EA25100B69A2A /* better.wav in Resources */,
 				E7DF60A61A10C73F000CCD52 /* DiallingCodes.plist in Resources */,
+				E770B9B41AEA33EE00781A0A /* like_react_sound.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,6 +752,7 @@
 				E7EBA42D19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift in Sources */,
 				E7AE5D791A41CA1800A77A91 /* FirstPageViewController.swift in Sources */,
 				E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */,
+				E7A46CFA1AE6531600CC2609 /* CameraCollectionViewCell.swift in Sources */,
 				E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */,
 				E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */,
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,

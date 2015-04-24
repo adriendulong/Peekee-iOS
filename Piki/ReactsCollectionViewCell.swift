@@ -10,101 +10,33 @@ import AVFoundation
 
 
 protocol ReactsCellProtocol {
-    func postTextReact()
-    func seeUserWhoPosted(user : PFUser)
-    func printUsernamesreact()
-    func hideUsernamesreact()
     func removeReact(react : AnyObject, isReport : Bool)
-    func cellBigger(cell : ReactsCollectionViewCell)
-    func cellSmaller(cell : ReactsCollectionViewCell) -> BFTask
-    func removeReact(cell: ReactsCollectionViewCell)
     func shareOneVsOne(react : PFObject)
+    
+    //Like
+    func hasUserLikedThisReact(react : PFObject) -> Bool
+    func userJustLiked(react : PFObject)
 }
 
-class insideReactCell : UICollectionViewCell{
-    
-    var iconImageView:UIImageView!
-    var labelInfos:UILabel!
-    var parentCell:ReactsCollectionViewCell!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        if iconImageView == nil {
-            
-            iconImageView = UIImageView(frame: CGRect(x: frame.width/2 - 15, y: frame.height/2 - 20, width: 30, height: 30))
-            iconImageView.contentMode = UIViewContentMode.Center
-            contentView.addSubview(iconImageView)
-            
-            labelInfos = UILabel(frame: CGRect(x: 0, y: iconImageView.frame.origin.y + iconImageView.frame.height + 5, width: frame.width, height: 20))
-            labelInfos.font = UIFont(name: Utils().customFontSemiBold, size: 15)
-            labelInfos.textColor = UIColor.whiteColor()
-            labelInfos.textAlignment = NSTextAlignment.Center
-            contentView.addSubview(labelInfos)
-            
-        }
-        else{
-            iconImageView.frame = CGRect(x: frame.width/2 - 15, y: frame.height/2 - 20, width: 30, height: 30)
-        }
-        
-        
-        
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    func loadCell(position : Int){
-        
-        iconImageView.frame = CGRect(x: frame.width/2 - 15, y: frame.height/2 - 20, width: 30, height: 30)
-        labelInfos.frame = CGRect(x: 0, y: iconImageView.frame.origin.y + iconImageView.frame.height + 5, width: frame.width, height: 20)
-        iconImageView.hidden = false
-        
-        switch position{
-        case 0:
-            contentView.backgroundColor = UIColor.clearColor()
-            iconImageView.hidden = true
-            labelInfos.hidden = true
-            
-        case 1:
-            contentView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-            iconImageView.image = UIImage(named: self.parentCell.getNameImageReportOrDelete())
-            labelInfos.text = self.parentCell.getLabelReportOrDelete()
-            labelInfos.hidden = false
-            
-        default:
-            contentView.backgroundColor = UIColor.clearColor()
-            iconImageView.hidden = true
-        }
-        
-    }
-    
-}
-
-class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ReactsCollectionViewCell : UICollectionViewCell {
     
     var delegate:ReactsCellProtocol? = nil
     
-    var reactImage:UIImageView!
-    var previewCameraView:UIView!
+    var mainViewCell:UIView!
+    var flipView:UIView!
+    
+    var reactImage:PFImageView!
     var playerLayer:AVPlayerLayer!
     var playerView:UIView!
     //let player:AVPlayer!
     var overlayCameraView:UIView!
     var emojiImageView:UIImageView!
     var recordVideoBar:UIView?
-    var textViewOverPhoto:UITextView?
-    var backgoundOverlayView:UIView?
     var react:PFObject?
-    var iconInfo:UIImageView?
-    var usernameLabel:UILabel?
-    var backImageView:UIImageView?
     var player:AVPlayer?
     var ownPosition:Int?
     
     //Delete View
-    var insideCollectionView:UICollectionView!
     var readVideoImageView:UIImageView!
     var reactVideoURL:String?
     
@@ -120,50 +52,131 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     var moreInfosView:UIView!
     
-    var moreInfosAddUserView:UIView?
-    var moreInfosPreviewView:UIView?
-    var moreInfosIconAdd:UIImageView?
-    var moreInfosIconPreview:UIImageView?
-    var moreInfosLabelAdd:UILabel?
-    var moreInfosLabelPreview:UILabel?
-    var separatorMoreInfos:UIView?
-    
     var hasLoaded:Bool = false
+    var reactRandomId:String?
+    
+    //Flip
+    var flipPosition:Int = 0
+    var usernameLabel:UILabel!
+    var nbLikes:UILabel!
+    var likesIcon:UIImageView!
+    var addUserIcon:UIImageView!
+    
+    //Colors
+    let greyNotSelected:UIColor = UIColor(red: 216/255, green: 215/255, blue: 216/255, alpha: 1.0)
+    let blackSelected:UIColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+    
+    //Icons
+    let imageUserAdded:UIImage = UIImage(named: "friend_added_icon_react")!
+    let imageUserNotAdded:UIImage = UIImage(named: "friend_add_icon_react")!
+    let imageUserHasLiked:UIImage = UIImage(named: "like_icon_liked")!
+    let imageUserHasNotLiked:UIImage = UIImage(named: "like_icon_not_liked")!
+    
+    var nbLikesView:UIView!
+    var nbLikesLabelFront:UILabel!
+    var nbLikesImageView:UIImageView!
+    var imageLikeFast:UIImageView!
+    
+    var spinnerView:LLARingSpinnerView!
     
     func loadCell(){
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("newVideoStarted:"), name: "startNewVideo", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("scrollStarted"), name: "scrollStarted", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("scrollEnded"), name: "scrollEnded", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("scrollCell:"), name: "scrollCell", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("startFlip:"), name: "startFlip", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateLikeInfos:"), name: "updateLikeInfos", object: nil)
         
-        var tapGestureDOubleClick:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("doubleTap:"))
-        tapGestureDOubleClick.numberOfTapsRequired = 2
-        contentView.addGestureRecognizer(tapGestureDOubleClick)
-        
-        var longPress:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("longPress:"))
-        contentView.addGestureRecognizer(longPress)
+        //Flip View
+        flipView = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.height))
+        flipView.backgroundColor = UIColor.whiteColor()
+        contentView.addSubview(flipView)
         
         
         
-        //Preview Camera View
-        previewCameraView = UIView(frame: self.contentView.frame)
-        contentView.addSubview(previewCameraView)
-        previewCameraView.hidden = true
+        //Username View
+        let tapGestureUsernameAdd:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("addFriend"))
+        let usernameView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: flipView.frame.width/2, height: flipView.frame.width/2))
+        usernameView.addGestureRecognizer(tapGestureUsernameAdd)
+        usernameView.backgroundColor = UIColor.clearColor()
+        flipView.addSubview(usernameView)
         
-        backImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
-        backImageView!.contentMode = UIViewContentMode.Center
-        backImageView!.backgroundColor = UIColor(red: 230/255, green: 231/255, blue: 234/255, alpha: 1.0)
-        contentView.addSubview(backImageView!)
+        addUserIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: usernameView.frame.width, height: usernameView.frame.height/4 * 3))
+        addUserIcon.contentMode = UIViewContentMode.Center
+        addUserIcon.image = imageUserAdded
+        usernameView.addSubview(addUserIcon)
         
-        emptyCaseImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
-        emptyCaseImageView!.contentMode = UIViewContentMode.Center
-        emptyCaseImageView!.image = UIImage(named: "empty_reacts")
-        //contentView.addSubview(emptyCaseImageView!)
+        usernameLabel = UILabel(frame: CGRect(x: 5, y: usernameView.frame.height/2, width: usernameView.frame.width - 10, height: usernameView.frame.height/2))
+        usernameLabel.textAlignment = NSTextAlignment.Center
+        usernameLabel.font = UIFont(name: Utils().montserratRegular, size: 18)
+        usernameLabel.adjustsFontSizeToFitWidth = true
+        usernameLabel.textColor = blackSelected
+        usernameView.addSubview(usernameLabel)
+        
+        
+        //Likes View
+        let tapGestureLikeReact:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("likeReact"))
+        let likesView:UIView = UIView(frame: CGRect(x: flipView.frame.width/2, y: 0, width: flipView.frame.width/2, height: flipView.frame.width/2))
+        likesView.addGestureRecognizer(tapGestureLikeReact)
+        likesView.backgroundColor = UIColor.clearColor()
+        flipView.addSubview(likesView)
+        
+        likesIcon = UIImageView(frame: CGRect(x: 5, y: 0, width: likesView.frame.width - 10, height: likesView.frame.height/4 * 3))
+        likesIcon.contentMode = UIViewContentMode.Center
+        likesIcon.image = imageUserHasNotLiked
+        likesView.addSubview(likesIcon)
+        
+        //Likes
+        nbLikes = UILabel(frame: CGRect(x: 0, y: likesView.frame.height/2, width: likesView.frame.width, height: likesView.frame.height/2))
+        nbLikes.textAlignment = NSTextAlignment.Center
+        nbLikes.font = UIFont(name: Utils().montserratRegular, size: 16)
+        nbLikes.adjustsFontSizeToFitWidth = true
+        nbLikes.textColor = greyNotSelected
+        nbLikes.text = "0"
+        likesView.addSubview(nbLikes)
+        
+        
+        
+        
+        
+        let bottomFlipView:UIView = UIView(frame: CGRect(x: 0, y: flipView.frame.height/2, width: flipView.frame.width, height: flipView.frame.height/2))
+        bottomFlipView.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 251/255, alpha: 1.0)
+        flipView.addSubview(bottomFlipView)
+        
+        let innerShadowImage:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: flipView.frame.width, height: flipView.frame.height))
+        innerShadowImage.image = UIImage(named: "inner_shadow_selected_cell")
+        flipView.addSubview(innerShadowImage)
+        
+        let reportOrDeleteButton:UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height))
+        reportOrDeleteButton.setImage(UIImage(named: "trash_react_icon"), forState: UIControlState.Normal)
+        reportOrDeleteButton.addTarget(self, action: Selector("reportOrRemove"), forControlEvents: UIControlEvents.TouchUpInside)
+        reportOrDeleteButton.tag = 10
+        bottomFlipView.addSubview(reportOrDeleteButton)
+        
+        let shareReactButton:UIButton = UIButton(frame: CGRect(x: bottomFlipView.frame.width/2, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height))
+        shareReactButton.setImage(UIImage(named: "share_react_icon"), forState: UIControlState.Normal)
+        shareReactButton.addTarget(self, action: Selector("shareOne"), forControlEvents: UIControlEvents.TouchUpInside)
+        shareReactButton.tag = 11
+        bottomFlipView.addSubview(shareReactButton)
+        
+        
+        let middleDivider:UIView = UIView(frame: CGRect(x: 0, y: flipView.frame.height/2, width: flipView.frame.width, height: 1))
+        middleDivider.backgroundColor = UIColor(red: 213/255, green: 214/255, blue: 216/255, alpha: 1.0)
+        flipView.addSubview(middleDivider)
+        
+        let middleVerticalDivider:UIView = UIView(frame: CGRect(x: flipView.frame.width/2, y: 0, width: 1, height: flipView.frame.height))
+        middleVerticalDivider.backgroundColor = UIColor(red: 213/255, green: 214/255, blue: 216/255, alpha: 1.0)
+        flipView.addSubview(middleVerticalDivider)
+        
+        //Main View Cell
+        let longTapLike:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("likeLong:"))
+        longTapLike.minimumPressDuration = 0.4
+        mainViewCell = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+        mainViewCell.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 251/255, alpha: 1.0)
+        mainViewCell.addGestureRecognizer(longTapLike)
         
         //Image of the React
-        reactImage = UIImageView(frame: CGRect(x: 0, y: 0, width: self.contentView.frame.size.width, height: self.contentView.frame.size.height))
-        contentView.addSubview(reactImage)
+        reactImage = PFImageView(frame: CGRect(x: 0, y: 0, width: self.contentView.frame.size.width, height: self.contentView.frame.size.height))
+        mainViewCell.addSubview(reactImage)
         
         
         
@@ -174,7 +187,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         playerView.layer.addSublayer(playerLayer)
         playerView.hidden = true
-        contentView.addSubview(playerView)
+        mainViewCell.addSubview(playerView)
         
         
         loadIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
@@ -182,103 +195,211 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
         loadIndicator!.center = self.playerView.center
         loadIndicator!.hidesWhenStopped = true
         loadIndicator!.hidden = true
-        contentView.addSubview(loadIndicator!)
+        mainViewCell.addSubview(loadIndicator!)
         
         overlayCameraView = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         overlayCameraView.hidden = true
-        contentView.addSubview(overlayCameraView)
+        mainViewCell.addSubview(overlayCameraView)
         
-        
-        
-        backgoundOverlayView = UIView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
-        backgoundOverlayView!.backgroundColor = UIColor.blackColor()
-        backgoundOverlayView!.alpha = 0.1
-        overlayCameraView.addSubview(backgoundOverlayView!)
+    
         
         emojiImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: overlayCameraView.frame.size.width, height: overlayCameraView.frame.size.height))
         emojiImageView.contentMode = UIViewContentMode.ScaleAspectFit
         emojiImageView.image = UIImage(named: "emoji_smiley")
         emojiImageView.hidden = true
-        contentView.addSubview(emojiImageView)
+        mainViewCell.addSubview(emojiImageView)
         
         
-        textViewOverPhoto = UITextView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height - 10))
-        textViewOverPhoto!.font = UIFont(name: Utils().customFontSemiBold, size: 26.0)
-        textViewOverPhoto!.textAlignment = NSTextAlignment.Center
-        textViewOverPhoto!.textColor = UIColor.whiteColor()
-        textViewOverPhoto!.backgroundColor = UIColor.clearColor()
-        textViewOverPhoto!.text = "Your text here 😀"
-        textViewOverPhoto!.hidden = true
-        textViewOverPhoto!.delegate = self
-        textViewOverPhoto!.autocorrectionType = UITextAutocorrectionType.No
-        textViewOverPhoto!.keyboardAppearance = UIKeyboardAppearance.Dark
-        textViewOverPhoto!.returnKeyType = UIReturnKeyType.Send
-        overlayCameraView.addSubview(textViewOverPhoto!)
         
         recordVideoBar = UIView(frame: CGRect(x: 0, y: frame.size.height-20, width: 0, height: 20))
         recordVideoBar!.backgroundColor = UIColor(red: 255/255, green: 100/255, blue: 93/255, alpha: 1.0)
         recordVideoBar!.alpha = 0.8
+
+        nbLikesView = UIView(frame: CGRect(x: mainViewCell.frame.width - 40, y: mainViewCell.frame.height - 24, width: 40, height: 24))
+        nbLikesView.backgroundColor = UIColor.clearColor()
+        nbLikesView.hidden = true
+        mainViewCell.addSubview(nbLikesView)
         
+        nbLikesImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: nbLikesView.frame.width, height: nbLikesView.frame.height))
+        nbLikesImageView.image = UIImage(named: "like_background")
+        nbLikesView.addSubview(nbLikesImageView)
         
-        iconInfo = UIImageView(frame: CGRect(x: frame.width - 40, y: frame.height - 35, width: 35, height: 35))
-        iconInfo!.contentMode = UIViewContentMode.Center
-        iconInfo!.image = UIImage(named: "switch_camera")
-        contentView.addSubview(iconInfo!)
+        nbLikesLabelFront = UILabel(frame: CGRect(x: 0, y: 0, width: nbLikesView.frame.width - 24, height: nbLikesView.frame.height))
+        nbLikesLabelFront.textAlignment = NSTextAlignment.Right
+        nbLikesLabelFront.textColor = UIColor.whiteColor()
+        nbLikesLabelFront.font = UIFont(name: Utils().montserratRegular, size: 12)
+        nbLikesLabelFront.text = "0"
+        nbLikesView.addSubview(nbLikesLabelFront)
         
-        
-        usernameLabel = UILabel(frame: CGRect(x: 0, y: frame.height - 25, width: frame.width, height: 25))
-        usernameLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
-        usernameLabel!.textColor = UIColor.whiteColor()
-        usernameLabel!.hidden = true
-        usernameLabel!.textAlignment = NSTextAlignment.Center
-        usernameLabel!.adjustsFontSizeToFitWidth = true
-        contentView.addSubview(usernameLabel!)
-        
-        
-        //Pan Gesture
-        let panGesture = UIPanGestureRecognizer(target: self, action: "handlePan:")
-        //contentView.addGestureRecognizer(panGesture)
-        
-        
-        //Delete View
-        //deleteView = UIView(frame: CGRect(x: -frame.width, y: 0, width: frame.width, height: frame.height))
-        //deleteView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
-        //contentView.addSubview(deleteView)
-        
-        //Collection View Layout
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: frame.width, height: frame.height)
-        layout.scrollDirection = UICollectionViewScrollDirection.Horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        insideCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height), collectionViewLayout: layout)
-        insideCollectionView.collectionViewLayout = layout
-        insideCollectionView!.registerClass(insideReactCell.self, forCellWithReuseIdentifier: "Cell")
-        insideCollectionView.pagingEnabled = true
-        insideCollectionView.delegate = self
-        insideCollectionView.dataSource = self
-        insideCollectionView.backgroundColor = UIColor.clearColor()
-        insideCollectionView.bounces = false
-        insideCollectionView.showsHorizontalScrollIndicator = false
-        insideCollectionView.showsVerticalScrollIndicator = false
-        contentView.addSubview(insideCollectionView)
-        
+        //Heart
+        let heartImageView:UIImageView = UIImageView(frame: CGRect(x: nbLikesView.frame.width - 19, y: 0, width: 10, height: nbLikesView.frame.height))
+        heartImageView.contentMode = UIViewContentMode.Center
+        heartImageView.image = UIImage(named: "like_pleek_view")
+        nbLikesView.addSubview(heartImageView)
         
         readVideoImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         readVideoImageView.center = CGPoint(x: frame.width/2, y: frame.height/2)
         readVideoImageView.image = UIImage(named: "play_answer")
         readVideoImageView.hidden = true
         readVideoImageView.contentMode = UIViewContentMode.Center
-        contentView.addSubview(readVideoImageView)
+        mainViewCell.addSubview(readVideoImageView)
         
-        moreInfosAddUserView = nil
-        moreInfosPreviewView = nil
-        moreInfosView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-        moreInfosView.backgroundColor = UIColor(red: 34/255, green: 33/255, blue: 37/255, alpha: 1.0)
-        contentView.addSubview(moreInfosView)
+        spinnerView = LLARingSpinnerView(frame: CGRect(x: mainViewCell.frame.width/2 - 15, y: mainViewCell.frame.height/2 - 15, width: 20, height: 30))
+        spinnerView.lineWidth = 2
+        spinnerView.tintColor = UIColor(red: 33/255, green: 35/255, blue: 37/255, alpha: 1.0)
+        mainViewCell.addSubview(spinnerView)
+        spinnerView.startAnimating()
+        
+        //Image like fast
+        imageLikeFast = UIImageView(frame: CGRect(x: 0, y: 0, width: mainViewCell.frame.width, height: mainViewCell.frame.height))
+        imageLikeFast.contentMode = UIViewContentMode.Center
+        imageLikeFast.image = UIImage(named: "heart_like_fast")
+        imageLikeFast.hidden = true
+        mainViewCell.addSubview(imageLikeFast)
+        
+        contentView.addSubview(mainViewCell)
+        
+        
+        
         
         hasLoaded = true
+        
+    }
+    
+    //MARK: FLIP
+    
+    func flip(){
+        
+        initFlipInfos()
+        
+        //If video can't flip must play
+        var canFlip:Bool = true
+        if self.react != nil{
+            
+            if self.react!["video"] != nil{
+                if playerLayer.player == nil{
+                    canFlip = false
+                }
+            }
+ 
+        }
+        else if self.reactVideoURL != nil{
+            if playerLayer.player == nil{
+                canFlip = false
+            }
+        }
+        
+        
+        switch flipPosition{
+        case 0:
+            if canFlip{
+                
+                //Flip back other react
+                if self.react != nil{
+                    NSNotificationCenter.defaultCenter().postNotificationName("startFlip", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
+                }
+                else if self.reactRandomId != nil{
+                    NSNotificationCenter.defaultCenter().postNotificationName("startFlip", object: nil, userInfo: ["exectpId" : self.reactRandomId!])
+                }
+                
+                UIView.transitionWithView(self.contentView,
+                    duration: 0.4,
+                    options: UIViewAnimationOptions.TransitionFlipFromRight,
+                    animations: { () -> Void in
+                        self.contentView.insertSubview(self.flipView, aboveSubview: self.mainViewCell)
+                    }, completion: { (finished) -> Void in
+                        
+                })
+                self.flipPosition = 1
+                
+                println("Flip back")
+            }
+            else{
+                self.startVideo()
+            }
+            
+        case 1:
+            println("Flip front")
+            UIView.transitionWithView(self.contentView,
+                duration: 0.4,
+                options: UIViewAnimationOptions.TransitionFlipFromRight,
+                animations: { () -> Void in
+                    self.contentView.insertSubview(self.mainViewCell, aboveSubview: self.flipView)
+                }, completion: { (finished) -> Void in
+                    
+            })
+            self.flipPosition = 0
+        default:
+            println("Flip front")
+        }
+    }
+    
+    func flipInitialState(){
+        
+        if flipPosition == 1{
+            UIView.transitionWithView(self.contentView,
+                duration: 0.4,
+                options: UIViewAnimationOptions.TransitionFlipFromRight,
+                animations: { () -> Void in
+                    self.contentView.insertSubview(self.mainViewCell, aboveSubview: self.flipView)
+                }, completion: { (finished) -> Void in
+                    
+            })
+            self.flipPosition = 0
+        }
+    }
+    
+    
+    func initFlipInfos(){
+        
+        if self.react != nil{
+            
+            if self.react!["user"] != nil{
+                var userReact:PFUser = self.react!["user"] as! PFUser
+                usernameLabel.text = userReact.username!
+                
+                //Adapt Report/React CTA
+                adaptRemoveOrReact()
+                
+                //Adapt friend CTA
+                adaptFriendActions(Utils().isUserAFriend(userReact))
+                
+                //Adapt Like CTA
+                adaptLikeActions()
+                
+            }
+            
+        }
+        else{
+            
+        }
+        
+    }
+    
+    func startFlip(notification : NSNotification){
+        
+        let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
+        
+        if let theReact = self.react {
+            
+            if let exceptReact = userInfo["exceptReact"]{
+                
+                if theReact.objectId != userInfo["exceptReact"]{
+                    flipInitialState()
+                }
+            }
+            
+            
+        }
+        else if self.reactVideoURL != nil{
+            
+            if let exceptId = userInfo["exceptId"]{
+                flipInitialState()
+            }
+        }
+        
+        
+        
         
     }
     
@@ -301,262 +422,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        
-        
-        if text == "\n"{
-            self.delegate!.postTextReact()
-            return false
-        }
-        
-        
-        
-        
-        var textEntered:NSString = textView.text as NSString
-        textEntered = textEntered.stringByReplacingCharactersInRange(range, withString: text)
-        
-        
-        if textEntered.length > (textView.text as NSString).length{
-            if getHeightTextView(textView, string: textEntered) > textView.frame.height{
-                
-                let maxDifFont = textView.font.pointSize - 14
-                
-                if maxDifFont > 0{
-                    
-                    for index in 1...Int(maxDifFont) {
-                        
-                        var fontSize = textView.font.pointSize
-                        fontSize = fontSize - CGFloat(index)
-                        
-                        textView.font = UIFont(name: textView.font.fontName, size: fontSize)
-                        
-                        if getHeightTextView(textView, string: textEntered) < textView.frame.height{
-                            modifyFrameTextView()
-                            return true
-                        }
-                    }
-                    
-                    if getHeightTextView(textView, string: textEntered) > textView.frame.height{
-                        return false
-                    }
-                }
-                else{
-                    return false
-                }
-                
-            }
-        }
-        else{
-            let maxDifFont = 26 - textView.font.pointSize
-            var previousFontSize:CGFloat = textView.font.pointSize
-            
-            if maxDifFont > 0{
-                
-                for index in 1...Int(maxDifFont) {
-                    
-                    var fontSize = textView.font.pointSize
-                    fontSize = fontSize + CGFloat(index)
-                    
-                    textView.font = UIFont(name: textView.font.fontName, size: fontSize)
-                    
-                    if getHeightTextView(textView, string: textEntered) > textView.frame.height{
-                        textView.font = UIFont(name: textView.font.fontName, size: previousFontSize)
-                        modifyFrameTextView()
-                        return true
-                    }
-                    
-                    previousFontSize = textView.font.pointSize
-                }
-            }
-        }
-        
-        
-        modifyFrameTextView()
-        return true
-    }
     
-    
-    func getHeightTextView(textView : UITextView, string : NSString) -> CGFloat {
-        var textEntered:NSString = string
-        let textAttributes:[String:AnyObject] = [NSFontAttributeName: textView.font]
-        
-        var textWidth:CGFloat = CGRectGetWidth(UIEdgeInsetsInsetRect(textView.frame, textView.textContainerInset))
-        textWidth = textWidth - 2.0 * textView.textContainer.lineFragmentPadding
-        
-        let boundingRect:CGRect = textEntered.boundingRectWithSize(CGSizeMake(textWidth, 0),
-            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
-            attributes: [NSFontAttributeName: textView.font],
-            context: nil)
-        
-        let nbLines = CGRectGetHeight(boundingRect) / textView.font.lineHeight
-        
-        return CGRectGetHeight(boundingRect)
-    }
-    
-    
-    func modifyFrameTextView(){
-        self.textViewOverPhoto!.frame = CGRect(x: 0, y: self.frame.height/2 - getHeightTextView(self.textViewOverPhoto!, string: self.textViewOverPhoto!.text)/2 - self.textViewOverPhoto!.textContainerInset.top, width: self.textViewOverPhoto!.frame.width, height: self.textViewOverPhoto!.frame.height)
-    }
-    
-    
-    
-    func doubleTap(gesture : UITapGestureRecognizer){
-        println("Double Tap")
-        if react != nil{
-            if react!["user"] != nil{
-                self.delegate!.seeUserWhoPosted(react!["user"] as! PFUser)
-            }
-            
-        }
-        
-    }
-    
-    func longPress(longPress : UILongPressGestureRecognizer){
-        
-        if longPress.state == UIGestureRecognizerState.Began{
-            self.delegate!.printUsernamesreact()
-            
-            
-        }
-        else if longPress.state == UIGestureRecognizerState.Ended{
-            self.delegate!.hideUsernamesreact()
-            
-            
-        }
-        
-    }
-    
-    
-    func showUsername(){
-        
-        if react != nil{
-            if react!["user"] != nil{
-                let username = (react!["user"] as! PFUser).username!
-                self.usernameLabel!.text = "@\(username)"
-                self.usernameLabel!.hidden = false
-            }
-        }
-        
-        
-        
-    }
-    
-    func hideUserName(){
-        self.usernameLabel!.hidden = true
-    }
-    
-    
-    // MARK : Collection View
-    
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! insideReactCell
-        
-        cell.parentCell = self
-        cell.loadCell(indexPath.item)
-        
-        return cell
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        
-        return self.frame.size
-        
-    }
-    
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if self.react != nil{
-            NSNotificationCenter.defaultCenter().postNotificationName("scrollCell", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
-        }
-        
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.item == 0{
-            if self.react != nil{
-                
-                if !self.isInBigMode{
-                    self.delegate!.cellBigger(self)
-                }
-                else{
-                    self.delegate!.cellSmaller(self)
-                }
-
-            }
-            else if self.reactVideoURL != nil{
-                dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
-                    dispatch_async(dispatch_get_main_queue(), { ()->() in
-                        self.loadIndicator!.hidden = false
-                        self.loadIndicator!.startAnimating()
-                        self.readVideoImageView.hidden = true
-                    })
-                    
-                    var filepath = NSURL(fileURLWithPath: self.reactVideoURL!)
-                    var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
-                    var player:AVPlayer = AVPlayer(playerItem: playerItem)
-                    player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                    
-                    
-                    
-                    
-                    
-                    NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-                    
-                    dispatch_async(dispatch_get_main_queue(), { ()->() in
-                        self.loadIndicator!.hidden = true
-                        self.playerLayer.player = player
-                        self.playerView.hidden = false
-                        self.readVideoImageView.hidden = true
-                        player.play()
-                    })
-                })
-            }
-        }
-        else if indexPath.item == 1{
-            
-            self.delegate!.removeReact(self)
-
-        }
-    }
-    
-    func scrollCell(notification : NSNotification){
-        let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
-        
-        if let theReact = self.react {
-            
-            if userInfo["exceptReact"] != nil{
-                if theReact.objectId != userInfo["exceptReact"]{
-                    insideCollectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.None, animated: true)
-                }
-            }
-        }
-    }
-    
-    
-    func removeReact(){
-        
-        let currentUser:PFUser = PFUser.currentUser()!
-        if self.react != nil{
-            let reactUser:PFUser? = self.react!["user"] as? PFUser
-            
-            if reactUser?.objectId == currentUser.objectId{
-                self.delegate!.removeReact(self.react!, isReport: false)
-            }
-            else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId{
-                self.delegate!.removeReact(self.react!, isReport: false)
-            }
-            else{
-                self.delegate!.removeReact(self.react!, isReport: true)
-            }
-        }
-        else if self.pikiInfos != nil{
-            self.delegate!.removeReact(self.pikiInfos!, isReport: true)
-        }
-    }
     
     // MARK : VIdeo
     
@@ -581,56 +447,87 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
             NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exectpURL" : self.reactVideoURL!])
         }
         
-        
-        dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
-            if self.react!["video"] != nil{
-                dispatch_async(dispatch_get_main_queue(), { ()->() in
-                    self.loadIndicator!.hidden = false
-                    self.loadIndicator!.startAnimating()
-                    self.readVideoImageView.hidden = true
-                })
-                
-                
-                let videoFile:PFFile = self.react!["video"] as! PFFile
-                
-                videoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
+        if self.react != nil{
+            dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
+                if self.react!["video"] != nil{
+                    dispatch_async(dispatch_get_main_queue(), { ()->() in
+                        self.loadIndicator!.hidden = false
+                        self.loadIndicator!.startAnimating()
+                        self.readVideoImageView.hidden = true
+                    })
                     
                     
-                    var fileManager:NSFileManager = NSFileManager()
-                    if data!.writeToFile("\(NSTemporaryDirectory())_\(self.react!.objectId).mov", atomically: false){
+                    let videoFile:PFFile = self.react!["video"] as! PFFile
+                    
+                    videoFile.getDataInBackgroundWithBlock({ (data, error) -> Void in
                         
                         
-                        var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.react!.objectId).mov")
-                        var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
-                        var player:AVPlayer = AVPlayer(playerItem: playerItem)
-                        player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                        
-                        
-                        
-                        
-                        
-                        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-                        
-                        dispatch_async(dispatch_get_main_queue(), { ()->() in
+                        var fileManager:NSFileManager = NSFileManager()
+                        if data!.writeToFile("\(NSTemporaryDirectory())_\(self.react!.objectId).mov", atomically: false){
                             
                             
-                            if (self.delegate as! PikiViewController).isViewLoaded() && ((self.delegate as! PikiViewController).view.window != nil) {
-                                self.loadIndicator!.hidden = true
+                            var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.react!.objectId).mov")
+                            var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
+                            var player:AVPlayer = AVPlayer(playerItem: playerItem)
+                            player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
+                            
+                            
+                            
+                            
+                            
+                            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+                            
+                            dispatch_async(dispatch_get_main_queue(), { ()->() in
                                 
-                                self.playerLayer.player = player
-                                self.playerView.hidden = false
-                                self.readVideoImageView.hidden = true
-                                player.play()
-                            }
-                            
-                            
-                        })
-                    }
+                                
+                                if (self.delegate as! PikiViewController).isViewLoaded() && ((self.delegate as! PikiViewController).view.window != nil) {
+                                    self.loadIndicator!.hidden = true
+                                    
+                                    self.playerLayer.player = player
+                                    self.playerView.hidden = false
+                                    self.readVideoImageView.hidden = true
+                                    player.play()
+                                }
+                                
+                                
+                            })
+                        }
+                        
+                        
+                    })
+                }
+            })
+        }
+        else if self.reactVideoURL != nil{
+            var fileManager:NSFileManager = NSFileManager()
+            var playerItem:AVPlayerItem = AVPlayerItem(URL: NSURL(fileURLWithPath: self.reactVideoURL!))
+            var player:AVPlayer = AVPlayer(playerItem: playerItem)
+            player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
+            
+            
+            
+            
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+            
+            dispatch_async(dispatch_get_main_queue(), { ()->() in
+                
+                
+                if (self.delegate as! PikiViewController).isViewLoaded() && ((self.delegate as! PikiViewController).view.window != nil) {
+                    self.loadIndicator!.hidden = true
                     
-                    
-                })
-            }
-        })
+                    self.playerLayer.player = player
+                    self.playerView.hidden = false
+                    self.readVideoImageView.hidden = true
+                    player.play()
+                }
+                
+                
+            })
+        }
+        
+        
+        
         
         
     }
@@ -640,8 +537,7 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     
     func scrollStarted(){
         
-        insideCollectionView.hidden = true
-        insideCollectionView.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.None, animated: false)
+        flipInitialState()
         
         if react != nil{
             if react!["video"] != nil{
@@ -684,31 +580,6 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     
-    func scrollEnded(){
-        
-        
-        if ownPosition != nil{
-            
-            if ownPosition > 0{
-                insideCollectionView.hidden = false
-                
-                insideCollectionView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-            }
-            
-        }
-        
-        
-        
-        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: frame.width, height: frame.height)
-        layout.scrollDirection = UICollectionViewScrollDirection.Horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        insideCollectionView.setCollectionViewLayout(layout, animated: false)
-        
-    }
-    
     
     func videoDidEnd(notification : NSNotification){
         var player:AVPlayerItem = notification.object as! AVPlayerItem
@@ -716,98 +587,6 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     
-    func updateDeleteSign(){
-        let currentUser:PFUser = PFUser.currentUser()!
-        if react != nil{
-            let reactUser:PFUser? = self.react!["user"] as? PFUser
-            
-            
-            let cell:insideReactCell? = self.insideCollectionView.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as? insideReactCell
-            
-            if cell != nil{
-                if reactUser?.objectId == currentUser.objectId{
-                    cell!.iconImageView.image = UIImage(named: "delete_react_icon")
-                }
-                else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId!{
-                    cell!.iconImageView.image = UIImage(named: "delete_react_icon")
-                }
-                else{
-                    cell!.iconImageView.image = UIImage(named: "report_react_icon")
-                }
-            }
-            
-            
-        }
-        else if self.pikiInfos != nil{
-            
-            
-            let cell:insideReactCell? = self.insideCollectionView.cellForItemAtIndexPath(NSIndexPath(forItem: 1, inSection: 0)) as? insideReactCell
-            
-            if cell != nil{
-                cell!.iconImageView.image = UIImage(named: "delete_react_icon")
-            }
-        }
-        
-    }
-    
-    func getLabelReportOrDelete() -> String{
-        let currentUser:PFUser = PFUser.currentUser()!
-        if react != nil{
-            let reactUser:PFUser? = self.react!["user"] as? PFUser
-            
-            
-            if reactUser?.objectId == currentUser.objectId{
-                return NSLocalizedString("DELETE", comment : "")
-            }
-            else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId{
-                return NSLocalizedString("DELETE", comment : "")
-            }
-            else{
-                return NSLocalizedString("REPORT", comment : "")
-            }
-            
-            
-        }
-        else if self.pikiInfos != nil{
-            return NSLocalizedString("DELETE", comment : "")
-        }
-        else{
-            return NSLocalizedString("REPORT", comment : "")
-        }
-    }
-    
-    func getNameImageReportOrDelete() -> String{
-        
-        let currentUser:PFUser = PFUser.currentUser()!
-        if react != nil{
-            let reactUser:PFUser? = self.react!["user"] as? PFUser
-            
-            
-            if reactUser?.objectId == currentUser.objectId{
-                return "delete_react_icon"
-            }
-            else if currentUser.objectId == (self.mainPeekee!["user"] as! PFUser).objectId{
-                return "delete_react_icon"
-            }
-            else{
-                return "report_react_icon"
-            }
-            
-            
-        }
-        else if self.pikiInfos != nil{
-            return "delete_react_icon"
-        }
-        else{
-            return "report_react_icon"
-        }
-        
-    }
-    
-    func morePeekee(){
-        println("MORE")
-    }
-
     
     func newVideoStarted(notification : NSNotification){
         
@@ -862,111 +641,321 @@ class ReactsCollectionViewCell : UICollectionViewCell, UITextViewDelegate, UICol
     }
     
     
-    func addFriends(){
-        if react != nil{
-            if react!["user"] != nil{
-                self.delegate!.seeUserWhoPosted(react!["user"] as! PFUser)
+    //MARK: ADD FRIEND
+    
+    func addFriend(){
+        println("add friend")
+        if self.react != nil{
+            if let userReact = self.react!["user"] as? PFUser{
+                
+                if Utils().isUserAFriend(userReact){
+                    //Remove Friend
+                    Utils().removeFriend(userReact.objectId!).continueWithBlock({ (task) -> AnyObject! in
+                        if task.error != nil{
+                            
+                        }
+                        else{
+                            self.adaptFriendActions(false)
+                        }
+                        return nil
+                    })
+                }
+                else{
+                    //Add Friend
+                    Utils().addFriend(userReact.objectId!).continueWithBlock({ (task) -> AnyObject! in
+                        if task.error != nil{
+                            
+                        }
+                        else{
+                            self.adaptFriendActions(true)
+                        }
+                        return nil
+                    })
+                }
+                
             }
+        }
+    }
+    
+    func adaptFriendActions(isFriend : Bool){
+        if isFriend{
+            usernameLabel.textColor = blackSelected
+            addUserIcon.image = imageUserAdded
+        }
+        else{
+            usernameLabel.textColor = greyNotSelected
+            addUserIcon.image = imageUserNotAdded
+        }
+    }
+    
+    
+    //MARK: LIKES
+    
+    func updateLikeInfos(notification : NSNotification){
+        
+        
+        let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
+        
+        if let theReact = self.react {
+            
+            if let reactId = userInfo["reactId"]{
+                
+                if theReact.objectId != reactId{
+                    println("UPDATE likes : \(reactId)")
+                    adaptLikeActions()
+                    updateFrontLikes()
+                }
+            }
+            
             
         }
     }
     
-    func seePreview(){
+    func likeReact(){
+        println("Like React")
         
-        if react != nil{
-            if react!["user"] != nil{
-                self.delegate!.shareOneVsOne(react!)
+        if let reactPleek = self.react{
+            
+            if let pleek = self.mainPeekee{
+                
+                if let delegatePleek = self.delegate{
+                    
+                    Utils().likeReact(reactPleek, pleek: pleek, hasAlreadyLiked : userHasLiked())
+                    
+                    delegatePleek.userJustLiked(reactPleek)
+                    self.adaptLikeActions()
+                    self.updateFrontLikes()
+                    
+                }
+                
+                
+                
+                
             }
             
+            
+        }
+   
+    }
+    
+    func likeAfterLongPress(){
+        
+        if !userHasLiked(){
+            if let reactPleek = self.react{
+                
+                if let pleek = self.mainPeekee{
+                    
+                    if let delegatePleek = self.delegate{
+                        
+                        Utils().likeReact(reactPleek, pleek: pleek, hasAlreadyLiked : userHasLiked())
+                        
+                        delegatePleek.userJustLiked(reactPleek)
+                        self.adaptLikeActions()
+                        self.updateFrontLikes()
+                        
+                    }
+                    
+                    
+                    
+                    
+                }
+                
+                
+            }
         }
         
     }
     
+    func userHasLiked() -> Bool{
+        
+        if let delagatePleek = self.delegate{
+            if let reactPleek = self.react{
+                return delagatePleek.hasUserLikedThisReact(reactPleek)
+            }
+            
+        }
+        
+        return false
+        
+    }
     
-    func showMoreInfos(){
+    func adaptLikeActions(){
+        
+        if userHasLiked(){
+            nbLikes.textColor = blackSelected
+            likesIcon.image = imageUserHasLiked
+            
+            UIView.animateWithDuration(0.2,
+                delay: 0,
+                options: nil,
+                animations: { () -> Void in
+                    self.likesIcon.transform = CGAffineTransformMakeScale(1.5, 1.5)
+                }, completion: { (finished) -> Void in
+                    UIView.animateWithDuration(0.2,
+                        delay: 0,
+                        options: nil,
+                        animations: { () -> Void in
+                            self.likesIcon.transform = CGAffineTransformIdentity
+                        }, completion: { (finished) -> Void in
+                            
+                    })
+            })
+        }
+        else{
+            nbLikes.textColor = greyNotSelected
+            likesIcon.image = imageUserHasNotLiked
+            
+            
+        }
+        
+        //Set nb likes
+        nbLikes.text = "0"
+        if let reactPleek = self.react{
+            if let nbLikesReact = reactPleek["nbLikes"] as? Int{
 
-        
-        let reactUser:PFUser = self.react!["user"] as! PFUser
-        
-        if moreInfosAddUserView == nil{
-            var tapGestureMoreFriends:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("addFriends"))
-            
-            moreInfosAddUserView = UIView(frame: CGRect(x: 0, y: 0, width: moreInfosView.frame.width, height: moreInfosView.frame.width))
-            moreInfosAddUserView!.backgroundColor = UIColor.clearColor()
-            moreInfosAddUserView!.addGestureRecognizer(tapGestureMoreFriends)
-            moreInfosView.addSubview(moreInfosAddUserView!)
-            
-            moreInfosIconAdd = UIImageView(frame: CGRect(x: 0, y: moreInfosAddUserView!.frame.height/3, width: moreInfosAddUserView!.frame.width, height: 30))
-            moreInfosIconAdd!.contentMode = UIViewContentMode.Center
-            moreInfosIconAdd!.image = UIImage(named: "add_icon_big_react")
-            moreInfosAddUserView!.addSubview(moreInfosIconAdd!)
-            
-            moreInfosLabelAdd = UILabel(frame: CGRect(x: 0, y: 0, width: moreInfosAddUserView!.frame.width, height: 30))
-            moreInfosLabelAdd!.center = CGPoint(x: moreInfosAddUserView!.frame.width/2, y: moreInfosAddUserView!.frame.height/3 * 2)
-            moreInfosLabelAdd!.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
-            moreInfosLabelAdd!.textColor = UIColor.whiteColor()
-            moreInfosLabelAdd!.adjustsFontSizeToFitWidth = true
-            moreInfosLabelAdd!.textAlignment = NSTextAlignment.Center
-            moreInfosAddUserView!.addSubview(moreInfosLabelAdd!)
-            
+                nbLikes.text = "\(nbLikesReact)"
+            }
         }
-        else{
-            moreInfosAddUserView!.frame = CGRect(x: 0, y: 0, width: moreInfosView.frame.width, height: moreInfosView.frame.width)
-            moreInfosIconAdd!.frame = CGRect(x: 0, y: moreInfosAddUserView!.frame.height/3, width: moreInfosAddUserView!.frame.width, height: 30)
-            moreInfosLabelAdd!.center = CGPoint(x: moreInfosAddUserView!.frame.width/2, y: moreInfosAddUserView!.frame.height/3 * 2)
-        }
-        
-        moreInfosLabelAdd!.text = "@\(reactUser.username!)"
-        
-        if moreInfosPreviewView == nil{
-            var tapGestureMorePreview:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("seePreview"))
-            
-            moreInfosPreviewView = UIView(frame: CGRect(x: 0, y: moreInfosView.frame.width, width: moreInfosView.frame.width, height: moreInfosView.frame.width))
-            moreInfosPreviewView!.backgroundColor = UIColor.clearColor()
-            moreInfosPreviewView!.addGestureRecognizer(tapGestureMorePreview)
-            moreInfosView.addSubview(moreInfosPreviewView!)
-            
-            moreInfosIconPreview = UIImageView(frame: CGRect(x: 0, y: moreInfosPreviewView!.frame.height/3, width: moreInfosPreviewView!.frame.width, height: 30))
-            moreInfosIconPreview!.contentMode = UIViewContentMode.Center
-            moreInfosIconPreview!.image = UIImage(named: "eye_big_react")
-            moreInfosPreviewView!.addSubview(moreInfosIconPreview!)
-            
-            moreInfosLabelPreview = UILabel(frame: CGRect(x: 0, y: 0, width: moreInfosAddUserView!.frame.width, height: 30))
-            moreInfosLabelPreview!.center = CGPoint(x: moreInfosPreviewView!.frame.width/2, y: moreInfosPreviewView!.frame.height/3 * 2)
-            moreInfosLabelPreview!.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
-            moreInfosLabelPreview!.adjustsFontSizeToFitWidth = true
-            moreInfosLabelPreview!.textColor = UIColor.whiteColor()
-            moreInfosLabelPreview!.textAlignment = NSTextAlignment.Center
-            moreInfosPreviewView!.addSubview(moreInfosLabelPreview!)
-            
-        }
-        else{
-            moreInfosPreviewView!.frame = CGRect(x: 0, y: moreInfosView.frame.width, width: moreInfosView.frame.width, height: moreInfosView.frame.width)
-            moreInfosIconPreview!.frame = CGRect(x: 0, y: moreInfosPreviewView!.frame.height/3, width: moreInfosAddUserView!.frame.width, height: 30)
-            moreInfosLabelPreview!.center = CGPoint(x: moreInfosPreviewView!.frame.width/2, y: moreInfosPreviewView!.frame.height/3 * 2)
-        }
-        
-        moreInfosLabelPreview!.text = "Preview"
-        
-        separatorMoreInfos = UIView(frame: CGRect(x: 0, y: moreInfosView.frame.height/2, width: moreInfosView.frame.width, height: 2))
-        separatorMoreInfos!.backgroundColor = UIColor(red: 24/255, green: 23/255, blue: 27/255, alpha: 1.0)
-        moreInfosView!.addSubview(separatorMoreInfos!)
-        
-        
-        
-        if Utils().isUserAFriend(reactUser){
-            moreInfosIconAdd!.image = UIImage(named: "added_icon_big_react")
-        }
-        else{
-            moreInfosIconAdd!.image = UIImage(named: "add_icon_big_react")
-        }
-        
-        
-        /*moreInfosUsernameLabel!.hidden = false
-        moreInfosIconeUserImageView!.hidden = false*/
-        
         
     }
+    
+    func updateFrontLikes(){
+        
+        nbLikesView.hidden = true
+        if let reactPleek = self.react{
+            if let nbLikesCount = reactPleek["nbLikes"] as? Int {
+                if nbLikesCount > 0{
+                    nbLikesView.hidden = false
+                    nbLikesLabelFront.text = "\(nbLikesCount)"
+                }
+            }
+        }
+        
+    }
+    
+    func likeLong(sender : UILongPressGestureRecognizer){
+        switch sender.state{
+            
+        case UIGestureRecognizerState.Began:
+
+            println("start long press")
+            startHeartBigger()
+            
+            
+            
+        case UIGestureRecognizerState.Ended:
+            println("end long press")
+            //imageLikeFast.hidden = false
+            
+            
+            
+        default:
+            println("none")
+            
+        }
+    }
+    
+    
+    func startHeartBigger(){
+        imageLikeFast.transform = CGAffineTransformMakeScale(0, 0)
+        imageLikeFast.hidden = false
+        
+        UIView.animateWithDuration(1.5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 10,
+            options: nil,
+            animations: { () -> Void in
+                self.imageLikeFast.transform = CGAffineTransformIdentity
+        }) { (finisehd) -> Void in
+            self.likeAfterLongPress()
+            self.slowlyHideHeart()
+        }
+        
+    }
+    
+    func slowlyHideHeart(){
+        UIView.animateWithDuration(0.5,
+            animations: { () -> Void in
+                self.imageLikeFast.alpha = 0.0
+        }) { (finisehd) -> Void in
+            self.imageLikeFast.hidden = true
+            self.imageLikeFast.alpha = 1.0
+        }
+    }
+    
+    //MARK: REPORT OR REMOVE
+    
+    
+    
+    func adaptRemoveOrReact(){
+        
+        if canRemove(){
+            (flipView.viewWithTag(10) as! UIButton).setImage(UIImage(named: "trash_react_icon"), forState: UIControlState.Normal)
+        }
+        else{
+            (flipView.viewWithTag(10) as! UIButton).setImage(UIImage(named: "report_react_icon"), forState: UIControlState.Normal)
+        }
+        
+    }
+    
+    func reportOrRemove(){
+    
+        if let delegatePleek = self.delegate{
+            if let reactPleek = self.react{
+                delegatePleek.removeReact(reactPleek, isReport: !canRemove())
+            }
+            
+        }
+    
+    }
+    
+    func canRemove() -> Bool{
+        var canRemove:Bool = false
+        
+        //Ca Remove if has posted the react
+        if self.react != nil{
+            
+            if self.react!["user"] != nil{
+                var userReact:PFUser = self.react!["user"] as! PFUser
+                
+                //Adapt Report/React CTA
+                if userReact.objectId == PFUser.currentUser()!.objectId{
+                    return true
+                }
+
+            }
+            
+        }
+        
+        //Can remove if he is owner of the pleek
+        if let pleek = self.mainPeekee{
+            
+            if let userPleek = pleek["user"] as? PFUser{
+                
+                if userPleek.objectId == PFUser.currentUser()!.objectId{
+                    return true
+                }
+                
+            }
+            
+        }
+        
+        return canRemove
+    }
+    
+    
+    //MARK: SHARE
+    func shareOne(){
+        if let delegateReact = self.delegate{
+            if let reactGood = self.react{
+                delegateReact.shareOneVsOne(reactGood)
+            }
+            
+        }
+    }
+    
+    
     
     
 }

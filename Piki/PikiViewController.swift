@@ -19,15 +19,8 @@ protocol PikiControllerProtocol {
     func updatePikis()
 }
 
-class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, AVCaptureFileOutputRecordingDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate {
+class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, PBJVisionDelegate {
     
-    
-    //Asset Keys
-    private let PlayerTracksKey = "tracks"
-    private let PlayerPlayableKey = "playable"
-    private let PlayerDurationKey = "duration"
-    private let PlayerRateKey = "rate"
-    private var asset: AVAsset!
     
     var collectionView: UICollectionView?
     var mainPhotoView : UIView?
@@ -35,26 +28,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var actualMode:Int = 0
     var imageFile:PFFile?
     var takePhotoLabel : UILabel?
-    var comeFromMode:Int = 0
     var lastPiki:PFObject?
     var switchCamera:UIButton?
     var reacts:NSArray = NSArray()
-    var likeOverlayView:UIView?
     var likeImageView:UIImageView?
     var likeOverlayBlackView: UIView?
     var photoTaken:UIImage?
     var statusBarHidden:Bool = false
     var cameraText:UITextField?
     
-    
-    let captureSession = AVCaptureSession()
-    var captureDevice : AVCaptureDevice?
-    var audioCaptureDevice : AVCaptureDevice?
-    var previewLayer :AVCaptureVideoPreviewLayer?
-    var imageOutput : AVCaptureStillImageOutput?
-    var videoOutput : AVCaptureMovieFileOutput?
-    var captureDeviceInput:AVCaptureDeviceInput?
-    var audioDeviceInput:AVCaptureDeviceInput?
     
     var previewCameraCell:ReactsCollectionViewCell?
     
@@ -71,11 +53,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var pikiReacts:Array<AnyObject> = []
     var hasNewReacts:Bool = false
     var videoReacts = [String : AVPlayer]()
-    
-    var nbreactsView:UIView?
-    var nbPeopleView:UIView?
-    var mainPikiPreview:PFImageView?
-    var nbReactLabel: UILabel?
     
     //Action buttons
     var cameraActionButton:UIButton?
@@ -110,18 +87,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var mainPekeeImage:UIImage?
     
     
-    //New version react
-    var replyButton:UIButton!
-    var topOverlay:UIView!
-    var alternativeMiddleOverlay:UIView!
-    var middleOverlay:UIView!
-    var bottomOverlay:UIView!
-    var arrayEmojisButton:Array<UIButton> = Array<UIButton>()
-    var backCameraActionView:UIView!
-    var emojiButtonSelected:UIButton?
-    var backEmojiButtonSelected:UIView!
-    
-    
     //Share views elements
     var bottomShareView:UIView?
     var imageShareView:UIView?
@@ -149,6 +114,25 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var shareMessengerReactView:UIView?
     var gifURLLastReact:NSURL?
     var isPublicPleek:Bool = false
+    
+    
+    //Camera Menu V2
+    var cameraMenuView:UIView?
+    var reactMenuView:UIView?
+    var mainOverlayCameraMenu:UIView?
+    var secondOverlayCameraView:UIView?
+    var isLeavingCameraMode:Bool = false
+    var cameraMenuPhotoButton:UIButton?
+    var keyboardSize:CGSize?
+    var collectionShown:Int = 0
+    var memeCellSelected:Int?
+    var textCellSelected:Int?
+    
+    //Likes
+    var listLikesUser:Set<String> = Set<String>()
+    var likeSoundPlayer:AVAudioPlayer?
+    
+    var playerVideoPleek:AVPlayer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,28 +149,20 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: Selector("dismissKeyboard:"))
         
         
-        
+        //IsPublic
+        if self.mainPiki!["isPublic"] != nil {
+            isPublicPleek = self.mainPiki!["isPublic"] as! Bool
+        }
+        else{
+            isPublicPleek = true
+        }
+        recipients = self.mainPiki!["recipients"] as? Array<String>
 
         
         //Listen keyboard to move collection view
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name: UIKeyboardWillHideNotification, object: nil)
-        
-        
-        //Like overlay view
-        likeOverlayView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.width))
-        likeOverlayView!.backgroundColor = UIColor.clearColor()
-        likeOverlayView!.hidden = true
-        //self.view.addSubview(likeOverlayView!)
-        
-        likeOverlayBlackView =  UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.width))
-        likeOverlayBlackView!.backgroundColor = UIColor.blackColor()
-        likeOverlayBlackView!.alpha = 0.7
-        likeOverlayView!.addSubview(likeOverlayBlackView!)
-        
-        likeImageView = UIImageView(frame: CGRect(x: likeOverlayView!.frame.size.height/2 - 75, y: likeOverlayView!.frame.size.width/2 - 75, width: 150, height: 150))
-        likeImageView!.image = UIImage(named: "like")
-        likeOverlayView!.addSubview(likeImageView!)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("morePeekee"), name: "moreInfosPleek", object: nil)
         
 
         
@@ -205,15 +181,22 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         //View top left for username/back
         var gesture:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quit"))
-        let backLeftView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width - 85, height: 60))
+        let backLeftView:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         backLeftView.backgroundColor = Utils().primaryColor
         backLeftView.addGestureRecognizer(gesture)
         topBarView.addSubview(backLeftView)
         
-        let usernameLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: backLeftView.frame.size.width - 35, height: backLeftView.frame.size.height))
-        usernameLabel.font = UIFont(name: Utils().customFontSemiBold, size: 20)
+        let backImageView:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 8, height: 60))
+        backImageView.image = UIImage(named: "button_back")
+        backImageView.contentMode = UIViewContentMode.Center
+        topBarView.addSubview(backImageView)
+        
+        let usernameLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 150, height: 40))
+        usernameLabel.center = CGPoint(x: self.view.frame.width/2, y: 25)
+        usernameLabel.textAlignment = NSTextAlignment.Center
+        usernameLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18)
         usernameLabel.textColor = UIColor.whiteColor()
-        backLeftView.addSubview(usernameLabel)
+        topBarView.addSubview(usernameLabel)
         if self.mainPiki!["user"] != nil {
 
             var user = self.mainPiki!["user"] as! PFUser
@@ -229,19 +212,30 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
         }
         
-        
-        //IsPublic
-        if self.mainPiki!["isPublic"] != nil {
-            isPublicPleek = self.mainPiki!["isPublic"] as! Bool
+        let recipientsNumberLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 150, height: 30))
+        recipientsNumberLabel.center = CGPoint(x: self.view.frame.width/2, y: 45)
+        recipientsNumberLabel.textAlignment = NSTextAlignment.Center
+        recipientsNumberLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16)
+        recipientsNumberLabel.textColor = Utils().statusBarColor
+        topBarView.addSubview(recipientsNumberLabel)
+        if isPublicPleek {
+            recipientsNumberLabel.text = "Public"
         }
         else{
-            isPublicPleek = true
+            if recipients != nil{
+                recipientsNumberLabel.text = "TO \(Utils().formatNumber(recipients!.count)) FRIENDS"
+            }
+            else{
+                recipientsNumberLabel.text = "TO SOME FRIENDS"
+            }
+            
         }
         
-        let backImageView:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 8, height: 60))
-        backImageView.image = UIImage(named: "button_back")
-        backImageView.contentMode = UIViewContentMode.Center
-        topBarView.addSubview(backImageView)
+        
+        
+        
+        
+        
         
         let colorShareButton:UIView = UIView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
         colorShareButton.backgroundColor = Utils().primaryColorDark
@@ -259,19 +253,14 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         shareButton.addTarget(self, action: Selector("buildViewSharePopUp"), forControlEvents: UIControlEvents.TouchUpInside)
         topBarView.addSubview(shareButton)
         
+        
         //Collection View Layout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
-        
-        if Utils().isIphone6Plus(){
-            layout.minimumInteritemSpacing = 0
-        }
-        else{
-            layout.minimumInteritemSpacing = 1
-        }
+        layout.minimumInteritemSpacing = 1
         
         layout.minimumLineSpacing = 1
-        layout.itemSize = CGSize(width: (UIScreen.mainScreen().bounds.width  - 2)/3, height: (UIScreen.mainScreen().bounds.width - 2)/3)
+        layout.itemSize = CGSize(width: UIScreen.mainScreen().bounds.width/2 - 1, height: UIScreen.mainScreen().bounds.width/2 - 1)
         
         collectionView = UICollectionView(frame: CGRect(x: 0, y: 60, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 60) , collectionViewLayout: layout)
         //collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
@@ -279,7 +268,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         collectionView!.delegate = self
         collectionView!.registerClass(ReactsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView!.registerClass(MainPeekeeCollectionViewCell.self, forCellWithReuseIdentifier: "MainCell")
-        collectionView!.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
+        collectionView!.registerClass(CameraCollectionViewCell.self, forCellWithReuseIdentifier: "CameraCell")
+        collectionView!.backgroundColor = Utils().darkGrey
         collectionView!.showsHorizontalScrollIndicator = false
         collectionView!.showsVerticalScrollIndicator = false
         self.view.addSubview(collectionView!)
@@ -293,289 +283,9 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         self.view.addSubview(backStatusBar)
         self.view.addSubview(topBarView)
         
-        
-        //NB People Infos View
-        nbPeopleView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.width + topBarView.frame.size.height - 50, width: self.view.frame.size.width, height: 50))
-        nbPeopleView!.backgroundColor = UIColor.clearColor()
-        
-        let nbPeopleButton:UIButton = UIButton(frame: CGRect(x: 10, y: 0, width: 200, height: nbPeopleView!.frame.height))
-        nbPeopleButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        nbPeopleButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
-        
-        if isPublicPleek{
-            nbPeopleButton.setTitle("🌍 Public", forState: UIControlState.Normal)
-        }
-        else{
-            nbPeopleButton.addTarget(self, action: Selector("seeFriends:"), forControlEvents: UIControlEvents.TouchUpInside)
-            recipients = self.mainPiki!["recipients"] as? Array<String>
-            if recipients != nil {
-                if recipients!.count > 1{
-                    let nbFriendsFormat = String(format: NSLocalizedString("%d friends", comment : "%d friends"), recipients!.count)
-                    nbPeopleButton.setTitle(nbFriendsFormat, forState: UIControlState.Normal)
-                }
-                else{
-                    let nbFriendsFormat = String(format: NSLocalizedString("%d friend", comment : "%d friend"), recipients!.count)
-                    nbPeopleButton.setTitle(nbFriendsFormat, forState: UIControlState.Normal)
-                }
-                
-            }
-            else{
-                nbPeopleButton.setTitle("🔒 friends", forState: UIControlState.Normal)
-            }
-        }
-        
-        
-        nbPeopleButton.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 22)
-        nbPeopleButton.titleLabel!.textAlignment = NSTextAlignment.Left
-        
-        nbPeopleView!.addSubview(nbPeopleButton)
-        
-        var moreButton = UIButton(frame: CGRect(x: nbPeopleView!.frame.width - 50, y: 0, width: 35, height: nbPeopleView!.frame.height))
-        moreButton.setImage(UIImage(named: "view_more_peekee"), forState: UIControlState.Normal)
-        moreButton.addTarget(self, action: Selector("morePeekee"), forControlEvents: UIControlEvents.TouchUpInside)
-        nbPeopleView!.addSubview(moreButton)
-        
-        
-        
-        self.view.addSubview(nbPeopleView!)
-        
-        //NB Reacts Infos Bar
-        nbreactsView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.width + 20 + topBarView.frame.size.height - 50, width: self.view.frame.size.width, height: 50))
-        nbreactsView!.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 0.96)
-        nbreactsView!.hidden = true
-        self.view.addSubview(nbreactsView!)
 
-        //Nb React View
         
-        let nbReactInBarView:UIView = UIView(frame: CGRect(x: 15, y: 0, width: 55, height: nbreactsView!.frame.height))
-        nbReactInBarView.backgroundColor = UIColor.clearColor()
-        nbreactsView!.addSubview(nbReactInBarView)
-        
-        //Nb React Label
-        nbReactLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 35, height: nbReactInBarView.frame.height))
-        nbReactLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 18)
-        nbReactLabel!.textColor = UIColor.whiteColor()
-        nbReactLabel!.adjustsFontSizeToFitWidth = true
-        nbReactLabel!.textAlignment = NSTextAlignment.Center
-        
-        let nbReact = self.mainPiki!["nbReaction"] as? Int
-        if nbReact != nil{
-            nbReactLabel!.text = "\(nbReact!)"
-        }
-        else{
-            nbReactLabel!.text = "0"
-
-        }
-        nbReactInBarView.addSubview(nbReactLabel!)
-        
-        
-        //Nb React Icon
-        let nbReactIcon:UIImageView = UIImageView(frame: CGRect(x: nbReactInBarView.frame.width - 20, y: 0, width: 20, height: nbReactInBarView.frame.height))
-        nbReactIcon.contentMode = UIViewContentMode.Center
-        nbReactIcon.image = UIImage(named: "reacts_nb_piki_icon")
-        nbReactInBarView.addSubview(nbReactIcon)
-        
-        
-        //Nb Friends In Bar View
-        let gestureTapNbFriends:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("seeFriends:"))
-        let nbFriendsInBarView:UIView = UIView(frame: CGRect(x: nbReactInBarView.frame.origin.x + nbReactInBarView.frame.width + 10, y: 0, width: 60, height: nbreactsView!.frame.height))
-        nbFriendsInBarView.backgroundColor = UIColor.clearColor()
-        nbFriendsInBarView.addGestureRecognizer(gestureTapNbFriends)
-        nbreactsView!.addSubview(nbFriendsInBarView)
-        
-        //Nb People in bar Label
-        let nbPeopleInBarLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 35, height: nbFriendsInBarView.frame.height))
-        nbPeopleInBarLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18)
-        nbPeopleInBarLabel.textColor = UIColor.whiteColor()
-        nbPeopleInBarLabel.adjustsFontSizeToFitWidth = true
-        nbPeopleInBarLabel.textAlignment = NSTextAlignment.Center
-        if isPublicPleek{
-            nbPeopleInBarLabel.text = "🌍"
-        }
-        else{
-            if recipients != nil {
-                nbPeopleInBarLabel.text = "\(recipients!.count)"
-                
-            }
-            else{
-                nbPeopleInBarLabel.text = "0"
-            }
-        }
-        
-        nbFriendsInBarView.addSubview(nbPeopleInBarLabel)
-        
-        
-        //Nb People Icon
-        let nbPeopleIcon:UIImageView = UIImageView(frame: CGRect(x: nbFriendsInBarView.frame.width - 20, y: 0, width: 20, height: nbFriendsInBarView.frame.height))
-        nbPeopleIcon.contentMode = UIViewContentMode.Center
-        nbPeopleIcon.image = UIImage(named: "recipient_piki_icon")
-        nbFriendsInBarView.addSubview(nbPeopleIcon)
-        
-        //Preview of the main Piki on the infos bar
-        mainPikiPreview = PFImageView(frame: CGRect(x: self.view.frame.size.width - 45, y: 5, width: 40, height: 40))
-        
-        mainPikiPreview!.layer.cornerRadius = 2
-        mainPikiPreview!.clipsToBounds = true
-        
-        nbreactsView!.addSubview(mainPikiPreview!)
-        if self.mainPiki!["smallPiki"] != nil{
-            mainPikiPreview!.file = self.mainPiki!["smallPiki"] as? PFFile
-        }
-        else if self.mainPiki!["previewImage"] != nil{
-            mainPikiPreview!.file = self.mainPiki!["previewImage"] as? PFFile
-        }
-        
-        mainPikiPreview!.loadInBackground()
-        
-        
-        
-        //Reply Button
-        replyButton = UIButton(frame: CGRect(x: self.view.frame.width - 103, y: self.view.frame.height - 108, width: 75, height: 80))
-        replyButton.setImage(UIImage(named: "reply_button_v2"), forState: UIControlState.Normal)
-        replyButton.addTarget(self, action: Selector("replyPeekee"), forControlEvents: UIControlEvents.TouchUpInside)
-        self.view.addSubview(replyButton)
-        
-
-        //Overlays Reply Mode
-        var spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
-        
-        let tapGestureLeaveReplyTop = UITapGestureRecognizer(target: self, action: Selector("leaveReply"))
-        topOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - (125 + self.view.frame.width/3) + 2))
-        topOverlay.backgroundColor = UIColor.blackColor()
-        topOverlay.addGestureRecognizer(tapGestureLeaveReplyTop)
-        topOverlay.alpha = 0.0
-        self.view.addSubview(topOverlay)
-        
-        let tapGestureLeaveReplyMiddle = UITapGestureRecognizer(target: self, action: Selector("leaveReply"))
-        middleOverlay = UIView(frame : CGRect(x: self.view.frame.width/3 - 1, y: topOverlay.frame.origin.y + topOverlay.frame.height, width: (self.view.frame.width/3) * 2 + 1, height: self.view.frame.width/3))
-        middleOverlay.backgroundColor = UIColor.blackColor()
-        middleOverlay.alpha = 0
-        //middleOverlay.addGestureRecognizer(tapGestureLeaveReplyMiddle)
-        self.view.addSubview(middleOverlay)
-        
-        var stretchBackgroundMeme:UIImage = UIImage(named: "background_stickers")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        let backgroundMemeImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: middleOverlay.frame.width, height: middleOverlay.frame.height))
-        backgroundMemeImageView.image = stretchBackgroundMeme
-        middleOverlay.addSubview(backgroundMemeImageView)
-        
-        //Collection View Layout
-        let layoutMem: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-        layoutMem.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
-        layoutMem.minimumInteritemSpacing = 0
-        layoutMem.minimumLineSpacing = 0
-        layoutMem.itemSize = CGSize(width: middleOverlay.frame.height, height: middleOverlay.frame.height)
-        layoutMem.scrollDirection = UICollectionViewScrollDirection.Horizontal
-        memCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: middleOverlay.frame.width, height: middleOverlay.frame.height) , collectionViewLayout: layoutMem)
-        memCollectionView.registerClass(MemCollectionViewCell.self, forCellWithReuseIdentifier: "CellMem")
-        memCollectionView.backgroundColor = UIColor.clearColor()
-        memCollectionView!.dataSource = self
-        memCollectionView!.delegate = self
-        memCollectionView.showsHorizontalScrollIndicator = false
-        memCollectionView.showsVerticalScrollIndicator = false
-        middleOverlay.addSubview(memCollectionView)
-        
-        var stretchShadowMeme:UIImage = UIImage(named: "shadow_meme")!.resizableImageWithCapInsets(UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
-        let shadowMemeImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 10, height: middleOverlay.frame.height))
-        shadowMemeImageView.image = stretchShadowMeme
-        middleOverlay.addSubview(shadowMemeImageView)
-        
-        
-        
-        let tapGestureLeaveReplyBottom = UITapGestureRecognizer(target: self, action: Selector("leaveReply"))
-        bottomOverlay = UIView(frame : CGRect(x: 0, y:middleOverlay.frame.origin.y + middleOverlay.frame.height - 1 , width: self.view.frame.width, height: self.view.frame.height - (middleOverlay.frame.origin.y + middleOverlay.frame.height) + 1))
-        bottomOverlay.backgroundColor = UIColor.blackColor()
-        bottomOverlay.alpha = 0
-        bottomOverlay.addGestureRecognizer(tapGestureLeaveReplyBottom)
-        self.view.addSubview(bottomOverlay)
-        
-        backEmojiButtonSelected = UIView(frame: CGRect(x: 0, y: 0, width: 56, height: 56))
-        backEmojiButtonSelected.backgroundColor = UIColor.whiteColor()
-        backEmojiButtonSelected.layer.cornerRadius = 28
-        backEmojiButtonSelected.clipsToBounds = true
-        backEmojiButtonSelected.hidden = true
-        self.view.addSubview(backEmojiButtonSelected)
-        
-        
-        
-        //Emojis buttons
-        //for i in 0...3{
-            var emojiButton = UIButton(frame: CGRect(x: 0, y: 0, width: 57, height: 60))
-            emojiButton.center = CGPoint(x: replyButton.center.x, y: replyButton.center.y)
-            emojiButton.setImage(UIImage(named: "text_emoji_button"), forState: UIControlState.Normal)
-        
-            
-            emojiButton.transform = CGAffineTransformMakeScale(0, 0)
-            emojiButton.addTarget(self, action: Selector("selectEmoji:"), forControlEvents: UIControlEvents.TouchUpInside)
-            self.view.addSubview(emojiButton)
-            arrayEmojisButton.append(emojiButton)
-        //}
-        
-        
-            
-            
-        
-        var tapGestureTakeReact: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("takeReact:"))
-        var longPressGestureReact : UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("recordVideoReact:"))
-        longPressGestureReact.minimumPressDuration = 0.4
-        //Camera Action Button
-        cameraActionButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 172, y: self.view.frame.height - 75, width: 62, height: 65))
-        cameraActionButton!.center = CGPoint(x: self.view.frame.width/2, y: replyButton.center.y)
-        cameraActionButton!.setImage(UIImage(named: "answer_button"), forState: UIControlState.Normal)
-        cameraActionButton!.addGestureRecognizer(tapGestureTakeReact)
-        cameraActionButton!.addGestureRecognizer(longPressGestureReact)
-        cameraActionButton!.hidden = true
-        
-        
-        
-        //Circle around action button
-        backCameraActionView = UIView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
-        backCameraActionView.center = CGPoint(x: cameraActionButton!.center.x, y: cameraActionButton!.center.y - 2)
-        backCameraActionView.backgroundColor = UIColor.whiteColor()
-        backCameraActionView.layer.cornerRadius = 35
-        backCameraActionView.clipsToBounds = true
-        backCameraActionView.alpha = 0.4
-        backCameraActionView.hidden = true
-        //self.view.addSubview(backCameraActionView)
-        self.view.addSubview(cameraActionButton!)
-        
-        
-        var translateCameraButton:CGFloat = self.replyButton.center.x - self.cameraActionButton!.center.x
-        cameraActionButton!.transform = CGAffineTransformMakeTranslation(translateCameraButton, 0)
-        backCameraActionView!.transform = CGAffineTransformMakeTranslation(translateCameraButton, 0)
-        
-        
-        quitButtonReply = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        quitButtonReply!.addTarget(self, action: Selector("leaveReply"), forControlEvents: UIControlEvents.TouchUpInside)
-        quitButtonReply!.center = replyButton.center
-        quitButtonReply!.setImage(UIImage(named: "quit_reply_icon"), forState: UIControlState.Normal)
-        quitButtonReply!.hidden = true
-        self.view.addSubview(quitButtonReply!)
-        
-        
-        backEmojisView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        backEmojisView!.hidden = true
-        backEmojisView!.backgroundColor = UIColor.whiteColor()
-        backEmojisView!.alpha = 0.6
-        self.view.addSubview(backEmojisView!)
-        
-        
-        captureSession.sessionPreset = AVCaptureSessionPresetMedium
-        let devices = AVCaptureDevice.devices()
-        
-        // Loop through all the capture devices on this phone
-        for device in devices {
-            // Make sure this particular device supports video
-            if (device.hasMediaType(AVMediaTypeVideo)) {
-                // Finally check the position and confirm we've got the back camera
-                if(device.position == AVCaptureDevicePosition.Front) {
-                    println("Init capture cevice")
-                    captureDevice = device as? AVCaptureDevice
-                }
-            }
-        }
-        
-        
-        refreshControl.tintColor = UIColor(red: 63/255, green: 45/255, blue: 50/255, alpha: 1.0)
+        refreshControl.tintColor = UIColor.whiteColor()
         refreshControl.addTarget(self, action: Selector("refresh"), forControlEvents: UIControlEvents.ValueChanged)
         self.collectionView!.addSubview(refreshControl)
         
@@ -584,21 +294,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         Utils().setPikiAsView(self.mainPiki!)
         
         
-        getLastMem()
         
         
         self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject?, error : NSError?) -> Void in
             if error == nil{
-                let nbReact = updatedMainPiki!["nbReaction"] as? Int
-                if nbReact != nil{
-                    self.nbReactLabel!.text = "\(nbReact!)"
-                }
-                else{
-                    self.nbReactLabel!.text = "0"
-                    
-                }
+                self.updateMainCellPleek()
             }
         }
+        
+        //Get Likes user has done on reacts of this pleek
+        getLikesUser()
         
         
     }
@@ -611,22 +316,15 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     override func viewDidAppear(animated: Bool) {
         
         
-        
-        //See if show tuto overlay
-        if PFUser.currentUser()!["hasShownOverlayPeekee"] != nil{
-            
-            if !(PFUser.currentUser()!["hasShownOverlayPeekee"] as! Bool){
-                showOverlayTuto()
-            }
-        }
-        else{
-            showOverlayTuto()
-        }
-        
-        if collectionView != nil {
+        /*if collectionView != nil {
             //startVideoOnVisibleCells()
             self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: 0, inSection: 1)])
-        }
+        }*/
+        
+        let betterPath = NSBundle.mainBundle().pathForResource("like_react_sound", ofType: "wav")
+        let betterURL = NSURL(fileURLWithPath: betterPath!)
+        likeSoundPlayer = AVAudioPlayer(contentsOfURL: betterURL, error: nil)
+        likeSoundPlayer!.prepareToPlay()
         
     }
 
@@ -635,18 +333,28 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
+    //MARK : NEW VERSION CAMERA
+    
+    func setupCamera(){
+        var vision:PBJVision = PBJVision.sharedInstance()
+        vision.delegate = self
+        vision.cameraMode = PBJCameraMode.Photo
+        vision.cameraOrientation = PBJCameraOrientation.Portrait
+        vision.focusMode = PBJFocusMode.ContinuousAutoFocus
+        vision.videoBitRate = 87500 * 8
+        vision.outputFormat = PBJOutputFormat.Square
+        vision.startPreview()
+        
+    }
+    
+    
     func refresh(){
         
         self.mainPiki!.fetchInBackgroundWithBlock { (updatedMainPiki : PFObject?, error : NSError?) -> Void in
             if error == nil{
-                let nbReact = updatedMainPiki!["nbReaction"] as? Int
-                if nbReact != nil{
-                    self.nbReactLabel!.text = "\(nbReact!)"
-                }
-                else{
-                    self.nbReactLabel!.text = "0"
-                    
-                }
+                self.updateMainCellPleek()
             }
         }
         
@@ -654,6 +362,24 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
+    
+    func updateMainCellPleek(){
+        
+        if let mainCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) as? MainPeekeeCollectionViewCell{
+            
+            if let nbReplies = self.mainPiki!["nbReaction"] as? Int{
+                mainCell.nbRepliesLabel.text = "\(nbReplies) REPLIES"
+            }
+            else{
+                mainCell.nbRepliesLabel.text = "REPLY FIRST"
+            }
+            
+            //mainCell.updateInfosPleek()
+        }
+        
+        //self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: 0, inSection: 0)])
+        
+    }
     
     //Number of cells
     
@@ -668,7 +394,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
         }
         else{
-            return self.mems.count
+            if self.collectionShown == 2{
+                return self.mems.count
+            }
+            else if self.collectionShown == 1{
+                return Utils().getFontsWithSize(30).count
+                
+            }
+            else{
+                return 0
+            }
         }
         
     }
@@ -701,20 +436,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             else{
                 if indexPath == indexPathBig{
                     return CGSize(width: self.view.frame.width, height: (self.view.frame.width - 2)/3 * 2)
-                    //return CGSize(width: (self.view.frame.width - 2)/3 * 2, height: (self.view.frame.width - 2)/3 * 2)
                 }
                 else{
-                    return CGSize(width: (self.view.frame.size.width - 2)/3, height: (self.view.frame.size.width - 2)/3)
+                    return CGSize(width: self.view.frame.size.width/2 - 1, height: self.view.frame.size.width/2 - 1)
                 }
                 
                 
             }
         }
         else{
-            return CGSize(width: self.middleOverlay.frame.height, height: self.middleOverlay.frame.height)
+            return CGSize(width: keyboardSize!.height/2 - 1, height: keyboardSize!.height/2 - 1)
         }
-        
-        
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -739,12 +471,38 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
         if collectionView == self.collectionView! {
+            
+            //Load More
+            if indexPath.item == (pikiReacts.count - 1){
+                
+                
+                if pikiReacts.count > 30 && !isLoadingMore{
+                    
+                    let nbReact = self.mainPiki!["nbReaction"] as? Int
+                    if nbReact != nil{
+                        if nbReact > pikiReacts.count{
+                            isLoadingMore = true
+                            self.getMoreReacts()
+                        }
+                    }
+                }
+            }
+            
+            
+            //Build cells
             if indexPath.section == 0{
                 
                 let cell = collectionView.dequeueReusableCellWithReuseIdentifier("MainCell", forIndexPath: indexPath) as! MainPeekeeCollectionViewCell
                 
                 if self.mainPiki != nil {
                     
+                    
+                    if let nbReplies = self.mainPiki!["nbReaction"] as? Int{
+                        cell.nbRepliesLabel.text = "\(nbReplies) REPLIES"
+                    }
+                    else{
+                        cell.nbRepliesLabel.text = "REPLY FIRST"
+                    }
                     
                     var file:PFFile?
                     if mainPiki!["photo"] != nil {
@@ -754,14 +512,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         file = mainPiki!["previewImage"] as? PFFile
                     }
                     
-                    
-                    file!.getDataInBackgroundWithBlock({ (data, error) -> Void in
-                        if error == nil {
-                            let image:UIImage = UIImage(data: data!)!
-                            self.mainPekeeImage = image
-                            cell.mainImageView.image = image
-                        }
+                    cell.mainImageView.file = file
+                    cell.spinnerView.hidden = false
+                    cell.spinnerView.startAnimating()
+                    cell.mainImageView.loadInBackground({ (image, error) -> Void in
+                        cell.spinnerView.stopAnimating()
+                        cell.spinnerView.hidden = true
+                    }, progressBlock: { (progress) -> Void in
+                        println("progress : \(progress)")
                     })
+                    
+                    
                     
                     if mainPiki!["video"] != nil{
                         
@@ -769,8 +530,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             
                         }
                         else{
-                            cell.loadIndicator.hidden = false
-                            cell.loadIndicator.startAnimating()
+                            cell.spinnerView.startAnimating()
+                            cell.spinnerView.hidden = false
                             
                             let videoFile:PFFile = mainPiki!["video"] as! PFFile
                             
@@ -782,25 +543,34 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                         var fileManager:NSFileManager = NSFileManager()
                                         if data!.writeToFile("\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov", atomically: false){
                                             
+                                            if self.playerVideoPleek == nil{
+                                                
+                                                var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov")
+                                                var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
+                                                self.playerVideoPleek = AVPlayer(playerItem: playerItem)
+                                                self.playerVideoPleek!.actionAtItemEnd = AVPlayerActionAtItemEnd.None
+                                                self.playerVideoPleek!.muted = false
+                                                
+                                                
+                                                
+                                                
+                                                
+                                                NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playerVideoPleek!.currentItem)
+                                                
+                                            }
                                             
-                                            var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.mainPiki!.objectId).mov")
-                                            var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
-                                            var player:AVPlayer = AVPlayer(playerItem: playerItem)
-                                            player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                                            player.muted = false
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+                                           
                                             
                                             
                                             if (self as UIViewController).isViewLoaded() && ((self as UIViewController).view.window != nil) {
-                                                cell.loadIndicator.hidden = true
-                                                cell.playerLayer.player = player
-                                                cell.playerView.hidden = false
-                                                player.play()
+                                                if cell.playerLayer.player == nil{
+                                                    cell.spinnerView.stopAnimating()
+                                                    cell.spinnerView.hidden = true
+                                                    cell.playerLayer.player = self.playerVideoPleek!
+                                                    cell.playerView.hidden = false
+                                                    self.playerVideoPleek!.play()
+                                                }
+                                                
                                             }
                                             
                                             
@@ -825,73 +595,71 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
             }
             else{
-                let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ReactsCollectionViewCell
-                if !cell.hasLoaded{
-                    cell.loadCell()
-                }
-                
-                
-                cell.ownPosition = indexPath.item
-                cell.mainPeekee = self.mainPiki!
-                
-                
-                if indexPath.item%2 == 0{
-                    cell.backImageView!.backgroundColor = UIColor(red: 230/255, green: 231/255, blue: 234/255, alpha: 1.0)
-                }
-                else{
-                    cell.backImageView!.backgroundColor = UIColor(red: 236/255, green: 238/255, blue: 240/255, alpha: 1.0)
-                }
-                
-                
-                cell.react = nil
-                cell.delegate = self
-                cell.backImageView!.hidden = true
-                cell.insideCollectionView.hidden = false
-                cell.readVideoImageView.hidden = true
-                cell.reactVideoURL = nil
-                cell.pikiInfos = nil
-                cell.emptyCaseImageView!.hidden = true
-                cell.playerView.hidden = true
                 
                 //Camera view
                 if indexPath.item == 0 {
-                    cell.insideCollectionView.hidden = true
-                    cell.iconInfo!.hidden = false
-                    cell.iconInfo!.image = UIImage(named: "switch_camera")
-                    
-                    self.previewCameraCell = cell
-                    cell.previewCameraView.hidden = false
-                    cell.previewCameraView.frame = CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height)
-                    cell.reactImage.hidden = true
-                    cell.playerView.hidden = true
-                    
-                    if captureDevice != nil && !captureSession.running{
-                        println("Begin Session from cell")
-                        beginSession(cell.previewCameraView)
+                    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CameraCell", forIndexPath: indexPath) as! CameraCollectionViewCell
+                    if !cell.hasLoaded{
+                        cell.loadCell()
+                        
                     }
-                    else{
-                        previewLayer?.frame = cell.previewCameraView.layer.frame
-                        cell.previewCameraView.layer.addSublayer(previewLayer)
-                    }
+                    
+                    cell.previewLayer = PBJVision.sharedInstance().previewLayer
+                    cell.previewLayer.frame = CGRect(x: 0, y: 0, width: cell.contentView.frame.width, height: cell.contentView.frame.height)
+                    cell.previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                    cell.previewCameraView.layer.addSublayer(cell.previewLayer)
+                    
+                    self.setupCamera()
+                    
+                    return cell
+
                 }
                     //Display React
                 else{
                     
-                    cell.iconInfo!.hidden = true
-                    cell.previewCameraView.hidden = true
-                    cell.reactImage.hidden = true
-                    cell.backImageView!.hidden = false
+                    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! ReactsCollectionViewCell
+                    if !cell.hasLoaded{
+                        cell.loadCell()
+                    }
+                    
+                    
+                    cell.ownPosition = indexPath.item
+                    cell.mainPeekee = self.mainPiki!
+
+                    
+                    cell.react = nil
+                    cell.delegate = self
+                    cell.readVideoImageView.hidden = true
+                    cell.reactVideoURL = nil
+                    cell.pikiInfos = nil
+                    cell.playerView.hidden = true
+                    cell.reactImage.hidden = false
                     
                     
                     if self.pikiReacts[indexPath.item-1].isKindOfClass(PFObject){
                         cell.react = self.pikiReacts[indexPath.item-1] as? PFObject
-                        cell.updateDeleteSign()
+                        cell.updateFrontLikes()
                         
                         var pikiReact:PFObject = self.pikiReacts[indexPath.item-1] as! PFObject
                         //React is a photo
                         if (pikiReact["photo"] != nil){
                             cell.playerView.hidden = true
                             
+                            
+                            
+                            if let file = pikiReact["photo"] as? PFFile{
+                                cell.spinnerView.hidden = false
+                                cell.reactImage.file = file
+                                cell.reactImage.loadInBackground({ (finalImage, error) -> Void in
+                                    if error == nil{
+                                    }
+                                    cell.spinnerView.hidden = true
+                                    }, progressBlock: { (progress) -> Void in
+                                        
+                                })
+                            }
+                            
+                            /*
                             var file:PFFile = pikiReact["photo"] as! PFFile
                             file.getDataInBackgroundWithBlock({ (data, error) -> Void in
                                 if error == nil {
@@ -912,17 +680,35 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                     println("Error getting image")
                                     
                                 }
-                            })
+                            })*/
                         }
                             //React is a video
                         else{
                             cell.readVideoImageView.hidden = false
-                            //cell.iconInfo!.hidden = false
-                            cell.iconInfo!.image = UIImage(named: "mute_react_icon")
                             
                             cell.playerView.hidden = true
+                            
+                            
+                            if let file = pikiReact["previewImage"] as? PFFile{
+                                cell.spinnerView.hidden = false
+                                cell.reactImage.file = file
+                                cell.reactImage.loadInBackground({ (finalImage, error) -> Void in
+                                    if error == nil{
+                                    }
+                                    cell.spinnerView.hidden = true
+                                    }, progressBlock: { (progress) -> Void in
+                                        
+                                })
+                            }
+                            else{
+                                cell.spinnerView.hidden = true
+                                cell.reactImage.hidden = true
+                            }
+                            
+                            /*
                             //Load preview image first
                             if pikiReact["previewImage"] != nil{
+                                
                                 var file:PFFile = pikiReact["previewImage"] as! PFFile
                                 file.getDataInBackgroundWithBlock({ (data, error) -> Void in
                                     if error == nil {
@@ -939,15 +725,16 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             }
                             else{
                                 cell.reactImage.hidden = true
-                            }
+                            }*/
                         }
                     }
                     else{
                         var pikiInfos:[String : AnyObject] = self.pikiReacts[indexPath.item-1] as! [String : AnyObject]
+                        cell.updateFrontLikes()
                         
                         cell.playerView.hidden = true
+                        cell.reactRandomId = pikiInfos["id"] as? String
                         if pikiInfos["photo"] != nil {
-                            cell.backImageView!.hidden = true
                             cell.reactImage.image = pikiInfos["photo"] as? UIImage
                             cell.reactImage.hidden = false
                             
@@ -955,51 +742,103 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         else{
                             println("PIKIINFOS :\(pikiInfos)")
                             cell.readVideoImageView.hidden = false
-                            //cell.iconInfo!.hidden = false
-                            cell.iconInfo!.image = UIImage(named: "mute_react_icon")
-                            cell.backImageView!.hidden = true
                             cell.reactImage.hidden = false
-                            cell.reactVideoURL = (pikiInfos["videoPath"] as? NSURL)?.path
+                            cell.reactVideoURL = (pikiInfos["videoPath"] as? NSURL)?.path!
                             
                             cell.reactImage.image = pikiInfos["previewImage"] as? UIImage
                         }
                         cell.pikiInfos = pikiInfos
-                        cell.updateDeleteSign()
                     }
+                    
+                    
+                    return cell
                     
                 }
                 
-                if indexPath.item == (pikiReacts.count - 1){
-                    
-                    
-                    if pikiReacts.count > 30 && !isLoadingMore{
-                        
-                        let nbReact = self.mainPiki!["nbReaction"] as? Int
-                        if nbReact != nil{
-                            if nbReact > pikiReacts.count{
-                                isLoadingMore = true
-                                self.getMoreReacts()
-                            }
-                        }
-                    }
-                }
                 
                 
-                return cell
+                
             }
         }
         else{
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier("CellMem", forIndexPath: indexPath) as! MemCollectionViewCell
 
-            cell.iconImageView.image = nil
-            cell.loadIndicator.startAnimating()
-            
-            var fileMem = self.mems[indexPath.item]["image"] as! PFFile
-            fileMem.getDataInBackgroundWithBlock({ (data, error) -> Void in
-                cell.loadIndicator.stopAnimating()
-                cell.iconImageView.image = UIImage(data: data!)
+            if self.collectionShown == 2{
+                cell.iconImageView.hidden = false
+                cell.labelDemoFont.hidden = true
+                cell.iconImageView.image = nil
+                //cell.loadIndicator.startAnimating()
                 
-            })
+                cell.selectorImageView.hidden = true
+                cell.innerShadowImageView.hidden = true
+                cell.contentView.backgroundColor = UIColor(red: 53/255, green: 54/255, blue: 55/255, alpha: 1.0)
+                
+                
+                if self.memeCellSelected != nil{
+                    if indexPath.item == self.memeCellSelected{
+                        cell.selectorImageView.hidden = false
+                        cell.innerShadowImageView.hidden = false
+                        cell.contentView.backgroundColor = UIColor(red: 47/255, green: 47/255, blue: 48/255, alpha: 1.0)
+                    }
+                }
+                else{
+                    if let cellCamera:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                        cellCamera.textViewOverPhoto.hidden = true
+                        cellCamera.memeImageView.hidden = false
+                        cellCamera.memeImageView.image = nil
+                    }
+                }
+                
+                var fileMem = self.mems[indexPath.item]["image"] as! PFFile
+                fileMem.getDataInBackgroundWithBlock({ (data, error) -> Void in
+                    cell.loadIndicator.stopAnimating()
+                    cell.iconImageView.image = UIImage(data: data!)
+                    
+                    if self.memeCellSelected != nil{
+                        if indexPath.item == self.memeCellSelected{
+                            if let cellCamera:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                                cellCamera.textViewOverPhoto.hidden = true
+                                cellCamera.memeImageView.hidden = false
+                                cellCamera.memeImageView.image = UIImage(data: data!)
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                    
+                })
+            }
+            else{
+                cell.iconImageView.hidden = true
+                cell.labelDemoFont.font = Utils().getFontsWithSize(50)[indexPath.item]
+                cell.labelDemoFont.hidden = false
+                
+                
+                
+                cell.selectorImageView.hidden = true
+                cell.innerShadowImageView.hidden = true
+                cell.contentView.backgroundColor = UIColor(red: 53/255, green: 54/255, blue: 55/255, alpha: 1.0)
+                
+                if self.textCellSelected != nil{
+                    if indexPath.item == self.textCellSelected {
+                        cell.selectorImageView.hidden = false
+                        cell.innerShadowImageView.hidden = false
+                        cell.contentView.backgroundColor = UIColor(red: 47/255, green: 47/255, blue: 48/255, alpha: 1.0)
+                        
+                        if let cellCamera:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                            cellCamera.textViewOverPhoto.hidden = false
+                            cellCamera.memeImageView.hidden = true
+                            cellCamera.textViewOverPhoto.font = UIFont(name: Utils().getFontsWithSize(50)[indexPath.item].fontName, size: cellCamera.textViewOverPhoto.font.pointSize)
+                            if count(cellCamera.textViewOverPhoto.text) == 0{
+                                cellCamera.textViewOverPhoto.text = "YO"
+                            }
+                            cellCamera.reloadPositionTextView()
+                        }
+                    }
+                }
+            }
+            
             
             return cell
         }
@@ -1016,31 +855,19 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if collectionView == self.collectionView! {
             if indexPath.section == 1{
                 if indexPath.item == 0{
-                    comeFromMode = 1
+                    let cell:CameraCollectionViewCell = self.collectionView?.cellForItemAtIndexPath(indexPath) as! CameraCollectionViewCell
                     
-                    self.changeCameraPosition()
+                    cell.iconImageView.hidden = true
+                    cell.textViewOverPhoto.hidden = false
+                    cell.textViewOverPhoto.text = ""
+                    cell.textViewOverPhoto.becomeFirstResponder()
+                    
+                    
                 }
                 else{
                     let cell:ReactsCollectionViewCell = self.collectionView?.cellForItemAtIndexPath(indexPath) as! ReactsCollectionViewCell
-                    if !cell.playerView.hidden{
-                        
-                        muteAllVideosExcept(indexPath)
-                        
-                        
-                        if  cell.playerLayer.player.muted {
-                            cell.iconInfo!.hidden = true
-                            cell.playerLayer.player.muted = false
-                            
-                        }
-                        else{
-                            cell.iconInfo!.hidden = false
-                            cell.playerLayer.player.muted = true
-                        }
-                        
-                        
-                        
-                        
-                    }
+                    cell.flip()
+                    //cell.startVideo()
                 }
             }
             else{
@@ -1051,12 +878,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     if (cellMain.playerLayer.player.rate > 0 && cellMain.playerLayer.player.error == nil) {
                         cellMain.playerLayer.player.pause()
                         cellMain.readVideoIcon.hidden = false
-                        cellMain.loadIndicator.hidden = true
                     }
                     else{
                         cellMain.playerLayer.player.play()
                         cellMain.readVideoIcon.hidden = true
-                        cellMain.loadIndicator.hidden = true
                     }
                     
                     
@@ -1066,8 +891,57 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         else{
             
+            if self.collectionShown == 2{
+                var oldCellSelected:Int?
+                if self.memeCellSelected != nil{
+                    if self.memeCellSelected! == indexPath.item{
+                        self.memeCellSelected = nil
+                    }
+                    else{
+                        oldCellSelected = self.memeCellSelected
+                        self.memeCellSelected = indexPath.item
+                        
+                    }
+                }
+                else{
+                    self.memeCellSelected = indexPath.item
+                }
+                
+                var indexPathToReload:[NSIndexPath] = [NSIndexPath]()
+                if oldCellSelected != nil{
+                    indexPathToReload.append(NSIndexPath(forItem: oldCellSelected!, inSection: 0))
+                }
+                
+                indexPathToReload.append(indexPath)
+                self.memCollectionView.reloadItemsAtIndexPaths(indexPathToReload)
+            }
+            else{
+                var oldCellSelected:Int?
+                if self.textCellSelected != nil{
+                    if self.textCellSelected! == indexPath.item{
+                        self.textCellSelected = nil
+                    }
+                    else{
+                        oldCellSelected = self.textCellSelected
+                        self.textCellSelected = indexPath.item
+                        
+                    }
+                }
+                else{
+                    self.textCellSelected = indexPath.item
+                }
+                
+                var indexPathToReload:[NSIndexPath] = [NSIndexPath]()
+                if oldCellSelected != nil{
+                    indexPathToReload.append(NSIndexPath(forItem: oldCellSelected!, inSection: 0))
+                }
+                
+                indexPathToReload.append(indexPath)
+                self.memCollectionView.reloadItemsAtIndexPaths(indexPathToReload)
+            }
             
             
+            /*
             if (self.memCollectionView!.cellForItemAtIndexPath(indexPath) as! MemCollectionViewCell).iconImageView.image != nil{
                 
                 if positionMemShowed != nil{
@@ -1088,7 +962,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     self.positionMemShowed = indexPath.item
                 }
                 
-            }
+            }*/
             
             
             
@@ -1112,8 +986,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     }
                 }
                 
-                return CGSize(width: self.view.frame.width, height: 50)
-                //return CGSize(width: self.view.frame.width, height: 0)
+                //return CGSize(width: self.view.frame.width, height: 50)
+                return CGSize(width: self.view.frame.width, height: 0)
                 
             }
             else{
@@ -1125,6 +999,8 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
     }
+    
+    
     
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         
@@ -1141,7 +1017,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 if indexPath.section == 1{
                     
-                    reusableView!.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)
+                    reusableView!.backgroundColor = Utils().darkGrey
                     
                     if parrotLoad == nil{
                         parrotLoad = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
@@ -1203,445 +1079,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         return reusableView!
     }
-    
-    
-    /*
-    * TAP GESTURE RECOGNIZERS
-    */
 
-    
-    func takePhotoFromCell(){
-        
-        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
-        
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            var videoConnection : AVCaptureConnection?
-            for connecton in self.imageOutput!.connections {
-                //find a matching input port
-                for port in connecton.inputPorts!{
-                    if port.mediaType == AVMediaTypeVideo {
-                        videoConnection = connecton as? AVCaptureConnection
-                        break //for port
-                    }
-                }
-                
-                if videoConnection  != nil {
-                    break// for connections
-                }
-            }
-            if videoConnection  != nil {
-                Mixpanel.sharedInstance().timeEvent("Send React")
-                
-                self.imageOutput!.captureStillImageAsynchronouslyFromConnection(videoConnection){
-                    (imageSampleBuffer : CMSampleBuffer!, _) in
-                    
-                    let imageDataJpeg = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer)
-                    var pickedImage: UIImage = UIImage(data: imageDataJpeg)!
-                    
-                    
-                    var flippedImage:UIImage?
-                    if self.captureDevice!.position == AVCaptureDevicePosition.Front {
-                        flippedImage = UIImage(CGImage: pickedImage.CGImage, scale: pickedImage.scale, orientation: UIImageOrientation.LeftMirrored)
-                    }
-                    else{
-                        flippedImage = pickedImage
-                    }
-                    
-                    var squareImage = RBSquareImageTo(flippedImage!, CGSize(width: 300, height: 300))
-                    
-                    
-                    var randomNumber = self.randomNumber()
-                    
-                    //Add photo now to the collection
-                    var pikiInfos:[String : AnyObject] = [String : AnyObject]()
-                    pikiInfos["photo"] = squareImage
-                    pikiInfos["id"] = randomNumber
-
-                    
-                    self.postNewTempReact(pikiInfos)
-                    
-                    //Upload file
-                    self.uploadImage(squareImage)
-                    println("Photo Taken")
-                    
-                    //Push notif
-                    var isPublic:Bool?
-                    if self.mainPiki!["isPublic"] != nil {
-                        isPublic = self.mainPiki!["isPublic"] as? Bool
-                    }
-                    else{
-                        isPublic = true
-                    }
-                    
-                    
-                    
-                    
-                    //Create React
-                    if self.imageFile != nil{
-                        if self.mainPiki != nil{
-                            var newReact:PFObject = PFObject(className: "React")
-                            newReact["photo"] = self.imageFile!
-                            newReact["Piki"] = self.mainPiki!
-                            newReact["user"] = PFUser.currentUser()
-                            var reactACL:PFACL = PFACL()
-                            
-                            
-                            if self.isPublicPleek{
-                                reactACL.setPublicReadAccess(true)
-                            }
-                            else{
-                                if self.mainPiki!["recipients"] != nil{
-                                    for userId in self.mainPiki!["recipients"] as! Array<String>{
-                                        reactACL.setReadAccess(true, forUserId: userId)
-                                    }
-                                }
-                                
-                            }
-                            
-                            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
-                            
-                            if self.mainPiki!["user"] != nil {
-                                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
-                            }
-                            
-                            newReact.ACL = reactACL
-                            
-                            
-                            //Start a background task
-                            bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
-                                UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                            })
-                            
-                            
-                            newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError?) -> Void in
-                                if succeeded{
-                                    Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Photo Sent" : 1])
-                                    FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Photo"])
-                                    Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Photo"])
-                                    
-                                    println("NEw REact : \(newReact)")
-                                    
-                                    var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
-                                    if peekeeInfosPosition != nil{
-                                        println("found")
-                                        self.pikiReacts[peekeeInfosPosition!] = newReact
-                                        self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: peekeeInfosPosition! + 1, inSection: 1)])
-                                        
-                                        self.hasNewReacts = true
-                                        
-                                        self.mainPiki!.fetchInBackground()
-                                        
-                                        //Push notif
-                                        self.sendPushNewComment(isPublic!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                                            UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                            bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                            
-                                            Utils().setPikiAsView(self.mainPiki!)
-                                            return nil
-                                        })
-                                    }
-                                    else{
-                                        println("delete")
-                                        newReact.deleteEventually()
-                                        
-                                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                    }
-                                    
-                                    
-                                    
-                                    
-                                    
-                                }
-                                else{
-                                    println("Error while creating new react")
-                                    UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                    bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                }
-                            })
-                            
-                            //self.pikiReacts.insert(newReact, atIndex: 0)
-                            //self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 0)])
-                        }
-                        
-                    }
-                    
-                    
-                }
-                
-            }
-        }
-    }
-
-
-
-    
-    /*
-    * Camera functions
-    *
-    */
-    
-    func beginSession(viewToUse : UIView) {
-        
-        
-        
-        var authStatus:AVAuthorizationStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo)
-        
-        if authStatus == AVAuthorizationStatus.Authorized{
-            //configureDevice()
-            audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-            var errAudio : NSError? = nil
-            audioDeviceInput = AVCaptureDeviceInput(device: audioCaptureDevice, error: &errAudio)
-            if errAudio != nil{
-                println("Problem to get audio input : \(errAudio!.localizedDescription)")
-            }
-            else{
-                /*if captureSession.canAddInput(audioDeviceInput){
-                captureSession.addInput(audioDeviceInput)
-                println("ADD")
-                }*/
-            }
-            
-            
-            
-            
-            var err : NSError? = nil
-            
-            var tempCaptureDevice = AVCaptureDeviceInput(device: captureDevice, error: &err)
-            
-            if captureSession.canAddInput(tempCaptureDevice){
-                captureDeviceInput = tempCaptureDevice
-                captureSession.addInput(captureDeviceInput!)
-            }
-            
-            
-            if err != nil {
-                println("error: \(err?.localizedDescription)")
-            }
-            
-            previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-            previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-            
-            previewLayer?.frame = viewToUse.layer.frame
-            viewToUse.layer.addSublayer(previewLayer)
-            
-            
-            
-            var imageOutputTemp = AVCaptureStillImageOutput()
-            imageOutputTemp.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
-            if captureSession.canAddOutput(imageOutputTemp){
-                println("Capture add image output")
-                imageOutput = imageOutputTemp
-                captureSession.addOutput(imageOutput)
-            }
-            
-            
-            //Movie output
-            var tempVideoOutput = AVCaptureMovieFileOutput()
-            let totalSeconds:Float64 = 10
-            let preferedTimeScale:Int32 = 30
-            let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-            tempVideoOutput.maxRecordedDuration = maxDuration
-            tempVideoOutput.minFreeDiskSpaceLimit = 1024 * 1024
-            if captureSession.canAddOutput(tempVideoOutput){
-                videoOutput = tempVideoOutput
-                captureSession.addOutput(videoOutput!)
-            }
-            
-            captureSession.startRunning()
-        }
-        else if authStatus == AVAuthorizationStatus.NotDetermined{
-            
-            if !authorizing{
-                authorizing = true
-                AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (succeed) -> Void in
-                    if succeed{
-                        
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-                            var errAudio : NSError? = nil
-                            self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
-                            if errAudio != nil{
-                                println("Problem to get audio input : \(errAudio!.localizedDescription)")
-                            }
-                            else{
-                                /*if captureSession.canAddInput(audioDeviceInput){
-                                captureSession.addInput(audioDeviceInput)
-                                println("ADD")
-                                }*/
-                            }
-                            
-                            
-                            
-                            
-                            var err : NSError? = nil
-                            self.captureDeviceInput = AVCaptureDeviceInput(device: self.captureDevice, error: &err)
-                            if self.captureSession.canAddInput(self.captureDeviceInput!){
-                                self.captureSession.addInput(self.captureDeviceInput!)
-                            }
-                            
-                            
-                            if err != nil {
-                                println("error: \(err?.localizedDescription)")
-                            }
-                            
-                            
-                            self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-                            self.previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                            
-                            self.previewLayer?.frame = viewToUse.layer.frame
-                            viewToUse.layer.addSublayer(self.previewLayer)
-                            
-                            
-                            
-                            
-                            
-                            self.imageOutput = AVCaptureStillImageOutput()
-                            self.imageOutput!.outputSettings = NSDictionary(object: AVVideoCodecJPEG, forKey: AVVideoCodecKey) as [NSObject : AnyObject]
-                            if self.captureSession.canAddOutput(self.imageOutput){
-                                self.captureSession.addOutput(self.imageOutput)
-                            }
-                            
-                            
-                            //Movie output
-                            self.videoOutput = AVCaptureMovieFileOutput()
-                            let totalSeconds:Float64 = 10
-                            let preferedTimeScale:Int32 = 30
-                            let maxDuration:CMTime = CMTimeMakeWithSeconds(totalSeconds, preferedTimeScale)
-                            self.videoOutput!.maxRecordedDuration = maxDuration
-                            self.videoOutput!.minFreeDiskSpaceLimit = 1024 * 1024
-                            if self.captureSession.canAddOutput(self.videoOutput!){
-                                self.captureSession.addOutput(self.videoOutput!)
-                            }
-                            
-                            
-                            self.captureSession.startRunning()
-                        })
-                        
-                        
-                        
-                    }
-                    else{
-                        
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.camDenied()
-                        })
-                        
-                    }
-                })
-            }
-            
-            
-        }
-        else{
-            self.camDenied()
-        }
-    }
-    
-    func addAudio(){
-        //var successful = BFTaskCompletionSource()
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            
-            self.captureSession.beginConfiguration()
-            
-            self.audioCaptureDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-            var errAudio : NSError? = nil
-            self.audioDeviceInput = AVCaptureDeviceInput(device: self.audioCaptureDevice, error: &errAudio)
-            if errAudio != nil{
-                println("Problem to get audio input : \(errAudio!.localizedDescription)")
-            }
-            
-            if self.audioDeviceInput != nil {
-                if self.captureSession.canAddInput(self.audioDeviceInput){
-                    self.captureSession.addInput(self.audioDeviceInput)
-                    
-                }
-                
-            }
-            
-            self.captureSession.commitConfiguration()
-            
-        }
-        
-
-    
-        //return successful.task
-    }
-    
-    func removeAudio(){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            self.captureSession.beginConfiguration()
-            
-            if self.audioDeviceInput != nil {
-                self.captureSession.removeInput(self.audioDeviceInput)
-            }
-            
-            self.captureSession.commitConfiguration()
-        }
-        
-    }
-    
-    
-    func switchCamera(button : UIButton){
-        self.changeCameraPosition()
-    }
-    
-    func changeCameraPosition(){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            
-            var preferredPosition:AVCaptureDevicePosition = AVCaptureDevicePosition.Unspecified
-            var currentPosition:AVCaptureDevicePosition = self.captureDevice!.position
-            
-            switch currentPosition{
-                
-            case AVCaptureDevicePosition.Unspecified:
-                preferredPosition = AVCaptureDevicePosition.Front
-                
-            case AVCaptureDevicePosition.Front:
-                preferredPosition = AVCaptureDevicePosition.Back
-                
-            case AVCaptureDevicePosition.Back:
-                preferredPosition = AVCaptureDevicePosition.Front
-                
-            default:
-                preferredPosition = AVCaptureDevicePosition.Back
-            }
-            
-            self.captureSession.beginConfiguration()
-            
-            let devices = AVCaptureDevice.devices()
-            var tempCaptureDevice:AVCaptureDevice?
-            for device in devices {
-                // Make sure this particular device supports video
-                if (device.hasMediaType(AVMediaTypeVideo)) {
-                    // Finally check the position and confirm we've got the back camera
-                    if(device.position == preferredPosition) {
-                        tempCaptureDevice = device as? AVCaptureDevice
-                    }
-                }
-            }
-            
-            
-            var videoCaptureDeviceInput:AVCaptureDeviceInput = AVCaptureDeviceInput.deviceInputWithDevice(tempCaptureDevice, error: nil) as! AVCaptureDeviceInput
-            
-            self.captureSession.removeInput(self.captureDeviceInput!)
-            
-            if self.captureSession.canAddInput(videoCaptureDeviceInput){
-                self.captureSession.addInput(videoCaptureDeviceInput)
-                self.captureDevice = tempCaptureDevice
-                self.captureDeviceInput = videoCaptureDeviceInput
-            }
-            else{
-                self.captureSession.addInput(AVCaptureDeviceInput(device: self.captureDevice, error: nil))
-            }
-            
-            self.captureSession.commitConfiguration()
-            
-        }
-    }
-    
     
     func uploadImage(image : UIImage){
         
@@ -1659,273 +1097,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-    
-    /*
-    * SERVER
-    */
-    
-    func getLastPiki(){
-        
-        var requestPiki:PFQuery = PFQuery(className: "Piki")
-        requestPiki.orderByDescending("createdAt")
-        requestPiki.getFirstObjectInBackgroundWithBlock { (piki : PFObject?, error : NSError?) -> Void in
-            
-            if piki != nil{
-                
-                //If there is already a Piki, see if it is the same
-                if self.mainPiki != nil {
-                    if self.mainPiki!.objectId != piki!.objectId!{
-                        self.mainPiki = piki!
-                        var file:PFFile = piki!["photo"] as! PFFile
-                        
-                        self.getLastReact()
-                        
-                        file.getDataInBackgroundWithBlock({ (imageData : NSData?, error : NSError?) -> Void in
-                            if error == nil {
-                                self.mainPhotoImageView!.image = UIImage(data: imageData!)
-                            }
-                        })
-                    }
-                    else{
-                        self.getLastReact()
-                    }
-                }
-                else{
-                    self.mainPiki = piki!
-                    var file:PFFile = piki!["photo"] as! PFFile
-                    
-                    self.getLastReact()
-                    
-                    file.getDataInBackgroundWithBlock({ (imageData : NSData?, error : NSError?) -> Void in
-                        if error == nil {
-                            self.mainPhotoImageView!.image = UIImage(data: imageData!)
-                        }
-                    })
-                }
-                
-                
-                
-            }
-        }
-        
-    }
-    
-    func getLastReact(){
-        
-        if self.mainPiki != nil {
-            var requestReacts:PFQuery = PFQuery(className: "React")
-            requestReacts.orderByDescending("createdAt")
-            requestReacts.whereKey("Piki", equalTo: self.mainPiki!)
-        
-            
-            requestReacts.findObjectsInBackgroundWithBlock { (reacts : [AnyObject]?, error : NSError?) -> Void in
-                if error == nil{
-                    self.videoReacts.removeAll(keepCapacity: false)
-                    self.pikiReacts = reacts as! Array<PFObject>
-                    self.collectionView!.reloadData()
-                    self.collectionView?.layoutIfNeeded()
-                }
-            }
-        }
-        
-    }
-    
-    
-    /*
-    * LIKE
-    */
-    
-    func likePhoto(){
-        
-        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
-        
-        //See if front camera, otherwise change orientation
-        
-        if actualMode == 0{
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-                var videoConnection : AVCaptureConnection?
-                for connecton in self.imageOutput!.connections {
-                    //find a matching input port
-                    println("connections")
-                    for port in connecton.inputPorts!{
-                        println("input port")
-                        if port.mediaType == AVMediaTypeVideo {
-                            println("video port")
-                            videoConnection = connecton as? AVCaptureConnection
-                            break //for port
-                        }
-                    }
-                    
-                    if videoConnection  != nil {
-                        break// for connections
-                    }
-                }
-                if videoConnection  != nil {
-                    Mixpanel.sharedInstance().timeEvent("Send React")
-                    self.imageOutput!.captureStillImageAsynchronouslyFromConnection(videoConnection){
-                        (imageSampleBuffer : CMSampleBuffer!, _) in
-                        
-                        let imageDataJpeg = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer)
-                        var pickedImage: UIImage = UIImage(data: imageDataJpeg!)!
-                        
-                        var flippedImage:UIImage?
-                        if self.captureDevice!.position == AVCaptureDevicePosition.Front {
-                            flippedImage = UIImage(CGImage: pickedImage.CGImage, scale: pickedImage.scale, orientation: UIImageOrientation.LeftMirrored)
-                        }
-                        else{
-                            flippedImage = pickedImage
-                        }
-                        
-                        var squareImage = RBSquareImageTo(flippedImage!, CGSize(width: 400, height: 400))
-                        
-                        
-                        self.photoTaken = squareImage
-                        //self.uploadImage(self.getPhotoWithLikeOverlay(squareImage))
-                        let finalImage:UIImage = self.getPhotoWithLikeOverlay(squareImage)
-                        
-                        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-                        cameraCell.overlayCameraView.hidden = true
-                        
-                        self.deselectAllEmojis()
-                        
-                        var randomNumber = self.randomNumber()
-                        
-                        //Add photo now to the collection
-                        var pikiInfos:[String : AnyObject] = [String : AnyObject]()
-                        pikiInfos["photo"] = finalImage
-                        pikiInfos["id"] = randomNumber
-                        
-                        self.postNewTempReact(pikiInfos)
-                        
-                        
-                        //Hide et deslect all emojis butt
-                        
-                        
-                        //Upload file
-                        self.uploadImage(finalImage)
-                        
-                        
-                        
-                        //Create React
-                        if self.imageFile != nil{
-                            if self.mainPiki != nil{
-                                var newReact:PFObject = PFObject(className: "React")
-                                newReact["photo"] = self.imageFile!
-                                newReact["Piki"] = self.mainPiki!
-                                newReact["user"] = PFUser.currentUser()
-                                var reactACL:PFACL = PFACL()
-                                
-                                
-                                if self.isPublicPleek{
-                                    reactACL.setPublicReadAccess(true)
-                                }
-                                else{
-                                    if self.mainPiki!["recipients"] != nil{
-                                        for userId in self.mainPiki!["recipients"] as! Array<String>{
-                                            reactACL.setReadAccess(true, forUserId: userId)
-                                        }
-                                    }
-                                    
-                                }
-                                
-                                reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
-                                if self.mainPiki!["user"] != nil {
-                                    reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
-                                }
-                                
-                                newReact.ACL = reactACL
-                                
-                                
-                                //Start a background task
-                                bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
-                                    UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                    bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                })
-                                
-                                
-                                newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
-                                    if succeeded{
-                                        
-                                        var reactName:String?
-                                        
-                                        Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Emoji Sent" : 1])
-                                        if self.positionMemShowed != nil{
-                                            reactName = self.mems[self.positionMemShowed!]["name"] as? String
-                                            
-                                            if reactName != nil{
-                                                FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji", "Meme Name" : reactName!])
-                                                Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji", "Meme Name" : reactName!])
-                                            }
-                                            else{
-                                                FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
-                                                Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
-                                            }
-                                            
-                                            
-                                        }
-                                        else{
-                                            FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Emoji"])
-                                            Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Emoji"])
-                                        }
-                                        
-                                        
-                                        
-                                        //Push notif
-                                        var isPublic:Bool?
-                                        if self.mainPiki!["isPublic"] != nil {
-                                            isPublic = self.mainPiki!["isPublic"] as? Bool
-                                        }
-                                        else{
-                                            isPublic = true
-                                        }
-                                        
-                                        
-                                        var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
-                                        if peekeeInfosPosition != nil{
-                                            println("found")
-                                            self.pikiReacts[peekeeInfosPosition!] = newReact
-                                            self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: peekeeInfosPosition! + 1, inSection: 1)])
-                                            
-                                            self.hasNewReacts = true
-                                            
-                                            self.mainPiki!.fetchIfNeededInBackground()
-                                            
-                                            //Push notif
-                                            self.sendPushNewComment(isPublic!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                                                UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                                bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                                
-                                                Utils().setPikiAsView(self.mainPiki!)
-                                                return nil
-                                            })
-                                        }
-                                        else{
-                                            println("delete")
-                                            newReact.deleteEventually()
-                                            
-                                            UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                            bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                        }
 
-                                    }
-                                    else{
-                                        println("Error while creating new react")
-                                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                    }
-                                })
-                            }
-                            
-                        }
-                        
-                        
-                    }
-                    
-                }
-            }
-        }
-
-    }
     
     /*
     * Build photos with different layers
@@ -1933,360 +1105,85 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
     
     
-    func getPhotoWithTextOverlay(image : UIImage) -> UIImage {
-        var blackOverlayImage:UIImage?
+    func getPhotoWithTextOverlay(image : UIImage) -> UIImage? {
+        var finalImage:UIImage?
         
-        
-        
-        
-        
-        var overlayView = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: image.size))
-        overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.1
-        
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        
-        let size:CGSize = CGSize(width: cameraCell.frame.size.width * UIScreen.mainScreen().scale, height: cameraCell.frame.size.width * UIScreen.mainScreen().scale)
-        
-        
-        
-        var imageLabel:UIImage?
-        cameraCell.textViewOverPhoto!.editable = false
-        if (cameraCell.textViewOverPhoto!.text as NSString).length > 0{
-            UIGraphicsBeginImageContextWithOptions(cameraCell.textViewOverPhoto!.frame.size, false, 0.0);
-            cameraCell.textViewOverPhoto!.layer.renderInContext(UIGraphicsGetCurrentContext())
-            imageLabel = UIGraphicsGetImageFromCurrentImageContext()
+
+        if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+            let size:CGSize = CGSize(width: cell.frame.size.width * UIScreen.mainScreen().scale, height: cell.frame.size.width * UIScreen.mainScreen().scale)
+            
+            var imageLabel:UIImage?
+            cell.textViewOverPhoto!.editable = false
+            if (cell.textViewOverPhoto!.text as NSString).length > 0{
+                UIGraphicsBeginImageContextWithOptions(cell.textViewOverPhoto!.frame.size, false, 0.0);
+                cell.textViewOverPhoto!.layer.renderInContext(UIGraphicsGetCurrentContext())
+                imageLabel = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+            }
+            cell.textViewOverPhoto!.editable = true
+            
+            
+            UIGraphicsBeginImageContext(size)
+            
+            image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            
+            if imageLabel != nil{
+                imageLabel!.drawInRect(CGRect(x: 0, y: cell.textViewOverPhoto!.frame.origin.y * UIScreen.mainScreen().scale, width: imageLabel!.size.width * UIScreen.mainScreen().scale, height: imageLabel!.size.height * UIScreen.mainScreen().scale))
+            }
+            
+            
+            
+            finalImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
         }
-        cameraCell.textViewOverPhoto!.editable = true
-        
-        UIGraphicsBeginImageContextWithOptions(image.size, false, 0.0);
-        overlayView.layer.renderInContext(UIGraphicsGetCurrentContext())
-        
-        blackOverlayImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        
-        UIGraphicsBeginImageContext(size)
-        
-        image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        blackOverlayImage!.drawInRect(CGRect(x: 0, y: 0, width: size.width , height: size.height))
-        
-        if imageLabel != nil{
-            imageLabel!.drawInRect(CGRect(x: 0, y: cameraCell.textViewOverPhoto!.frame.origin.y * UIScreen.mainScreen().scale, width: imageLabel!.size.width * UIScreen.mainScreen().scale, height: imageLabel!.size.height * UIScreen.mainScreen().scale))
-        }
-        
-        
-        
-        var finalImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
         
         return finalImage
     }
     
     
     
-    func getPhotoWithLikeOverlay(image : UIImage) ->  UIImage {
+    func getPhotoWithLikeOverlay(image : UIImage) ->  UIImage? {
         
         
         var imageLike:UIImage?
-        var blackOverlayImage:UIImage?
+        var finalImage:UIImage?
         
         
-        
-        
-        
-        var overlayView = UIView(frame: CGRect(origin: CGPoint(x: 0, y: 0), size: image.size))
-        overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.4
-        
-        var selectedCell:ReactsCollectionViewCell?
-        
-        
-        for cell in collectionView!.visibleCells() as! Array<UICollectionViewCell>{
+        if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+            cell.iconImageView.hidden = false
             
-            let indexPathCell = collectionView!.indexPathForCell(cell as UICollectionViewCell)
-            if indexPathCell!.section == 1{
-                if indexPathCell!.item == 0{
-                    selectedCell = cell as? ReactsCollectionViewCell
-                    
-                }
-            }
+            let size:CGSize = CGSize(width: cell.frame.size.width * UIScreen.mainScreen().scale, height: cell.frame.size.width * UIScreen.mainScreen().scale)
+            
+            UIGraphicsBeginImageContextWithOptions(size, false, 0.0);
+            cell.memeImageView.layer.renderInContext(UIGraphicsGetCurrentContext())
+            
+            imageLike = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            UIGraphicsBeginImageContext(size)
+            
+            image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            imageLike!.drawInRect(CGRect(x: 0, y: 0, width: imageLike!.size.width *  UIScreen.mainScreen().scale, height: imageLike!.size.height  * UIScreen.mainScreen().scale))
             
             
-        }
-        
-        if selectedCell == nil{
-            println("nil")
+            finalImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
         }
         
         
-        let size:CGSize = CGSize(width: selectedCell!.frame.size.width * UIScreen.mainScreen().scale, height: selectedCell!.frame.size.width * UIScreen.mainScreen().scale)
         
         
-        
-        let sizeLikeImage:CGSize = CGSize(width: selectedCell!.emojiImageView!.frame.size.width * UIScreen.mainScreen().scale, height: selectedCell!.emojiImageView!.frame.size.height * UIScreen.mainScreen().scale)
-        UIGraphicsBeginImageContextWithOptions(sizeLikeImage, false, 0.0);
-        selectedCell!.emojiImageView!.layer.renderInContext(UIGraphicsGetCurrentContext())
-        
-        imageLike = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        /*UIGraphicsBeginImageContextWithOptions(image.size, false, 0.0);
-        overlayView.layer.renderInContext(UIGraphicsGetCurrentContext())
-        
-        blackOverlayImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();*/
-        
-        UIGraphicsBeginImageContext(size)
-        
-        image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        /*blackOverlayImage!.drawInRect(CGRect(x: 0, y: 0, width: size.width * UIScreen.mainScreen().scale , height: size.height * UIScreen.mainScreen().scale))*/
-        imageLike!.drawInRect(CGRect(x: 0, y: 0, width: imageLike!.size.width *  UIScreen.mainScreen().scale, height: imageLike!.size.height  * UIScreen.mainScreen().scale))
-        
-        
-        var finalImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
         
         return finalImage
         
     }
-    
-    
-    /*
-    * TEXTFIELD functions
-    */
-    
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
 
-        
-        if text == "\n"{
-            textView.resignFirstResponder()
-            return false
-        }
-        
-        return true
-    }
-    
-    
-    /*
-    * Capture File Recording Delegate
-    */
-    
-    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
-    
-        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
-        
-        if error != nil {
-            println("Error : \(error.localizedDescription)")
-        }
-        
-        for cell in collectionView!.visibleCells() as! Array<UICollectionViewCell>{
-            
-            let indexPathCell = collectionView!.indexPathForCell(cell as UICollectionViewCell)
-            if indexPathCell!.section == 1{
-                if indexPathCell!.item == 0{
-                    (cell as! ReactsCollectionViewCell).recordVideoBar!.removeFromSuperview()
-                }
-            }
-            
-            
-        }
-        
-        var recordedSuccessfully = true
-        
-        if error != nil{
-            if error.code != 0{
-                //An error occured
-                var value: AnyObject! = error.userInfo![AVErrorRecordingSuccessfullyFinishedKey]
-                if value != nil{
-                    recordedSuccessfully = value.boolValue
-                }
-                
-            }
-        }
-        
-        
-        if recordedSuccessfully {
-            
-            
-
-            Mixpanel.sharedInstance().timeEvent("Send React")
-            Utils().cropVideo(outputFileURL, captureDevice: self.captureDevice!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                if task.error != nil{
-                    println("Error : \(error.localizedDescription)")
-                }
-                else{
-                    var finalURL = task.result as! NSURL
-                    let screenImage:UIImage = Utils().getImageFrameFromVideo(finalURL)
-                    var imageData:NSData = UIImageJPEGRepresentation(screenImage, 0.8)
-                    
-                    var randomNumber = self.randomNumber()
-                    
-                    //Add photo now to the collection
-                    var pikiInfos:[String : AnyObject] = [String : AnyObject]()
-                    pikiInfos["videoPath"] = finalURL
-                    pikiInfos["previewImage"] = UIImage(data: imageData)
-                    pikiInfos["id"] = randomNumber
-
-                    dispatch_async(dispatch_get_main_queue(), {
-
-                        
-                        self.pikiReacts.insert(pikiInfos, atIndex: 0)
-                        self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 1)])
-                        self.leaveReply()
-                        //self.startVideoOnVisibleCells()
-                    })
-                    
-                    
-
-                    
-                    self.imageFile = PFFile(name: "video.mp4", contentsAtPath: finalURL.path!)
-                    
-                    
-                    
-                    
-                    
-                    
-                    /*
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                        var player:AVPlayer = AVPlayer(URL: finalURL)
-                        var playerLayer:AVPlayerLayer = AVPlayerLayer(player: player)
-                        playerLayer.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)
-                        self.mainPhotoView!.layer.addSublayer(playerLayer)
-                        player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                        player.muted = true
-                        player.play()
-                        
-                        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
-
-                    })*/
-                    
-                    
-                    //Start a background task
-                    bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
-                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                    })
-                    
-                    
-                    
-                    let previewFile:PFFile = PFFile(name: "photo.jpg", data: imageData)
-                    previewFile.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
-                        
-                        }, progressBlock: { (progress : Int32) -> Void in
-                        println("Preview : \(progress)")
-                    })
-                    
-                    
-                    var newVideoReact:PFObject = PFObject(className: "React")
-                    self.imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
-                        if succeeded{
-                            //self.pikiReacts.insert(newVideoReact, atIndex: 0)
-                            //self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 0)])
-                        }
-                        
-                        }, progressBlock: { (progress:Int32) -> Void in
-                            println(progress)
-                    })
-                    
-                    //Push notif
-                    var isPublic:Bool?
-                    if self.mainPiki!["isPublic"] != nil {
-                        isPublic = self.mainPiki!["isPublic"] as? Bool
-                    }
-                    else{
-                        isPublic = true
-                    }
-                    
-                    
-                    
-                    newVideoReact["video"] = self.imageFile!
-                    newVideoReact["previewImage"] = previewFile
-                    newVideoReact["Piki"] = self.mainPiki!
-                    
-                    if PFUser.currentUser() != nil{
-                        newVideoReact["user"] = PFUser.currentUser()
-                        var reactACL:PFACL = PFACL()
-                        
-                        if self.isPublicPleek{
-                            reactACL.setPublicReadAccess(true)
-                        }
-                        else{
-                            if self.mainPiki!["recipients"] != nil{
-                                for userId in self.mainPiki!["recipients"] as! Array<String>{
-                                    reactACL.setReadAccess(true, forUserId: userId)
-                                }
-                            }
-                            
-                        }
-                        
-                        
-                        reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
-                        if self.mainPiki!["user"] != nil {
-                            reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
-                        }
-                        newVideoReact.ACL = reactACL
-                    }
-                    
-                    
-                    newVideoReact.saveInBackgroundWithBlock({ (success :Bool, error) -> Void in
-                        if success{
-                            Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Video Sent" : 1])
-                            FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Video"])
-                            Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Video"])
-
-                            var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
-                            if peekeeInfosPosition != nil{
-                                println("found")
-                                self.pikiReacts[peekeeInfosPosition!] = newVideoReact
-                                self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: peekeeInfosPosition! + 1, inSection: 1)])
-                                
-                                self.hasNewReacts = true
-                                
-                                //Push notif
-                                self.sendPushNewComment(isPublic!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                                    UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                    bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                    
-                                    Utils().setPikiAsView(self.mainPiki!)
-                                    return nil
-                                })
-                            }
-                            else{
-                                println("delete")
-                                newVideoReact.deleteEventually()
-                                
-                                UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                            }
-
-                        }
-                        
-                    })
-                    
-                    
-                    
-                    
-                }
-                
-                return nil
-            })
-            
-            //removeAudio()
-            
-        }
-        
-    }
-    
     
     // Quit button
     func quit(){
         
         //removeAudio()
          muteAllVideos()
-        captureSession.stopRunning()
         Utils().setPikiAsView(self.mainPiki!)
         
         if self.hasNewReacts{
@@ -2314,14 +1211,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
     
     
-    override func viewWillDisappear(animated: Bool) {
-        self.captureSession.removeInput(audioDeviceInput)
-        self.captureSession.removeInput(captureDeviceInput)
-        self.captureSession.stopRunning()
-    }
-    
-    
-    
     
     
     
@@ -2329,52 +1218,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     * Scroll View Delegate
     */
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
-
-        if scrollView == self.collectionView{
-            let originYNbReactsView:CGFloat = self.view.frame.size.width + 80 - nbreactsView!.frame.size.height
-            
-            if originYNbReactsView - scrollView.contentOffset.y > 80{
-                nbreactsView!.hidden = true
-                nbPeopleView!.hidden = false
-                
-                
-                nbreactsView!.transform = CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)
-                
-                nbPeopleView!.transform = CGAffineTransformMakeTranslation(0, -scrollView.contentOffset.y)
-                
-                
-                
-            }
-            else{
-                nbPeopleView!.hidden = true
-                nbreactsView!.hidden = false
-                
-                nbreactsView!.transform = CGAffineTransformMakeTranslation(0, -(originYNbReactsView - 80))
-            }
-        }
-        
-        
-        
-        
-    }
-    
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         
         //pauseAndMuteAllVideos()
         NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
         
-        if indexPathBig != nil{
-            self.cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as! ReactsCollectionViewCell)
-        }
-        
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
 
         if !decelerate{
-            println("End Dragging")
             NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
             //self.startVideoOnVisibleCells()
         }
@@ -2412,12 +1266,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             
                             if pikiReact["video"] != nil{
 
-                                
-                                dispatch_async(dispatch_get_main_queue(), { ()->() in
-                                    cell.iconInfo!.hidden = false
-                                })
-                                
-                                
                                 var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(pikiReact.objectId).mov")
                                 
                                 if NSFileManager.defaultManager().fileExistsAtPath(filepath!.path!){
@@ -2466,16 +1314,12 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                     })
                                 }
                             }
-                            else{
-                                cell.iconInfo!.hidden = true
-                            }
                         }
                             
                         else{
                             var pikiInfos:[String : AnyObject] = self.pikiReacts[index.item-1] as! [String : AnyObject]
                             
                             if pikiInfos["videoPath"] != nil {
-                                cell.iconInfo!.hidden = false
                                 
                                 var playerItem:AVPlayerItem = AVPlayerItem(URL: pikiInfos["videoPath"] as! NSURL)
                                 var player:AVPlayer = AVPlayer(playerItem: playerItem)
@@ -2492,9 +1336,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                                 
                                 NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
                             }
-                            else{
-                                cell.iconInfo!.hidden = true
-                            }
+
                         }
                         
                         
@@ -2539,7 +1381,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                             
                             dispatch_async(dispatch_get_main_queue(), {
                                 (cell as! MainPeekeeCollectionViewCell).playerLayer.player.pause()
-                                (cell as! MainPeekeeCollectionViewCell).loadIndicator.hidden = true
                                 (cell as! MainPeekeeCollectionViewCell).readVideoIcon.hidden = false
                             })
                             
@@ -2563,13 +1404,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     let cellReact : ReactsCollectionViewCell = cell as! ReactsCollectionViewCell
                     if cellReact.playerLayer.player != nil{
                         cellReact.playerLayer.player.muted = true
-                        dispatch_async(dispatch_get_main_queue(), {
-                            cellReact.iconInfo!.hidden = false
-                        })
                         
                     }
                 }
-                else{
+                else if cell.isKindOfClass(MainPeekeeCollectionViewCell){
                     let cellReact : MainPeekeeCollectionViewCell = cell as! MainPeekeeCollectionViewCell
                     if cellReact.playerLayer.player != nil {
                         cellReact.playerLayer.player.muted = true
@@ -2599,9 +1437,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     if self.collectionView!.indexPathForCell(cellReact)?.item != indexPath.item{
                         if cellReact.playerLayer.player != nil{
                             cellReact.playerLayer.player.muted = true
-                            dispatch_async(dispatch_get_main_queue(), {
-                                cellReact.iconInfo!.hidden = false
-                            })
                         }
                     }
                 }
@@ -2625,108 +1460,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     /*
     * Action Reacts
     */
-    
-    
-    func recordVideoReact(sender : UILongPressGestureRecognizer){
-        if sender.state == UIGestureRecognizerState.Began{
 
-            //Create temporary URL to record to
-            let outpuPath:String = "\(NSTemporaryDirectory())output-\(NSDate()).mov"
-            let outputURL:NSURL = NSURL(fileURLWithPath: outpuPath)!
-            var fileManager:NSFileManager = NSFileManager()
-            
-            for cell in collectionView!.visibleCells() as! Array<UICollectionViewCell>{
-                
-                let indexPathCell = collectionView!.indexPathForCell(cell as UICollectionViewCell)
-                if indexPathCell!.section == 1{
-                    if indexPathCell!.item == 0{
-                        
-                        
-                        
-                        (cell as! ReactsCollectionViewCell).startRecording()
-                        timerReact = NSTimer(timeInterval: 5, target: self, selector: Selector("endRecording"), userInfo: nil, repeats: false)
-                        NSRunLoop.currentRunLoop().addTimer(timerReact!, forMode: NSRunLoopCommonModes)
-                    }
-                }
-                
-                
-            }
-
-            //Start Recording
-            self.isRecording = true
-            videoOutput!.startRecordingToOutputFileURL(outputURL, recordingDelegate: self)
-            
-            
-        }
-        else if sender.state == UIGestureRecognizerState.Ended {
-
-            self.timerReact!.invalidate()
-            
-            if isRecording{
-                videoOutput!.stopRecording()
-            }
-            
-        }
-    }
-    
-    
-    func endRecording(){
-        
-        if isRecording{
-            videoOutput!.stopRecording()
-        }
-        
-    }
-    
-    
-    func takeReact(recognizer: UITapGestureRecognizer){
-        
-        if isAnEmojiShowed(){
-            self.likePhoto()
-            
-        }
-        else if isInTextMode(){
-            postTextReact()
-        }
-        else{
-            takePhotoFromCell()
-        }
-        
-        
-    }
-    
-    
-    func reducActions(){
-        
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            
-            self.cameraActionButton!.frame = CGRect(x: 15 + 36, y: self.view.frame.height - 80 + 36, width: 0, height: 0)
-            
-            self.emojiActionButton!.frame = CGRect(x: self.view.frame.size.width - 75 + 31, y: self.view.frame.height - 62 + 31, width: 0, height: 0)
-            
-        }) { (completed) -> Void in
-        }
-        
-    }
-    
-    func getBackActions(full : Bool){
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            
-            if full {
-                self.cameraActionButton!.frame = CGRect(x: 15, y: self.view.frame.height - 80, width: 71, height: 72)
-                
-                self.emojiActionButton!.frame = CGRect(x: self.view.frame.size.width - 75, y: self.view.frame.height - 70, width: 61, height: 62)
-            }
-            else{
-                self.cameraActionButton!.frame = CGRect(x: 33, y: self.view.frame.height - 62, width: 36, height: 36)
-                
-                self.emojiActionButton!.frame = CGRect(x: self.view.frame.size.width - 60, y: self.view.frame.height - 55, width: 31, height: 31)
-            }
-            
-            
-            }) { (completed) -> Void in
-        }
-    }
     
     
     func updateReactRequest(){
@@ -2759,23 +1493,48 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
             else{
                 
+                
+                
                 if self.pikiReacts.count == 0{
                     self.pikiReacts = reacts as! Array<PFObject>
                     
-                    for react in self.pikiReacts{
-                    }
                     
                     self.buildViewShareBackButton()
-                    self.collectionView!.reloadData()
+                    self.collectionView!.reloadSections(NSIndexSet(index: 1))
                 }
                 else{
                     var nbReactToInsert:Int = 0
+                    var indexPathToReload:[NSIndexPath] = [NSIndexPath]()
+                    var positionIndexPathToReload:[Int] = [Int]()
+                    
+                    var position:Int = 0
                     for react in reacts as! Array<PFObject> {
                         var alreadyIn:Bool = false
                         for actualReact in self.pikiReacts{
                             
                             if actualReact.isKindOfClass(PFObject){
                                 if react.objectId == actualReact.objectId{
+                                    
+                                    
+                                    
+                                    //update react nb likes
+                                    if let nbLikesNew = react["nbLikes"] as? Int{
+                                        
+                                        if let nbLikesNew = react["nbLikes"] as? Int{
+                                            if self.pikiReacts[position].isKindOfClass(PFObject){
+                                                (self.pikiReacts[position] as! PFObject)["nbLikes"] = nbLikesNew
+                                            }
+                                            
+                                            
+                                            /*if let cellUpdate:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: position + 1, inSection: 1)) as? ReactsCollectionViewCell{
+                                                println("Position : \(position), new like : \(nbLikesNew)")
+                                                cellUpdate.updateFrontLikes()
+                                            }*/
+                                        }
+                                        
+                                        
+                                    }
+                                    
                                     alreadyIn = true
                                     break
                                 }
@@ -2786,15 +1545,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         
                         if !alreadyIn{
                             self.pikiReacts.insert(react, atIndex: nbReactToInsert)
-                            //self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: nbReactToInsert, inSection: 0)])
-                            //self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: nbReactToInsert, inSection: 0)])
                             nbReactToInsert++
                         }
                         
-                        
+                        position++
                     }
                     
-                    if nbReactToInsert > 0{
+                    
+                    self.collectionView!.reloadSections(NSIndexSet(index: 1))
+                    /*if nbReactToInsert > 0{
+                        
+                        
                         var indexToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
                         for index in 1...(nbReactToInsert){
                             indexToInsert.append(NSIndexPath(forItem: index, inSection: 1))
@@ -2802,16 +1563,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         
                         self.collectionView!.performBatchUpdates({ () -> Void in
                             self.collectionView!.insertItemsAtIndexPaths(indexToInsert)
-                        }, completion: { (completed) -> Void in
-                            self.buildViewShareBackButton()
+                            }, completion: { (completed) -> Void in
+                                self.buildViewShareBackButton()
 
                         })
-                        
-                        
-                    }
-                    else{
-                        //self.startVideoOnVisibleCells()
-                    }
+                    }*/
+                    
+                    
+
+                    
+                    
+                    
 
                     
                 }
@@ -2861,7 +1623,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                         for react in self.pikiReacts{
                         }
                         
-                        self.collectionView!.reloadData()
+                        self.collectionView!.reloadSections(NSIndexSet(index: 1))
                     }
                     else{
                         var nbReactToInsert:Int = 0
@@ -2945,7 +1707,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showRecipients"{
-            captureSession.stopRunning()
             pauseAndMuteAllVideos()
             var listRecipientsController:ListRecipientsViewController = segue.destinationViewController as! ListRecipientsViewController
             listRecipientsController.mainPiki = self.mainPiki!
@@ -2955,342 +1716,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
     
     
-    func goInTextMode(){
-        
-        for button in arrayEmojisButton{
-            button.hidden = true
-        }
-        
-        self.backCameraActionView.hidden = true
-        
-        
-        
-        
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        cameraCell.textViewOverPhoto!.becomeFirstResponder()
-        cameraCell.textViewOverPhoto!.text = ""
-        
-    }
     
-    func leaveTextMode(){
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        cameraCell.overlayCameraView!.hidden = true
-        cameraCell.textViewOverPhoto!.resignFirstResponder()
-        deselectAllEmojis()
-        cameraCell.textViewOverPhoto!.text = "Your text here 😀"
-    }
-    
-    func getHeightTextView(textView : UITextView, string : NSString) -> CGFloat {
-        var textEntered:NSString = string
-        let textAttributes:[String:AnyObject] = [NSFontAttributeName: textView.font]
-        
-        var textWidth:CGFloat = CGRectGetWidth(UIEdgeInsetsInsetRect(textView.frame, textView.textContainerInset))
-        textWidth = textWidth - 2.0 * textView.textContainer.lineFragmentPadding
-        
-        let boundingRect:CGRect = textEntered.boundingRectWithSize(CGSizeMake(textWidth, 0),
-            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
-            attributes: [NSFontAttributeName: textView.font],
-            context: nil)
-        
-        let nbLines = CGRectGetHeight(boundingRect) / textView.font.lineHeight
-        
-        return CGRectGetHeight(boundingRect)
-    }
-    
-    
-    
-    // MARK: Keyboard
-    
-    //Keyboard Notifs
-    func keyboardWillShow(notification : NSNotification){
-        
-        self.view.addGestureRecognizer(tapToDismissKeyboard!)
-        
-        let info:NSDictionary = notification.userInfo!
-        let keyboardSize = info.objectForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue().size
-        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
-        
-        
-        self.nbPeopleView!.hidden = true
-        self.nbreactsView!.hidden = true
-        
-        self.arrayEmojisButton[0].hidden = false
-        self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
-        self.backCameraActionView!.hidden = true
-        
-        UIView.animateWithDuration(animationDuration, animations: { () -> Void in
-            
-            var dif = self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)
-            println("Difference collection view move : \(dif)")
-            
-            
-            var difOrigin:CGFloat = self.cameraActionButton!.frame.origin.y - self.middleOverlay.frame.origin.y
-            var difFinal:CGFloat = self.middleOverlay.frame.height - self.cameraActionButton!.frame.height
-            var difToMove:CGFloat = difOrigin - difFinal
-            println("Dif Final : \(difToMove). Origin : \(difOrigin), final : \(difFinal)")
-            
-            self.cameraActionButton!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
-            self.backEmojiButtonSelected.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
-            self.arrayEmojisButton[0].transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
-            
-            
-            
-            
-            if Utils().isIphone4(){
-                self.topOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
-                self.middleOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
-                self.bottomOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
-                self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + difToMove)
-            }
-            else{
-                self.topOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-                self.middleOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-                self.bottomOverlay.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-                self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height + (self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-            }
-            
-            
-            
-            }) { (finished) -> Void in
-        }
-        
-        
-    }
-    
-    func keyboardWillHide(notification : NSNotification){
-        
-        self.view.removeGestureRecognizer(tapToDismissKeyboard!)
-        
-        for button in arrayEmojisButton{
-            button.hidden = false
-        }
-        
-       let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
-        
-        
-        UIView.animateWithDuration(animationDuration, animations: { () -> Void in
-            
-            self.backEmojiButtonSelected.transform = CGAffineTransformIdentity
-            self.arrayEmojisButton[0].transform = CGAffineTransformIdentity
-            self.cameraActionButton!.transform = CGAffineTransformIdentity
-            self.collectionView!.transform = CGAffineTransformIdentity
-            self.topOverlay.transform = CGAffineTransformIdentity
-            self.middleOverlay.transform = CGAffineTransformIdentity
-            self.bottomOverlay.transform = CGAffineTransformIdentity
-            
-            }) { (finished) -> Void in
-                self.nbreactsView!.hidden = true
-                self.backCameraActionView!.hidden = false
-                
-        }
-        
-    }
-    
-    func dismissKeyboard(gesture : UITapGestureRecognizer){
-        
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        cameraCell.textViewOverPhoto!.resignFirstResponder()
-        cameraCell.overlayCameraView!.hidden = true
-        
-    }
-    
-    
-    // MARK: ReactCollectionViewCell Deelegate
-    
-    func postTextReact() {
-        
-        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            var videoConnection : AVCaptureConnection?
-            for connecton in self.imageOutput!.connections {
-                //find a matching input port
-                for port in connecton.inputPorts!{
-                    if port.mediaType == AVMediaTypeVideo {
-                        videoConnection = connecton as? AVCaptureConnection
-                        break //for port
-                    }
-                }
-                
-                if videoConnection  != nil {
-                    break// for connections
-                }
-            }
-            if videoConnection  != nil {
-                Mixpanel.sharedInstance().timeEvent("Send React")
-                self.imageOutput!.captureStillImageAsynchronouslyFromConnection(videoConnection){
-                    (imageSampleBuffer : CMSampleBuffer!, _) in
-                    
-                    let imageDataJpeg = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageSampleBuffer)
-                    var pickedImage: UIImage = UIImage(data: imageDataJpeg!)!
-                    
-                    var flippedImage:UIImage?
-                    if self.captureDevice!.position == AVCaptureDevicePosition.Front {
-                        flippedImage = UIImage(CGImage: pickedImage.CGImage, scale: pickedImage.scale, orientation: UIImageOrientation.LeftMirrored)
-                    }
-                    else{
-                        flippedImage = pickedImage
-                    }
-                    
-                    var squareImage = RBSquareImageTo(flippedImage!, CGSize(width: 400, height: 400))
-                    
-                    
-                    self.photoTaken = squareImage
-                    //self.uploadImage(self.getPhotoWithLikeOverlay(squareImage))
-                    var finalImage:UIImage = self.getPhotoWithTextOverlay(squareImage)
-                    
-                    var randomNumber = self.randomNumber()
-                    
-                    //Add photo now to the collection
-                    var pikiInfos:[String : AnyObject] = [String : AnyObject]()
-                    pikiInfos["photo"] = finalImage
-                    pikiInfos["id"] = randomNumber
-                    
-                    self.postNewTempReact(pikiInfos)
-                    
-                    self.leaveTextMode()
-
-                    
-                    
-                    
-                    
-                    //Upload file
-                    self.uploadImage(finalImage)
-                    
-                    
-                    
-                    
-                    //Create React
-                    if self.imageFile != nil{
-                        if self.mainPiki != nil{
-                            var newReact:PFObject = PFObject(className: "React")
-                            newReact["photo"] = self.imageFile!
-                            newReact["Piki"] = self.mainPiki!
-                            newReact["user"] = PFUser.currentUser()
-                            var reactACL:PFACL = PFACL()
-                            if self.isPublicPleek{
-                                reactACL.setPublicReadAccess(true)
-                            }
-                            else{
-                                if self.mainPiki!["recipients"] != nil{
-                                    for userId in self.mainPiki!["recipients"] as! Array<String>{
-                                        reactACL.setReadAccess(true, forUserId: userId)
-                                    }
-                                }
-                                
-                            }
-                            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
-                            if self.mainPiki!["user"] != nil {
-                                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
-                            }
-                            
-                            newReact.ACL = reactACL
-                            
-                            
-                            
-                            //Start a background task
-                            bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
-                                UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                            })
-                            
-                            
-                            
-                            
-                            newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
-                                if succeeded{
-                                    Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Text Sent" : 1])
-                                    FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Text"])
-                                    Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Text"])
-                                    
-                                    //Push notif
-                                    var isPublic:Bool?
-                                    if self.mainPiki!["isPublic"] != nil {
-                                        isPublic = self.mainPiki!["isPublic"] as? Bool
-                                    }
-                                    else{
-                                        isPublic = true
-                                    }
-                                    
-                                    var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
-                                    if peekeeInfosPosition != nil{
-                                        println("found")
-                                        self.pikiReacts[peekeeInfosPosition!] = newReact
-                                        self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: peekeeInfosPosition! + 1, inSection: 1)])
-                                        
-                                        self.hasNewReacts = true
-                                        
-                                        self.mainPiki!.fetchIfNeededInBackground()
-                                        
-                                        self.sendPushNewComment(isPublic!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                                            UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                            bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                            
-                                            return nil
-                                        })
-                                        
-                                    }
-                                    else{
-                                        println("delete")
-                                        newReact.deleteEventually()
-                                        
-                                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                    }
-                                    
-                                    
-                                    
-                                    //self.getLastReact()
-                                    
-                                }
-                                else{
-                                    println("Error while creating new react")
-                                    UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
-                                    bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
-                                }
-                            })
-                        }
-                        
-                    }
-                    
-                    
-                }
-                
-            }
-        }
-        
-        
-    }
-
-    
-    func seeUserWhoPosted(user : PFUser){
-        
-        presentPopUpForUser(user)
-        
-    }
-    
-    
-    func printUsernamesreact(){
-        for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
-            if cell.isKindOfClass(ReactsCollectionViewCell){
-                (cell as! ReactsCollectionViewCell).showUsername()
-            }
-            
-        }
-    }
-    
-    func hideUsernamesreact(){
-        for cell in self.collectionView!.visibleCells() as! Array<UICollectionViewCell>{
-            if cell.isKindOfClass(ReactsCollectionViewCell){
-                (cell as! ReactsCollectionViewCell).hideUserName()
-            }
-            
-        }
-    }
     
     
     func removeReact(react : AnyObject, isReport : Bool){
-        println("React \(react)")
         
         if react.isKindOfClass(PFObject){
             if !isReport{
@@ -3340,130 +1769,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         
     }
-    
-    
-    func cellBigger(cell : ReactsCollectionViewCell){
-        
-        NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
-        
-        //Bigger
-        var cellToReduce:ReactsCollectionViewCell?
-        if indexPathBig != nil{
-            cellToReduce = self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as? ReactsCollectionViewCell
-            cellSmaller(cellToReduce!).continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                self.makeItBigger(cell)
-                
-                return nil
-            })
-        }
-        else{
-            makeItBigger(cell)
-        }
-        
-        
-        
-        
-        
-        
-    }
-    
-    func makeItBigger(cell : ReactsCollectionViewCell){
-        
-        self.indexPathBig = self.collectionView!.indexPathForCell(cell)
-        
-        
-        self.collectionView!.performBatchUpdates({ () -> Void in
-            self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
-            }, completion: { (finished) -> Void in
-                self.collectionView!.collectionViewLayout.invalidateLayout()
-                
-                
-                UIView.transitionWithView(cell, duration: 0.5, options: nil,
-                    animations: { () -> Void in
-                        
-                        cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, self.view.frame.width, (self.view.frame.width - 2)/3 * 2)
-                        //cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, (self.view.frame.width - 2)/3 * 2, (self.view.frame.width - 2)/3 * 2)
-                        cell.reactImage.frame = CGRectMake(0, 0, (cell.frame.width - 2)/3 * 2, (cell.frame.width - 2)/3 * 2)
-                        //cell.reactImage.frame = CGRectMake(0, 0, cell.frame.width, cell.frame.height)
-                        cell.usernameLabel!.frame = CGRectMake(0,cell.reactImage.frame.height - 25, cell.reactImage.frame.width, 25)
-                        cell.playerView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                        cell.playerLayer.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                        cell.loadIndicator!.center = cell.playerView.center
-                        cell.readVideoImageView.center = cell.playerView.center
-                        cell.insideCollectionView.frame = CGRectMake(0, 0, cell.reactImage.frame.width, cell.reactImage.frame.height)
-                        cell.moreInfosView.frame = CGRectMake(cell.reactImage.frame.width + 1, 0, cell.frame.width - cell.reactImage.frame.width - 1, cell.frame.height)
-                        cell.moreInfosView.alpha = 1.0
-                        
-                        
-                        
-                        cell.insideCollectionView.reloadData()
-                    }, completion: { (finisehd) -> Void in
-                        cell.showMoreInfos()
-                        
-                        if cell.separatorMoreInfos != nil{
-                            cell.separatorMoreInfos!.alpha = 1.0
-                        }
-                        
-                        cell.isInBigMode = true
-                        self.collectionView!.scrollToItemAtIndexPath(self.indexPathBig!, atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
-                        cell.startVideo()
-                        NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
-                })
-        })
-        
-        
-        
-    }
-    
-    func cellSmaller(cell : ReactsCollectionViewCell) -> BFTask{
-        var completionTask = BFTaskCompletionSource()
-        
-        self.indexPathBig = nil
-        self.collectionView!.collectionViewLayout.invalidateLayout()
-    
-        
-        cell.stopVideo()
-        cell.moreInfosView.alpha = 0.0
-        
-        share1vs1View = nil
-        
-        
-        UIView.transitionWithView(cell, duration: 0.2, options: nil,
-            animations: { () -> Void in
-                cell.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y,  (self.view.frame.size.width - 2)/3,  (self.view.frame.size.width - 2)/3)
-                cell.usernameLabel!.frame = CGRectMake(0,cell.frame.height - 25, cell.frame.width, 25)
-                cell.reactImage.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
-                cell.playerView.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
-                cell.playerLayer.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
-                cell.insideCollectionView.frame = CGRectMake(0, 0, (self.view.frame.size.width - 2)/3, (self.view.frame.size.width - 2)/3)
-                cell.insideCollectionView.reloadData()
-                cell.loadIndicator!.center = cell.playerView.center
-                cell.readVideoImageView.center = cell.playerView.center
-                cell.moreInfosView.frame = CGRectMake(0, 0, 0, 0)
-                cell.separatorMoreInfos!.alpha = 0.0
-                
-            }, completion: { (finished) -> Void in
-                cell.isInBigMode = false
-                
-                completionTask.setResult(finished)
-        })
-        
-        return completionTask.task
-        
-    }
-    
-    func removeReact(cell: ReactsCollectionViewCell) {
-        
-        if indexPathBig != nil{
-            
-            cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as! ReactsCollectionViewCell)
-            
-        }
-        
-        cell.removeReact()
-        
-    }
-    
     
     
     // MARK: Pop Up
@@ -3660,212 +1965,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         return task.task
     }
     
-    
-    
-    // MARK: VIDEO FUNCTIONS
-    
-    func setURL(react : PFObject, cell : ReactsCollectionViewCell){
-        
-        let videoFile:PFFile = react["video"] as! PFFile
-        
-        var remoteUrl: NSURL? = NSURL(string: videoFile.url!)
-        if remoteUrl != nil && remoteUrl!.scheme != nil {
-            if let asset = AVURLAsset(URL: remoteUrl, options: nil) {
-                let keys: [String] = [PlayerTracksKey, PlayerPlayableKey, PlayerDurationKey]
-                
-                if let asset = AVURLAsset(URL: remoteUrl, options: nil) {
-                    
-                    //self.asset = asset
-                    
-                    asset.loadValuesAsynchronouslyForKeys(keys, completionHandler: { () -> Void in
-                        for key in keys {
-                            var error: NSError?
-                            let status = asset.statusOfValueForKey(key, error:&error)
-                            if status == .Failed {
-                                println("Failed")
-                                return
-                            }
-                        }
-                        
-                        if asset.playable.boolValue == false {
-                            println("Playable")
-                            return
-                        }
-                        
-                        println("Setup")
-                        
-                        if !self.isAssetExisting(react){
-                            self.saveAssetForReact(asset, react: react)
-                            self.setAssetForCell(asset, cell: cell)
-                        }
-                        else{
-                            self.setAssetForCell(self.getAssetForReact(react)!, cell: cell)
-                        }
-                        
-                        
-                    })
-                    
-                }
-            }
-        }
 
-    }
-    
-    
-    func setAssetForCell(asset : AVURLAsset, cell : ReactsCollectionViewCell){
-
-        if !self.collectionView!.dragging && !self.collectionView!.decelerating{
-            
-            let indexPathCell:NSIndexPath? = self.collectionView!.indexPathForCell(cell)
-            let indexPathVisibleCells:Array<NSIndexPath>? = self.collectionView!.indexPathsForVisibleItems() as? Array<NSIndexPath>
-            
-            if indexPathCell != nil{
-                if indexPathVisibleCells != nil{
-                    
-                    if contains(indexPathVisibleCells!, indexPathCell!){
-
-                        dispatch_sync(dispatch_get_main_queue(), { () -> Void in
-                            let playerItem: AVPlayerItem = AVPlayerItem(asset: asset)
-                            NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: playerItem)
-                            
-                            
-                            var player = AVPlayer(playerItem: playerItem)
-                            player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                            player.muted = true
-                            cell.playerLayer.player = player
-                            cell.playerView!.hidden = false
-                            player.play()
-                        })
-                        
-                        
-                    }
-                    
-                }
-            }
-        }
-        
-        
-    }
-    
-    
-    func saveAssetForReact(asset : AVURLAsset, react : PFObject){
-        playerItmes.append(["reactId" : react.objectId!, "asset" : asset])
-    }
-    
-    func isAssetExisting(react : PFObject) -> Bool{
-        
-        for playerItemsInfo in playerItmes{
-            
-            if playerItemsInfo["reactId"] as? String == react.objectId{
-                return true
-            }
-            
-        }
-        
-        return false
-        
-    }
-    
-    
-    func getAssetForReact(react : PFObject) -> AVURLAsset? {
-        
-        var asset:AVURLAsset?
-        
-        for playerItemsInfo in playerItmes{
-            
-            if playerItemsInfo["reactId"] as? String == react.objectId{
-                asset = playerItemsInfo["asset"] as? AVURLAsset
-                
-                return asset
-            }
-            
-        }
-        
-        
-        return asset
-        
-    }
-    
-    
-    // MARK: Overlay Tuto
-    
-    func showOverlayTuto(){
-        
-        if overlayTuto == nil{
-            
-            let tapGestureLeaveTuto:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leaveTuto"))
-            
-            overlayTuto = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-            overlayTuto.backgroundColor = UIColor.clearColor()
-            overlayTuto.addGestureRecognizer(tapGestureLeaveTuto)
-            
-            let mainOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80 + self.view.frame.width + 1))
-            mainOverlay.backgroundColor = UIColor.blackColor()
-            mainOverlay.alpha = 0.7
-            overlayTuto.addSubview(mainOverlay)
-            
-            let cameraOverlay = UIView(frame: CGRect(x: 0, y: 80 + self.view.frame.width, width: self.view.frame.width/3 + 1, height: self.view.frame.width/3))
-            cameraOverlay.backgroundColor = UIColor.blackColor()
-            cameraOverlay.alpha = 0.7
-            overlayTuto.addSubview(cameraOverlay)
-            
-            let oneReactOverlay = UIView(frame: CGRect(x: (self.view.frame.width/3) * 2, y: 80 + self.view.frame.width, width: self.view.frame.width/3, height: self.view.frame.width/3))
-            oneReactOverlay.backgroundColor = UIColor.blackColor()
-            oneReactOverlay.alpha = 0.7
-            overlayTuto.addSubview(oneReactOverlay)
-            
-            let restScreenOverlay = UIView(frame: CGRect(x: 0, y: 80 + self.view.frame.width + self.view.frame.width/3, width: self.view.frame.width, height: self.view.frame.height - (80 + self.view.frame.width + self.view.frame.width/3)))
-            restScreenOverlay.backgroundColor = UIColor.blackColor()
-            restScreenOverlay.alpha = 0.7
-            overlayTuto.addSubview(restScreenOverlay)
-            
-            let imageButton  = UIImageView(frame: CGRect(x: replyButton!.frame.origin.x, y: replyButton!.frame.origin.y, width: replyButton!.frame.width, height: replyButton!.frame.height))
-            imageButton.image = UIImage(named: "reply_button_v2")
-            overlayTuto.addSubview(imageButton)
-            
-            let lineReact = UIImageView(frame: CGRect(x: cameraOverlay.frame.width + 5, y: cameraOverlay.frame.origin.y - 100, width: 6, height: 113))
-            lineReact.image = UIImage(named: "peekee_line_react")
-            overlayTuto.addSubview(lineReact)
-            
-            let lineButton = UIImageView(frame: CGRect(x: replyButton!.center.x - 3, y: replyButton!.frame.origin.y - 280 , width: 6, height: 275))
-            lineButton.image = UIImage(named: "peekee_line_button")
-            overlayTuto.addSubview(lineButton)
-            
-            
-            let reactLabel = UILabel(frame: CGRect(x: 5, y: lineReact.frame.origin.y - 28 , width: 200, height: 22))
-            reactLabel.adjustsFontSizeToFitWidth = true
-            reactLabel.font = UIFont(name: Utils().customGothamBol, size: 30.0)
-            reactLabel.textColor = UIColor.whiteColor()
-            reactLabel.text = NSLocalizedString("This is a reaction 🎉", comment : "This is a reaction 🎉") 
-            overlayTuto.addSubview(reactLabel)
-            
-            let buttonLabel = UILabel(frame: CGRect(x: lineButton.frame.origin.x - 140, y: lineButton.frame.origin.y - 50 , width: 140, height: 43))
-            buttonLabel.numberOfLines = 2
-            buttonLabel.adjustsFontSizeToFitWidth = true
-            buttonLabel.font = UIFont(name: Utils().customGothamBol, size: 30.0)
-            buttonLabel.textColor = UIColor.whiteColor()
-            buttonLabel.text = NSLocalizedString("Add your own reaction", comment : "Add your own reaction")
-            overlayTuto.addSubview(buttonLabel)
-            
-            let beerLabel = UILabel(frame: CGRect(x: buttonLabel.frame.origin.x + 140, y: buttonLabel.frame.origin.y , width: 40, height: 43))
-            beerLabel.font = UIFont(name: Utils().customGothamBol, size: 30.0)
-            beerLabel.text = "🍻"
-            overlayTuto.addSubview(beerLabel)
-            
-            
-            self.view.addSubview(overlayTuto)
-            
-            
-        }
-        
-        PFUser.currentUser()!["hasShownOverlayPeekee"] = true
-        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
-            PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
-                println("UPDATE USER")
-            })
-        }
-        
-    }
     
     
     func leaveTuto(){
@@ -3960,377 +2060,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-    
-    
-    
-    
-    
-    
-    // MARK: Answer / React
-    
-    
-    //Go in answer mode : camera button and emoji buttons
-    func replyPeekee(){
-        
-        if indexPathBig != nil{
-            self.cellSmaller(self.collectionView!.cellForItemAtIndexPath(indexPathBig!) as! ReactsCollectionViewCell)
-        }
-        
-        
-        self.collectionView!.performBatchUpdates({ () -> Void in
-            self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
-        }, completion: { (finished) -> Void in
-            // Calculate the move the table view has to made in order to have enough space
-            var spaceToMove:CGFloat?
-            
-            if Utils().iOS8{
-                spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
-            }
-            else{
-                spaceToMove =  (self.view.frame.height - (60 + 125 + self.view.frame.width/3)) - self.view.frame.width
-            }
-            
-            //var spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
-            println("Table view to move of : \(spaceToMove)")
-            
-            
-            self.collectionView!.frame = CGRect(x: 0, y: self.collectionView!.frame.origin.y + spaceToMove!, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height - spaceToMove!)
-            self.collectionView!.reloadData()
-        })
-        
-        
-        
-        
-        
-        
-        self.nbPeopleView!.hidden = true
-        
-        
-        
-        NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
-        
-        //Show camera action button
-        cameraActionButton!.hidden = false
-        backCameraActionView.hidden = false
-        
-        //Hide reply button
-        replyButton.hidden = true
-        
-        self.collectionView!.scrollEnabled = false
-        
-        /*if Utils().isIphone4(){
-            topOverlay.transform = CGAffineTransformMakeTranslation(0, -40)
-            middleOverlay.transform = CGAffineTransformMakeTranslation(0, -40)
-            bottomOverlay.transform = CGAffineTransformMakeTranslation(0, -40)
-            alternativeMiddleOverlay.transform = CGAffineTransformMakeTranslation(0, -40)
-            
-            nbPeopleView!.transform = CGAffineTransformMakeTranslation(0, -40)
-            
-            self.collectionView!.frame = CGRect(x: self.collectionView!.frame.origin.x, y: self.collectionView!.frame.origin.y, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height + 40)
-            self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -40)
-            self.collectionView!.reloadData()
-        }*/
-        
-        
-        self.quitButtonReply!.hidden = false
-        self.quitButtonReply!.alpha = 0.0
-        
-        UIView.animateWithDuration(0.3,
-            delay:0,
-            usingSpringWithDamping: 0.6,
-            initialSpringVelocity: 10,
-            options: nil,
-            animations: { () -> Void in
-                
-                //Show overlay
-                self.topOverlay.alpha = 0.85
-                self.middleOverlay.alpha = 1.0
-                self.bottomOverlay.alpha = 0.85
-                
-                self.cameraActionButton!.alpha = 1.0
-                self.cameraActionButton!.transform = CGAffineTransformIdentity
-                self.backCameraActionView!.alpha = 0.4
-                self.backCameraActionView!.transform = CGAffineTransformIdentity
-                
-                self.quitButtonReply!.alpha = 1.0
-                self.quitButtonReply!.center = CGPoint(x: 40, y: self.replyButton.center.y)
-            }, completion: { (finished) -> Void in
-                self.memCollectionView.reloadData()
-        })
-        
-        var position:Int = 0
-        for button in arrayEmojisButton{
-            
-            UIView.animateWithDuration(0.2,
-                delay: Double(position) * 0.1,
-                usingSpringWithDamping: 0.6,
-                initialSpringVelocity: 10,
-                options: nil,
-                animations: { () -> Void in
-                    button.transform = CGAffineTransformIdentity
-            }, completion: { (finished) -> Void in
-            })
-            
-            position++
-            
-        }
-        
-        
-        addAudio()
-        
-        
-        
-    }
-    
-    //Leave reply mode
-    func leaveReply(){
-        
-        self.memCollectionView!.hidden = false
-        
-        NSNotificationCenter.defaultCenter().postNotificationName("scrollEnded", object: nil)
-        
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        
-        if cameraCell.textViewOverPhoto!.isFirstResponder(){
-            var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-            cameraCell.textViewOverPhoto!.resignFirstResponder()
-            cameraCell.overlayCameraView!.hidden = true
-            deselectAllEmojis()
-        }
-        else{
-            deselectAllEmojis()
-            
-            
-            /*if Utils().isIphone4(){
-                self.collectionView!.frame = CGRect(x: self.collectionView!.frame.origin.x, y: self.collectionView!.frame.origin.y, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height - 40)
-                self.collectionView!.transform = CGAffineTransformIdentity
-                self.collectionView!.reloadData()
-                
-                topOverlay.transform = CGAffineTransformIdentity
-                middleOverlay.transform = CGAffineTransformIdentity
-                bottomOverlay.transform = CGAffineTransformIdentity
-                alternativeMiddleOverlay.transform = CGAffineTransformIdentity
-                nbPeopleView!.transform = CGAffineTransformIdentity
-            }*/
-            
-            UIView.animateWithDuration(0.3,
-                delay:0,
-                usingSpringWithDamping: 0.6,
-                initialSpringVelocity: 10,
-                options: nil,
-                animations: { () -> Void in
-                    var translateCameraButton:CGFloat = self.replyButton.center.x - self.cameraActionButton!.center.x
-                    self.cameraActionButton!.alpha = 0.0
-                    self.cameraActionButton!.transform = CGAffineTransformMakeTranslation(translateCameraButton, 0)
-                    self.backCameraActionView!.alpha = 0.0
-                    self.backCameraActionView!.transform = CGAffineTransformMakeTranslation(translateCameraButton, 0)
-                    
-                    //Hide overlay
-                    self.topOverlay.alpha = 0.0
-                    self.middleOverlay.alpha = 0.0
-                    self.bottomOverlay.alpha = 0.0
-                    
-                    // Calculate the move the table view has to made in order to have enough space
-                    var spaceToMove:CGFloat?
-                    
-                    if Utils().iOS8{
-                        spaceToMove =  (self.view.frame.height - (20 + 60 + 125 + self.view.frame.width/3)) - self.view.frame.width
-                    }
-                    else{
-                        spaceToMove =  (self.view.frame.height - (60 + 125 + self.view.frame.width/3)) - self.view.frame.width
-                    }
-                    
-                    self.collectionView!.frame = CGRect(x: 0, y: self.collectionView!.frame.origin.y - spaceToMove!, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height + spaceToMove!)
-                    
-                    self.quitButtonReply!.center = self.replyButton.center
-                    self.quitButtonReply!.alpha = 0.0
-                    
-                    
-                }, completion: { (finished) -> Void in
-                    self.cameraActionButton!.hidden = true
-                    self.backCameraActionView!.hidden = true
-                    self.replyButton.hidden = false
-                    
-                    self.quitButtonReply!.hidden = true
-                    
-                    self.collectionView!.scrollEnabled = true
-                    self.nbPeopleView!.hidden = false
-                    
-            })
-            
-            
-            
-            
-            
-            for button in arrayEmojisButton{
-                button.transform = CGAffineTransformMakeScale(0, 0)
-            }
-            
-            removeAudio()
-        }
-        
-        
-        
-        
-        
-    }
-    
-    func selectEmoji(button : UIButton){
-        
-        switch button{
-        case arrayEmojisButton[0]:
-            if arrayEmojisButton[0].selected{
-                hideEmojis()
-                arrayEmojisButton[0].selected = false
-                leaveTextMode()
-                self.memCollectionView!.hidden = false
-            }
-            else{
-                deselectAllEmojis()
-                showEmojis(0)
-                arrayEmojisButton[0].selected = true
-                self.memCollectionView!.hidden = true
-                self.positionMemShowed = nil
-            }
-            
-            
-        case arrayEmojisButton[1]:
-            
-            if arrayEmojisButton[1].selected{
-                hideEmojis()
-                arrayEmojisButton[1].selected = false
-            }
-            else{
-                deselectAllEmojis()
-                showEmojis(1)
-                arrayEmojisButton[1].selected = true
-            }
-        case arrayEmojisButton[2]:
-            
-            if arrayEmojisButton[2].selected{
-                hideEmojis()
-                arrayEmojisButton[2].selected = false
-            }
-            else{
-                deselectAllEmojis()
-                showEmojis(2)
-                arrayEmojisButton[2].selected = true
-            }
-            
-        case arrayEmojisButton[3]:
-            if arrayEmojisButton[3].selected{
-                hideEmojis()
-                arrayEmojisButton[3].selected = false
-            }
-            else{
-                deselectAllEmojis()
-                showEmojis(3)
-                arrayEmojisButton[3].selected = true
-            }
-            
-        default:
-            println("default")
-        }
-        
-    }
-    
-    
-    func deselectAllEmojis(){
-        
-        for button in arrayEmojisButton{
-            button.selected = false
-        }
-        
-        hideEmojis()
-        self.backCameraActionView.hidden = false
-        
-    }
-    
-    func isInTextMode() -> Bool{
-        if arrayEmojisButton[0].selected{
-            return true
-        }
-        
-        return false
-    }
-    
-    func isAnEmojiShowed() -> Bool{
-        
-        if positionMemShowed != nil{
-            return true
-        }
-        
-        return false
-    
-    }
-    
-    func hideEmojis(){
-        backCameraActionView.hidden = false
-        backEmojiButtonSelected.hidden = true
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        cameraCell.overlayCameraView.hidden = true
-        cameraCell.emojiImageView.hidden = true
-        cameraCell.textViewOverPhoto!.hidden = true
-        
-        self.isMemShowed = false
-    }
-    
-    
-    
-    func hideMem(){
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        cameraCell.overlayCameraView.hidden = true
-        cameraCell.emojiImageView.hidden = true
-        cameraCell.textViewOverPhoto!.hidden = true
-    }
-    
-    func showMem(position : Int){
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        
-        cameraCell.textViewOverPhoto!.hidden = true
-        cameraCell.emojiImageView!.hidden = false
-        cameraCell.overlayCameraView.hidden = true
-        cameraCell.emojiImageView.image = (self.memCollectionView.cellForItemAtIndexPath(NSIndexPath(forItem: position, inSection: 0)) as! MemCollectionViewCell).iconImageView.image
-        
-        self.isMemShowed = true
-    }
-    
-    
-    func showEmojis(position: Int){
-        
-        var cameraCell:ReactsCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as! ReactsCollectionViewCell
-        
-        cameraCell.textViewOverPhoto!.hidden = true
-        
-        backCameraActionView.hidden = true
-        arrayEmojisButton[position].selected = true
-        backEmojiButtonSelected.center = CGPoint(x: arrayEmojisButton[position].center.x, y: arrayEmojisButton[position].center.y - 2)
-        backEmojiButtonSelected.hidden = false
-        cameraCell.emojiImageView!.hidden = false
-        cameraCell.overlayCameraView.hidden = true
-        
-        switch position{
-        case 0:
-            cameraCell.overlayCameraView.hidden = false
-            cameraCell.textViewOverPhoto!.hidden = false
-            cameraCell.emojiImageView!.hidden = true
-            cameraCell.textViewOverPhoto!.frame = CGRect(x: 0, y: cameraCell.frame.height/2 - getHeightTextView(cameraCell.textViewOverPhoto!, string: cameraCell.textViewOverPhoto!.text)/2, width: cameraCell.textViewOverPhoto!.frame.width, height: cameraCell.textViewOverPhoto!.frame.height)
-            cameraCell.textViewOverPhoto!.text = "Your text here 😀"
-            goInTextMode()
-        case 1:
-            cameraCell.emojiImageView.image = UIImage(named: "awesome")
-        case 2:
-            cameraCell.emojiImageView.image = UIImage(named: "cute")
-        case 3:
-            cameraCell.emojiImageView.image = UIImage(named: "fuck")
-        default:
-            cameraCell.emojiImageView.image = UIImage(named: "awesome")
-        }
-        
-        
-        //cameraCell.overlayCameraView.hidden = false
-        
-    }
+
     
     //MARK: Share View
     
@@ -5135,8 +2865,6 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     var divider:Float = roundf(Float(i)/2) - 1
                     var positionYMore : Float = 125 * divider
                     
-                    println("Divider : \(positionYMore)")
-                    
                     if i%2 == 0{
                         var imageViewReact = UIImageView(frame: CGRect(x: 250 + CGFloat(positionYMore), y: 750, width: 125, height: 125))
                         viewToBuildImage!.addSubview(imageViewReact)
@@ -5153,8 +2881,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 else if i > 12 && i < 25{
                     var divider:Float = roundf(Float(i)/2) - 7
                     var positionYMore : Float = 125 * divider
-                    
-                    println("Divider : \(positionYMore)")
+
                     
                     if i%2 == 0{
                         var imageViewReact = UIImageView(frame: CGRect(x: 750, y: 0 + CGFloat(positionYMore), width: 125, height: 125))
@@ -5452,10 +3179,10 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         self.buildViewShareBackButton()
 
+        PBJVision.sharedInstance().startPreview()
+        //self.leaveReply()
         
-        self.leaveReply()
-        
-        self.shareOnMessengerDirectReact(pikiInfos["photo"] as! UIImage)
+        //self.shareOnMessengerDirectReact(pikiInfos["photo"] as! UIImage)
         
     }
     
@@ -5529,6 +3256,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         var queryMem:PFQuery = PFQuery(className: "stickers")
         queryMem.orderByAscending("priorite")
+        queryMem.cachePolicy = PFCachePolicy.CacheThenNetwork
         queryMem.findObjectsInBackgroundWithBlock { (mems, error) -> Void in
             if error != nil{
                 
@@ -5728,6 +3456,779 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
     }
+    
+    
+    //MARK: Camera Menu V2
+    
+    func buildMenu(keyboardSize : CGSize){
+        NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
+        self.keyboardSize = keyboardSize
+        
+        if cameraMenuView == nil{
+            
+            var differencePositionOverlay:CGFloat = 80 + self.view.frame.width/2
+            
+            //Overlays
+            mainOverlayCameraMenu = UIView(frame: CGRect(x: 0, y: differencePositionOverlay, width: self.view.frame.width, height: self.view.frame.height - (differencePositionOverlay)))
+            mainOverlayCameraMenu!.backgroundColor = UIColor.blackColor()
+            mainOverlayCameraMenu!.alpha = 0
+            self.view.addSubview(mainOverlayCameraMenu!)
+            
+            secondOverlayCameraView = UIView(frame: CGRect(x: self.view.frame.width/2, y: 80, width: self.view.frame.width/2, height: self.view.frame.width/2))
+            secondOverlayCameraView!.backgroundColor = UIColor.blackColor()
+            secondOverlayCameraView!.alpha = 0
+            self.view.addSubview(secondOverlayCameraView!)
+            
+            //Tap gestures overlays
+            var tapGestureMainOverlay:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quitCameraMenu"))
+            mainOverlayCameraMenu!.addGestureRecognizer(tapGestureMainOverlay)
+            var tapGestureSecondOverlay:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quitCameraMenu"))
+            secondOverlayCameraView!.addGestureRecognizer(tapGestureSecondOverlay)
+            
+            reactMenuView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - 95, width: self.view.frame.width, height: 95 + keyboardSize.height))
+            reactMenuView!.backgroundColor = UIColor.clearColor()
+            
+            //Camera Tab
+            cameraMenuView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 95))
+            cameraMenuView!.backgroundColor = UIColor.clearColor()
+            
+            
+            //Background Image
+            let backgroundBaseTab:UIView = UIView(frame: CGRect(x: 0, y: 45, width: self.view.frame.width, height: 50))
+            backgroundBaseTab.backgroundColor = UIColor(red: 68/255, green: 70/255, blue: 72/255, alpha: 1.0)
+            cameraMenuView!.addSubview(backgroundBaseTab)
+            
+            var eachSideWidth:CGFloat = (cameraMenuView!.frame.width - 65)/2
+            
+            //Change Camera Button
+            var changeCameraButton:UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: eachSideWidth/2, height: backgroundBaseTab.frame.height))
+            changeCameraButton.setImage(UIImage(named: "switch_camera_new"), forState: UIControlState.Normal)
+            changeCameraButton.tag = 1
+            changeCameraButton.addTarget(self, action: Selector("selectCameraMode:"), forControlEvents: UIControlEvents.TouchUpInside)
+            backgroundBaseTab.addSubview(changeCameraButton)
+            
+            //Keyboard Button
+            var keyboardButton:UIButton = UIButton(frame: CGRect(x: eachSideWidth/2, y: 0, width: eachSideWidth/2, height: backgroundBaseTab.frame.height))
+            keyboardButton.setImage(UIImage(named: "keyboard_icon"), forState: UIControlState.Normal)
+            keyboardButton.setImage(UIImage(named: "keyboard_selected_icon"), forState: UIControlState.Selected)
+            keyboardButton.tag = 2
+            keyboardButton.addTarget(self, action: Selector("selectCameraMode:"), forControlEvents: UIControlEvents.TouchUpInside)
+            backgroundBaseTab.addSubview(keyboardButton)
+            
+            //Meme Button
+            var memeButton:UIButton = UIButton(frame: CGRect(x: cameraMenuView!.frame.width - (eachSideWidth/2), y: 0, width: eachSideWidth/2, height: backgroundBaseTab.frame.height))
+            memeButton.setImage(UIImage(named: "stickers_icon"), forState: UIControlState.Normal)
+            memeButton.setImage(UIImage(named: "stickers_icon_selected"), forState: UIControlState.Selected)
+            memeButton.tag = 4
+            memeButton.addTarget(self, action: Selector("selectCameraMode:"), forControlEvents: UIControlEvents.TouchUpInside)
+            backgroundBaseTab.addSubview(memeButton)
+            
+            //Font Button
+            var textButton:UIButton = UIButton(frame: CGRect(x: cameraMenuView!.frame.width - eachSideWidth, y: 0, width: eachSideWidth/2, height: backgroundBaseTab.frame.height))
+            textButton.setImage(UIImage(named: "font_icon"), forState: UIControlState.Normal)
+            textButton.setImage(UIImage(named: "font_icon_selected"), forState: UIControlState.Selected)
+            textButton.tag = 3
+            textButton.addTarget(self, action: Selector("selectCameraMode:"), forControlEvents: UIControlEvents.TouchUpInside)
+            backgroundBaseTab.addSubview(textButton)
+            
+            //Background Camera
+            let backCamera:UIImageView = UIImageView(frame : CGRect(x: cameraMenuView!.frame.width/2 - 42, y: 0, width: 85, height: 85))
+            backCamera.image = UIImage(named: "reply_button_background")
+            cameraMenuView!.addSubview(backCamera)
+            
+            //Button Camera
+            var tapGestureTakPhoto:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("takePhoto"))
+            var longGestureRecordVideo:UILongPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: Selector("recordVideo:"))
+            longGestureRecordVideo.minimumPressDuration = 0.4
+            cameraMenuPhotoButton = UIButton(frame : CGRect(x: cameraMenuView!.frame.width/2 - 32, y: 10, width: 65, height: 65))
+            cameraMenuPhotoButton!.setImage(UIImage(named: "reply_button"), forState: UIControlState.Normal)
+            cameraMenuPhotoButton!.setImage(UIImage(named: "reply_button_selected"), forState: UIControlState.Selected)
+            cameraMenuPhotoButton!.addGestureRecognizer(tapGestureTakPhoto)
+            cameraMenuPhotoButton!.addGestureRecognizer(longGestureRecordVideo)
+            cameraMenuView!.addSubview(cameraMenuPhotoButton!)
+            
+            reactMenuView!.addSubview(cameraMenuView!)
+            
+            //Collection View Layout
+            let layoutMem: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+            layoutMem.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
+            layoutMem.minimumInteritemSpacing = 1
+            layoutMem.minimumLineSpacing = 1
+            layoutMem.itemSize = CGSize(width: keyboardSize.height/2 - 1, height: keyboardSize.height/2 - 1)
+            layoutMem.scrollDirection = UICollectionViewScrollDirection.Horizontal
+            memCollectionView = UICollectionView(frame: CGRect(x: 0, y: 95, width: self.view.frame.width, height: keyboardSize.height) , collectionViewLayout: layoutMem)
+            memCollectionView.registerClass(MemCollectionViewCell.self, forCellWithReuseIdentifier: "CellMem")
+            memCollectionView.backgroundColor = UIColor(red: 42/255, green: 41/255, blue: 41/255, alpha: 1.0)
+            memCollectionView!.dataSource = self
+            memCollectionView!.delegate = self
+            memCollectionView.showsHorizontalScrollIndicator = false
+            memCollectionView.showsVerticalScrollIndicator = false
+            reactMenuView!.addSubview(memCollectionView)
+            
+            self.view.addSubview(reactMenuView!)
+            
+            
+            
+        }
+        else{
+            reactMenuView!.hidden = false
+        }
+        
+    }
+    
+    func quitCameraMenu(){
+        
+        //Get camera Cell
+        let cell:CameraCollectionViewCell? = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell
+        if cell != nil{
+            isLeavingCameraMode = true
+            if cell!.textViewOverPhoto.isFirstResponder(){
+                cell!.textViewOverPhoto.resignFirstResponder()
+            }
+            else{
+                let animationDuration: NSTimeInterval = 0.5
+                
+                quitAnimation(animationDuration)
+            }
+            
+        }
+        
+        
+    }
+    
+    func quitAnimation(duration : NSTimeInterval){
+        
+        
+        if isLeavingCameraMode {
+            //AppearOverlays
+            self.mainOverlayCameraMenu!.alpha = 0
+            self.secondOverlayCameraView!.alpha = 0
+            
+            if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                cell.memeImageView.hidden = true
+                cell.textViewOverPhoto.hidden = true
+            }
+            
+            UIView.animateWithDuration(duration, animations: { () -> Void in
+                
+                self.collectionView!.transform = CGAffineTransformIdentity
+                self.reactMenuView!.transform = CGAffineTransformIdentity
+                self.reactMenuView!.alpha = 0
+                
+                
+                
+                
+                }) { (finished) -> Void in
+                    
+                    self.collectionView!.frame = CGRect(x: self.collectionView!.frame.origin.x, y: self.collectionView!.frame.origin.y, width: self.collectionView!.frame.width, height: self.view.frame.height - 60)
+                    self.reactMenuView!.hidden = true
+                    self.reactMenuView!.alpha = 1
+                    self.isLeavingCameraMode = false
+                    
+                    if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                        cell.iconImageView.hidden = false
+                    }
+                    
+            }
+        }
+        
+    }
+    
+    func selectCameraMode(sender : UIButton){
+        
+        
+        
+        switch sender.tag{
+        case 1:
+            var vision:PBJVision = PBJVision.sharedInstance()
+            
+            if vision.cameraDevice == PBJCameraDevice.Front{
+                vision.cameraDevice = PBJCameraDevice.Back
+            }
+            else{
+                vision.cameraDevice = PBJCameraDevice.Front
+            }
+        case 2:
+            getBackToKeyboardMode()
+        case 3:
+            
+            if sender.selected{
+                (self.cameraMenuView!.viewWithTag(4) as! UIButton).selected = false
+                sender.selected = !sender.selected
+                getBackToKeyboardMode()
+            }
+            else{
+                (self.cameraMenuView!.viewWithTag(4) as! UIButton).selected = false
+                sender.selected = !sender.selected
+                self.collectionShown = 1
+                self.memCollectionView.reloadData()
+                if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                    cell.textViewOverPhoto.resignFirstResponder()
+                }
+                
+            }
+            
+            
+        case 4:
+            if sender.selected{
+                (self.cameraMenuView!.viewWithTag(3) as! UIButton).selected = false
+                sender.selected = !sender.selected
+                getBackToKeyboardMode()
+            }
+            else{
+                (self.cameraMenuView!.viewWithTag(3) as! UIButton).selected = false
+                sender.selected = !sender.selected
+                self.collectionShown = 2
+                self.memCollectionView.reloadData()
+                if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+                    cell.textViewOverPhoto.resignFirstResponder()
+                }
+            }
+            
+            
+            
+        default:
+            println("not known")
+        }
+    }
+    
+    func getBackToKeyboardMode(){
+        self.collectionShown = 0
+        (self.cameraMenuView!.viewWithTag(2) as! UIButton).selected = true
+        (self.cameraMenuView!.viewWithTag(3) as! UIButton).selected = false
+        (self.cameraMenuView!.viewWithTag(4) as! UIButton).selected = false
+        if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+            cell.textViewOverPhoto.hidden = false
+            cell.memeImageView.hidden = true
+            cell.textViewOverPhoto.becomeFirstResponder()
+        }
+    }
+    
+    
+    //MARK: TAKE PHOTO
+    func takePhoto(){
+        println("takePhoto")
+        PBJVision.sharedInstance().capturePhoto()
+    }
+    
+    func vision(vision: PBJVision, capturedPhoto photoDict: [NSObject : AnyObject]?, error: NSError?) {
+        
+        if error != nil{
+            //Alert and return
+            return
+        }
+        
+        var photoData:NSData? = photoDict![PBJVisionPhotoJPEGKey] as? NSData
+        
+        if photoData != nil{
+            
+            self.uploadNewReact(photoData!)
+            
+        }
+        else{
+            //Alert and return
+            return
+        }
+        
+    }
+    
+    
+    //MARK: RECORD VIDEO
+    
+    func visionDidStartVideoCapture(vision: PBJVision) {
+        if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+            cell.startRecording(6)
+        }
+    }
+    
+    func visionDidEndVideoCapture(vision: PBJVision) {
+        if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+            cell.endRecording()
+        }
+        PBJVision.sharedInstance().cameraMode = PBJCameraMode.Photo
+    }
+    
+    func visionCameraModeDidChange(vision: PBJVision) {
+        if vision.cameraMode == PBJCameraMode.Video{
+            println("Now ready for Video  \(NSDate())")
+            if cameraMenuPhotoButton!.selected{
+                println("CAN Record Video")
+                if !PBJVision.sharedInstance().recording{
+                    var timer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("startRecordVideo"), userInfo: nil, repeats: false)
+                    
+                }
+            }
+            else{
+                println("TOO LATE DO NOTRecord Video")
+            }
+        }
+        else{
+            println("Now ready for Photo")
+        }
+        
+    }
+    
+    func startRecordVideo(){
+        PBJVision.sharedInstance().startVideoCapture()
+    }
+    
+    func recordVideo(longGesture:UILongPressGestureRecognizer){
+        
+        switch longGesture.state{
+            
+        case UIGestureRecognizerState.Began:
+            cameraMenuPhotoButton!.selected = true
+            PBJVision.sharedInstance().maximumCaptureDuration = CMTimeMakeWithSeconds(6, 600)
+            PBJVision.sharedInstance().cameraMode = PBJCameraMode.Video
+            
+            
+            
+        case UIGestureRecognizerState.Ended:
+            cameraMenuPhotoButton!.selected = false
+            
+            if PBJVision.sharedInstance().recording{
+                PBJVision.sharedInstance().endVideoCapture()
+            }
+            
+            
+            
+        default:
+            println("problem")
+            
+        }
+        
+        
+    }
+    
+    func vision(vision: PBJVision, capturedVideo videoDict: [NSObject : AnyObject]?, error: NSError?) {
+        
+        isRecording = false
+        
+        
+        
+        if error != nil{
+
+            //ALERT PROBLEM RECORDING VIDEO
+            println("PROBLEM : \(error?.description)")
+            
+        }
+        else{
+            
+            
+            var videoPath:NSString? = videoDict![PBJVisionVideoPathKey] as? NSString
+            
+            
+            if videoPath != nil{
+                println("Video Path : \(videoPath!)")
+                
+                self.uploadNewVideoReact(videoPath!)
+            }
+            
+        }
+  
+    }
+    
+    
+    // MARK: Keyboard
+    
+    //Keyboard Notifs
+    func keyboardWillShow(notification : NSNotification){
+        
+        
+        let info:NSDictionary = notification.userInfo!
+        let keyboardSize = info.objectForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue().size
+        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        
+        self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
+        buildMenu(keyboardSize)
+        getLastMem()
+        self.collectionView!.frame = CGRect(x: self.collectionView!.frame.origin.x, y: self.collectionView!.frame.origin.y, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height+self.view.frame.width)
+        
+        (self.cameraMenuView!.viewWithTag(3) as! UIButton).selected = false
+        (self.cameraMenuView!.viewWithTag(4) as! UIButton).selected = false
+        (self.cameraMenuView!.viewWithTag(2) as! UIButton).selected = true
+        
+        UIView.animateWithDuration(animationDuration, animations: { () -> Void in
+            
+            
+                self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -self.view.frame.width)
+                self.reactMenuView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
+            
+                //AppearOverlays
+                self.mainOverlayCameraMenu!.alpha = 0.85
+                self.secondOverlayCameraView!.alpha = 0.85
+            
+            
+            }) { (finished) -> Void in
+                
+                
+        }
+        
+        
+    }
+    
+    func keyboardWillHide(notification : NSNotification){
+        
+        (self.cameraMenuView!.viewWithTag(2) as! UIButton).selected = false
+        
+        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+        
+        quitAnimation(animationDuration)
+        
+        
+    }
+    
+    
+    //MARK: PARSE UPLOAD PHOTO
+    
+    func uploadNewReact(imageData:NSData){
+       
+        var typeReact:String = "Photo"
+        
+        Mixpanel.sharedInstance().timeEvent("Send React")
+        
+        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
+        var squareImage:UIImage = Utils().resizeSquareImage(Utils().cropMiddle(UIImage(data: imageData)!), size: CGSize(width: 200, height: 200))
+        var modifyImage:UIImage = squareImage
+        
+        if let cell:CameraCollectionViewCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 1)) as? CameraCollectionViewCell{
+            if !cell.textViewOverPhoto.hidden{
+                println("React with text")
+                if let fontImage:UIImage = self.getPhotoWithTextOverlay(modifyImage){
+                    modifyImage = fontImage
+                    typeReact = "Text"
+                }
+                
+            }
+            else if !cell.memeImageView.hidden{
+                println("React with Meme")
+                if let memeImage:UIImage = self.getPhotoWithLikeOverlay(modifyImage){
+                    modifyImage = memeImage
+                    typeReact = "Emoji"
+                }
+            }
+        }
+        
+        //Quit when we have built the image
+        quitCameraMenu()
+        
+        //Add photo to the collection view right now
+        var randomNumber = self.randomNumber()
+        var pikiInfos:[String : AnyObject] = [String : AnyObject]()
+        pikiInfos["photo"] = modifyImage
+        pikiInfos["id"] = randomNumber
+        self.postNewTempReact(pikiInfos)
+        
+        //Upload the image
+        self.uploadImage(modifyImage)
+        
+        //Save the react
+        if self.imageFile != nil{
+            if self.mainPiki != nil{
+                
+                var newReact:PFObject = PFObject(className: "React")
+                newReact["photo"] = self.imageFile!
+                newReact["Piki"] = self.mainPiki!
+                newReact["user"] = PFUser.currentUser()
+                
+                //Set the ACL
+                var reactACL:PFACL = PFACL()
+                if self.isPublicPleek{
+                    reactACL.setPublicReadAccess(true)
+                }
+                else{
+                    if self.mainPiki!["recipients"] != nil{
+                        for userId in self.mainPiki!["recipients"] as! Array<String>{
+                            reactACL.setReadAccess(true, forUserId: userId)
+                        }
+                    }
+                    
+                }
+                reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
+                if self.mainPiki!["user"] != nil {
+                    reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
+                }
+                newReact.ACL = reactACL
+                
+                
+                //Start a background task
+                bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
+                    UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+                    bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+                })
+                
+                
+                newReact.saveInBackgroundWithBlock({ (succeeded:Bool, error:NSError?) -> Void in
+                    if succeeded{
+                        Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Photo Sent" : 1])
+                        FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : typeReact])
+                        Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : typeReact])
+                        
+                        
+                        var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
+                        if peekeeInfosPosition != nil{
+
+                            self.pikiReacts[peekeeInfosPosition!] = newReact
+                            self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: peekeeInfosPosition! + 1, inSection: 1)])
+                            
+                            self.hasNewReacts = true
+                            
+                            
+                            
+                            //Push notif
+                            self.sendPushNewComment(self.isPublicPleek).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                                UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+                                bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+                                
+                                Utils().setPikiAsView(self.mainPiki!)
+                                return nil
+                            })
+                            
+                            self.mainPiki!.fetchInBackgroundWithBlock({ (newPiki, error) -> Void in
+                                if error == nil{
+                                    self.updateMainCellPleek()
+                                }
+                            })
+                        }
+                        else{
+                            println("delete")
+                            newReact.deleteEventually()
+                            
+                            UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+                            bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+                        }
+                        
+                        
+                        
+                        
+                        
+                    }
+                    else{
+                        println("Error while creating new react")
+                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+                    }
+                })
+            }
+        }
+    }
+    
+    
+    //MARK: PARSE UPLOAD VIDEO
+    
+    func uploadNewVideoReact(videoPath:NSString){
+        quitCameraMenu()
+        
+        Mixpanel.sharedInstance().timeEvent("Send React")
+        
+        var bgTaskIdentifierUploadReact:UIBackgroundTaskIdentifier?
+        
+        let screenImage:UIImage = Utils().getImageFrameFromVideo(NSURL(fileURLWithPath: videoPath as String)!)
+        var imageData:NSData = UIImageJPEGRepresentation(screenImage, 0.8)
+        
+        //Add photo now to the collection
+        var randomNumber = self.randomNumber()
+        var pikiInfos:[String : AnyObject] = [String : AnyObject]()
+        pikiInfos["videoPath"] = NSURL(fileURLWithPath: videoPath as String)
+        pikiInfos["previewImage"] = screenImage
+        pikiInfos["id"] = randomNumber
+        self.postNewTempReact(pikiInfos)
+        
+        
+        self.imageFile = PFFile(name: "video.mp4", contentsAtPath: NSURL(fileURLWithPath: videoPath as String)!.path!)
+        
+        //Start a background task
+        bgTaskIdentifierUploadReact = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({ () -> Void in
+            UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+            bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+        })
+        
+        let previewFile:PFFile = PFFile(name: "photo.jpg", data: imageData)
+        previewFile.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
+            
+            }, progressBlock: { (progress : Int32) -> Void in
+                println("Preview : \(progress)")
+        })
+        
+        
+        //Build React
+        var newVideoReact:PFObject = PFObject(className: "React")
+        self.imageFile!.saveInBackgroundWithBlock({ (succeeded:Bool, error) -> Void in
+            if succeeded{
+                //self.pikiReacts.insert(newVideoReact, atIndex: 0)
+                //self.collectionView!.insertItemsAtIndexPaths([NSIndexPath(forItem: 1, inSection: 0)])
+            }
+            
+            }, progressBlock: { (progress:Int32) -> Void in
+                println(progress)
+        })
+        
+        newVideoReact["video"] = self.imageFile!
+        newVideoReact["previewImage"] = previewFile
+        newVideoReact["Piki"] = self.mainPiki!
+        
+        if PFUser.currentUser() != nil{
+            newVideoReact["user"] = PFUser.currentUser()
+            var reactACL:PFACL = PFACL()
+            
+            if self.isPublicPleek{
+                reactACL.setPublicReadAccess(true)
+            }
+            else{
+                if self.mainPiki!["recipients"] != nil{
+                    for userId in self.mainPiki!["recipients"] as! Array<String>{
+                        reactACL.setReadAccess(true, forUserId: userId)
+                    }
+                }
+                
+            }
+            
+            
+            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
+            if self.mainPiki!["user"] != nil {
+                reactACL.setWriteAccess(true, forUser: self.mainPiki!["user"] as! PFUser)
+            }
+            newVideoReact.ACL = reactACL
+        }
+        
+        newVideoReact.saveInBackgroundWithBlock({ (success :Bool, error) -> Void in
+            if success{
+                Mixpanel.sharedInstance().people.increment(["React Sent" : 1, "React Video Sent" : 1])
+                FBSDKAppEvents.logEvent("Send React", parameters: ["React Type" : "Video"])
+                Mixpanel.sharedInstance().track("Send React", properties: ["React Type" : "Video"])
+                
+                var peekeeInfosPosition:Int? = self.findPikiInfosPosition(randomNumber)
+                if peekeeInfosPosition != nil{
+                    println("found")
+                    self.pikiReacts[peekeeInfosPosition!] = newVideoReact
+                    self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: peekeeInfosPosition! + 1, inSection: 1)])
+                    
+                    self.hasNewReacts = true
+                    
+                    
+                    
+                    //Push notif
+                    self.sendPushNewComment(self.isPublicPleek).continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                        UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+                        bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+                        
+                        Utils().setPikiAsView(self.mainPiki!)
+                        return nil
+                    })
+                    
+                    self.mainPiki!.fetchInBackgroundWithBlock({ (newPiki, error) -> Void in
+                        if error == nil{
+                            self.updateMainCellPleek()
+                        }
+                    })
+                }
+                else{
+                    println("delete")
+                    newVideoReact.deleteEventually()
+                    
+                    UIApplication.sharedApplication().endBackgroundTask(bgTaskIdentifierUploadReact!)
+                    bgTaskIdentifierUploadReact = UIBackgroundTaskInvalid
+                }
+                
+            }
+            
+        })
+    }
+    
+    
+    //MARK: LIKES REACTS
+    
+    func getLikesUser(){
+        
+        var likesQuery:PFQuery = PFQuery(className: "Like")
+        likesQuery.whereKey("user", equalTo: PFUser.currentUser()!)
+        likesQuery.whereKey("piki", equalTo: self.mainPiki!)
+        likesQuery.includeKey("react")
+        likesQuery.cachePolicy = PFCachePolicy.CacheThenNetwork
+        
+        likesQuery.findObjectsInBackgroundWithBlock { (likes, error) -> Void in
+            if error == nil{
+                if likes != nil{
+                    
+                    self.listLikesUser.removeAll(keepCapacity: false)
+                    
+                    
+                    for like in likes as! [PFObject]{
+                        
+                        if let react = like["react"] as? PFObject{
+                            self.listLikesUser.insert(react.objectId!)
+                        }
+                        
+                        
+                    }
+                    
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
+    func hasUserLikedThisReact(react : PFObject) -> Bool {
+
+        
+        return self.listLikesUser.contains(react.objectId!)
+        
+    }
+    
+    func userJustLiked(react : PFObject){
+        
+        
+        
+        if hasUserLikedThisReact(react){
+            self.listLikesUser.remove(react.objectId!)
+            
+            for (index, value) in enumerate(self.pikiReacts){
+                
+                if value.isKindOfClass(PFObject){
+                    if (value as! PFObject).objectId == react.objectId{
+                        if let nbLikesActual = (self.pikiReacts[index] as! PFObject)["nbLikes"] as? Int{
+                            (self.pikiReacts[index] as! PFObject)["nbLikes"] = nbLikesActual - 1
+                        }
+                        else{
+                            (self.pikiReacts[index] as! PFObject)["nbLikes"] = 0
+                        }
+                        
+                    }
+                }
+                
+                
+            }
+        }
+        else{
+            if let player = likeSoundPlayer{
+                player.play()
+            }
+            
+            self.listLikesUser.insert(react.objectId!)
+            
+            for (index, value) in enumerate(self.pikiReacts){
+                
+                if value.isKindOfClass(PFObject){
+                    if (value as! PFObject).objectId == react.objectId{
+                        if let nbLikesActual = (self.pikiReacts[index] as! PFObject)["nbLikes"] as? Int{
+                            (self.pikiReacts[index] as! PFObject)["nbLikes"] = nbLikesActual + 1
+                        }
+                        else{
+                            (self.pikiReacts[index] as! PFObject)["nbLikes"] = 1
+                        }
+                        
+                    }
+                }
+                
+                
+            }
+        }
+        
+    }
+
 
 }
+
 

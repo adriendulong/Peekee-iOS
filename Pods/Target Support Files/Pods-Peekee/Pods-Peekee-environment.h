@@ -60,6 +60,12 @@
 #define COCOAPODS_VERSION_MINOR_Facebook_iOS_SDK_ShareKit 0
 #define COCOAPODS_VERSION_PATCH_Facebook_iOS_SDK_ShareKit 1
 
+// LLARingSpinnerView
+#define COCOAPODS_POD_AVAILABLE_LLARingSpinnerView
+#define COCOAPODS_VERSION_MAJOR_LLARingSpinnerView 0
+#define COCOAPODS_VERSION_MINOR_LLARingSpinnerView 1
+#define COCOAPODS_VERSION_PATCH_LLARingSpinnerView 3
+
 // Mixpanel
 #define COCOAPODS_POD_AVAILABLE_Mixpanel
 #define COCOAPODS_VERSION_MAJOR_Mixpanel 2
@@ -71,6 +77,12 @@
 #define COCOAPODS_VERSION_MAJOR_Mixpanel_MPCategoryHelpers 2
 #define COCOAPODS_VERSION_MINOR_Mixpanel_MPCategoryHelpers 7
 #define COCOAPODS_VERSION_PATCH_Mixpanel_MPCategoryHelpers 3
+
+// PBJVision
+#define COCOAPODS_POD_AVAILABLE_PBJVision
+#define COCOAPODS_VERSION_MAJOR_PBJVision 0
+#define COCOAPODS_VERSION_MINOR_PBJVision 4
+#define COCOAPODS_VERSION_PATCH_PBJVision 1
 
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse

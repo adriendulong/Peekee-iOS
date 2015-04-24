@@ -67,6 +67,8 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "Mixpanel/Mixpanel/MPCloseBtn@2x.png"
   install_resource "Mixpanel/Mixpanel/MPNotification.storyboard"
   install_resource "Mixpanel/Mixpanel/MPSurvey.storyboard"
+  install_resource "PBJVision/Source/Shaders/Shader.fsh"
+  install_resource "PBJVision/Source/Shaders/Shader.vsh"
   install_resource "ParseUI/ParseUI/Resources/Localization/en.lproj"
   install_resource "libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberMetadata.plist"
 fi
@@ -87,6 +89,8 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "Mixpanel/Mixpanel/MPCloseBtn@2x.png"
   install_resource "Mixpanel/Mixpanel/MPNotification.storyboard"
   install_resource "Mixpanel/Mixpanel/MPSurvey.storyboard"
+  install_resource "PBJVision/Source/Shaders/Shader.fsh"
+  install_resource "PBJVision/Source/Shaders/Shader.vsh"
   install_resource "ParseUI/ParseUI/Resources/Localization/en.lproj"
   install_resource "libPhoneNumber-iOS/libPhoneNumber/NBPhoneNumberMetadata.plist"
 fi
