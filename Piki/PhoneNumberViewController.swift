@@ -68,6 +68,26 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
             verticalSpaceConstraint.constant = 0
         }
         
+        //Button to validate phone number
+        var gestureSendCode:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("sendConfCode:"))
+        validatePhoneView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - 55, width: self.view.frame.size.width, height: 55))
+        validatePhoneView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+        validatePhoneView!.addGestureRecognizer(gestureSendCode)
+        self.view.addSubview(validatePhoneView!)
+        
+        let textValidatePhone:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: validatePhoneView!.frame.width, height: validatePhoneView!.frame.height))
+        textValidatePhone.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
+        textValidatePhone.textColor = UIColor.whiteColor()
+        textValidatePhone.textAlignment = NSTextAlignment.Center
+        textValidatePhone.adjustsFontSizeToFitWidth = true
+        textValidatePhone.text = NSLocalizedString("TEXT ME A 4 DIGITS CODE", comment : "TEXT ME A 4 DIGITS CODE")
+        validatePhoneView!.addSubview(textValidatePhone)
+        
+        let iconSendImageView:UIImageView = UIImageView(frame: CGRect(x: validatePhoneView!.frame.width - 30 - 25, y: 0, width: 25, height: validatePhoneView!.frame.height))
+        iconSendImageView.contentMode = UIViewContentMode.Center
+        iconSendImageView.image = UIImage(named: "send_icon")
+        validatePhoneView!.addSubview(iconSendImageView)
+        
         
         
         var gestureDaft:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("daftAnim:"))
@@ -87,7 +107,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         enterPhoneLabel.textColor = Utils().primaryColorDark
         enterPhoneLabel.text = NSLocalizedString("Enter your cell number", comment : "Enter your cell number")
         
-        phoneNumberView = UIView(frame: CGRect(x: 30, y: 0, width: self.view.frame.width - 60, height: 53))
+        phoneNumberView = UIView(frame: CGRect(x: 30, y: validatePhoneView!.frame.origin.y - 53 - 20, width: self.view.frame.width - 60, height: 53))
         phoneNumberView!.backgroundColor = UIColor.clearColor()
         self.view.addSubview(phoneNumberView!)
         
@@ -155,25 +175,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
         phoneNumberTextField!.becomeFirstResponder()
         phoneContainerView.addSubview(phoneNumberTextField!)*/
         
-        //Button to validate phone number
-        var gestureSendCode:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("sendConfCode:"))
-        validatePhoneView = UIView(frame: CGRect(x: 0, y: 300, width: self.view.frame.size.width, height: 55))
-        validatePhoneView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-        validatePhoneView!.addGestureRecognizer(gestureSendCode)
-        self.view.addSubview(validatePhoneView!)
         
-        let textValidatePhone:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: validatePhoneView!.frame.width, height: validatePhoneView!.frame.height))
-        textValidatePhone.font = UIFont(name: Utils().customFontSemiBold, size: 16.0)
-        textValidatePhone.textColor = UIColor.whiteColor()
-        textValidatePhone.textAlignment = NSTextAlignment.Center
-        textValidatePhone.adjustsFontSizeToFitWidth = true
-        textValidatePhone.text = NSLocalizedString("TEXT ME A 4 DIGITS CODE", comment : "TEXT ME A 4 DIGITS CODE")
-        validatePhoneView!.addSubview(textValidatePhone)
-        
-        let iconSendImageView:UIImageView = UIImageView(frame: CGRect(x: validatePhoneView!.frame.width - 30 - 25, y: 0, width: 25, height: validatePhoneView!.frame.height))
-        iconSendImageView.contentMode = UIViewContentMode.Center
-        iconSendImageView.image = UIImage(named: "send_icon")
-        validatePhoneView!.addSubview(iconSendImageView)
         
         
         //Import list of countries

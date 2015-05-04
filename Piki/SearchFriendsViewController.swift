@@ -412,6 +412,7 @@ class PikiUserTableViewCell : UITableViewCell {
                 }
                 else{
                     self.addUserButton!.setImage(UIImage(named: "friends_added_icon"), forState: UIControlState.Normal)
+                    self.addUserButton!.hidden = false
                     
                     Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "search_friend"])
                     self.searchController!.getAllUsersFromContacts()
@@ -437,7 +438,7 @@ class PikiUserTableViewCell : UITableViewCell {
                     
                 }
                 
-                self.addUserButton!.hidden = false
+                
                 
                 return nil
                 
@@ -641,7 +642,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         friendsSelectorLabelBottom = UILabel(frame: CGRect(x: 0, y: friendsSelectorView.frame.height/2, width: friendsSelectorView.frame.width, height: friendsSelectorView.frame.height/2))
         friendsSelectorLabelBottom.font = UIFont(name: Utils().customFontSemiBold, size: 12)
         friendsSelectorLabelBottom.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-        friendsSelectorLabelBottom.text = "YOU ADDED"
+        friendsSelectorLabelBottom.text = "YOU FOLLOW"
         friendsSelectorLabelBottom.textAlignment = NSTextAlignment.Center
         friendsSelectorLabelBottom.adjustsFontSizeToFitWidth = true
         friendsSelectorView.addSubview(friendsSelectorLabelBottom)
@@ -664,7 +665,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         recipientsSelectorLabelBottom = UILabel(frame: CGRect(x: 0, y: recipientsSelectorView.frame.height/2, width: recipientsSelectorView.frame.width, height: recipientsSelectorView.frame.height/2))
         recipientsSelectorLabelBottom.font = UIFont(name: Utils().customFontSemiBold, size: 12)
         recipientsSelectorLabelBottom.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-        recipientsSelectorLabelBottom.text = "ADDED YOU"
+        recipientsSelectorLabelBottom.text = "FOLLOW YOU"
         recipientsSelectorLabelBottom.textAlignment = NSTextAlignment.Center
         recipientsSelectorLabelBottom.adjustsFontSizeToFitWidth = true
         recipientsSelectorView.addSubview(recipientsSelectorLabelBottom)
@@ -827,6 +828,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             
             if self.usernameUserFound == nil{
                 var searchCell:SearchUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("SearchCell") as! SearchUserTableViewCell
+                searchCell.selectionStyle = UITableViewCellSelectionStyle.None
                 
                 if usernameInSearch != nil{
                     searchCell.loadItemLoading(usernameInSearch!, isSearching: self.isSearchingUser)
@@ -840,6 +842,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             }
             else{
                 var cell:PikiUserTableViewCell = tableView.dequeueReusableCellWithIdentifier("PikiUserCell") as! PikiUserTableViewCell
+                cell.selectionStyle = UITableViewCellSelectionStyle.None
                 
                 cell.loadItem(self.usernameUserFound!, searchController: self)
                 
@@ -940,7 +943,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     cell.selectionStyle = UITableViewCellSelectionStyle.None
                     
                     
-                    if indexPath.row == (friends.count - 10){
+                    if indexPath.row == (friends.count - 20){
                         if friends.count > 0 && !isLoadingMore{
                             if friends.count % 100 == 0{
                                 println("Load More")
@@ -949,6 +952,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                             }
                         }
                     }
+                    
                     
                     return cell
                 }
@@ -985,11 +989,11 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     cell.selectionStyle = UITableViewCellSelectionStyle.None
                     
                     
-                    if indexPath.row == (recipients.count - 10){
+                    if indexPath.row == (recipients.count - 20){
                         if recipients.count > 0 && !isLoadingMoreRecipients{
                             if recipients.count % 100 == 0{
                                 isLoadingMoreRecipients = true
-                                getMoreFriends()
+                                getMoreRecipients()
                             }
                         }
                     }
@@ -1288,7 +1292,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     for friend in friends as! Array<PFUser>{
                         self.friends.append(friend)
-                        indexPathToInsert.append(NSIndexPath(forRow: self.friends.count - 1, inSection: 0))
+                        indexPathToInsert.append(NSIndexPath(forRow: self.friends.count - 1, inSection: 1))
                     }
                     
                     if self.printMode == 1{
@@ -1840,7 +1844,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 if self.printMode == 2{
                     for recipient in recipientsObjects as! Array<PFObject>{
                         self.recipients.append(recipient["user"] as! PFUser)
-                        indexPathToInsert.append(NSIndexPath(forRow: self.recipients.count - 1, inSection: 0))
+                        indexPathToInsert.append(NSIndexPath(forRow: self.recipients.count - 1, inSection: 1))
                     }
                     
                     

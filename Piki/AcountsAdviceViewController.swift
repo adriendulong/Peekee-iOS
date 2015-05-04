@@ -337,15 +337,15 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     func goLeave(){
         
-        Mixpanel.sharedInstance().track("Close Recommended Account", properties: ["nd_added" : recommendedAccountsAdded])
-        
         PFUser.currentUser()!["hasSeenRecommanded"] = true
-        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
-            Utils().updateUser()
-        }
         
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
+            Mixpanel.sharedInstance().track("Close Recommended Account", properties: ["nd_added" : self.recommendedAccountsAdded])
             
+            
+            PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+                Utils().updateUser()
+            }
         })
     }
     

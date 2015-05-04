@@ -411,7 +411,6 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         if indexPath.section == 0{
             userToSelect = topFriendsInfos[indexPath.row]["user"] as? PFUser
             
-            println("User to select : \(userToSelect)")
             
             if isUserSelected(userToSelect!, isUserIAdded : true ){
                 removeUserFromSelected(userToSelect!, isUserIAdded: true)

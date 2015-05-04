@@ -37,9 +37,9 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
         
         Mixpanel.sharedInstance().track("Choose Username View")
         
-        if keyboardSize == nil{
+        /*if keyboardSize == nil{
             keyboardSize = CGSize(width: self.view.frame.width, height: 270)
-        }
+        }*/
         
         if phoneNumber == nil{
             phoneNumber = "+33601010101"
@@ -48,6 +48,11 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
         
         if UIScreen.mainScreen().bounds.height < 500{
             spaceVerticalConstraint.constant = 0
+        }
+        
+        var moreInY:CGFloat = 0
+        if let sizeToGo = self.keyboardSize{
+            moreInY = sizeToGo.height
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name: UIKeyboardWillShowNotification, object: nil)
@@ -67,7 +72,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
 
         
         var gestureGetStarted:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("getStarted:"))
-        validationView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.height - keyboardSize!.height - 50, width: self.view.frame.size.width, height: 50))
+        validationView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.height - moreInY - 50, width: self.view.frame.size.width, height: 50))
         validationView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
         validationView!.addGestureRecognizer(gestureGetStarted)
         
@@ -179,6 +184,15 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
         //Verify if exists
         if count(finalString) > 3 {
             println("Username : \(finalString)")
+            
+            //Can't while we have not verified
+            self.usernameChoiceIndicator!.hidden = false
+            self.usernameChoiceIndicator!.image = UIImage(named: "error_username_icon")
+            self.validationView!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
+            self.canSignUp = false
+            self.notAvailableUsernameLabel!.hidden = false
+            self.termsLabel!.hidden = true
+            
             if Utils().usernameValid(finalString){
                 var userQuery:PFQuery = PFUser.query()!
                 userQuery.whereKey("username", equalTo: finalString.lowercaseString)
@@ -251,130 +265,138 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
     func getStarted(sender : UITapGestureRecognizer){
         var textFieldString = NSString(string: usernameTextField!.text)
         
-        if Utils().usernameValid(textFieldString.lowercaseString){
-            //Create User Object
-            var user:PFUser = PFUser()
-            
-            user.username = textFieldString.lowercaseString
-            user.password = textFieldString.lowercaseString
-            
-            var userInfos:PFObject = PFObject(className: "UserInfos")
-            userInfos["phoneNumber"] = self.phoneNumber!
-            
-            user["userInfos"] = userInfos
-            var usersFriend = [String]()
-            user["usersFriend"] = usersFriend
-            user["hasSeenRecommanded"] = false
-            user["hasShownOverlayMenu"] = false
-            user["hasShownOverlayPeekee"] = false
-            user["hasSeenFriends"] = false
-            
-            
-            MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-            user.signUpInBackgroundWithBlock { (succeeded, error) -> Void in
-                if error != nil {
-                    MBProgressHUD.hideHUDForView(self.view, animated: true)
-                    
-                    if Utils().iOS8{
-                        var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-                            message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
-                    }
-                    else{
-                        var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
-                            message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"),
-                            delegate: nil,
-                            cancelButtonTitle: "Ok")
-                        alertView.show()
-                    }
-                    
-                }
-                else{
-                    
-                    var userInfos:PFObject = user["userInfos"] as! PFObject
-                    userInfos.ACL = PFACL(user: user)
-                    userInfos.saveEventually()
-                    
-                    
-                    
-                    Mixpanel.sharedInstance().createAlias(PFUser.currentUser()!.objectId!, forDistinctID: Mixpanel.sharedInstance().distinctId)
-                    if user.username != nil{
-                        Mixpanel.sharedInstance().people.set(["Username" : user.username!])
-                    }
-                    
-                    if self.phoneNumber != nil{
-                        Mixpanel.sharedInstance().people.set(["$phone" : self.phoneNumber!])
-                    }
-                    
-                    
-                    PFCloud.callFunctionInBackground("addToFirstUsePiki",
-                        withParameters: ["Test" : "Test"],
-                        block: { (result, error) -> Void in
-
-                            Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
-                                FBSDKAppEvents.logEvent(FBSDKAppEventNameCompletedRegistration)
-                                Mixpanel.sharedInstance().track("Sign Up")
-                                
-                                MBProgressHUD.hideHUDForView(self.view, animated: true)
-                                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                                appDelegate.window?.rootViewController = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateInitialViewController() as! UINavigationController
-                                
-                                return nil
-                            })
-
-                            
-                    })
-                    
-                    
-                    /*
-                    user.saveInBackgroundWithBlock({ (succeeded, error) -> Void in
+        if self.canSignUp{
+            if Utils().usernameValid(textFieldString.lowercaseString){
+                //Create User Object
+                var user:PFUser = PFUser()
+                
+                user.username = textFieldString.lowercaseString
+                user.password = textFieldString.lowercaseString
+                
+                var userInfos:PFObject = PFObject(className: "UserInfos")
+                userInfos["phoneNumber"] = self.phoneNumber!
+                
+                user["userInfos"] = userInfos
+                var usersFriend = [String]()
+                user["usersFriend"] = usersFriend
+                user["hasSeenRecommanded"] = false
+                user["hasShownOverlayMenu"] = false
+                user["hasShownOverlayPeekee"] = false
+                user["hasSeenFriends"] = false
+                
+                
+                MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+                user.signUpInBackgroundWithBlock { (succeeded, error) -> Void in
+                    if error != nil {
                         MBProgressHUD.hideHUDForView(self.view, animated: true)
-                        if error == nil {
-                            
-                            
-                            
-                            
+                        
+                        if Utils().iOS8{
+                            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
+                                message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                            self.presentViewController(alert, animated: true, completion: nil)
                         }
                         else{
-                            user.saveEventually()
-                            
-                            if Utils().iOS8{
-                                var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-                                    message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                                self.presentViewController(alert, animated: true, completion: nil)
-                            }
-                            else{
-                                var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
-                                    message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"),
-                                    delegate: nil,
-                                    cancelButtonTitle: "Ok")
-                                alertView.show()
-                            }
-                            
+                            var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
+                                message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"),
+                                delegate: nil,
+                                cancelButtonTitle: "Ok")
+                            alertView.show()
+                        }
+                        
+                    }
+                    else{
+                        
+                        var userInfos:PFObject = user["userInfos"] as! PFObject
+                        userInfos.ACL = PFACL(user: user)
+                        userInfos.saveEventually()
+                        
+                        
+                        
+                        Mixpanel.sharedInstance().createAlias(PFUser.currentUser()!.objectId!, forDistinctID: Mixpanel.sharedInstance().distinctId)
+                        if user.username != nil{
+                            Mixpanel.sharedInstance().people.set(["Username" : user.username!])
+                        }
+                        
+                        if self.phoneNumber != nil{
+                            Mixpanel.sharedInstance().people.set(["$phone" : self.phoneNumber!])
                         }
                         
                         
-                    })*/
+                        PFCloud.callFunctionInBackground("addToFirstUsePiki",
+                            withParameters: ["Test" : "Test"],
+                            block: { (result, error) -> Void in
+                                
+                                if let currentUser = PFUser.currentUser(){
+                                    println("There is a current user")
+                                }
+                                
+                                Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
+                                    FBSDKAppEvents.logEvent(FBSDKAppEventNameCompletedRegistration)
+                                    Mixpanel.sharedInstance().track("Sign Up")
+                                    
+                                    MBProgressHUD.hideHUDForView(self.view, animated: true)
+                                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                                    appDelegate.window?.rootViewController = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateInitialViewController() as! UINavigationController
+                                    
+                                    return nil
+                                })
+                                
+                                
+                        })
+                        
+                        
+                        /*
+                        user.saveInBackgroundWithBlock({ (succeeded, error) -> Void in
+                        MBProgressHUD.hideHUDForView(self.view, animated: true)
+                        if error == nil {
+                        
+                        
+                        
+                        
+                        }
+                        else{
+                        user.saveEventually()
+                        
+                        if Utils().iOS8{
+                        var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                        self.presentViewController(alert, animated: true, completion: nil)
+                        }
+                        else{
+                        var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"),
+                        delegate: nil,
+                        cancelButtonTitle: "Ok")
+                        alertView.show()
+                        }
+                        
+                        }
+                        
+                        
+                        })*/
+                    }
+                }
+            }
+            else{
+                if Utils().iOS8{
+                    var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("The username is not valid : only letters and numbers allowed", comment : "The username is not valid : only letters and numbers allowed"), preferredStyle: UIAlertControllerStyle.Alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
+                else{
+                    var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
+                        message: NSLocalizedString("The username is not valid : only letters and numbers allowed", comment : "The username is not valid : only letters and numbers allowed"),
+                        delegate: nil,
+                        cancelButtonTitle: "Ok")
+                    alertView.show()
                 }
             }
         }
-        else{
-            if Utils().iOS8{
-                var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-                    message: NSLocalizedString("The username is not valid : only letters and numbers allowed", comment : "The username is not valid : only letters and numbers allowed"), preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
-            else{
-                var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
-                    message: NSLocalizedString("The username is not valid : only letters and numbers allowed", comment : "The username is not valid : only letters and numbers allowed"),
-                    delegate: nil,
-                    cancelButtonTitle: "Ok")
-                alertView.show()
-            }
-        }
+        
+        
         
         
         

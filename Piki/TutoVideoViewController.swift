@@ -22,6 +22,8 @@ class TutoVideoViewController : UIViewController{
     
     override func viewDidLoad() {
         
+        self.view.backgroundColor = UIColor.blackColor()
+        
         Mixpanel.sharedInstance().track("Tuto Video")
         
         var filePath:String? = NSBundle.mainBundle().pathForResource("peekee_tuto", ofType: "mp4")

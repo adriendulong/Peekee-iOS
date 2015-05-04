@@ -34,6 +34,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
     var codeTextFieldFour:UITextField?
     
     var invalidCodeLabel:UILabel?
+    var codeEnterView:UIView!
     
     @IBOutlet weak var codeSentLabel: UILabel!
     @IBOutlet weak var separatorView: UIView!
@@ -85,8 +86,14 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         
         statusView.backgroundColor = Utils().primaryColorDark
         
+        
+        var moreInY:CGFloat = 0
+        if let sizeToGo = self.keyboardSize{
+            moreInY = sizeToGo.height
+        }
+        
         var gestureCheckNumber:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("checkNumber:"))
-        validationView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.height - keyboardSize!.height - 55, width: self.view.frame.size.width, height: 55))
+        validationView = UIView(frame: CGRect(x: 0, y: self.view.frame.size.height - moreInY - 55, width: self.view.frame.size.width, height: 55))
         validationView!.backgroundColor = Utils().primaryColorDark
         validationView!.addGestureRecognizer(gestureCheckNumber)
         self.view.addSubview(validationView!)
@@ -119,7 +126,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         
         
         //ENTER THE 4 DIGIT CODE
-        let codeEnterView:UIView = UIView(frame: CGRect(x: 15, y: validationView!.frame.origin.y - 80, width: 260, height: 52))
+        codeEnterView = UIView(frame: CGRect(x: 15, y: validationView!.frame.origin.y - 80, width: 260, height: 52))
         codeEnterView.center = CGPoint(x: self.view.frame.width/2, y: validationView!.frame.origin.y - 54)
         codeEnterView.backgroundColor = Utils().primaryColor
         self.view.addSubview(codeEnterView)
@@ -334,8 +341,20 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         
         let info:NSDictionary = notification.userInfo!
         let kbSize:CGSize = info.objectForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue().size
+        let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         
-        validationView!.frame = CGRect(x: 0, y: self.view.frame.size.height - kbSize.height - 55, width: self.view.frame.size.width, height: 55)
+        println("Keyboard size : \(kbSize)")
+        
+        UIView.animateWithDuration(animationDuration,
+            animations: { () -> Void in
+                self.validationView!.frame = CGRect(x: 0, y: self.view.frame.size.height - kbSize.height - 55, width: self.view.frame.size.width, height: 55)
+                self.invalidCodeLabel!.frame = CGRect(x: 0, y: self.view.frame.size.height - kbSize.height - 55 - 25, width: self.view.frame.width, height: 15)
+                self.codeEnterView.frame = CGRect(x: 15, y: self.view.frame.size.height - kbSize.height - 55 - 80, width: 260, height: 52)
+        }) { (finished) -> Void in
+            
+        }
+        
+        
         
     }
     

@@ -26,16 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        //ParseCrashReporting.enable()
-        //Parse.enableLocalDatastore()
-        
         ////Dev
-        Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
-        Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
+        //Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
+        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
          
         //PROD
-        //Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
-        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
+        Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
+        Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
         
         
         Fabric.with([Crashlytics()])
@@ -126,7 +123,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             
             Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
                 
-                println("Friendlist : \(self.friendsIdList)")
 
                 //If no name and launched the app 10 times : ask for his name
                 Utils().nbVisitAppIncrement()
@@ -196,20 +192,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
                                 completionHandler(UIBackgroundFetchResult.Failed)
                             }
                             else{
-                                let photoFile:PFFile = piki!["photo"] as! PFFile
-                                photoFile.getDataInBackgroundWithBlock({ (data : NSData?, error : NSError?) -> Void in
-                                    if error != nil {
-                                        completionHandler(UIBackgroundFetchResult.Failed)
-                                    }
-                                    else{
-                                        
-                                        var navController:UINavigationController = self.window!.rootViewController as! UINavigationController
-                                        var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
-                                        rootController.goToPiki(piki!)
-                                        NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)
-                                        completionHandler(UIBackgroundFetchResult.NewData)
-                                    }
-                                })
+                                var navController:UINavigationController = self.window!.rootViewController as! UINavigationController
+                                var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
+                                rootController.goToPiki(piki!)
+                                NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)
+                                completionHandler(UIBackgroundFetchResult.NewData)
                             }
                         })
                         

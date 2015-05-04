@@ -65,18 +65,37 @@ class Utils {
     
     //MARK: FONTS REPLIES
     
-    let fontReplies:[String] = ["BaronNeueBlack", "BrushUp", "DaftBrush", "BanzaiBros", "Higher", "Impact", "VolteBold", "TrendSansFour", "PlasticaPro", "story"]
+    let fontReplies:[String] = ["BanzaiBros", "Volte-Bold", "TrashHand", "Impact", "PlasticaPro", "TrendSansFour", "story", "BaronNeueBlack"]
+    let fontColors:[UIColor] = [UIColor(red: 53/255, green: 226/255, blue: 126/255, alpha: 1.0), UIColor(red: 81/255, green: 255/255, blue: 252/255, alpha: 1.0), UIColor(red: 228/255, green: 69/255, blue: 92/255, alpha: 1.0),UIColor(red: 128/255, green: 251/255, blue: 69/255, alpha: 1.0), UIColor(red: 255/255, green: 251/255, blue: 78/255, alpha: 1.0), UIColor(red: 239/255, green: 83/255, blue: 53/255, alpha: 1.0), UIColor(red: 218/255, green: 91/255, blue: 242/255, alpha: 1.0), UIColor(red: 54/255, green: 92/255, blue: 246/255, alpha: 1.0)]
+    let fontSizes:[CGFloat] = [30, 30, 36, 30 , 30, 30, 45, 36]
     
     
-    func getFontsWithSize(size:CGFloat) -> [UIFont]{
+    func getFontsWithSize(size:CGFloat) -> Array<[String : AnyObject]>{
+
         
-        
-        var arrayFont:[UIFont] = [UIFont]()
-        
-        for fontReply in fontReplies{
+        /*for familyName in UIFont.familyNames() as! [String]{
             
-            if let fontFound = UIFont(name: fontReply, size: size){
-                arrayFont.append(fontFound)
+            println("Family name : \(familyName)")
+            
+            for name in UIFont.fontNamesForFamilyName(familyName) as! [String]{
+                println("Name : \(name)")
+            }
+            
+        }*/
+        
+        var arrayFont:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
+        
+        for (index, value) in enumerate(fontReplies){
+            
+            if let fontFound = UIFont(name: value as String, size: fontSizes[index]){
+
+                var infosFontWhite = ["font" : fontFound, "color" : UIColor.whiteColor()]
+                arrayFont.append(infosFontWhite)
+
+                var infosFontColored = ["font" : fontFound, "color" : fontColors[index]]
+                arrayFont.append(infosFontColored)
+                
+                
             }
             
         }
@@ -497,6 +516,23 @@ class Utils {
         var time:CMTime = CMTimeMakeWithSeconds(1, 600)
         var oneRef:CGImageRef = generate1.copyCGImageAtTime(time, actualTime: nil, error: nil)
         var one:UIImage = UIImage(CGImage: oneRef)!
+        
+        return one
+        
+    }
+    
+    func getImageFrameFromVideoBeginning(videoURL : NSURL) -> UIImage{
+        
+        var asset:AVURLAsset = AVURLAsset(URL: videoURL, options: nil)
+        println("Size video : \((asset.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack).naturalSize)")
+        var generate1:AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+        generate1.appliesPreferredTrackTransform = true
+        
+        var time:CMTime = CMTimeMakeWithSeconds(0, 600)
+        var oneRef:CGImageRef = generate1.copyCGImageAtTime(time, actualTime: nil, error: nil)
+        var one:UIImage = UIImage(CGImage: oneRef)!
+        
+        println("ONE SIZE : \(one.size) and scale : \(one.scale)")
         
         return one
         
@@ -1573,13 +1609,10 @@ class Utils {
             }
             else{
                 Mixpanel.sharedInstance().people.set(["Username" : PFUser.currentUser()!.username!])
-                
-                var lastModifFriends:NSDate = PFUser.currentUser()!["lastFriendsModification"] as! NSDate
-                println("Last Modified Friends : \(lastModifFriends)")
-                
+
                 //If need to be updated we make the request in order to have a cache now
                 if Utils().friendsNeedsToBeUpdated(){
-                    println("update friends")
+                    println("UPDATE FRIENDS")
                     
                     self.getFriends(false).continueWithBlock({ (task : BFTask!) -> AnyObject! in
                         if task.error != nil{
@@ -1713,23 +1746,41 @@ class Utils {
     
     func friendsNeedsToBeUpdated() -> Bool{
         
-        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        if defaults.objectForKey("lastFriendsUpdate") != nil{
-            
-            var lastFriendsUpdate:NSDate = defaults.objectForKey("lastFriendsUpdate") as! NSDate
-            var userFriendsUpdate:NSDate = PFUser.currentUser()!["lastFriendsModification"] as! NSDate
-            
-            if lastFriendsUpdate.compare(userFriendsUpdate) == NSComparisonResult.OrderedAscending{
+        //If we don't have the same number of friends that we should we update the user
+        if let nbFriends = PFUser.currentUser()!["nbFriends"] as? Int{
+            if nbFriends != getAppDelegate().friendsIdList.count{
                 return true
             }
-            else{
-                return false
-            }
-            
         }
-        else{
+        else {
             return true
         }
+        
+        //If we have the same number but the date from the last modif is more recent, we update
+        if let lastFriendsModif = PFUser.currentUser()!["lastFriendsModification"] as? NSDate{
+            var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            if defaults.objectForKey("lastFriendsUpdate") != nil{
+                
+                var lastFriendsUpdate:NSDate = defaults.objectForKey("lastFriendsUpdate") as! NSDate
+                var userFriendsUpdate:NSDate = lastFriendsModif
+                
+                if lastFriendsUpdate.compare(userFriendsUpdate) == NSComparisonResult.OrderedAscending{
+                    return true
+                }
+                else{
+                    return false
+                }
+                
+            }
+            else{
+                return true
+            }
+        }
+        else {
+            return true
+        }
+        
+        
         
     }
     
@@ -1774,7 +1825,7 @@ class Utils {
     func getFriends(withCache : Bool) -> BFTask {
         var friendsCompletionTask = BFTaskCompletionSource()
         var needToUpdateLocalFriendsList:Bool = false
-        
+
         var queryFriends = PFQuery(className: "Friend")
         queryFriends.whereKey("user", equalTo: PFUser.currentUser()!)
         queryFriends.limit = 500
@@ -1888,6 +1939,8 @@ class Utils {
     func likeReact(react : PFObject!, pleek : PFObject!, hasAlreadyLiked : Bool){
 
         if !hasAlreadyLiked{
+            Mixpanel.sharedInstance().track("Like")
+            
             var likeObject:PFObject = PFObject(className: "Like")
             var reactCopy:PFObject = PFObject(withoutDataWithClassName:"React", objectId: react.objectId)
             likeObject["react"] = reactCopy
@@ -1924,6 +1977,27 @@ class Utils {
         }
      
         
+        
+    }
+    
+    
+    // MARK: TUTO
+    
+    func justSeeVideoTuto(){
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(true, forKey: "seenVideoTuto")
+    }
+    
+    func hasSeenVideoTuto() -> Bool{
+        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if defaults.objectForKey("seenVideoTuto") != nil{
+            
+            return true
+            
+        }
+        
+        return false
         
     }
     

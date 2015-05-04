@@ -54,6 +54,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     
     var hasLoaded:Bool = false
     var reactRandomId:String?
+    var reportOrDeleteLabel:UILabel!
     
     //Flip
     var flipPosition:Int = 0
@@ -78,6 +79,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     var imageLikeFast:UIImageView!
     
     var spinnerView:LLARingSpinnerView!
+    var spinnerViewAddFriend:LLARingSpinnerView!
     
     func loadCell(){
         
@@ -86,9 +88,11 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("startFlip:"), name: "startFlip", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateLikeInfos:"), name: "updateLikeInfos", object: nil)
         
+        contentView.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 251/255, alpha: 1.0)
+        
         //Flip View
         flipView = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.height))
-        flipView.backgroundColor = UIColor.whiteColor()
+        flipView.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 251/255, alpha: 1.0)
         contentView.addSubview(flipView)
         
         
@@ -107,10 +111,18 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         
         usernameLabel = UILabel(frame: CGRect(x: 5, y: usernameView.frame.height/2, width: usernameView.frame.width - 10, height: usernameView.frame.height/2))
         usernameLabel.textAlignment = NSTextAlignment.Center
-        usernameLabel.font = UIFont(name: Utils().montserratRegular, size: 18)
+        usernameLabel.font = UIFont(name: Utils().montserratRegular, size: 14)
         usernameLabel.adjustsFontSizeToFitWidth = true
         usernameLabel.textColor = blackSelected
         usernameView.addSubview(usernameLabel)
+        
+        spinnerViewAddFriend = LLARingSpinnerView(frame: CGRect(x: usernameView.frame.width/2 - 10, y: usernameView.frame.height/2 - 10, width: 20, height: 20))
+        spinnerViewAddFriend.center = addUserIcon.center
+        spinnerViewAddFriend.lineWidth = 2
+        spinnerViewAddFriend.tintColor = Utils().secondColor
+        spinnerViewAddFriend.hidden = true
+        usernameView.addSubview(spinnerViewAddFriend)
+        spinnerViewAddFriend.startAnimating()
         
         
         //Likes View
@@ -128,7 +140,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         //Likes
         nbLikes = UILabel(frame: CGRect(x: 0, y: likesView.frame.height/2, width: likesView.frame.width, height: likesView.frame.height/2))
         nbLikes.textAlignment = NSTextAlignment.Center
-        nbLikes.font = UIFont(name: Utils().montserratRegular, size: 16)
+        nbLikes.font = UIFont(name: Utils().montserratRegular, size: 14)
         nbLikes.adjustsFontSizeToFitWidth = true
         nbLikes.textColor = greyNotSelected
         nbLikes.text = "0"
@@ -146,17 +158,33 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         innerShadowImage.image = UIImage(named: "inner_shadow_selected_cell")
         flipView.addSubview(innerShadowImage)
         
-        let reportOrDeleteButton:UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height))
+        let reportOrDeleteButton:UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height/4 * 3))
         reportOrDeleteButton.setImage(UIImage(named: "trash_react_icon"), forState: UIControlState.Normal)
         reportOrDeleteButton.addTarget(self, action: Selector("reportOrRemove"), forControlEvents: UIControlEvents.TouchUpInside)
         reportOrDeleteButton.tag = 10
         bottomFlipView.addSubview(reportOrDeleteButton)
         
-        let shareReactButton:UIButton = UIButton(frame: CGRect(x: bottomFlipView.frame.width/2, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height))
+        reportOrDeleteLabel = UILabel(frame: CGRect(x: 0, y: bottomFlipView.frame.height/2, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height/2))
+        reportOrDeleteLabel.textAlignment = NSTextAlignment.Center
+        reportOrDeleteLabel.font = UIFont(name: Utils().montserratRegular, size: 12)
+        reportOrDeleteLabel.adjustsFontSizeToFitWidth = true
+        reportOrDeleteLabel.textColor = blackSelected
+        reportOrDeleteLabel.text = "DELETE"
+        bottomFlipView.addSubview(reportOrDeleteLabel)
+        
+        let shareReactButton:UIButton = UIButton(frame: CGRect(x: bottomFlipView.frame.width/2, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height/4 * 3))
         shareReactButton.setImage(UIImage(named: "share_react_icon"), forState: UIControlState.Normal)
         shareReactButton.addTarget(self, action: Selector("shareOne"), forControlEvents: UIControlEvents.TouchUpInside)
         shareReactButton.tag = 11
         bottomFlipView.addSubview(shareReactButton)
+        
+        let shareReactButtonLabel = UILabel(frame: CGRect(x: bottomFlipView.frame.width/2, y: bottomFlipView.frame.height/2, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height/2))
+        shareReactButtonLabel.textAlignment = NSTextAlignment.Center
+        shareReactButtonLabel.font = UIFont(name: Utils().montserratRegular, size: 12)
+        shareReactButtonLabel.adjustsFontSizeToFitWidth = true
+        shareReactButtonLabel.textColor = blackSelected
+        shareReactButtonLabel.text = "PREVIEW"
+        bottomFlipView.addSubview(shareReactButtonLabel)
         
         
         let middleDivider:UIView = UIView(frame: CGRect(x: 0, y: flipView.frame.height/2, width: flipView.frame.width, height: 1))
@@ -226,7 +254,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         
         nbLikesLabelFront = UILabel(frame: CGRect(x: 0, y: 0, width: nbLikesView.frame.width - 24, height: nbLikesView.frame.height))
         nbLikesLabelFront.textAlignment = NSTextAlignment.Right
-        nbLikesLabelFront.textColor = UIColor.whiteColor()
+        nbLikesLabelFront.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
         nbLikesLabelFront.font = UIFont(name: Utils().montserratRegular, size: 12)
         nbLikesLabelFront.text = "0"
         nbLikesView.addSubview(nbLikesLabelFront)
@@ -244,11 +272,11 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         readVideoImageView.contentMode = UIViewContentMode.Center
         mainViewCell.addSubview(readVideoImageView)
         
-        spinnerView = LLARingSpinnerView(frame: CGRect(x: mainViewCell.frame.width/2 - 15, y: mainViewCell.frame.height/2 - 15, width: 20, height: 30))
+        spinnerView = LLARingSpinnerView(frame: CGRect(x: mainViewCell.frame.width/2 - 15, y: mainViewCell.frame.height/2 - 15, width: 30, height: 30))
         spinnerView.lineWidth = 2
-        spinnerView.tintColor = UIColor(red: 33/255, green: 35/255, blue: 37/255, alpha: 1.0)
+        spinnerView.tintColor = UIColor(red: 128/255, green: 137/255, blue: 148/255, alpha: 1.0)
+        spinnerView.hidden = true
         mainViewCell.addSubview(spinnerView)
-        spinnerView.startAnimating()
         
         //Image like fast
         imageLikeFast = UIImageView(frame: CGRect(x: 0, y: 0, width: mainViewCell.frame.width, height: mainViewCell.frame.height))
@@ -263,6 +291,22 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         
         
         hasLoaded = true
+        
+    }
+    
+    func startAnimateLoader(){
+        if !Utils().isIphone4(){
+            spinnerView.hidden = false
+            spinnerView.startAnimating()
+        }
+        
+    }
+    
+    func stopAnimateLoader(){
+        if !Utils().isIphone4(){
+            spinnerView.stopAnimating()
+            spinnerView.hidden = true
+        }
         
     }
     
@@ -380,6 +424,13 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         
         let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
         
+        if self.react != nil{
+            NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
+        }
+        else if self.reactVideoURL != nil{
+            NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exectpURL" : self.reactVideoURL!])
+        }
+        
         if let theReact = self.react {
             
             if let exceptReact = userInfo["exceptReact"]{
@@ -440,6 +491,13 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     func startVideo(){
         
         //NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil)
+        if self.react != nil{
+            NSNotificationCenter.defaultCenter().postNotificationName("startFlip", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
+        }
+        else if self.reactRandomId != nil{
+            NSNotificationCenter.defaultCenter().postNotificationName("startFlip", object: nil, userInfo: ["exectpId" : self.reactRandomId!])
+        }
+        
         if self.react != nil{
             NSNotificationCenter.defaultCenter().postNotificationName("startNewVideo", object: nil, userInfo: ["exceptReact" : self.react!.objectId!])
         }
@@ -590,12 +648,21 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     
     func newVideoStarted(notification : NSNotification){
         
-         let userInfo:Dictionary<String,String!> = notification.userInfo as! Dictionary<String,String!>
-
-        if let theReact = self.react {
-            
-            if userInfo["exceptReact"] != nil{
-                if theReact.objectId != userInfo["exceptReact"]{
+        
+        if let userInfo = notification.userInfo as? Dictionary<String,String!>{
+            if let theReact = self.react {
+                
+                if userInfo["exceptReact"] != nil{
+                    if theReact.objectId != userInfo["exceptReact"]{
+                        if self.playerLayer.player != nil{
+                            self.playerLayer.player.pause()
+                            self.playerLayer.player = nil
+                            readVideoImageView.hidden = false
+                            self.loadIndicator!.hidden = true
+                        }
+                    }
+                }
+                else{
                     if self.playerLayer.player != nil{
                         self.playerLayer.player.pause()
                         self.playerLayer.player = nil
@@ -603,22 +670,21 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                         self.loadIndicator!.hidden = true
                     }
                 }
-            }
-            else{
-                if self.playerLayer.player != nil{
-                    self.playerLayer.player.pause()
-                    self.playerLayer.player = nil
-                    readVideoImageView.hidden = false
-                    self.loadIndicator!.hidden = true
-                }
-            }
-            
-            
-        }
-        else if self.reactVideoURL != nil{
-            if userInfo["exectpURL"] != nil{
                 
-                if self.reactVideoURL! != userInfo["exceptReact"]{
+                
+            }
+            else if self.reactVideoURL != nil{
+                if userInfo["exectpURL"] != nil{
+                    
+                    if self.reactVideoURL! != userInfo["exceptReact"]{
+                        if self.playerLayer.player != nil{
+                            self.playerLayer.player.pause()
+                            self.playerLayer.player = nil
+                            readVideoImageView.hidden = false
+                        }
+                    }
+                }
+                else{
                     if self.playerLayer.player != nil{
                         self.playerLayer.player.pause()
                         self.playerLayer.player = nil
@@ -626,14 +692,16 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                     }
                 }
             }
-            else{
-                if self.playerLayer.player != nil{
-                    self.playerLayer.player.pause()
-                    self.playerLayer.player = nil
-                    readVideoImageView.hidden = false
-                }
+        }
+        else{
+            if self.playerLayer.player != nil{
+                self.playerLayer.player.pause()
+                self.playerLayer.player = nil
+                readVideoImageView.hidden = false
             }
         }
+
+        
 
         
         
@@ -647,12 +715,15 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         println("add friend")
         if self.react != nil{
             if let userReact = self.react!["user"] as? PFUser{
-                
+                spinnerViewAddFriend.hidden = false
+                addUserIcon.hidden = true
                 if Utils().isUserAFriend(userReact){
                     //Remove Friend
                     Utils().removeFriend(userReact.objectId!).continueWithBlock({ (task) -> AnyObject! in
+                        self.spinnerViewAddFriend.hidden = true
+                        
                         if task.error != nil{
-                            
+                            self.addUserIcon.hidden = false
                         }
                         else{
                             self.adaptFriendActions(false)
@@ -662,9 +733,11 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                 }
                 else{
                     //Add Friend
+                    
                     Utils().addFriend(userReact.objectId!).continueWithBlock({ (task) -> AnyObject! in
+                        self.spinnerViewAddFriend.hidden = true
                         if task.error != nil{
-                            
+                            self.addUserIcon.hidden = false
                         }
                         else{
                             self.adaptFriendActions(true)
@@ -678,6 +751,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     }
     
     func adaptFriendActions(isFriend : Bool){
+        self.addUserIcon.hidden = false
         if isFriend{
             usernameLabel.textColor = blackSelected
             addUserIcon.image = imageUserAdded
@@ -813,7 +887,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         if let reactPleek = self.react{
             if let nbLikesReact = reactPleek["nbLikes"] as? Int{
 
-                nbLikes.text = "\(nbLikesReact)"
+                nbLikes.text = "\(Utils().formatNumber(nbLikesReact))"
             }
         }
         
@@ -892,15 +966,18 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         
         if canRemove(){
             (flipView.viewWithTag(10) as! UIButton).setImage(UIImage(named: "trash_react_icon"), forState: UIControlState.Normal)
+            reportOrDeleteLabel.text = "DELETE"
         }
         else{
             (flipView.viewWithTag(10) as! UIButton).setImage(UIImage(named: "report_react_icon"), forState: UIControlState.Normal)
+            reportOrDeleteLabel.text = "REPORT"
         }
         
     }
     
     func reportOrRemove(){
     
+        self.stopVideo()
         if let delegatePleek = self.delegate{
             if let reactPleek = self.react{
                 delegatePleek.removeReact(reactPleek, isReport: !canRemove())

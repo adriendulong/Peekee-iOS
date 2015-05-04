@@ -48,7 +48,7 @@ class MemCollectionViewCell : UICollectionViewCell{
         
         contentView.backgroundColor = UIColor(red: 53/255, green: 54/255, blue: 55/255, alpha: 1.0)
         
-        selectorImageView = UIImageView(frame: CGRect(x: frame.width - 45, y: 10, width: 22, height: 22))
+        selectorImageView = UIImageView(frame: CGRect(x: frame.width - 32, y: 10, width: 22, height: 22))
         selectorImageView.image = UIImage(named: "font_meme_selected")
         selectorImageView.hidden = true
         contentView.addSubview(selectorImageView)

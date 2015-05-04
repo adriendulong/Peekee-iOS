@@ -28,7 +28,7 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         super.init(frame: frame)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("scrollStarted"), name: "scrollStarted", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("newVideoStarted"), name: "startNewVideo", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("newVideoStarted:"), name: "startNewVideo", object: nil)
         
         contentView.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 251/255, alpha: 1.0)
         
@@ -58,12 +58,16 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         shadowImageView = UIImageView(frame: CGRect(x: 0, y: frame.height - 115 , width: frame.width, height: 115))
         shadowImageView.image = stretchShadowImage
         shadowImageView.hidden = false
-        contentView.addSubview(shadowImageView)
+        //contentView.addSubview(shadowImageView)
         
         nbRepliesLabel = UILabel(frame: CGRect(x: 12, y: frame.height - 30, width: 150, height: 20))
         nbRepliesLabel.textColor = UIColor.whiteColor()
-        nbRepliesLabel.font = UIFont(name: Utils().montserratRegular, size: 18)
+        nbRepliesLabel.font = UIFont(name: Utils().montserratRegular, size: 16)
         nbRepliesLabel.adjustsFontSizeToFitWidth = true
+        nbRepliesLabel.layer.shadowColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), [0, 0, 0, 0.5])
+        nbRepliesLabel.layer.shadowOffset = CGSizeMake(0, 1)
+        nbRepliesLabel.layer.shadowOpacity = 1.0
+        nbRepliesLabel.layer.shadowRadius = 2
         contentView.addSubview(nbRepliesLabel)
         
         moreInfosButton = UIButton(frame: CGRect(x: frame.width - 40, y: frame.height - 30, width: 30, height: 30))
@@ -74,7 +78,7 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         
         spinnerView = LLARingSpinnerView(frame: CGRect(x: contentView.frame.width/2 - 22, y: contentView.frame.height/2 - 22, width: 45, height: 45))
         spinnerView.lineWidth = 2
-        spinnerView.tintColor = UIColor(red: 33/255, green: 35/255, blue: 37/255, alpha: 1.0)
+        spinnerView.tintColor = UIColor(red: 128/255, green: 137/255, blue: 148/255, alpha: 1.0)
         contentView.addSubview(spinnerView)
         spinnerView.startAnimating()
         
@@ -101,20 +105,23 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         
     }
     
-    func newVideoStarted(){
-        if self.playerLayer.player != nil{
-            self.playerLayer.player.pause()
-            readVideoIcon.hidden = false
+    func newVideoStarted(notification : NSNotification){
+        if let userInfo = notification.userInfo as? Dictionary<String,String!>{
+            
+            if let pikiId = userInfo["pikiId"]{
+            
+            }
+            else{
+                if self.playerLayer.player != nil{
+                    self.playerLayer.player.pause()
+                    readVideoIcon.hidden = false
+                }
+            }
+            
         }
-    }
-    
-    func updateInfosPleek(){
-        nbRepliesLabel.text = "COUCOU"
-    }
-    
-    func startDownloadImage(){
         
     }
+
     
     
     

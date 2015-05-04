@@ -180,7 +180,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         //Get contacts
         //getContacts()
         
-        self.mainActionView.hidden = true
+        self.mainActionView.hidden = false
         createPopUp()
         
     }
@@ -415,8 +415,10 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         self.addressBook.loadContacts(
             { (contacts: [AnyObject]!, error: NSError!) in
                 MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-                if (contacts != nil) {
-
+                if error != nil{
+                    self.goLeave()
+                }
+                else{
                     self.contactsPhone = contacts as! Array<APContact>
                     self.lookingForFriendsOnPeekee = true
                     self.tableView.reloadData()
@@ -424,9 +426,6 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                     self.mainActionView.hidden = false
                     
                     self.checkContactsOnPiki()
-                }
-                else if (error != nil) {
-                    self.goLeave()
                 }
         })
     }
@@ -979,12 +978,12 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     func goLeave(){
         
         PFUser.currentUser()!["hasSeenFriends"] = true
-        PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
-            Utils().updateUser()
-        }
+        
         
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
-            
+            PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+                Utils().updateUser()
+            }
         })
     }
     

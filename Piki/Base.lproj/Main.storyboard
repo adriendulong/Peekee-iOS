@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D127a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="dWB-kv-xM6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14E11f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="dWB-kv-xM6">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -60,7 +60,7 @@
                                             <constraint firstAttribute="width" constant="40" id="STw-xB-c6C"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                                        <state key="normal" image="previous_icon">
+                                        <state key="normal" image="button_back">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -591,7 +591,7 @@
                                 <rect key="frame" x="0.0" y="60" width="600" height="540"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="inboxCell" id="YQL-Ds-2Fe" customClass="inboxTableViewCell" customModule="Peekee" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="inboxCell" id="YQL-Ds-2Fe" customClass="inboxTableViewCell" customModule="Peekee" customModuleProvider="target">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YQL-Ds-2Fe" id="QRT-oq-xQN">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -2027,7 +2027,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="button_back" width="8" height="14"/>
+        <image name="button_back" width="11" height="19"/>
         <image name="check_username" width="19" height="17"/>
         <image name="cheers_icon" width="42" height="28"/>
         <image name="daft_icon" width="30" height="32"/>
@@ -2046,6 +2046,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="in1-04-cqt"/>
-        <segue reference="f2k-6n-HYc"/>
+        <segue reference="Lpb-34-bai"/>
     </inferredMetricsTieBreakers>
 </document>

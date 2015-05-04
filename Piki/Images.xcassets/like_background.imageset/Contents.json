@@ -5,36 +5,14 @@
       "scale" : "1x"
     },
     {
-      "resizing" : {
-        "mode" : "3-part-horizontal",
-        "center" : {
-          "mode" : "fill",
-          "width" : 3
-        },
-        "capInsets" : {
-          "right" : 17,
-          "left" : 57
-        }
-      },
       "idiom" : "universal",
-      "filename" : "like_background@2x.png",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "badge_background_2x_360.png"
     },
     {
-      "resizing" : {
-        "mode" : "3-part-horizontal",
-        "center" : {
-          "mode" : "fill",
-          "width" : 1
-        },
-        "capInsets" : {
-          "right" : 60,
-          "left" : 59
-        }
-      },
       "idiom" : "universal",
-      "filename" : "like_background@3x.png",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "badge_background_3x_360.png"
     }
   ],
   "info" : {

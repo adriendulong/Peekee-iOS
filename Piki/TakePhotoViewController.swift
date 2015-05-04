@@ -56,6 +56,10 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     var captureDeviceInput:AVCaptureDeviceInput?
     var audioDeviceInput:AVCaptureDeviceInput?
     var isPressingRecordButton:Bool = false
+    var isTakingPicture:Bool = true
+    var noAuthCameraImageView:UIImageView!
+    var tutorialView:UIView!
+    var videoAsset:AVAsset?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,7 +96,11 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         cameraTextView!.editable = true
         cameraTextView!.backgroundColor = UIColor.clearColor()
         cameraTextView!.textAlignment = NSTextAlignment.Center
-        cameraTextView!.font = UIFont(name: Utils().customFontSemiBold, size: 60)
+        cameraTextView!.layer.shadowColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), [0, 0, 0, 0.5])
+        cameraTextView!.layer.shadowOffset = CGSizeMake(0, 1)
+        cameraTextView!.layer.shadowOpacity = 1.0
+        cameraTextView!.layer.shadowRadius = 2
+        cameraTextView!.font = UIFont(name: "BanzaiBros", size: 60.0)
         cameraTextView!.hidden = true
         cameraTextView!.delegate = self
         cameraTextView!.autocorrectionType = UITextAutocorrectionType.No
@@ -123,6 +131,34 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         previewLayer!.frame = CGRect(x: 0, y: 0, width: cameraView!.frame.width, height: cameraView!.frame.width)
         previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView!.layer.addSublayer(previewLayer)
+        PBJVision.sharedInstance().presentationFrame = cameraView!.frame
+        
+        noAuthCameraImageView = UIImageView(frame: CGRect(origin: previewImageView!.frame.origin, size: previewImageView!.frame.size))
+        noAuthCameraImageView.image = UIImage(named: "enable_camera_pleek")
+        noAuthCameraImageView.hidden = true
+        self.view.addSubview(noAuthCameraImageView)
+        
+        //Tutorial pop up
+        tutorialView = UIView(frame: CGRect(x: self.view.frame.width/2 - 102, y: self.view.frame.width/2, width: 205, height: 40))
+        tutorialView.backgroundColor = UIColor.clearColor()
+        let backImageTutoriel:UIImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: tutorialView.frame.width, height: tutorialView.frame.height))
+        backImageTutoriel.contentMode = UIViewContentMode.Center
+        backImageTutoriel.image = UIImage(named: "tutorial_background_pleek")
+        tutorialView!.addSubview(backImageTutoriel)
+        let textTuto:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: tutorialView!.frame.width, height: tutorialView!.frame.height - 5))
+        textTuto.textAlignment = NSTextAlignment.Center
+        textTuto.font = UIFont(name: Utils().montserratRegular, size: 11)
+        let string:NSString = "TAP TO ENABLE YOUR CAMERA" as NSString
+        let firstAttributes = [NSForegroundColorAttributeName: UIColor(red: 136/255, green: 146/255, blue: 159/255, alpha: 1.0)]
+        let secondAttributes = [NSForegroundColorAttributeName: UIColor(red: 36/255, green: 35/255, blue: 35/255, alpha: 1.0)]
+        var attributedString = NSMutableAttributedString(string: string as String)
+        attributedString.addAttributes(firstAttributes, range: string.rangeOfString("TAP TO"))
+        attributedString.addAttributes(firstAttributes, range: string.rangeOfString("YOUR CAMERA"))
+        attributedString.addAttributes(secondAttributes, range: string.rangeOfString("ENABLE"))
+        textTuto.attributedText = attributedString
+        tutorialView.addSubview(textTuto)
+        tutorialView.alpha = 0.0
+        self.view.addSubview(tutorialView!)
         
     }
     
@@ -182,15 +218,33 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
 
     
     func setupCamera(){
+        
+        
+        
         var vision:PBJVision = PBJVision.sharedInstance()
         vision.delegate = self
-        vision.cameraMode = PBJCameraMode.Photo
+        vision.cameraMode = PBJCameraMode.Video
         vision.cameraOrientation = PBJCameraOrientation.Portrait
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
-        vision.videoBitRate = 437500 * 8
-        vision.outputFormat = PBJOutputFormat.Square
+        if Utils().isIphone4(){
+            vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        }
+        else{
+            vision.captureSessionPreset = AVCaptureSessionPresetiFrame960x540
+        }
         
-        vision.startPreview()
+        vision.outputFormat = PBJOutputFormat.Square
+        vision.maximumCaptureDuration = CMTimeMakeWithSeconds(12, 600)
+        vision.videoRenderingEnabled = true
+        
+        
+        if checkIfCanPresentCamera(){
+            vision.startPreview()
+        }
+        else{
+            noAuthCameraImageView.hidden = false
+        }
+        
         
     }
     
@@ -229,6 +283,10 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     self.changeCameraSideButton = UIButton(frame: CGRect(x: 15, y: self.view.frame.size.width - 55, width: 40, height: 40))
                     self.changeCameraSideButton?.setImage(UIImage(named: "change_camera"), forState: UIControlState.Normal)
                     self.changeCameraSideButton!.addTarget(self, action: Selector("changeCamera:"), forControlEvents: UIControlEvents.TouchUpInside)
+                    if !self.checkIfCanPresentCamera(){
+                        self.changeCameraSideButton!.hidden = true
+                        
+                    }
                     self.view.addSubview(self.changeCameraSideButton!)
                     
                     
@@ -255,6 +313,9 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     self.libraryButton!.addTarget(self, action: Selector("fromLibrary:"), forControlEvents: UIControlEvents.TouchUpInside)
                     self.libraryButton!.layer.borderWidth = 0.5
                     self.libraryButton!.layer.borderColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0).CGColor
+                    if !self.checkIfCanPresentCamera(){
+                        self.libraryButton!.hidden = true
+                    }
                     self.view.addSubview(self.libraryButton!)
                     
                     self.backKeyboardView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - keyboardSize.height, width: self.view.frame.width, height: keyboardSize.height))
@@ -284,6 +345,12 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     self.takePhotoButton!.addGestureRecognizer(tapGestureRecordVideo)
                     
                     self.view.addSubview(self.takePhotoButton!)
+
+                    if !self.checkIfCanPresentCamera(){
+                        self.tutorialView.frame.origin = CGPoint(x: self.view.frame.width/2 - 102, y: self.takePhotoButton!.frame.origin.y - 60)
+                        self.tutorialView.alpha = 1.0
+                    }
+                    
                     
                     if Utils().isIphone4(){
                         self.cameraTextView!.transform = CGAffineTransformMakeTranslation(0, -40)
@@ -326,7 +393,14 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
         if previewImageView!.hidden{
             //takePhoto()
-            PBJVision.sharedInstance().capturePhoto()
+            if checkIfCanPresentCamera(){
+                isTakingPicture = true
+                PBJVision.sharedInstance().startVideoCapture()
+            }
+            else{
+                askPermissionCamera()
+            }
+            
         }
         else{
             newPiki()
@@ -341,12 +415,20 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
         if longGesture.state == UIGestureRecognizerState.Began{
 
-            isPressingRecordButton = true
-            PBJVision.sharedInstance().maximumCaptureDuration = CMTimeMakeWithSeconds(12, 600)
-            PBJVision.sharedInstance().cameraMode = PBJCameraMode.Video
+            if previewImageView!.hidden{
+                if checkIfCanPresentCamera(){
+                    isPressingRecordButton = true
+                    isTakingPicture = false
+                    PBJVision.sharedInstance().startVideoCapture()
+                    //self.cameraTextView!.resignFirstResponder()
+                    //self.cameraTextView!.hidden = true
+                }
+                else{
+                    askPermissionCamera()
+                }
+            }
             
-            self.cameraTextView!.resignFirstResponder()
-            self.cameraTextView!.hidden = true
+            
 
             
             
@@ -354,24 +436,40 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         else if longGesture.state == UIGestureRecognizerState.Ended {
             isPressingRecordButton = false
             
-            self.stopRecordingAnim()
             
-            PBJVision.sharedInstance().endVideoCapture()
+            if PBJVision.sharedInstance().recording{
+                self.stopRecordingAnim()
+                
+                PBJVision.sharedInstance().endVideoCapture()
+            }
+            
             
         }
         
     }
     
     func visionDidStartVideoCapture(vision: PBJVision) {
-        startRecordingAnim()
+        if !isTakingPicture{
+            startRecordingAnim()
+        }
+        else{
+            var timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("endTakePicture"), userInfo: nil, repeats: false)
+        }
+        
     }
     
+    func endTakePicture(){
+        PBJVision.sharedInstance().endVideoCapture()
+    }
+    
+    
+    
     func visionDidEndVideoCapture(vision: PBJVision) {
-        PBJVision.sharedInstance().cameraMode = PBJCameraMode.Photo
+        //PBJVision.sharedInstance().cameraMode = PBJCameraMode.Photo
     }
     
     func visionCameraModeDidChange(vision: PBJVision) {
-        if vision.cameraMode == PBJCameraMode.Video{
+        /*if vision.cameraMode == PBJCameraMode.Video{
 
             if isPressingRecordButton{
 
@@ -380,7 +478,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     
                 }
             }
-        }
+        }*/
         
     }
     
@@ -407,14 +505,27 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             
             
             if videoPath != nil{
-                self.urlVideoToUpload = NSURL(fileURLWithPath: videoPath! as String)
                 
                 
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                if isTakingPicture{
+                    let screenImage:UIImage = Utils().getImageFrameFromVideoBeginning(NSURL(fileURLWithPath: videoPath as! String)!)
+                    var croppedPhoto = Utils().resizeSquareImage(screenImage, size: CGSize(width: 400, height: 400))
                     
-                    self.passInPreviewModeVideo(NSURL(fileURLWithPath: videoPath! as String)!)
+                    self.passInPreviewMode(croppedPhoto)
+                    PBJVision.sharedInstance().startPreview()
+                }
+                else{
+                    self.urlVideoToUpload = NSURL(fileURLWithPath: videoPath! as String)
                     
-                })
+                    isTakingPicture = true
+                    
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        
+                        self.passInPreviewModeVideo(NSURL(fileURLWithPath: videoPath! as String)!)
+                        
+                    })
+                }
+                
                 
                 
             }
@@ -592,29 +703,39 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         }
         else if urlVideoToUpload != nil{
             
-            println("Upload video")
-            self.isPhoto = false
-            
-            //Generate and upload preview image video
-            self.finalImage = Utils().getImageFrameFromVideo(self.urlVideoToUpload!)
-            var imageData:NSData = UIImageJPEGRepresentation(self.finalImage, 0.8)
-            self.previewFile = PFFile(name: "photo.jpg", data: imageData)
-            self.previewFile!.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
+            if count(self.cameraTextView!.text) > 0{
+                self.applyOverlay(self.urlVideoToUpload!.path!)
+            }
+            else{
+                println("Upload video")
+                self.isPhoto = false
                 
-                }, progressBlock: { (progress : Int32) -> Void in
-                    println("Preview Progress: \(progress)")
-            })
-            
-            
-            //Upload video
-            self.imageFile = PFFile(name: "video.mp4", contentsAtPath: self.urlVideoToUpload!.path!)
-            self.imageFile!.saveInBackgroundWithBlock({ (succeedded, error) -> Void in
                 
-                }, progressBlock: { (progress : Int32) -> Void in
-                    println("Video Progress : \(progress)")
-            })
+                //Generate and upload preview image video
+                self.finalImage = Utils().getImageFrameFromVideoBeginning(self.urlVideoToUpload!)
+                var imageData:NSData = UIImageJPEGRepresentation(self.finalImage, 0.8)
+                self.previewFile = PFFile(name: "photo.jpg", data: imageData)
+                self.previewFile!.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
+                    
+                    }, progressBlock: { (progress : Int32) -> Void in
+                        println("Preview Progress: \(progress)")
+                })
+                
+                
+                //Upload video
+                self.imageFile = PFFile(name: "video.mp4", contentsAtPath: self.urlVideoToUpload!.path!)
+                self.imageFile!.saveInBackgroundWithBlock({ (succeedded, error) -> Void in
+                    
+                    }, progressBlock: { (progress : Int32) -> Void in
+                        println("Video Progress : \(progress)")
+                })
+                
+                self.performSegueWithIdentifier("chooseRecipients", sender: self)
+            }
             
-            self.performSegueWithIdentifier("chooseRecipients", sender: self)
+            
+            
+            
             
         }
         
@@ -709,7 +830,14 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         if text == "\n"{
             if previewImageView!.hidden{
                 //takePhoto()
-                PBJVision.sharedInstance().capturePhoto()
+                if checkIfCanPresentCamera(){
+                    isTakingPicture = true
+                    PBJVision.sharedInstance().startVideoCapture()
+                }
+                else{
+                    askPermissionCamera()
+                }
+                
             }
             else{
                 newPiki()
@@ -914,28 +1042,221 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     }
     
     
+    //MARK : PERMISSIONS PHO
+    func checkIfCanPresentCamera() -> Bool{
+        if AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo) ==  AVAuthorizationStatus.Authorized
+        {
+            // Already Authorized
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
+    
+    func askPermissionCamera(){
+        AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (granted :Bool) -> Void in
+            if granted == true
+            {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.noAuthCameraImageView.hidden = true
+                    self.libraryButton!.hidden = false
+                    self.changeCameraSideButton!.hidden = false
+                    self.tutorialView.hidden = true
+                    PBJVision.sharedInstance().startPreview()
+                }
+                
+            }
+            else
+            {
+                // User Rejected
+                self.camDenied()
+                println("Acces rejected")
+            }
+        });
+    }
+    
+    
     func camDenied(){
         
-        var canOpenSettings:Bool = false
-        
-        switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
-        case .OrderedSame, .OrderedDescending:
-            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", comment : "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu"), preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-                
-                self.openSettings()
-            }))
-        case .OrderedAscending:
-            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek", comment : "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek"), preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+        dispatch_async(dispatch_get_main_queue()) {
+            var canOpenSettings:Bool = false
+            
+            switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
+            case .OrderedSame, .OrderedDescending:
+                var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu", comment : "To interact with your friends you need to allow the access to your camera. Go to settings to allow it? You'll need to go in the privacy menu"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                    
+                    self.openSettings()
+                }))
+                self.presentViewController(alert, animated: false, completion: nil)
+            case .OrderedAscending:
+                var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek", comment : "To interact with your friends you need to allow the access to your camera. Please go to Settings > Confidentiality > Camera and allow it for Pleek"), preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
+                self.presentViewController(alert, animated: false, completion: nil)
+            }
         }
+        
+        
+        
         
     }
     
     
     func openSettings(){
         UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+    }
+    
+    
+    
+    // MARK: Text over video
+    
+    func exportDidFinish(exporter : AVAssetExportSession){
+        
+        if exporter.status == AVAssetExportSessionStatus.Completed{
+            
+            var url:NSURL = exporter.outputURL
+            
+            println("Upload video")
+            self.isPhoto = false
+            
+            
+            //Generate and upload preview image video
+            self.finalImage = Utils().getImageFrameFromVideoBeginning(url)
+            var imageData:NSData = UIImageJPEGRepresentation(self.finalImage, 0.8)
+            self.previewFile = PFFile(name: "photo.jpg", data: imageData)
+            self.previewFile!.saveInBackgroundWithBlock({ (succeeded : Bool, error) -> Void in
+                
+                }, progressBlock: { (progress : Int32) -> Void in
+                    println("Preview Progress: \(progress)")
+            })
+            
+            
+            //Upload video
+            self.imageFile = PFFile(name: "video.mp4", contentsAtPath: url.path!)
+            self.imageFile!.saveInBackgroundWithBlock({ (succeedded, error) -> Void in
+                
+                }, progressBlock: { (progress : Int32) -> Void in
+                    println("Video Progress : \(progress)")
+            })
+            
+            self.performSegueWithIdentifier("chooseRecipients", sender: self)
+            
+        }
+        else{
+            println("Error export : \(exporter.error.description)")
+        }
+        
+    }
+    
+    func applyOverlay(path: String!){
+        
+        
+        self.videoAsset = AVAsset.assetWithURL(NSURL(fileURLWithPath: path)) as? AVAsset
+        
+        //Create AVMutableComposition object. This object will hold your AVMutableCompositionTrack instances.
+        var mixComposition:AVMutableComposition = AVMutableComposition()
+        
+        //Video track
+        var compositionVideoTrack:AVMutableCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: CMPersistentTrackID())
+        compositionVideoTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, videoAsset!.duration), ofTrack: videoAsset!.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack, atTime: kCMTimeZero, error: nil)
+        compositionVideoTrack.preferredTransform = (videoAsset!.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack).preferredTransform
+        
+        //Audio track
+        var compositionAudioTrack:AVMutableCompositionTrack = mixComposition.addMutableTrackWithMediaType(AVMediaTypeAudio, preferredTrackID: CMPersistentTrackID())
+        compositionAudioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, videoAsset!.duration), ofTrack: videoAsset!.tracksWithMediaType(AVMediaTypeAudio)[0] as! AVAssetTrack, atTime: kCMTimeZero, error: nil)
+        compositionAudioTrack.preferredTransform = (videoAsset!.tracksWithMediaType(AVMediaTypeAudio)[0] as! AVAssetTrack).preferredTransform
+        
+        
+        
+        var videoComposition:AVMutableVideoComposition = AVMutableVideoComposition()
+        videoComposition.renderSize = compositionVideoTrack.naturalSize
+        videoComposition.frameDuration = CMTimeMake(1, 30)
+        
+        
+        applyTextWithComposition(videoComposition)
+        
+        
+        var instruction:AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, mixComposition.duration)
+        var videoTrack:AVAssetTrack = mixComposition.tracksWithMediaType(AVMediaTypeVideo)[0] as! AVAssetTrack
+        var layerInstruction : AVMutableVideoCompositionLayerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
+        instruction.layerInstructions = [layerInstruction]
+        
+        videoComposition.instructions = [instruction]
+        
+        
+        
+        var paths:NSArray = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        var documentsDirectory:NSString = paths[0] as! NSString
+        var myPathDocs:NSString = documentsDirectory.stringByAppendingPathComponent("finalVideo\(NSDate().description).m4v")
+        var url:NSURL = NSURL(fileURLWithPath: myPathDocs as String)!
+        
+        var exporter:AVAssetExportSession = AVAssetExportSession(asset: mixComposition, presetName: AVAssetExportPresetMediumQuality)
+        exporter.outputURL = url
+        exporter.outputFileType = AVFileTypeMPEG4
+        exporter.shouldOptimizeForNetworkUse = true
+        exporter.videoComposition = videoComposition
+        
+        exporter.exportAsynchronouslyWithCompletionHandler({ () -> Void in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.exportDidFinish(exporter)
+            })
+            
+        })
+        
+        
+    }
+    
+    
+    func applyTextWithComposition(composition : AVMutableVideoComposition){
+        
+        let scale:CGFloat = composition.renderSize.width / self.view.frame.width
+        
+        var viewBack:UIView = UIView(frame: CGRectMake(0, 0, composition.renderSize.width, composition.renderSize.height))
+        var textViewCustom:UITextView = UITextView(frame: CGRectMake(0, cameraTextView!.frame.origin.y * scale, cameraTextView!.frame.width * scale, cameraTextView!.frame.height * scale))
+        textViewCustom.textColor = UIColor.whiteColor()
+        textViewCustom.font = UIFont(name: cameraTextView!.font.fontName, size: cameraTextView!.font.pointSize * scale)
+        textViewCustom.text = cameraTextView!.text
+        textViewCustom.layer.shadowColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), [0, 0, 0, 0.5])
+        textViewCustom.layer.shadowOffset = CGSizeMake(0, 1)
+        textViewCustom.layer.shadowOpacity = 1.0
+        textViewCustom.layer.shadowRadius = 2
+        textViewCustom.backgroundColor = UIColor.clearColor()
+        textViewCustom.textAlignment = NSTextAlignment.Center
+        viewBack.backgroundColor = UIColor.clearColor()
+        viewBack.addSubview(textViewCustom)
+        
+        var imageLabel:UIImage?
+        if (self.cameraTextView!.text as NSString).length > 0{
+            UIGraphicsBeginImageContextWithOptions(viewBack.frame.size, false, 0.0);
+            viewBack.layer.renderInContext(UIGraphicsGetCurrentContext())
+            imageLabel = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+        }
+        
+        println("Size imageLabel : \(imageLabel!.size)")
+        
+        if imageLabel != nil{
+            // Setup the overlay
+            var overlayLayer:CALayer = CALayer()
+            overlayLayer.contents = imageLabel!.CGImage
+            overlayLayer.frame = CGRectMake(0, 0, composition.renderSize.width, composition.renderSize.height)
+            
+            //Parent Layer
+            var parentLayer = CALayer()
+            var videoLayer:CALayer = CALayer()
+            parentLayer.frame = CGRectMake(0, 0, composition.renderSize.width, composition.renderSize.height)
+            videoLayer.frame = CGRectMake(0, 0, composition.renderSize.width, composition.renderSize.height)
+            parentLayer.addSublayer(videoLayer)
+            parentLayer.addSublayer(overlayLayer)
+            
+            
+            composition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, inLayer: parentLayer)
+        }
+        
+        
     }
 }

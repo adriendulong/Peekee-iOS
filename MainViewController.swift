@@ -180,28 +180,6 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
         parrotView.addSubview(pikiLabel)
         
         
-        /*
-        //First Label Inbox
-        inboxButton = UIButton(frame: CGRect(x: self.view.frame.size.width/3, y: 0, width: self.view.frame.size.width/3 + 1, height: topBarView.frame.size.height))
-        inboxButton!.setTitle("INBOX", forState: UIControlState.Normal)
-        inboxButton!.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        inboxButton!.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
-        inboxButton!.addTarget(self, action: Selector("goInbox:"), forControlEvents: UIControlEvents.TouchUpInside)
-        topBarView.addSubview(inboxButton!)
-        //Second Label Friends
-        friendsButton = UIButton(frame: CGRect(x: self.view.frame.size.width/3 * 2 + 1, y: 0, width: self.view.frame.size.width/3 + 1, height: topBarView.frame.size.height))
-        friendsButton!.setTitle("FRIENDS", forState: UIControlState.Normal)
-        friendsButton!.setTitleColor(Utils().primaryColorDark, forState: UIControlState.Normal)
-        friendsButton!.titleLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 20)
-        friendsButton!.addTarget(self, action: Selector("goFriends:"), forControlEvents: UIControlEvents.TouchUpInside)
-        topBarView.addSubview(friendsButton!)
-        
-        tabIndicatorView = UIView(frame: CGRect(x: self.view.frame.size.width/3, y: 80 - 2, width: self.view.frame.size.width/3 + 1, height: 2))
-        tabIndicatorView!.backgroundColor = Utils().secondColor
-        self.view.addSubview(tabIndicatorView!)
-        */
-        
-        
         let newPikiButton:UIButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 80, y: self.view.frame.size.height - 80, width: 70, height: 70))
         newPikiButton.setImage(UIImage(named: "add_piki"), forState: UIControlState.Normal)
         newPikiButton.addTarget(self, action: Selector("takePiki:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -643,7 +621,10 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                             
                         }
                         else{
-                            pikiCell.secondPreviewReact!.image = UIImage(data: data!)
+                            if let finalData = data{
+                                pikiCell.secondPreviewReact!.image = UIImage(data: finalData)
+                            }
+                            
                         }
                     })
                     
@@ -659,7 +640,10 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                             
                         }
                         else{
-                            pikiCell.thirdPreviewReact!.image = UIImage(data: data!)
+                            if let finalData = data{
+                                pikiCell.thirdPreviewReact!.image = UIImage(data: finalData)
+                            }
+                            
                         }
                     })
                     
@@ -734,7 +718,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
                 pikiCell.secondPreviewReact!.hidden = true
                 pikiCell.thirdPreviewReact!.hidden = true
                 
-                pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+                pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.firstPreviewReact!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
             }
             
             //var count:AnyObject = self.lastPikis[indexPath.item]["nbReaction"]
@@ -746,7 +730,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
             pikiCell.secondPreviewReact!.hidden = true
             pikiCell.thirdPreviewReact!.hidden = true
             
-            pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
+            pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.firstPreviewReact!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
         }
         
         if Utils().hasEverViewThisPiki(self.lastPikis[indexPath.item]){

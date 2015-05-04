@@ -100,13 +100,13 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         answersIcon!.center = CGPoint(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 24, y: UIScreen.mainScreen().bounds.width/9 * 2)
         //self.mainContent!.addSubview(answersIcon!)
         
-        var separator:UIView = UIView(frame: CGRect(x: 0, y: UIScreen.mainScreen().bounds.width/3 - 2, width: UIScreen.mainScreen().bounds.width, height: 2))
+        var separator:UIView = UIView(frame: CGRect(x: 0, y: UIScreen.mainScreen().bounds.width/3 - 1, width: UIScreen.mainScreen().bounds.width, height: 1))
         separator.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
         self.addSubview(separator)
         
         
         firstPreviewReact = PFImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
-        firstPreviewReact!.center = CGPoint(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 30, y: answersIcon!.center.y)
+        firstPreviewReact!.center = CGPoint(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 35, y: answersIcon!.center.y)
         firstPreviewReact!.layer.cornerRadius = 2
         firstPreviewReact!.clipsToBounds = true
         firstPreviewReact!.hidden = true
@@ -134,7 +134,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         self.mainContent!.addSubview(moreInfosViewIndicator!)
         
         
-        moreInfosLabel = UILabel(frame: CGRect(x: 0, y: 0, width: moreInfosViewIndicator!.frame.size.width, height: moreInfosViewIndicator!.frame.size.height))
+        moreInfosLabel = UILabel(frame: CGRect(x: firstPreviewReact!.frame.origin.x, y: 0, width: moreInfosViewIndicator!.frame.size.width, height: moreInfosViewIndicator!.frame.size.height))
         moreInfosLabel!.textColor = UIColor.whiteColor()
         moreInfosLabel!.textAlignment = NSTextAlignment.Center
         moreInfosLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 15)
@@ -150,7 +150,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         videoIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: imagePikiPreview!.frame.width/4, height: imagePikiPreview!.frame.width/4))
         videoIcon.center = imagePikiPreview!.center
         videoIcon.contentMode = UIViewContentMode.ScaleAspectFit
-        videoIcon.image = UIImage(named: "read_video_icon")
+        videoIcon.image = UIImage(named: "video_icon_inbox")
         videoIcon.hidden = true
         self.mainContent!.addSubview(videoIcon)
         

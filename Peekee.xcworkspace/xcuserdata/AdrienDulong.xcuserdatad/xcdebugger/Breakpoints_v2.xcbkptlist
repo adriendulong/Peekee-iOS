@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Piki/SearchFriendsViewController.swift"
-            timestampString = "450719520.975465"
+            timestampString = "452414057.018985"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1723"
-            endingLineNumber = "1723"
+            startingLineNumber = "1727"
+            endingLineNumber = "1727"
             landmarkName = "unlockFriendsAfterTap()"
             landmarkType = "5">
             <Locations>
@@ -26,11 +26,11 @@
                   moduleName = "Peekee"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/SearchFriendsViewController.swift"
-                  timestampString = "451572560.24478"
+                  timestampString = "451992392.22381"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1725"
-                  endingLineNumber = "1725"
+                  startingLineNumber = "1728"
+                  endingLineNumber = "1728"
                   offsetFromSymbolStart = "68">
                </Location>
                <Location
@@ -41,11 +41,11 @@
                   moduleName = "Peekee"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/SearchFriendsViewController.swift"
-                  timestampString = "451572560.245"
+                  timestampString = "451992392.224088"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1725"
-                  endingLineNumber = "1725"
+                  startingLineNumber = "1728"
+                  endingLineNumber = "1728"
                   offsetFromSymbolStart = "72">
                </Location>
             </Locations>

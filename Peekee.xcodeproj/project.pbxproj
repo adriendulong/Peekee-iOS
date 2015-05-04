@@ -26,13 +26,14 @@
 		E72E7D6419E6F60A00D659AC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6319E6F60A00D659AC /* StoreKit.framework */; };
 		E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */; };
 		E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */; };
-		E72ED24C1AAA58F500505A56 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E72ED24B1AAA4DB200505A56 /* peekee_tuto.mp4 */; };
+		E72FC3171AEE2D6700243F78 /* TrashHand2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */; };
 		E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */; };
 		E74C1DF61A56F5F7002F86CC /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E74C1DF71A56F5F7002F86CC /* (null) in Resources */ = {isa = PBXBuildFile; };
 		E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */; };
 		E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF261A1C988800318F45 /* TakePhotoViewController.swift */; };
 		E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
+		E759F15B1AF02E7D008ED45B /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E759F15A1AF02E65008ED45B /* peekee_tuto.mp4 */; };
 		E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
 		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
 		E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */; };
@@ -127,7 +128,7 @@
 		E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		E72E7D6919E6F63D00D659AC /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactsCollectionViewCell.swift; sourceTree = "<group>"; };
-		E72ED24B1AAA4DB200505A56 /* peekee_tuto.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = peekee_tuto.mp4; sourceTree = "<group>"; };
+		E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = TrashHand2.ttf; sourceTree = "<group>"; };
 		E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutoVideoViewController.swift; sourceTree = "<group>"; };
 		E74660D21A56FD0B00D4C5BB /* libPods-Peekee-APAddressBook.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-APAddressBook.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-APAddressBook.a"; sourceTree = "<group>"; };
 		E74660D31A56FD0B00D4C5BB /* libPods-Peekee-Bolts.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Peekee-Bolts.a"; path = "Pods/build/Debug-iphoneos/libPods-Peekee-Bolts.a"; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 		E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFriendsViewController.swift; sourceTree = "<group>"; };
 		E758CF261A1C988800318F45 /* TakePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePhotoViewController.swift; sourceTree = "<group>"; };
 		E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodePhoneViewController.swift; sourceTree = "<group>"; };
+		E759F15A1AF02E65008ED45B /* peekee_tuto.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = peekee_tuto.mp4; sourceTree = "<group>"; };
 		E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuteAllViewController.swift; sourceTree = "<group>"; };
 		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E3219E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -291,7 +293,7 @@
 		E73A23DE1AA0B0DE00C65B7A /* Tuto Video */ = {
 			isa = PBXGroup;
 			children = (
-				E72ED24B1AAA4DB200505A56 /* peekee_tuto.mp4 */,
+				E759F15A1AF02E65008ED45B /* peekee_tuto.mp4 */,
 			);
 			name = "Tuto Video";
 			sourceTree = "<group>";
@@ -415,6 +417,7 @@
 		E77B98E61AE7DB85002B12C8 /* Fonts Replies */ = {
 			isa = PBXGroup;
 			children = (
+				E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */,
 				E77B98E71AE7DB94002B12C8 /* BaronNeueBlack.otf */,
 				E77B98E81AE7DB94002B12C8 /* BrushUp.otf */,
 				E77B98E91AE7DB94002B12C8 /* DaftBrush.otf */,
@@ -636,6 +639,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E759F15B1AF02E7D008ED45B /* peekee_tuto.mp4 in Resources */,
+				E72FC3171AEE2D6700243F78 /* TrashHand2.ttf in Resources */,
 				E77B98F11AE7DB9F002B12C8 /* BaronNeueBlack.otf in Resources */,
 				E77B98F21AE7DB9F002B12C8 /* BrushUp.otf in Resources */,
 				E77B98F31AE7DB9F002B12C8 /* DaftBrush.otf in Resources */,
@@ -649,7 +654,6 @@
 				E7A46CF71AE6339100CC2609 /* Montserrat-Bold.ttf in Resources */,
 				E7A46CFC1AE6BAB700CC2609 /* Images.xcassets in Resources */,
 				E7A46CF81AE6339100CC2609 /* Montserrat-Regular.ttf in Resources */,
-				E72ED24C1AAA58F500505A56 /* peekee_tuto.mp4 in Resources */,
 				E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */,
 				E74C1DF61A56F5F7002F86CC /* (null) in Resources */,
 				E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */,
