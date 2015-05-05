@@ -27,12 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         // Override point for customization after application launch.
         
         ////Dev
-        //Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
-        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
+        Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
+        Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
          
         //PROD
-        Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
-        Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
+        //Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
+        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
         
         
         Fabric.with([Crashlytics()])
@@ -105,6 +105,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         
         var currentInstallation:PFInstallation = PFInstallation.currentInstallation()
         if (currentInstallation.badge != 0) {
+            var bundleVersion:String? = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as? String
+            if let version = bundleVersion{
+                currentInstallation["applicationVersion"] = version
+            }
+            
             currentInstallation.badge = 0;
             currentInstallation.saveEventually()
         }

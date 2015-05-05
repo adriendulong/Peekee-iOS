@@ -850,9 +850,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
             
         }
         else{
-            if PFUser.currentUser()!["usersFriend"] != nil{
-                sendPiki([], isPublic : true)
-            }
+            sendPiki([], isPublic : true)
             
         }
     }
@@ -1014,7 +1012,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                 
             }
             else{
-
+                println("Top Friends : \(topFriends)")
                 self.createAndOrderTopFriends(topFriends as! Array<PFObject>)
             }
         }

@@ -26,11 +26,11 @@
                   moduleName = "Peekee"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/SearchFriendsViewController.swift"
-                  timestampString = "451992392.22381"
+                  timestampString = "452505209.562389"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1728"
-                  endingLineNumber = "1728"
+                  startingLineNumber = "1729"
+                  endingLineNumber = "1729"
                   offsetFromSymbolStart = "68">
                </Location>
                <Location
@@ -41,11 +41,11 @@
                   moduleName = "Peekee"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/AdrienDulong/Documents/PikiChat/iOS/v3/Piki/Piki/SearchFriendsViewController.swift"
-                  timestampString = "451992392.224088"
+                  timestampString = "452505209.562692"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1728"
-                  endingLineNumber = "1728"
+                  startingLineNumber = "1729"
+                  endingLineNumber = "1729"
                   offsetFromSymbolStart = "72">
                </Location>
             </Locations>
