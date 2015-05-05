@@ -12,6 +12,10 @@ import MediaPlayer
 import ImageIO
 import MobileCoreServices
 
+//
+//enum PLColor {
+//    case lightGrey: UIColor = UIColor(white: 250/255, alpha: 1.0)
+//}
 
 class Utils {
     
@@ -44,6 +48,7 @@ class Utils {
     let greySearch:UIColor = UIColor(red: 76/255, green: 79/255, blue: 83/255, alpha: 1.0)
     let blackSeparatorHeaderSearch = UIColor(red: 23/255, green: 28/255, blue: 30/255, alpha: 1.0)
     
+
     
     //V2 Design Color
     let primaryColor:UIColor = UIColor(red: 62/255, green: 80/255, blue: 180/255, alpha: 1.0)
@@ -878,15 +883,19 @@ class Utils {
         var frameProperties: [String : [String : AnyObject]] = [kCGImagePropertyGIFDictionary as String : [kCGImagePropertyGIFDelayTime as String : delay]]
         
         var documentsDirectoryURL = NSFileManager.defaultManager().URLForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomain: NSSearchPathDomainMask.UserDomainMask, appropriateForURL: nil, create: true, error: nil)
-        var fileURL = documentsDirectoryURL!.URLByAppendingPathComponent("animated.gif")
+        var fileURL = documentsDirectoryURL!.URLByAppendingPathComponent("\(username).gif")
+        
+        let path: String = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)[0] as! String
+        
+        if NSFileManager.defaultManager().fileExistsAtPath("\(path)/\(username).gif") {
+            return fileURL
+        }
 
         var destination:CGImageDestinationRef = CGImageDestinationCreateWithURL(fileURL, kUTTypeGIF, kFrameCount, nil)
         CGImageDestinationSetProperties(destination, fileProperties as CFDictionaryRef)
         
         for i in 0...(kFrameCount - 1){
 
-            
-            
             if iOS8{
                 var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
                 
@@ -1105,13 +1114,9 @@ class Utils {
                 viewToAdd.layer.renderInContext(UIGraphicsGetCurrentContext())
                 var img:UIImage = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
-                
                 CGImageDestinationAddImage(destination, img.CGImage, frameProperties as CFDictionaryRef);
-            }
-            
-            
-            
-            
+                
+            } 
         }
         
         

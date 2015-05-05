@@ -36,7 +36,7 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var photoTaken:UIImage?
     var statusBarHidden:Bool = false
     var cameraText:UITextField?
-    
+    var constraint: Constraint?
     
     var previewCameraCell:ReactsCollectionViewCell?
     
@@ -3503,7 +3503,17 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             var tapGestureSecondOverlay:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quitCameraMenu"))
             secondOverlayCameraView!.addGestureRecognizer(tapGestureSecondOverlay)
             
+//            reactMenuView = UIView(frame: CGRectZero)
             reactMenuView = UIView(frame: CGRect(x: 0, y: self.view.frame.height - 95, width: self.view.frame.width, height: 95 + keyboardSize.height))
+            self.view.addSubview(reactMenuView!)
+            
+            reactMenuView!.snp_makeConstraints { (make) -> Void in
+                make.leading.equalTo(self.view.snp_leading)
+                make.trailing.equalTo(self.view.snp_trailing)
+                self.constraint = make.height.equalTo(95.0 + keyboardSize.height).constraint
+                make.bottom.equalTo(self.view.snp_bottom)
+            }
+            
             reactMenuView!.backgroundColor = UIColor.clearColor()
             
             //Camera Tab
@@ -3600,16 +3610,26 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             layoutMem.minimumLineSpacing = 1
             layoutMem.itemSize = CGSize(width: keyboardSize.height/2, height: keyboardSize.height/2)
             layoutMem.scrollDirection = UICollectionViewScrollDirection.Horizontal
-            memCollectionView = UICollectionView(frame: CGRect(x: 0, y: 95, width: self.view.frame.width, height: keyboardSize.height) , collectionViewLayout: layoutMem)
+//            memCollectionView = UICollectionView(frame: CGRect(x: 0, y: 95, width: self.view.frame.width, height: keyboardSize.height) , collectionViewLayout: layoutMem)
+            memCollectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layoutMem)
+            reactMenuView!.addSubview(memCollectionView)
+            memCollectionView!.snp_makeConstraints { (make) -> Void in
+                make.leading.equalTo(self.reactMenuView!.snp_leading)
+                make.trailing.equalTo(self.reactMenuView!.snp_trailing)
+                make.top.equalTo(self.reactMenuView!.snp_top).offset(95)
+                make.bottom.equalTo(self.reactMenuView!.snp_bottom)
+            }
+            
+            
             memCollectionView.registerClass(MemCollectionViewCell.self, forCellWithReuseIdentifier: "CellMem")
             memCollectionView.backgroundColor = UIColor(red: 42/255, green: 41/255, blue: 41/255, alpha: 1.0)
             memCollectionView!.dataSource = self
             memCollectionView!.delegate = self
             memCollectionView.showsHorizontalScrollIndicator = false
             memCollectionView.showsVerticalScrollIndicator = false
-            reactMenuView!.addSubview(memCollectionView)
             
-            self.view.addSubview(reactMenuView!)
+            
+            
             
             
             
@@ -3963,12 +3983,21 @@ class PikiViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         (self.cameraMenuView!.viewWithTag(4) as! UIButton).selected = false
         (self.cameraMenuView!.viewWithTag(2) as! UIButton).selected = true
         
+        self.constraint?.uninstall()
+        
+        
+        reactMenuView!.snp_makeConstraints { (make) -> Void in
+            self.constraint = make.height.equalTo(95.0 + keyboardSize.height).constraint
+        }
+        
         
         UIView.animateWithDuration(animationDuration, animations: { () -> Void in
             
             
                 self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -self.view.frame.width - 2)
-                self.reactMenuView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
+//                self.reactMenuView!.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height)
+            self.view.layoutIfNeeded()
+            self.reactMenuView!.layoutIfNeeded()
             
                 if !Utils().hasSeenVideoTuto(){
                     self.tutorialView!.alpha = 1.0

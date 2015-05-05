@@ -10,7 +10,7 @@
 import UIKit
 import Fabric
 import Crashlytics
-import ParseCrashReporting
+
 
 
 @UIApplicationMain
@@ -26,13 +26,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        ////Dev
-        //Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
-        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
-         
-        //PROD
-        Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
-        Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
+        //Dev
+        Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
+        Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
+        
+//        //PROD
+//        Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
+//        Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
         
         
         Fabric.with([Crashlytics()])

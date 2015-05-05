@@ -1,0 +1,1 @@
+../../../Animated-Gif-iOS/AnimatedGif/AnimatedGif.h
