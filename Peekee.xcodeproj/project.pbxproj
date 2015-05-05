@@ -30,6 +30,7 @@
 		E70A8DA51A29D82C0062D446 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70A8DA41A29D82C0062D446 /* MessageUI.framework */; };
 		E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E71AEFE01A6AE1EF00377E86 /* Localizable.strings */; };
 		E720345F1A6A759C0058175B /* EditUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E720345E1A6A759C0058175B /* EditUsernameViewController.swift */; };
+		E724D0171AF75C6B0060B545 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */; };
 		E727F7021A5B0D3500BB8B0B /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */; };
 		E72E7D5419E6F5BF00D659AC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */; };
 		E72E7D5619E6F5C900D659AC /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5519E6F5C900D659AC /* CFNetwork.framework */; };
@@ -49,7 +50,6 @@
 		E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */; };
 		E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF261A1C988800318F45 /* TakePhotoViewController.swift */; };
 		E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
-		E759F15B1AF02E7D008ED45B /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E759F15A1AF02E65008ED45B /* peekee_tuto.mp4 */; };
 		E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
 		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
 		E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */; };
@@ -148,6 +148,7 @@
 		E71AEFE21A6AE22F00377E86 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E71AEFE31A6AE90000377E86 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E720345E1A6A759C0058175B /* EditUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUsernameViewController.swift; sourceTree = "<group>"; };
+		E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = peekee_tuto.mp4; sourceTree = "<group>"; };
 		E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalkthroughViewController.swift; sourceTree = "<group>"; };
 		E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		E72E7D5519E6F5C900D659AC /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -175,7 +176,6 @@
 		E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFriendsViewController.swift; sourceTree = "<group>"; };
 		E758CF261A1C988800318F45 /* TakePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePhotoViewController.swift; sourceTree = "<group>"; };
 		E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodePhoneViewController.swift; sourceTree = "<group>"; };
-		E759F15A1AF02E65008ED45B /* peekee_tuto.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = peekee_tuto.mp4; sourceTree = "<group>"; };
 		E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuteAllViewController.swift; sourceTree = "<group>"; };
 		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E3219E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 		E73A23DE1AA0B0DE00C65B7A /* Tuto Video */ = {
 			isa = PBXGroup;
 			children = (
-				E759F15A1AF02E65008ED45B /* peekee_tuto.mp4 */,
+				E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */,
 			);
 			name = "Tuto Video";
 			sourceTree = "<group>";
@@ -745,7 +745,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E759F15B1AF02E7D008ED45B /* peekee_tuto.mp4 in Resources */,
+				E724D0171AF75C6B0060B545 /* peekee_tuto.mp4 in Resources */,
 				E72FC3171AEE2D6700243F78 /* TrashHand2.ttf in Resources */,
 				E77B98F11AE7DB9F002B12C8 /* BaronNeueBlack.otf in Resources */,
 				E77B98F21AE7DB9F002B12C8 /* BrushUp.otf in Resources */,
@@ -1061,7 +1061,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
+				PROVISIONING_PROFILE = "9d03feea-49ad-400f-bf7f-6c2b439a5af6";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
