@@ -14,10 +14,12 @@ extension UIColor {
         // Base palette
         static let LightGrey: UIColor = UIColor(white: 250.0/255.0, alpha: 1.0)
         static let Grey: UIColor = UIColor(white: 234.0/255.0, alpha: 1.0)
+        static let DarkGrey: UIColor = UIColor(red: 68.0/255, green: 70.0/255, blue: 72.0/255, alpha: 1.0)
     }
     
     struct Theme {
         static let CellHighlightColor = PrivateColors.LightGrey
         static let CellSeparatorColor = PrivateColors.Grey
+        static let BackgroundNewPleekMenuColor = PrivateColors.DarkGrey
     }
 }

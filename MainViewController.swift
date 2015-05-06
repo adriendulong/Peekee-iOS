@@ -10,7 +10,7 @@ import Foundation
 import Social
 
 
-class MainViewController : UIViewController, UIScrollViewDelegate, PikiControllerProtocol, TakePhotoProtocol, UITableViewDelegate, UITableViewDataSource, InboxCellProtocol, SearchFriendsProtocol, TutoProtocol, UIAlertViewDelegate{
+class MainViewController : UIViewController, UIScrollViewDelegate, PleekControllerProtocol, TakePhotoProtocol, UITableViewDelegate, UITableViewDataSource, InboxCellProtocol, SearchFriendsProtocol, TutoProtocol, UIAlertViewDelegate{
     
     var loadPikisLimit:Int = 20
     
@@ -354,7 +354,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PikiControlle
 
             //let navController:UINavigationController = segue.destinationViewController as UINavigationController
             
-            var pikiViewController:PikiViewController = segue.destinationViewController as! PikiViewController
+            var pikiViewController: PleekViewController = segue.destinationViewController as! PleekViewController
             pikiViewController.mainPiki = self.pikiToPass
             pikiViewController.pikiReacts = self.reactsToPass
             

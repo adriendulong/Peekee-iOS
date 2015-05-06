@@ -82,10 +82,6 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         contentView.addSubview(spinnerView)
         spinnerView.startAnimating()
         
-        
-        
-        
-        
     }
     
     

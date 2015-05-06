@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0458CF1AF8C2A300BC779E /* NewPleekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewPleekViewController.swift */; };
 		0ADBF0FC1AF7A76600684E79 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F01AF7A76600684E79 /* Constraint.swift */; };
 		0ADBF0FD1AF7A76600684E79 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */; };
 		0ADBF0FE1AF7A76600684E79 /* ConstraintDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F21AF7A76600684E79 /* ConstraintDescription.swift */; };
@@ -23,6 +24,8 @@
 		0ADBF10E1AF8ACC700684E79 /* PikiUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF10D1AF8ACC700684E79 /* PikiUserTableViewCell.swift */; };
 		0ADBF1111AF8AED900684E79 /* UIColor+PleekColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1101AF8AED900684E79 /* UIColor+PleekColor.swift */; };
 		0ADBF1161AF8B10800684E79 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1151AF8B10800684E79 /* Constants.swift */; };
+		0AF32C941AF927ED0058B32C /* PleekManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF32C931AF927ED0058B32C /* PleekManager.swift */; };
+		0AF32C961AF9FC760058B32C /* PleekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF32C951AF9FC760058B32C /* PleekViewController.swift */; };
 		5E4C9A334D9FAF59B9CB4BE2 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
 		E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */; };
 		E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
@@ -52,7 +55,6 @@
 		E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
 		E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
 		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
-		E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */; };
 		E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
 		E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
 		E7665E4A19E5A3AB003DAAF8 /* PeekeeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E4919E5A3AB003DAAF8 /* PeekeeTests.swift */; };
@@ -120,6 +122,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0A0458CE1AF8C2A300BC779E /* NewPleekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPleekViewController.swift; sourceTree = "<group>"; };
 		0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.debug.xcconfig"; sourceTree = "<group>"; };
 		0ADBF0F01AF7A76600684E79 /* Constraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintAttributes.swift; sourceTree = "<group>"; };
@@ -138,6 +141,8 @@
 		0ADBF10D1AF8ACC700684E79 /* PikiUserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PikiUserTableViewCell.swift; sourceTree = "<group>"; };
 		0ADBF1101AF8AED900684E79 /* UIColor+PleekColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+PleekColor.swift"; sourceTree = "<group>"; };
 		0ADBF1151AF8B10800684E79 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		0AF32C931AF927ED0058B32C /* PleekManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekManager.swift; sourceTree = "<group>"; };
+		0AF32C951AF9FC760058B32C /* PleekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekViewController.swift; sourceTree = "<group>"; };
 		A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Peekee.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.release.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.release.xcconfig"; sourceTree = "<group>"; };
 		E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountriesTableViewController.swift; sourceTree = "<group>"; };
@@ -180,7 +185,6 @@
 		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E3219E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PikiViewController.swift; sourceTree = "<group>"; };
 		E7665E3819E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E7665E3D19E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeekeeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -290,6 +294,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A0458CC1AF8C25700BC779E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */,
+				E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */,
+				E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */,
+				E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		0A0458CD1AF8C26A00BC779E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */,
+				0A0458CE1AF8C2A300BC779E /* NewPleekViewController.swift */,
+				0AF32C951AF9FC760058B32C /* PleekViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		0ADBF0ED1AF7A6C100684E79 /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
@@ -364,6 +389,14 @@
 				0ADBF1151AF8B10800684E79 /* Constants.swift */,
 			);
 			name = Others;
+			sourceTree = "<group>";
+		};
+		0AF32C921AF927D80058B32C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0AF32C931AF927ED0058B32C /* PleekManager.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		34DD7A52573B09F7B3A92CAD /* Pods */ = {
@@ -609,12 +642,9 @@
 		E7CD3F421A44207300F38FB4 /* Piki */ = {
 			isa = PBXGroup;
 			children = (
-				E7665E3519E5A3AB003DAAF8 /* PikiViewController.swift */,
-				E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */,
-				E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */,
-				E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */,
-				E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */,
-				E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */,
+				0AF32C921AF927D80058B32C /* Models */,
+				0A0458CD1AF8C26A00BC779E /* Controllers */,
+				0A0458CC1AF8C25700BC779E /* Cells */,
 			);
 			name = Piki;
 			sourceTree = "<group>";
@@ -848,7 +878,6 @@
 				E70A55BA1A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift in Sources */,
 				E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */,
 				E7DF60861A10B6E8000CCD52 /* PhoneNumberViewController.swift in Sources */,
-				E7665E3619E5A3AB003DAAF8 /* PikiViewController.swift in Sources */,
 				0ADBF0FD1AF7A76600684E79 /* ConstraintAttributes.swift in Sources */,
 				E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */,
 				0ADBF1001AF7A76600684E79 /* ConstraintMaker.swift in Sources */,
@@ -876,8 +905,10 @@
 				E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */,
 				0ADBF0FF1AF7A76600684E79 /* ConstraintItem.swift in Sources */,
 				0ADBF1161AF8B10800684E79 /* Constants.swift in Sources */,
+				0AF32C961AF9FC760058B32C /* PleekViewController.swift in Sources */,
 				E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */,
 				0ADBF10E1AF8ACC700684E79 /* PikiUserTableViewCell.swift in Sources */,
+				0AF32C941AF927ED0058B32C /* PleekManager.swift in Sources */,
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
 				0ADBF10C1AF8ACB300684E79 /* SearchUserTableViewCell.swift in Sources */,
 				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,
@@ -885,6 +916,7 @@
 				E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */,
 				E7AB74831A9BC37700EEA0D8 /* MemCollectionViewCell.swift in Sources */,
 				0ADBF0FE1AF7A76600684E79 /* ConstraintDescription.swift in Sources */,
+				0A0458CF1AF8C2A300BC779E /* NewPleekViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

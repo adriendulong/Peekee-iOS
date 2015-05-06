@@ -999,10 +999,10 @@
             </objects>
             <point key="canvasLocation" x="2590" y="-1197"/>
         </scene>
-        <!--Piki View Controller-->
+        <!--Pleek View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="PikiViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="PleekViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
