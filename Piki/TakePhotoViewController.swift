@@ -115,20 +115,31 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
         
         topBarView = UIView(frame: CGRect(x: 0, y: -40, width: self.view.frame.size.width, height: 40))
-        topBarView!.backgroundColor = UIColor.blackColor()
-        topBarView!.alpha = 0.9
+        topBarView!.backgroundColor = UIColor(red: 67.0/255.0, green: 68.0/255.0, blue: 71.0/255.0, alpha: 1.0)
+        topBarView!.alpha = 0.80
         topBarView!.hidden = true
+        
+        let bezel = UIView(frame: CGRectZero)
+        bezel.backgroundColor = UIColor.Theme.BezelDarkColor
+        topBarView?.addSubview(bezel)
+        
+        bezel.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self.topBarView!.snp_leading)
+            make.trailing.equalTo(self.topBarView!.snp_trailing)
+            make.top.equalTo(self.topBarView!.snp_top)
+            make.height.equalTo(Dimensions.BezelHeight)
+        }
+        
         self.view.addSubview(topBarView!)
         
         progressBar = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 6))
         progressBar.backgroundColor = UIColor(red: 236/255, green: 19/255, blue: 63/255, alpha: 1.0)
         self.view.addSubview(progressBar)
         progressBar.transform = CGAffineTransformMakeTranslation(-progressBar.frame.width, 0)
-        
-        
+
         //INIT CAMERA
         previewLayer = PBJVision.sharedInstance().previewLayer
-        previewLayer!.frame = CGRect(x: 0, y: 0, width: cameraView!.frame.width, height: cameraView!.frame.width)
+        previewLayer!.frame = CGRect(x: 0, y: 0, width: cameraView!.frame.width, height: cameraView!.frame.height)
         previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView!.layer.addSublayer(previewLayer)
         PBJVision.sharedInstance().presentationFrame = cameraView!.frame
@@ -210,17 +221,10 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     }
     
     override func viewDidAppear(animated: Bool) {
-
         cameraTextView!.becomeFirstResponder()
-
     }
     
-
-    
     func setupCamera(){
-        
-        
-        
         var vision:PBJVision = PBJVision.sharedInstance()
         vision.delegate = self
         vision.cameraMode = PBJCameraMode.Video
@@ -244,8 +248,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         else{
             noAuthCameraImageView.hidden = false
         }
-        
-        
     }
     
     
@@ -257,10 +259,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             alreadyShow = true
             let info:NSDictionary = notification.userInfo!
             let keyboardSize = info.objectForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue().size
-            
-            
-            
-            
             
             let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
             
@@ -280,8 +278,15 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     self.topBarView!.hidden = false
                     
                     
-                    self.changeCameraSideButton = UIButton(frame: CGRect(x: 15, y: self.view.frame.size.width - 55, width: 40, height: 40))
-                    self.changeCameraSideButton?.setImage(UIImage(named: "change_camera"), forState: UIControlState.Normal)
+                    self.changeCameraSideButton = UIButton(frame: CGRect(x: 15, y: self.view.frame.size.width - 55, width: 30.5, height: 39))
+                    self.changeCameraSideButton?.alpha = 0.6
+                    
+                    if PBJVision.sharedInstance().cameraDevice == PBJCameraDevice.Front {
+                        self.changeCameraSideButton?.setImage(UIImage(named: "switch-camera-selfie"), forState: UIControlState.Normal)
+                    } else{
+                        self.changeCameraSideButton?.setImage(UIImage(named: "switch-camera-landscape"), forState: UIControlState.Normal)
+                    }
+                    
                     self.changeCameraSideButton!.addTarget(self, action: Selector("changeCamera:"), forControlEvents: UIControlEvents.TouchUpInside)
                     if !self.checkIfCanPresentCamera(){
                         self.changeCameraSideButton!.hidden = true
@@ -308,11 +313,14 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     self.saveImageButton!.hidden = true
                     self.view.addSubview(self.saveImageButton!)
                     
-                    self.libraryButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 50, y: self.view.frame.size.width - 55, width: 35, height: 35))
+                    self.libraryButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 52.5, y: self.view.frame.size.width - 57.5, width: 40, height: 40))
                     self.libraryButton!.setImage(UIImage(named: "library"), forState: UIControlState.Normal)
                     self.libraryButton!.addTarget(self, action: Selector("fromLibrary:"), forControlEvents: UIControlEvents.TouchUpInside)
-                    self.libraryButton!.layer.borderWidth = 0.5
-                    self.libraryButton!.layer.borderColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0).CGColor
+                    self.libraryButton!.layer.borderWidth = 1.5
+                    self.libraryButton!.layer.borderColor = UIColor.whiteColor().CGColor
+                    self.libraryButton!.layer.cornerRadius = 2.0
+                    self.libraryButton!.backgroundColor = UIColor.clearColor()
+                    self.libraryButton!.clipsToBounds = true
                     if !self.checkIfCanPresentCamera(){
                         self.libraryButton!.hidden = true
                     }
@@ -334,8 +342,8 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     
                     self.accessLastLibPhoto()
                     
-                    self.takePhotoButton = UIImageView(frame: CGRect(x: self.view.frame.size.width/2 - 35, y: self.view.frame.size.width - 75, width: 72, height: 75))
-                    self.takePhotoButton!.image = UIImage(named: "capture_button")
+                    self.takePhotoButton = UIImageView(frame: CGRect(x: self.view.frame.size.width/2 - 36, y: self.view.frame.size.width - 75.5, width: 72, height: 75.5))
+                    self.takePhotoButton!.image = UIImage(named: "new-capture-button")
                     self.takePhotoButton!.userInteractionEnabled = true
                     
                     var tapGestureTakePhoto  = UITapGestureRecognizer(target: self, action: Selector("takePhoto:"))
@@ -360,38 +368,39 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                         self.libraryButton!.transform = CGAffineTransformMakeTranslation(0, -40)
                         self.takePhotoButton!.transform = CGAffineTransformMakeTranslation(0, -40)
                     }
-                    
             }
         }
-        
-        
-        
-        
- 
     }
     
+    
+    // MARK: PBJVisionDelegate
+    
+    func visionCameraDeviceWillChange(vision: PBJVision) {
+        self.changeCameraSideButton?.alpha = 1.0
+        
+        if vision.cameraDevice == PBJCameraDevice.Front {
+            self.changeCameraSideButton?.setImage(UIImage(named: "switch-camera-landscape"), forState: UIControlState.Normal)
+        } else {
+            self.changeCameraSideButton?.setImage(UIImage(named: "switch-camera-selfie"), forState: UIControlState.Normal)
+        }
+    }
+    
+    func visionCameraDeviceDidChange(vision: PBJVision) {
+        self.changeCameraSideButton?.alpha = 0.6
+    }
     
     /*
     * Camera functions
     *
     */
-    
-
-    
     func quit(sender : UIButton){
-        
-        
         cameraTextView!.resignFirstResponder()
         self.dismissViewControllerAnimated(true, completion: nil)
-        
-        
-        
-        
     }
     
     func takePhoto(sender : UITapGestureRecognizer){
         
-        if previewImageView!.hidden{
+        if previewImageView!.hidden {
             //takePhoto()
             if checkIfCanPresentCamera(){
                 isTakingPicture = true
@@ -566,8 +575,6 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
     
     
     func passInPreviewModeVideo(videoURL : NSURL){
-        
-        
         self.previewImageView!.hidden = false
         var player:AVPlayer = AVPlayer(URL: videoURL)
         var playerLayer:AVPlayerLayer = AVPlayerLayer(player: player)
@@ -732,19 +739,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                 
                 self.performSegueWithIdentifier("chooseRecipients", sender: self)
             }
-            
-            
-            
-            
-            
         }
-        
-        
-        
-        
-        
-        
-
     }
     
     func backToCameraMode(sender : UIButton){
@@ -763,7 +758,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         self.previewImageView!.hidden = true
         self.previewImageView!.layer.sublayers = nil
         self.libraryButton!.hidden = false
-        self.takePhotoButton!.image = UIImage(named: "capture_button")
+        self.takePhotoButton!.image = UIImage(named: "new-capture-button")
         cameraTextView!.returnKeyType = UIReturnKeyType.Done
     }
     

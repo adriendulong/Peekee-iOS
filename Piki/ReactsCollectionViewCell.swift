@@ -448,10 +448,6 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                 flipInitialState()
             }
         }
-        
-        
-        
-        
     }
     
 
@@ -467,13 +463,8 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                 self.recordVideoBar!.frame = CGRect(x: 0, y: self.contentView.frame.size.height-20, width: self.contentView.frame.size.width, height: 20)
         }) { (completed) -> Void in
         }
-
-        
-        
     }
-    
-    
-    
+
     
     // MARK : VIdeo
     
@@ -538,7 +529,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                             dispatch_async(dispatch_get_main_queue(), { ()->() in
                                 
                                 
-                                if (self.delegate as! PikiViewController).isViewLoaded() && ((self.delegate as! PikiViewController).view.window != nil) {
+                                if (self.delegate as! PleekViewController).isViewLoaded() && ((self.delegate as! PleekViewController).view.window != nil) {
                                     self.loadIndicator!.hidden = true
                                     
                                     self.playerLayer.player = player
@@ -571,7 +562,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
             dispatch_async(dispatch_get_main_queue(), { ()->() in
                 
                 
-                if (self.delegate as! PikiViewController).isViewLoaded() && ((self.delegate as! PikiViewController).view.window != nil) {
+                if (self.delegate as! PleekViewController).isViewLoaded() && ((self.delegate as! PleekViewController).view.window != nil) {
                     self.loadIndicator!.hidden = true
                     
                     self.playerLayer.player = player

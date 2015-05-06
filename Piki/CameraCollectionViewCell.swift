@@ -118,7 +118,7 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
 
 
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            textView.frame = CGRect(x: 0, y: self.contentView.frame.height - (self.getNbLines(textView, string: textEntered) * (textView.font.lineHeight + 5)) - 5, width: self.contentView.frame.width, height: self.contentView.frame.height)
+            textView.frame = CGRect(x: 15, y: self.contentView.frame.height - (self.getNbLines(textView, string: textEntered) * (textView.font.lineHeight + 5)) - 5, width: self.contentView.frame.width - 20, height: self.contentView.frame.height)
         }) { (finished) -> Void in
             
         }
@@ -148,7 +148,7 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
         
         
         UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.textViewOverPhoto.frame = CGRect(x: 0, y: self.contentView.frame.height - (self.getNbLines(self.textViewOverPhoto, string: self.textViewOverPhoto.text) * (self.textViewOverPhoto.font.lineHeight + 5)) - 5, width: self.contentView.frame.width, height: self.contentView.frame.height)
+            self.textViewOverPhoto.frame = CGRect(x: 15, y: self.contentView.frame.height - (self.getNbLines(self.textViewOverPhoto, string: self.textViewOverPhoto.text) * (self.textViewOverPhoto.font.lineHeight + 5)) - 5, width: self.contentView.frame.width - 20, height: self.contentView.frame.height)
             }) { (finished) -> Void in
                 
         }
