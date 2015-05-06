@@ -61,6 +61,39 @@ class NewPleekViewController: UIViewController, UICollectionViewDataSource, UICo
         
         return tmpBackgroundBaseTab
     }()
+   
+    lazy var topBezel: UIView = {
+        var tmpTopBezel: UIView = UIView(frame: CGRectZero)
+        
+        tmpTopBezel.backgroundColor = UIColor.Theme.BezelLightColor
+        self.backgroundBaseTab.addSubview(tmpTopBezel)
+        
+        tmpTopBezel.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self.backgroundBaseTab.snp_leading)
+            make.trailing.equalTo(self.backgroundBaseTab.snp_trailing)
+            make.top.equalTo(self.backgroundBaseTab.snp_top)
+            make.height.equalTo(Dimensions.BezelHeight)
+        }
+        
+        return tmpTopBezel
+    }()
+    
+    lazy var bottomBezel: UIView = {
+        var tmpBottomBezel: UIView = UIView(frame: CGRectZero)
+        
+        tmpBottomBezel.backgroundColor = UIColor.Theme.BezelDarkColor
+        self.backgroundBaseTab.addSubview(tmpBottomBezel)
+        
+        tmpBottomBezel.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self.backgroundBaseTab.snp_leading)
+            make.trailing.equalTo(self.backgroundBaseTab.snp_trailing)
+            make.bottom.equalTo(self.backgroundBaseTab.snp_bottom)
+            make.height.equalTo(Dimensions.BezelHeight)
+        }
+        
+        return tmpBottomBezel
+    }()
+    
     
     lazy var changeCameraButton: UIButton = {
         var tmpChangeCameraButton: UIButton = UIButton(frame: CGRectZero)
@@ -294,7 +327,6 @@ class NewPleekViewController: UIViewController, UICollectionViewDataSource, UICo
             make.bottom.equalTo(self.view.snp_bottom)
         }
         
-        
         tmpMemCollectionView.registerClass(MemCollectionViewCell.self, forCellWithReuseIdentifier: "CellMem")
         tmpMemCollectionView.backgroundColor = UIColor(red: 42/255, green: 41/255, blue: 41/255, alpha: 1.0)
         tmpMemCollectionView.dataSource = self
@@ -312,14 +344,17 @@ class NewPleekViewController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func setupView() {
-        let vvv = self.backCamera
-        let vv = self.keyboardButton
-        let fff = self.changeCameraButton
-        let tt = self.memeButton
-        let ll = self.textButton
-        let ee = self.backImageTutoriel
-        let dd = self.textTuto
-        
+        let v1 = self.backgroundBaseTab
+        let v3 = self.topBezel
+        let v4 = self.bottomBezel
+        let v5 = self.backCamera
+        let v6 = self.cameraMenuPhotoButton
+        let v2 = self.keyboardButton
+        let v7 = self.changeCameraButton
+        let v8 = self.memeButton
+        let v9 = self.textButton
+        let v10 = self.backImageTutoriel
+        let v11 = self.textTuto
         
         self.memCollectionView.reloadData()
     }
