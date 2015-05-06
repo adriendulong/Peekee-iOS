@@ -18,4 +18,5 @@ struct Dimensions {
     static let CellSeparatorHeight: CGFloat = 1.0
     static let NewPleekMenuHeight: CGFloat = 95.0
     static let BackgroundBaseTabHeight: CGFloat = 50.0
+    static let BezelHeight: CGFloat = 1.0
 }

@@ -37,9 +37,9 @@ class PleekManager {
         
         if let delegate = self.delegate {
             var result = delegate.modifyImageWithTextAndMeme(modifyImage)
-            if let im = result.0, let text = result.1 {
+            if let im = result.0, let type = result.1 {
                 modifyImage = im
-                typeReact = text
+                typeReact = type
             }
             
             delegate.quitCameraMenu()

@@ -233,7 +233,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         }
         
         
-        
+        println(recipientsNumberLabel.font)
         
         
         
@@ -258,11 +258,13 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         //Collection View Layout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
+        
         layout.minimumInteritemSpacing = 1
-        
         layout.minimumLineSpacing = 1
-        layout.itemSize = CGSize(width: UIScreen.mainScreen().bounds.width/2 - 1, height: UIScreen.mainScreen().bounds.width/2 - 1)
         
+        layout.itemSize = CGSize(width: UIScreen.mainScreen().bounds.width/2 - 0.5, height: UIScreen.mainScreen().bounds.width/2 - 0.5)
+    println(CGSize(width: UIScreen.mainScreen().bounds.width/2 - 0.5, height: UIScreen.mainScreen().bounds.width/2 - 0.5))
+        println(CGRect(x: 0, y: 60, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 60))
         collectionView = UICollectionView(frame: CGRect(x: 0, y: 60, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 60) , collectionViewLayout: layout)
         //collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collectionView!.dataSource = self
@@ -441,7 +443,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 return CGSize(width: self.view.frame.width, height: (self.view.frame.width - 2)/3 * 2)
             }
             else{
-                return CGSize(width: self.view.frame.size.width/2 - 1, height: self.view.frame.size.width/2 - 1)
+                return CGSize(width: self.view.frame.size.width/2 - 0.5, height: self.view.frame.size.width/2 - 0.5)
             }
             
             
@@ -893,7 +895,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
             var imageLabel:UIImage?
             cell.textViewOverPhoto!.editable = false
-            if (cell.textViewOverPhoto!.text as NSString).length > 0{
+            if (cell.textViewOverPhoto!.text as NSString).length > 0 {
                 UIGraphicsBeginImageContextWithOptions(cell.textViewOverPhoto!.frame.size, false, 0.0);
                 cell.textViewOverPhoto!.layer.renderInContext(UIGraphicsGetCurrentContext())
                 imageLabel = UIGraphicsGetImageFromCurrentImageContext()
@@ -1818,7 +1820,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         var shareTitleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: bottomShareView!.frame.width, height: 50))
         shareTitleLabel.font = UIFont(name: Utils().customFontSemiBold, size: 20.0)
         shareTitleLabel.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1)
-        shareTitleLabel.text = NSLocalizedString("SEND", comment : "SEND")
+        shareTitleLabel.text = NSLocalizedString("COLLAGE", comment : "COLLAGE")
         shareTitleLabel.textAlignment = NSTextAlignment.Center
         bottomShareView!.addSubview(shareTitleLabel)
         
