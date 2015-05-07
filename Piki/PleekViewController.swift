@@ -3194,7 +3194,9 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             //AppearOverlays
             self.mainOverlayCameraMenu!.alpha = 0.85
             self.secondOverlayCameraView!.alpha = 0.85
-        }, completion: nil)
+        }) { (finished) -> Void in
+            self.newReactViewcontroller?.selectCameraMode(self.newReactViewcontroller!.keyboardButton)
+        }
     }
     
     func keyboardWillHide(notification : NSNotification){
