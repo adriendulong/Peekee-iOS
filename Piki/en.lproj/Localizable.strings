@@ -176,8 +176,71 @@
 "If you activate the silent mode all your contacts will be mute. And you won't receive their Pleeks anymore. Here you'll be able to unmute the friend you want to receive Pleek from." = "If you activate the silent mode all your contacts will be mute, and you won't receive their Pleeks anymore. Here you'll be able to unmute the friend you want to receive Pleek from.";
 
 
-// MARK: V1.0.2 <
+// MARK: V1.2.0
 
 "COLLAGE" = "COLLAGE";
+"Friends" = "Friends";
+"username"= "username";
+"TAP TO UNLOCK FRIENDS" = "TAP TO UNLOCK FRIENDS";
+"YOU FOLLOW" = "YOU FOLLOW";
+"FOLLOW YOU" = "FOLLOW YOU";
+"TAP TO VIEW POPULAR ACCOUNTS" = "TAP TO VIEW POPULAR ACCOUNTS";
+"You'll receive their pics & vids" = "You'll receive their pics & vids";
+"They will see your public pics & vids." = "They will see your public pics & vids.";
+"undefined" = "undefined";
+"Popular accounts" = "Popular accounts";
+"Create my Pleek ID" = "Create my Pleek ID";
+"Hey you!" = "Hey you!";
+"I wanted to let you know that ..." = "I wanted to let you know that ...";
+"Hey @Pleekapp" = "Hey @Pleekapp";
+"Add me on #Pleek" = "Add me on #Pleek";
+"@username" = "@username";
+"Your Name" = "Your Name";
+"Your Friends" = "Your Friends";
+"PUBLIC" = "PUBLIC";
+"TO %d FRIENDS" = "TO %d FRIENDS";
+"TO SOME FRIENDS" = "TO SOME FRIENDS";
+"%@ REPLIES" = "%@ REPLIES";
+"REPLY FIRST" = "REPLY FIRST";
+"Delete" = "Delete";
+"Are you sure you want to delete this react? You won't be able to get it back!" = "Are you sure you want to delete this react? You won't be able to get it back!";
+"Error" = "Error";
+"OK" = "OK";
+"Problem while reporting this react. Please try again later" = "Problem while reporting this react. Please try again later";
+"Problem while deleting this react. Please try again later" = "Problem while deleting this react. Please try again later";
+"Problem while deleting this Pleek. Please try again later." = "Problem while deleting this Pleek. Please try again later.";
+"This react has been reported. Thank you." = "This react has been reported. Thank you.";
+"Cancel" = "Cancel";
+"Show Recipients" = "Show Recipients";
+"Confirmation" = "Confirmation";
+"Awesome friends mozaic created with @Pleekapp #pleek" = "Awesome friends mozaic created with @Pleekapp #pleek";
+"Awesome friends mozaic created with @Pleekapp" = "Awesome friends mozaic created with @Pleekapp";
+"Error while saving your photo" = "Error while saving your photo";
+"Saved!" = "Saved!";
+"Your photo has been saved on your library" = "Your photo has been saved on your library";
+"@%@ to @%@ on Pleek" = "@%@ to @%@ on Pleek";
+"Reply to your friends on Messenger!" = "Reply to your friends on Messenger!";
+"YO" = "YO";
+"Preview" = "Preview";
+"0" = "0";
+"Report" = "Report";
+"TAP TO REPLY" = "TAP TO REPLY";
+"NEW" = "NEW";
+"Hey @Pleekapp I just clicked on your awesome icon! #itouchedpleek" = "Hey @Pleekapp I just clicked on your awesome icon! #itouchedpleek";
+"Real Name" = "Real Name";
+"To help your friends to find you please set your real name in the settings of the app." = "To help your friends to find you please set your real name in the settings of the app.";
+"TAP TO ENABLE YOUR CAMERA" = "TAP TO ENABLE YOUR CAMERA";
+"TAP TO" = "TAP TO";
+"ENABLE" = "ENABLE";
+"YOUR CAMERA" = "YOUR CAMERA";
+"You can not add text on the video for the moment😪 Promise, it comes soon!" = "You can not add text on the video for the moment😪 Promise, it comes soon!";
+"Error while saving your photo" = "Error while saving your photo";
+"Your photo has been saved on your library" = "Your photo has been saved on your library";
+"Error while saving your video" = "Error while saving your video";
+"Your video has been saved on your library" = "Your video has been saved on your library";
+"Score : %d" = "Score : %d";
+"10 000 SELECTED" = "10 000 SELECTED";
+"CODE" = "CODE";
+
 
 

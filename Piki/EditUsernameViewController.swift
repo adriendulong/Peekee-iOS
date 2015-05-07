@@ -21,16 +21,11 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
         
         if changeUsernameChosen{
             titleLabel.text = NSLocalizedString("Edit username", comment : "Edit username")
+            usernameTextField.placeholder = LocalizedString("@username")
         }
         else{
             titleLabel.text = NSLocalizedString("Edit your name", comment : "Edit your name")
-        }
-        
-        if changeUsernameChosen{
-            usernameTextField.placeholder = "@username"
-        }
-        else{
-            usernameTextField.placeholder = "Your Name"
+            usernameTextField.placeholder = LocalizedString("Your Name")
         }
         
         

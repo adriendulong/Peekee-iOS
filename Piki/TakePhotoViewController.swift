@@ -159,13 +159,13 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         let textTuto:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: tutorialView!.frame.width, height: tutorialView!.frame.height - 5))
         textTuto.textAlignment = NSTextAlignment.Center
         textTuto.font = UIFont(name: Utils().montserratRegular, size: 11)
-        let string:NSString = "TAP TO ENABLE YOUR CAMERA" as NSString
+        let string:NSString = LocalizedString("TAP TO ENABLE YOUR CAMERA") as NSString
         let firstAttributes = [NSForegroundColorAttributeName: UIColor(red: 136/255, green: 146/255, blue: 159/255, alpha: 1.0)]
         let secondAttributes = [NSForegroundColorAttributeName: UIColor(red: 36/255, green: 35/255, blue: 35/255, alpha: 1.0)]
         var attributedString = NSMutableAttributedString(string: string as String)
-        attributedString.addAttributes(firstAttributes, range: string.rangeOfString("TAP TO"))
-        attributedString.addAttributes(firstAttributes, range: string.rangeOfString("YOUR CAMERA"))
-        attributedString.addAttributes(secondAttributes, range: string.rangeOfString("ENABLE"))
+        attributedString.addAttributes(firstAttributes, range: string.rangeOfString(LocalizedString("TAP TO")))
+        attributedString.addAttributes(firstAttributes, range: string.rangeOfString(LocalizedString("YOUR CAMERA")))
+        attributedString.addAttributes(secondAttributes, range: string.rangeOfString(LocalizedString("ENABLE")))
         textTuto.attributedText = attributedString
         tutorialView.addSubview(textTuto)
         tutorialView.alpha = 0.0
@@ -336,7 +336,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
                     novideoLabel.textColor = UIColor.whiteColor()
                     novideoLabel.numberOfLines = 2
                     novideoLabel.textAlignment = NSTextAlignment.Center
-                    novideoLabel.text = "You can not add text on the video for the moment😪 Promise, it comes soon!"
+                    novideoLabel.text = LocalizedString("You can not add text on the video for the moment😪 Promise, it comes soon!")
                     self.backKeyboardView!.addSubview(novideoLabel)
                     
                     
@@ -958,13 +958,13 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             let library = ALAssetsLibrary()
             library.writeImageToSavedPhotosAlbum(imageToUpload!.CGImage, orientation: ALAssetOrientation.Up) { (url, error) -> Void in
                 if error != nil {
-                    let alert = UIAlertView(title: "Error", message: "Error while saving your photo",
-                        delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Error while saving your photo"),
+                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                     alert.show()
                 }
                 else{
-                    let alert = UIAlertView(title: "Saved!", message: "Your photo has been saved on your library",
-                        delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: LocalizedString("Saved!"), message: LocalizedString("Your photo has been saved on your library"),
+                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                     alert.show()
                 }
             }
@@ -974,13 +974,13 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
             if library.videoAtPathIsCompatibleWithSavedPhotosAlbum(self.urlVideoToUpload!){
                 library.writeVideoAtPathToSavedPhotosAlbum(self.urlVideoToUpload, completionBlock: { (assetUrl, error) -> Void in
                     if error != nil{
-                        let alert = UIAlertView(title: "Error", message: "Error while saving your video",
-                            delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Error while saving your video"),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
                     else{
-                        let alert = UIAlertView(title: "Saved!", message: "Your video has been saved on your library",
-                            delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: LocalizedString("Saved!"), message: LocalizedString("Your video has been saved on your library"),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
                 })

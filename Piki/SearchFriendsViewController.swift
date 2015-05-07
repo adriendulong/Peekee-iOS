@@ -76,7 +76,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         if carrier != nil {
             regionLabel = carrier.isoCountryCode
         }
-        else{
+        else {
             regionLabel = "us"
         }
         
@@ -95,7 +95,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         headerLabel.textAlignment = NSTextAlignment.Center
         headerLabel.font = UIFont(name: Utils().customFontSemiBold, size: 24.0)
         headerLabel.textColor = UIColor.whiteColor()
-        headerLabel.text = "Friends"
+        headerLabel.text = LocalizedString("Friends")
         searchTopBarView.addSubview(headerLabel)
         
         //Cancel the search button
@@ -123,7 +123,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         searchTextField.autocapitalizationType = UITextAutocapitalizationType.None
         searchTextField.delegate = self
         searchTextField.tintColor = Utils().secondColor
-        searchTextField.placeholder = "username"
+        searchTextField.placeholder = LocalizedString("username")
         searchTextField.textColor = UIColor.whiteColor()
         searchTextField.font = UIFont(name: Utils().customFontSemiBold, size: 22.0)
         searchTextField.autocorrectionType = UITextAutocorrectionType.No
@@ -161,7 +161,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         labelUnlock.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
         labelUnlock.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
         labelUnlock.textAlignment = NSTextAlignment.Center
-        labelUnlock.text = "TAP TO UNLOCK FRIENDS"
+        labelUnlock.text = LocalizedString("TAP TO UNLOCK FRIENDS")
         unlockContactsBar!.addSubview(labelUnlock)
         
         
@@ -204,7 +204,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         friendsSelectorLabelBottom = UILabel(frame: CGRect(x: 0, y: friendsSelectorView.frame.height/2, width: friendsSelectorView.frame.width, height: friendsSelectorView.frame.height/2))
         friendsSelectorLabelBottom.font = UIFont(name: Utils().customFontSemiBold, size: 12)
         friendsSelectorLabelBottom.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-        friendsSelectorLabelBottom.text = "YOU FOLLOW"
+        friendsSelectorLabelBottom.text = LocalizedString("YOU FOLLOW")
         friendsSelectorLabelBottom.textAlignment = NSTextAlignment.Center
         friendsSelectorLabelBottom.adjustsFontSizeToFitWidth = true
         friendsSelectorView.addSubview(friendsSelectorLabelBottom)
@@ -227,7 +227,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         recipientsSelectorLabelBottom = UILabel(frame: CGRect(x: 0, y: recipientsSelectorView.frame.height/2, width: recipientsSelectorView.frame.width, height: recipientsSelectorView.frame.height/2))
         recipientsSelectorLabelBottom.font = UIFont(name: Utils().customFontSemiBold, size: 12)
         recipientsSelectorLabelBottom.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
-        recipientsSelectorLabelBottom.text = "FOLLOW YOU"
+        recipientsSelectorLabelBottom.text = LocalizedString("FOLLOW YOU")
         recipientsSelectorLabelBottom.textAlignment = NSTextAlignment.Center
         recipientsSelectorLabelBottom.adjustsFontSizeToFitWidth = true
         recipientsSelectorView.addSubview(recipientsSelectorLabelBottom)
@@ -424,7 +424,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     certifiedLabel.textColor = UIColor(red: 33/255, green: 150/255, blue: 243/255, alpha: 1.0)
                     certifiedLabel.textAlignment = NSTextAlignment.Center
                     certifiedLabel.adjustsFontSizeToFitWidth = true
-                    certifiedLabel.text = "TAP TO VIEW POPULAR ACCOUNTS"
+                    certifiedLabel.text = LocalizedString("TAP TO VIEW POPULAR ACCOUNTS")
                     cell.addSubview(certifiedLabel)
                     
                     var certifiedIcon:UIImageView = UIImageView(frame: CGRect(x: self.view.frame.width - 45, y: 0, width: 30, height: 61))
@@ -483,7 +483,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     certifiedLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16)
                     certifiedLabel.textColor = UIColor(red: 249/255, green: 168/255, blue: 37/255, alpha: 1.0)
                     certifiedLabel.adjustsFontSizeToFitWidth = true
-                    certifiedLabel.text = "You'll receive their pics & vids"
+                    certifiedLabel.text = LocalizedString("You'll receive their pics & vids")
                     cell.addSubview(certifiedLabel)
                     
                     var receiveIcon:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 20, height: 61))
@@ -529,7 +529,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     certifiedLabel.font = UIFont(name: Utils().customFontSemiBold, size: 16)
                     certifiedLabel.textColor = UIColor(red: 249/255, green: 168/255, blue: 37/255, alpha: 1.0)
                     certifiedLabel.adjustsFontSizeToFitWidth = true
-                    certifiedLabel.text = "They will see your public pics & vids."
+                    certifiedLabel.text = LocalizedString("They will see your public pics & vids.")
                     cell.addSubview(certifiedLabel)
                     
                     var receiveIcon:UIImageView = UIImageView(frame: CGRect(x: 15, y: 0, width: 20, height: 61))

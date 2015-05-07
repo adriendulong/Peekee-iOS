@@ -322,7 +322,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Your Friends"
+        return LocalizedString("Your Friends")
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

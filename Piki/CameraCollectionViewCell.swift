@@ -71,7 +71,7 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
         
         labelTapToReply = UILabel(frame: CGRect(x: 0, y: contentView.frame.height - 45, width: contentView.frame.width, height: 15))
         labelTapToReply.font = UIFont(name: Utils().montserratRegular, size: 16)
-        labelTapToReply.text = "TAP TO REPLY"
+        labelTapToReply.text = LocalizedString("TAP TO REPLY")
         labelTapToReply.textColor = UIColor.whiteColor()
         labelTapToReply.adjustsFontSizeToFitWidth = true
         labelTapToReply.textAlignment = NSTextAlignment.Center
@@ -92,7 +92,7 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
         grantAccessView.addSubview(imageGrantAccess)
         let tapGrantAccess:UILabel = UILabel(frame: CGRect(x: 0, y: grantAccessView.frame.height - 30, width: grantAccessView.frame.width, height: 20))
         tapGrantAccess.textAlignment = NSTextAlignment.Center
-        tapGrantAccess.text = "TAP TO REPLY"
+        tapGrantAccess.text = LocalizedString("TAP TO REPLY")
         tapGrantAccess.font = UIFont(name: Utils().montserratRegular, size: 14)
         tapGrantAccess.textColor = UIColor(red: 155/255, green: 162/255, blue: 171/255, alpha: 1.0)
         grantAccessView.addSubview(tapGrantAccess)

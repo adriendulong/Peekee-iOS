@@ -763,7 +763,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                             pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
                             pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                             pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-                            pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                            pikiCell.moreInfosLabel!.text = LocalizedString("REPLY FIRST")
                             pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                         }
                         else{
@@ -791,7 +791,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                             pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
                             pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                             pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-                            pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                            pikiCell.moreInfosLabel!.text = LocalizedString("REPLY FIRST")
                             pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                             
                             
@@ -807,7 +807,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                     pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
                     pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                     pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-                    pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                    pikiCell.moreInfosLabel!.text = LocalizedString("REPLY FIRST")
                     pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                     
                    
@@ -837,7 +837,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                         pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
                         pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                         pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-                        pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                        pikiCell.moreInfosLabel!.text = LocalizedString("REPLY FIRST")
                         pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                     }
                     else{
@@ -849,7 +849,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                     pikiCell.moreInfosLabel!.frame = CGRect(x: 0, y: 0, width: pikiCell.moreInfosViewIndicator!.frame.size.width, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
                     pikiCell.moreInfosViewIndicator!.center = CGPoint(x: pikiCell.answersIcon!.frame.origin.x + pikiCell.moreInfosViewIndicator!.frame.size.width/2, y: pikiCell.answersIcon!.center.y)
                     pikiCell.moreInfosViewIndicator!.backgroundColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-                    pikiCell.moreInfosLabel!.text = "REPLY FIRST"
+                    pikiCell.moreInfosLabel!.text = LocalizedString("REPLY FIRST")
                     pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
                 }
                 
@@ -859,7 +859,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             
             pikiCell.moreInfosViewIndicator!.hidden = false
             pikiCell.moreInfosViewIndicator!.backgroundColor = Utils().secondColor
-            pikiCell.moreInfosLabel!.text = "NEW"
+            pikiCell.moreInfosLabel!.text = LocalizedString("NEW")
             pikiCell.moreInfosLabel!.textColor = UIColor.whiteColor()
             
             pikiCell.moreInfosViewIndicator!.frame = CGRect(x: pikiCell.moreInfosViewIndicator!.frame.origin.x, y: pikiCell.moreInfosViewIndicator!.frame.origin.y, width: 50, height: pikiCell.moreInfosViewIndicator!.frame.size.height)
@@ -908,12 +908,12 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
     func deletePiki(cell: inboxTableViewCell) {
         
         if Utils().iOS8{
-            var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."), preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            var alert = UIAlertController(title: LocalizedString("Confirmation"), message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: LocalizedString("No"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
                 self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
                 self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
             }))
-            alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+            alert.addAction(UIAlertAction(title: LocalizedString("Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 println("Yes")
                 
                 //Delete or Hide
@@ -925,8 +925,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                         withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
                             if error != nil {
                                 
-                                let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
-                                    delegate: nil, cancelButtonTitle: "OK")
+                                let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
+                                    delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                                 alert.show()
                                 
                                 println("Error : \(error!.localizedDescription)")
@@ -952,8 +952,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                             withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
                                 if error != nil {
                                     
-                                    let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
-                                        delegate: nil, cancelButtonTitle: "OK")
+                                    let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
+                                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                                     alert.show()
                                     
                                     println("Error : \(error!.localizedDescription)")
@@ -975,7 +975,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             self.presentViewController(alert, animated: true, completion: nil)
         }
         else{
-            var alertView = UIAlertView(title: "Confirmation",
+            var alertView = UIAlertView(title: LocalizedString("Confirmation"),
                 message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."),
                 delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
                 otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
@@ -1396,7 +1396,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             
             var composer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
 
-            composer.setInitialText("Hey @Pleekapp I just clicked on your awesome icon! #itouchedpleek")
+            composer.setInitialText(LocalizedString("Hey @Pleekapp I just clicked on your awesome icon! #itouchedpleek"))
             composer.addURL(NSURL(string: Utils().websiteUrl))
             
             var imageToShare:UIImage? = Utils().getShareUsernameImage()
@@ -1482,8 +1482,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             self.presentViewController(alert, animated: true, completion: nil)
         }
         else{
-            var alertView = UIAlertView(title:  "Real Name",
-                message: "To help your friends to find you please set your real name in the settings of the app.",
+            var alertView = UIAlertView(title:  LocalizedString("Real Name"),
+                message: LocalizedString("To help your friends to find you please set your real name in the settings of the app."),
                 delegate: self, cancelButtonTitle: NSLocalizedString("Cancel", comment : "Cancel"),
                 otherButtonTitles: NSLocalizedString("Ok", comment : "Ok"))
             alertView.alertViewStyle = UIAlertViewStyle.PlainTextInput
@@ -1620,7 +1620,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                 
                 
                 let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
-                    delegate: nil, cancelButtonTitle: "Ok")
+                    delegate: nil, cancelButtonTitle: LocalizedString("Ok"))
                 alert.show()
         }
         
@@ -1651,7 +1651,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
     func letsSayWhereVideo(){
         self.showTutoFirst = false
         let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
-            delegate: nil, cancelButtonTitle: "Ok")
+            delegate: nil, cancelButtonTitle: LocalizedString("Ok"))
         alert.show()
     }
     
@@ -1678,8 +1678,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                         withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result, error) -> Void in
                             if error != nil {
                                 
-                                let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
-                                    delegate: nil, cancelButtonTitle: "OK")
+                                let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
+                                    delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                                 alert.show()
                                 
                                 println("Error : \(error!.localizedDescription)")
@@ -1705,8 +1705,8 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
                             withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
                                 if error != nil {
                                     
-                                    let alert = UIAlertView(title: "Error", message: "Problem while deleting this Pleek. Please try again later.",
-                                        delegate: nil, cancelButtonTitle: "OK")
+                                    let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
+                                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                                     alert.show()
                                     
                                     println("Error : \(error!.localizedDescription)")

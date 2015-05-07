@@ -65,7 +65,7 @@ class MemCollectionViewCell : UICollectionViewCell{
         }
         labelDemoFont.font = UIFont(name: Utils().montserratBold, size: 30)
         labelDemoFont.textColor = UIColor.whiteColor()
-        labelDemoFont.text = "YO"
+        labelDemoFont.text = LocalizedString("YO")
         labelDemoFont.hidden = true
         labelDemoFont.textAlignment = NSTextAlignment.Center
         

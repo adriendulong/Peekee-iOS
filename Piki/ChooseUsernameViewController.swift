@@ -293,14 +293,14 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                         if Utils().iOS8{
                             var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
                                 message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                            alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
                             self.presentViewController(alert, animated: true, completion: nil)
                         }
                         else{
                             var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
                                 message: NSLocalizedString("Sorry an error occured. Please try again later", comment : "Sorry an error occured. Please try again later"),
                                 delegate: nil,
-                                cancelButtonTitle: "Ok")
+                                cancelButtonTitle: LocalizedString("Ok"))
                             alertView.show()
                         }
                         
@@ -383,14 +383,14 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                 if Utils().iOS8{
                     var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
                         message: NSLocalizedString("The username is not valid : only letters and numbers allowed", comment : "The username is not valid : only letters and numbers allowed"), preferredStyle: UIAlertControllerStyle.Alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                    alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
                     self.presentViewController(alert, animated: true, completion: nil)
                 }
                 else{
                     var alertView = UIAlertView(title: NSLocalizedString("Error", comment : "Error"),
                         message: NSLocalizedString("The username is not valid : only letters and numbers allowed", comment : "The username is not valid : only letters and numbers allowed"),
                         delegate: nil,
-                        cancelButtonTitle: "Ok")
+                        cancelButtonTitle: LocalizedString("Ok"))
                     alertView.show()
                 }
             }

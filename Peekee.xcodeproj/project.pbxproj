@@ -581,14 +581,6 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
-		0ADBF0ED1AF7A6C100684E79 /* Vendors */ = {
-			isa = PBXGroup;
-			children = (
-				0ADBF0EF1AF7A76600684E79 /* SnapKit */,
-			);
-			name = Vendors;
-			sourceTree = "<group>";
-		};
 		0ADBF0EF1AF7A76600684E79 /* SnapKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -731,20 +723,19 @@
 		E7665E3019E5A3AB003DAAF8 /* Piki */ = {
 			isa = PBXGroup;
 			children = (
-				E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */,
+				E7DF60871A10C584000CCD52 /* Vendors */,
 				0ADBF1131AF8B0B200684E79 /* Others */,
 				0ADBF1121AF8B09F00684E79 /* Views */,
-				0ADBF10F1AF8ADDB00684E79 /* Extensions */,
 				0ADBF1071AF8AC6200684E79 /* Search */,
-				0ADBF0ED1AF7A6C100684E79 /* Vendors */,
 				E704D5A61A6A5BFA008BE745 /* Settings */,
 				E7CD3F421A44207300F38FB4 /* Piki */,
 				E7BA499B1A2F548200DB1C96 /* Menu */,
 				E7C3B32B1A2485660059F78D /* New Piki */,
 				E78548C61A1B5336001F83FC /* Resources */,
-				E7DF60871A10C584000CCD52 /* Vendors */,
 				E7DF60841A10B6CE000CCD52 /* SignUp */,
 				E7665E5319E6C409003DAAF8 /* Utility */,
+				0ADBF10F1AF8ADDB00684E79 /* Extensions */,
+				E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */,
 			);
 			path = Piki;
 			sourceTree = "<group>";
@@ -939,6 +930,7 @@
 		E7DF60871A10C584000CCD52 /* Vendors */ = {
 			isa = PBXGroup;
 			children = (
+				0ADBF0EF1AF7A76600684E79 /* SnapKit */,
 				E7A0CCBB1ABC930E0025BA62 /* AppsFlyer */,
 				E7834C7C1A1A41B200CDB32D /* MBProgressHUD */,
 			);

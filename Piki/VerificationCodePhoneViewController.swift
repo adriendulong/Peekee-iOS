@@ -134,7 +134,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         let codeLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 35, height: 10))
         codeLabel.font = UIFont(name: Utils().customFontNormal, size: 10.0)
         codeLabel.textColor = UIColor.whiteColor()
-        codeLabel.text = "CODE"
+        codeLabel.text = LocalizedString("CODE")
         codeEnterView.addSubview(codeLabel)
         
         
@@ -267,7 +267,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                                 println("Error : \(error!.localizedDescription)")
                                 var alert = UIAlertController(title:NSLocalizedString("Error", comment : "Error") ,
                                     message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                                alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
                                 self.presentViewController(alert, animated: true, completion: nil)
                             }
                             else{

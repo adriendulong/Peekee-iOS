@@ -632,7 +632,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 var stillToGo:Int = limitFriendsInvit - totalUserSeelcted
                 let nbRecipientsFormat = String(format: NSLocalizedString("Still %d to go! You need them to enjoy Pleek!", comment : "Still %d to go! You need them to enjoy Pleek!"), stillToGo)
                 let alert = UIAlertView(title: NSLocalizedString("Friends", comment : "Friends"), message: nbRecipientsFormat,
-                    delegate: nil, cancelButtonTitle: "Ok")
+                    delegate: nil, cancelButtonTitle: LocalizedString("Ok"))
                 alert.show()
                 
             }
@@ -643,7 +643,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 //Invite All !
                 //Ask Before
                 if Utils().iOS8{
-                    var alert = UIAlertController(title: "Confirmation", message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
+                    var alert = UIAlertController(title: LocalizedString("Confirmation"), message: NSLocalizedString("Are you sure you want to invite all your contacts?", comment : "Are you sure you want to invite all your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
                     alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
                     alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                         self.sendSmsFromSeverTo(self.getArrayOfAllNumbers())
@@ -653,7 +653,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
                 }
                 else{
                     
-                    var alertView = UIAlertView(title: "Confirmation",
+                    var alertView = UIAlertView(title: LocalizedString("Confirmation"),
                         message: NSLocalizedString("Are you sure you want to invite all your contacts?",
                             comment : "Are you sure you want to invite all your contacts?"),
                         delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),

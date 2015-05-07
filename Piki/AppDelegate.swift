@@ -11,7 +11,9 @@ import UIKit
 import Fabric
 import Crashlytics
 
-
+func LocalizedString(string: String) -> String {
+    return NSLocalizedString(string, comment: string)
+}
 
 
 @UIApplicationMain
@@ -30,13 +32,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             let AppID = "BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG"
             let ClientKey = "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF"
             let mixpanelKey = "8ed35339994dd90dec6bda7d83c3d3eb"
+             println("\n\n\n\n\n\n DEV \n\n\n\n\n")
         #else
             let AppID = "Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9"
             let ClientKey = "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj"
             let mixpanelKey = "bdde62cd933f58205b7cb98da8a2bca8"
+            println("\n\n\n\n\n\n PROD \n\n\n\n\n")
         #endif
         
-        println(AppID + " " + ClientKey + " " + mixpanelKey)
+       
 
         Parse.setApplicationId(AppID, clientKey: ClientKey)
         Mixpanel.sharedInstanceWithToken(mixpanelKey)

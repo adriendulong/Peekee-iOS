@@ -169,7 +169,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         reportOrDeleteLabel.font = UIFont(name: Utils().montserratRegular, size: 12)
         reportOrDeleteLabel.adjustsFontSizeToFitWidth = true
         reportOrDeleteLabel.textColor = blackSelected
-        reportOrDeleteLabel.text = "DELETE"
+        reportOrDeleteLabel.text = LocalizedString("Delete").uppercaseString
         bottomFlipView.addSubview(reportOrDeleteLabel)
         
         let shareReactButton:UIButton = UIButton(frame: CGRect(x: bottomFlipView.frame.width/2, y: 0, width: bottomFlipView.frame.width/2, height: bottomFlipView.frame.height/4 * 3))
@@ -183,7 +183,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         shareReactButtonLabel.font = UIFont(name: Utils().montserratRegular, size: 12)
         shareReactButtonLabel.adjustsFontSizeToFitWidth = true
         shareReactButtonLabel.textColor = blackSelected
-        shareReactButtonLabel.text = "PREVIEW"
+        shareReactButtonLabel.text = LocalizedString("Preview").uppercaseString
         bottomFlipView.addSubview(shareReactButtonLabel)
         
         
@@ -256,7 +256,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         nbLikesLabelFront.textAlignment = NSTextAlignment.Right
         nbLikesLabelFront.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
         nbLikesLabelFront.font = UIFont(name: Utils().montserratRegular, size: 12)
-        nbLikesLabelFront.text = "0"
+        nbLikesLabelFront.text = LocalizedString("0")
         nbLikesView.addSubview(nbLikesLabelFront)
         
         //Heart
@@ -957,11 +957,11 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         
         if canRemove(){
             (flipView.viewWithTag(10) as! UIButton).setImage(UIImage(named: "trash_react_icon"), forState: UIControlState.Normal)
-            reportOrDeleteLabel.text = "DELETE"
+            reportOrDeleteLabel.text = LocalizedString("Delete").uppercaseString
         }
         else{
             (flipView.viewWithTag(10) as! UIButton).setImage(UIImage(named: "report_react_icon"), forState: UIControlState.Normal)
-            reportOrDeleteLabel.text = "REPORT"
+            reportOrDeleteLabel.text = LocalizedString("Report").uppercaseString
         }
         
     }

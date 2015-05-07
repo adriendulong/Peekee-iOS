@@ -108,10 +108,6 @@ class PikiUserTableViewCell : UITableViewCell {
         else{
             addUserButton!.setImage(UIImage(named: "add_friends_icon"), forState: UIControlState.Normal)
         }
-        
-        
-        
-        
     }
     
     
@@ -160,8 +156,6 @@ class PikiUserTableViewCell : UITableViewCell {
         else{
             loadIndicator!.stopAnimating()
         }
-        
-        
     }
     
     
@@ -219,18 +213,11 @@ class PikiUserTableViewCell : UITableViewCell {
                                     self.searchController!.friendsSelectorLabel!.textColor = UIColor(red: 216/255, green: 216/255, blue: 216/255, alpha: 1.0)
                             })
                     })
-                    
-                    
                 }
-                
-                
-                
+
                 return nil
-                
             })
-            
         }
-        
     }
     
 }

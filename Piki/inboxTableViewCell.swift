@@ -53,7 +53,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         deleteLabel!.textColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
         deleteLabel!.textAlignment = NSTextAlignment.Center
         deleteLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 14)
-        deleteLabel!.text = "DELETE"
+        deleteLabel!.text = LocalizedString("Delete").uppercaseString
         deleteView!.addSubview(deleteLabel!)
         
         deleteImageView = UIImageView(frame: CGRect(x: 0, y: deleteView!.frame.size.height/2 - 15, width: UIScreen.mainScreen().bounds.width/4, height: 17))
@@ -83,7 +83,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         //fromLabel!.center = CGPoint(x: UIScreen.mainScreen().bounds.width/3 * 2, y: UIScreen.mainScreen().bounds.width/9)
         fromLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 16)
         fromLabel!.textColor = UIColor(red: 209/255, green: 212/255, blue: 218/255, alpha: 1.0)
-        fromLabel!.text = "From"
+        fromLabel!.text = LocalizedString("From")
         //self.mainContent!.addSubview(fromLabel!)
         
         usernameLabel = UILabel(frame: CGRect(x: (UIScreen.mainScreen().bounds.width - 2)/3 + 20, y: UIScreen.mainScreen().bounds.width/9 - 15, width: UIScreen.mainScreen().bounds.width/3 * 2 - 40, height: 30))
@@ -138,7 +138,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
         moreInfosLabel!.textColor = UIColor.whiteColor()
         moreInfosLabel!.textAlignment = NSTextAlignment.Center
         moreInfosLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 15)
-        moreInfosLabel!.text = "NEW"
+        moreInfosLabel!.text = LocalizedString("NEW")
         moreInfosViewIndicator!.addSubview(moreInfosLabel!)
         
         let panGestureRecognizer:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("deleteAction:"))
@@ -172,7 +172,7 @@ class inboxTableViewCell: UITableViewCell, UIGestureRecognizerDelegate {
             if userPeekee != nil{
                 //Delete Icon
                 if userPeekee!.objectId == (PFUser.currentUser())!.objectId{
-                    self.deleteLabel!.text = NSLocalizedString("DELETE", comment: "DELETE")
+                    self.deleteLabel!.text = LocalizedString("Delete").uppercaseString
                 }
                     //Hide Icon
                 else{

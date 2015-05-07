@@ -94,7 +94,7 @@ class RecipientsCell: UITableViewCell {
             secondLabel!.hidden = false
             testLabel!.frame = CGRect(x: 15, y: 0, width: 300, height: 50)
             
-            secondLabel!.text = "Score : \(score)"
+            secondLabel!.text = String(format: LocalizedString("Score : %d"), score)
             testLabel!.text = "@\(self.user!.username!)"
         }
         
@@ -202,13 +202,13 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         largeLabelSend!.font = UIFont(name: Utils().customFontSemiBold, size: 18)
         largeLabelSend!.textColor = UIColor.whiteColor()
         largeLabelSend!.textAlignment = NSTextAlignment.Center
-        largeLabelSend!.text = "PUBLIC"
+        largeLabelSend!.text = LocalizedString("PUBLIC")
         largeSendView!.addSubview(largeLabelSend!)
         
         nbSelectedLabel = UILabel(frame: CGRect(x: largeSendView!.frame.width/3 + 25, y: 0, width: largeSendView!.frame.width/3 * 2 - 40, height: largeSendView!.frame.height))
         nbSelectedLabel!.font = UIFont(name: Utils().customFontSemiBold, size: 16)
         nbSelectedLabel!.textColor = UIColor.whiteColor()
-        nbSelectedLabel!.text = "10 000 SELECTED"
+        nbSelectedLabel!.text = LocalizedString("10 000 SELECTED")
         nbSelectedLabel!.alpha = 0.0
         largeSendView!.addSubview(nbSelectedLabel!)
         
@@ -970,7 +970,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         MBProgressHUD.hideHUDForView(self.view, animated: true)
         var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
             message: NSLocalizedString("We had a problem while sending your Pleek, please try again later", comment : "We had a problem while sending your Pleek, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
         
     }

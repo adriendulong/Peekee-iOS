@@ -249,14 +249,14 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         }
         
         if isPublicPleek {
-            recipientsNumberLabel.text = "PUBLIC"
+            recipientsNumberLabel.text = LocalizedString("PUBLIC")
         }
         else{
             if recipients != nil{
-                recipientsNumberLabel.text = "TO \(Utils().formatNumber(recipients!.count)) FRIENDS"
+                recipientsNumberLabel.text = String(format: LocalizedString("TO %@ FRIENDS"), Utils().formatNumber(recipients!.count))
             }
             else{
-                recipientsNumberLabel.text = "TO SOME FRIENDS"
+                recipientsNumberLabel.text = LocalizedString("TO SOME FRIENDS")
             }
             
         }
@@ -406,15 +406,15 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
             if let nbReplies = self.mainPiki!["nbReaction"] as? Int{
                 if nbReplies > 0{
-                    mainCell.nbRepliesLabel.text = "\(Utils().formatNumber(nbReplies)) REPLIES"
+                    mainCell.nbRepliesLabel.text = String(format: LocalizedString("%@ REPLIES"), Utils().formatNumber(nbReplies))
                 }
                 else{
-                    mainCell.nbRepliesLabel.text = "REPLY FIRST"
+                    mainCell.nbRepliesLabel.text = LocalizedString("REPLY FIRST")
                 }
                 
             }
             else{
-                mainCell.nbRepliesLabel.text = "REPLY FIRST"
+                mainCell.nbRepliesLabel.text = LocalizedString("REPLY FIRST")
             }
             
             //mainCell.updateInfosPleek()
@@ -501,7 +501,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 
                 
                 if let nbReplies = self.mainPiki!["nbReaction"] as? Int{
-                    cell.nbRepliesLabel.text = "\(Utils().formatNumber(nbReplies)) REPLIES"
+                    cell.nbRepliesLabel.text = String(format: LocalizedString("%@ REPLIES"), Utils().formatNumber(nbReplies))
                 }
                 else{
                     cell.nbRepliesLabel.text = "REPLY FIRST"
@@ -1412,7 +1412,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
             case .OrderedSame, .OrderedDescending:
                 
-                var alert = UIAlertController(title: "Delete", message: "Are you sure you want to delete this react? You won't be able to get it back!", preferredStyle: UIAlertControllerStyle.Alert)
+                var alert = UIAlertController(title: LocalizedString("Delete"), message: LocalizedString("Are you sure you want to delete this react? You won't be able to get it back!"), preferredStyle: UIAlertControllerStyle.Alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                     
@@ -1423,11 +1423,11 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 
             case .OrderedAscending:
                 self.reactToRemove = react
-                var alertView = UIAlertView(title: "Delete",
-                    message:  "Are you sure you want to delete this React? You won't be able to get it back!",
+                var alertView = UIAlertView(title: LocalizedString("Delete"),
+                    message:  LocalizedString("Are you sure you want to delete this React? You won't be able to get it back!"),
                     delegate: self,
-                    cancelButtonTitle: "No",
-                    otherButtonTitles: "Yes")
+                    cancelButtonTitle: LocalizedString("No"),
+                    otherButtonTitles: LocalizedString("Yes"))
                 alertView.tag = 10
                 alertView.show()
                 
@@ -1448,13 +1448,13 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             PFCloud.callFunctionInBackground("reportOrRemoveReact ", withParameters: ["reactId" : reactObject.objectId!]) { (result, error) -> Void in
                 if error != nil {
                     if isReport{
-                        let alert = UIAlertView(title: "Error", message: "Problem while reporting this react. Please try again later",
-                            delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while reporting this react. Please try again later"),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
                     else{
-                        let alert = UIAlertView(title: "Error", message: "Problem while deleting this react. Please try again later",
-                            delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this react. Please try again later"),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
                     
@@ -1462,8 +1462,8 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 }
                 else{
                     if isReport{
-                        let alert = UIAlertView(title: "Report", message: "This react has been reported. Thank you.",
-                            delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: LocalizedString("Report"), message: LocalizedString("This react has been reported. Thank you."),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                         NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
                     }
@@ -1735,11 +1735,11 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
             var alert = UIAlertController(title: NSLocalizedString("More", comment : "More"),
                 message: NSLocalizedString("More actions for this Pleek", comment : "More actions for this Pleek"), preferredStyle: UIAlertControllerStyle.ActionSheet)
-            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
+            alert.addAction(UIAlertAction(title: LocalizedString("Cancel"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
                 
             }))
             if !isPublicPleek{
-                alert.addAction(UIAlertAction(title:"Show Recipients", style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+                alert.addAction(UIAlertAction(title:LocalizedString("Show Recipients"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                     self.performSegueWithIdentifier("showRecipients", sender: self)
                 }))
             }
@@ -1749,7 +1749,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                     withParameters: ["pikiId" : self.mainPiki!.objectId!], block: { (result, error) -> Void in
                         if error != nil{
                             let alert = UIAlertView(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Problem while reporting this Pleek. Please try again later", comment :"Problem while reporting this Pleek. Please try again later") ,
-                                delegate: nil, cancelButtonTitle: "OK")
+                                delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                             alert.show()
                         }
                         else{
@@ -1768,9 +1768,9 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         else {
             var actionSheet:UIActionSheet = UIActionSheet(title: NSLocalizedString("More", comment : "More"),
                 delegate: self,
-                cancelButtonTitle: "Cancel",
+                cancelButtonTitle: LocalizedString("Cancel"),
                 destructiveButtonTitle: nil,
-                otherButtonTitles: "Show Recipients", NSLocalizedString("Report this Pleek", comment : "Report this Pleek"))
+                otherButtonTitles: LocalizedString("Show Recipients"), NSLocalizedString("Report this Pleek", comment : "Report this Pleek"))
             actionSheet.showInView(self.view)
             println("UIAlertController can NOT be instantiated")
             
@@ -1789,12 +1789,12 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 withParameters: ["pikiId" : self.mainPiki!.objectId!], block: { (result, error) -> Void in
                     if error != nil{
                         let alert = UIAlertView(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Problem while reporting this Pleek. Please try again later", comment :"Problem while reporting this Pleek. Please try again later") ,
-                            delegate: nil, cancelButtonTitle: "OK")
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
                     else{
-                        let alert = UIAlertView(title: "Confirmation", message: NSLocalizedString( "This Pleek has been reported. Thank you.", comment :  "This Pleek has been reported. Thank you."),
-                            delegate: nil, cancelButtonTitle: "OK")
+                        let alert = UIAlertView(title: LocalizedString("Confirmation"), message: NSLocalizedString( "This Pleek has been reported. Thank you.", comment :  "This Pleek has been reported. Thank you."),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
             })
@@ -2025,7 +2025,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                         let url =  NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_shareInstagram.igo")!
                         println("URL : \(url.description)")
                         self.documentInteractionController!.UTI = "com.instagram.exclusivegram"
-                        self.documentInteractionController!.annotation = ["InstagramCaption" : "Awesome friends mozaic created with @Pleekapp #pleek"]
+                        self.documentInteractionController!.annotation = ["InstagramCaption" : LocalizedString("Awesome friends mozaic created with @Pleekapp #pleek")]
                         
                         self.documentInteractionController!.presentOpenInMenuFromRect(CGRectMake(0,0,0,0), inView: self.view, animated: true)
                         
@@ -2042,7 +2042,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                     let url =  NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_shareInstagram.igo")!
                     println("URL : \(url.description)")
                     self.documentInteractionController!.UTI = "com.instagram.exclusivegram"
-                    self.documentInteractionController!.annotation = ["InstagramCaption" : "Awesome friends mozaic created with @Pleekapp #pleek"]
+                    self.documentInteractionController!.annotation = ["InstagramCaption" : LocalizedString("Awesome friends mozaic created with @Pleekapp #pleek")]
                     
                     self.documentInteractionController!.presentOpenInMenuFromRect(CGRectMake(0,0,0,0), inView: self.view, animated: true)
                     
@@ -2090,7 +2090,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
             
             composer.addImage(image!)
-            composer.setInitialText("Awesome friends mozaic created with @Pleekapp")
+            composer.setInitialText(LocalizedString("Awesome friends mozaic created with @Pleekapp"))
             composer.addURL(NSURL(string: Utils().websiteUrl))
             
             composer.completionHandler = {
@@ -2237,13 +2237,13 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             let library = ALAssetsLibrary()
             library.writeImageToSavedPhotosAlbum(image!.CGImage, orientation: ALAssetOrientation.Up) { (url, error) -> Void in
                 if error != nil {
-                    let alert = UIAlertView(title: "Error", message: "Error while saving your photo",
-                        delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Error while saving your photo"),
+                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                     alert.show()
                 }
                 else{
-                    let alert = UIAlertView(title: "Saved!", message: "Your photo has been saved on your library",
-                        delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: LocalizedString("Saved!"), message: LocalizedString("Your photo has been saved on your library"),
+                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                     alert.show()
                 }
             }
@@ -3055,7 +3055,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         var userReact:PFUser = react["user"] as! PFUser
         var userPiki:PFUser = self.mainPiki!["user"] as! PFUser
-        labelWho.text = "@\(userReact.username!) to @\(userPiki.username!) on Pleek"
+        labelWho.text = String(format: LocalizedString("@%@ to @%@ on Pleek"), userReact.username!, userPiki.username!)
         
         
         
@@ -3102,7 +3102,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             sendLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18.0)
             sendLabel.textColor = UIColor.whiteColor()
             sendLabel.textAlignment = NSTextAlignment.Center
-            sendLabel.text = "Reply to your friends on Messenger!"
+            sendLabel.text = LocalizedString("Reply to your friends on Messenger!")
             shareMessengerReactView!.addSubview(sendLabel)
             
             self.view.addSubview(shareMessengerReactView!)
@@ -3261,7 +3261,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             cellCamera.textViewOverPhoto.textColor = Utils().getFontsWithSize(30)[indexPath.item]["color"] as! UIColor
 
             if count(cellCamera.textViewOverPhoto.text) == 0{
-                cellCamera.textViewOverPhoto.text = "YO"
+                cellCamera.textViewOverPhoto.text = LocalizedString("YO")
             }
             cellCamera.reloadPositionTextView()
         }

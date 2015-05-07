@@ -195,7 +195,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                 countryInfosDic["countryName"] = NSLocale.currentLocale().displayNameForKey(NSLocaleCountryCode, value: key)!
             }
             else{
-                countryInfosDic["countryName"] = "Unkwown"
+                countryInfosDic["countryName"] = LocalizedString("Unkwown")
             }
             
             self.countriesInfos.append(countryInfosDic)
@@ -378,7 +378,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                                 if error != nil {
                                     var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error") ,
                                         message: NSLocalizedString("Error while getting the confirmation code. Please try again later.", comment : "Error while getting the confirmation code. Please try again later."), preferredStyle: UIAlertControllerStyle.Alert)
-                                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                                    alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
                                     self.presentViewController(alert, animated: true, completion: nil)
                                 }
                                 else{
@@ -401,7 +401,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                                     else{
                                         var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error") ,
                                             message: NSLocalizedString("Error while getting the confirmation code. Please try again later.", comment : "Error while getting the confirmation code. Please try again later."), preferredStyle: UIAlertControllerStyle.Alert)
-                                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                                        alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
                                         self.presentViewController(alert, animated: true, completion: nil)
                                     }
                                     
@@ -418,7 +418,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                     else{
                         //Not valid number
                         var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Sorry but your phone number is not valid", comment : "Sorry but your phone number is not valid") , preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+                        alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
                         self.presentViewController(alert, animated: true, completion: nil)
                     }
                 }

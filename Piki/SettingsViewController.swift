@@ -190,18 +190,18 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.secondLabel.text = PFUser.currentUser()!["name"] as? String
                 }
                 else{
-                    cell.secondLabel.text = "undefined"
+                    cell.secondLabel.text = LocalizedString("undefined")
                 }
                 
                 
             case 2:
                 cell.mainLabel.transform = CGAffineTransformIdentity
-                cell.mainLabel.text = "Popular accounts"
+                cell.mainLabel.text = LocalizedString("Popular accounts")
                 cell.emojiImageView.image = UIImage(named: "recommand_emoji")
                 cell.mainSwitch.hidden = true
                 
             case 3:
-                cell.mainLabel.text = "Create my Pleek ID"
+                cell.mainLabel.text = LocalizedString("Create my Pleek ID")
                 cell.mainLabel.transform = CGAffineTransformIdentity
                 cell.emojiImageView.image = UIImage(named: "share_emoji")
                 cell.mainSwitch.hidden = true
@@ -251,12 +251,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             switch indexPath.row{
             case 0:
                 //cell.mainLabel.text = NSLocalizedString("Share the app", comment : "Share the app")
-                cell.mainLabel.text = "Create my Pleek ID"
+                cell.mainLabel.text = LocalizedString("Create my Pleek ID")
                 cell.mainLabel.transform = CGAffineTransformIdentity
                 cell.emojiImageView.image = UIImage(named: "share_emoji")
                 cell.mainSwitch.hidden = true
             default:
-                cell.mainLabel.text = "Create my Pleek ID"
+                cell.mainLabel.text = LocalizedString("Create my Pleek ID")
                 //cell.mainLabel.text = NSLocalizedString("Share the app", comment : "Share the app")
                 cell.mainLabel.transform = CGAffineTransformIdentity
                 cell.mainSwitch.hidden = true
@@ -322,8 +322,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: Actions Functions
     
     func sendEmail(){
-        let emailTitle = "Hey you!"
-        let messageBody = "I wanted to let you know that ..."
+        let emailTitle = LocalizedString("Hey you!")
+        let messageBody = LocalizedString("I wanted to let you know that ...")
         let toRecipents = ["yo@pleekapp.com"]
         var mc: MFMailComposeViewController = MFMailComposeViewController()
         mc.mailComposeDelegate = self
@@ -340,7 +340,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         if okTwitter{
             var composer = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
             
-            composer.setInitialText("Hey @Pleekapp")
+            composer.setInitialText(LocalizedString("Hey @Pleekapp"))
             
             composer.completionHandler = {
                 (result:SLComposeViewControllerResult) in
@@ -357,7 +357,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func shareTheApp(){
         
         
-        let someText:String = "Add me on #Pleek"
+        let someText:String = LocalizedString("Add me on #Pleek")
         let google:NSURL = NSURL(string: Utils().shareAppUrl)!
         var image:UIImage = Utils().buildPleekId()
         
