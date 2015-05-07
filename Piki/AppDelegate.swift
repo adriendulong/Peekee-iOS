@@ -13,6 +13,7 @@ import Crashlytics
 
 
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerDelegate {
 
@@ -24,15 +25,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-//        self.window!.layer.speed = 0.1
-        ////Dev
-        Parse.setApplicationId("BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG", clientKey: "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF")
-        Mixpanel.sharedInstanceWithToken(Utils().mixpanelDev)
+        
+        #if DEBUG
+            let AppID = "BA7FMG5LmMRx0RIPw3XdrOkR7FTnnSe4SIMRrnRG"
+            let ClientKey = "DrWgjs7EII2Sm1tVYwJICkjoWGA23oW42JXcI3BF"
+            let mixpanelKey = "8ed35339994dd90dec6bda7d83c3d3eb"
+        #else
+            let AppID = "Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9"
+            let ClientKey = "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj"
+            let mixpanelKey = "bdde62cd933f58205b7cb98da8a2bca8"
+        #endif
+        
+        println(AppID + " " + ClientKey + " " + mixpanelKey)
 
-        //PROD
-        //Parse.setApplicationId("Yw204Svyg7sXIwvWdAZ9EmOOglqxpqk71ICpHDY9", clientKey: "EPCJfqJIWtsTzARaPE4GvFsWHzfST8atBw3NCuxj")
-        //Mixpanel.sharedInstanceWithToken(Utils().mixpanelProd)
+        Parse.setApplicationId(AppID, clientKey: ClientKey)
+        Mixpanel.sharedInstanceWithToken(mixpanelKey)
         
         Fabric.with([Crashlytics()])
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)

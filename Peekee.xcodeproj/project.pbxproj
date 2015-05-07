@@ -8,6 +8,216 @@
 
 /* Begin PBXBuildFile section */
 		0A0458CF1AF8C2A300BC779E /* NewReactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */; };
+		0A57615E1AFB9C4D0006B544 /* pleek-beta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */; };
+		0A57615F1AFB9C4D0006B544 /* pleek-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */; };
+		0A5761601AFB9C4D0006B544 /* pleek-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */; };
+		0A5761641AFB9D850006B544 /* EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F71AF7A76600684E79 /* EdgeInsets.swift */; };
+		0A5761651AFB9D850006B544 /* ContactPhoneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1091AF8AC9300684E79 /* ContactPhoneTableViewCell.swift */; };
+		0A5761661AFB9D850006B544 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B1903B19F5695F0022617F /* MainViewController.swift */; };
+		0A5761671AFB9D850006B544 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
+		0A5761681AFB9D850006B544 /* inboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */; };
+		0A5761691AFB9D850006B544 /* MainPeekeeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */; };
+		0A57616A1AFB9D850006B544 /* SearchFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */; };
+		0A57616B1AFB9D850006B544 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */; };
+		0A57616C1AFB9D850006B544 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */; };
+		0A57616D1AFB9D850006B544 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
+		0A57616E1AFB9D850006B544 /* ConstraintMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F41AF7A76600684E79 /* ConstraintMaker.swift */; };
+		0A57616F1AFB9D850006B544 /* Debugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F61AF7A76600684E79 /* Debugging.swift */; };
+		0A5761701AFB9D850006B544 /* AcountsAdviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */; };
+		0A5761711AFB9D850006B544 /* EditUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E720345E1A6A759C0058175B /* EditUsernameViewController.swift */; };
+		0A5761721AFB9D850006B544 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */; };
+		0A5761731AFB9D850006B544 /* CountriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */; };
+		0A5761741AFB9D850006B544 /* ListRecipientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */; };
+		0A5761751AFB9D850006B544 /* ReactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */; };
+		0A5761761AFB9D850006B544 /* UIColor+PleekColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1101AF8AED900684E79 /* UIColor+PleekColor.swift */; };
+		0A5761771AFB9D850006B544 /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
+		0A5761781AFB9D850006B544 /* RBResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5C19E6E6E9003DAAF8 /* RBResizer.swift */; };
+		0A5761791AFB9D850006B544 /* WaitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77913161AC3C58000E2CE89 /* WaitViewController.swift */; };
+		0A57617A1AFB9D850006B544 /* View+SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0FB1AF7A76600684E79 /* View+SnapKit.swift */; };
+		0A57617B1AFB9D850006B544 /* ChooseReceiversViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */; };
+		0A57617C1AFB9D850006B544 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F01AF7A76600684E79 /* Constraint.swift */; };
+		0A57617D1AFB9D850006B544 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */; };
+		0A57617E1AFB9D850006B544 /* LayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F81AF7A76600684E79 /* LayoutConstraint.swift */; };
+		0A57617F1AFB9D850006B544 /* EmojiLikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */; };
+		0A5761801AFB9D850006B544 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */; };
+		0A5761811AFB9D850006B544 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5419E6C42E003DAAF8 /* Utils.swift */; };
+		0A5761821AFB9D850006B544 /* SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0FA1AF7A76600684E79 /* SnapKit.swift */; };
+		0A5761831AFB9D850006B544 /* CameraCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */; };
+		0A5761841AFB9D850006B544 /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */; };
+		0A5761851AFB9D850006B544 /* ConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F31AF7A76600684E79 /* ConstraintItem.swift */; };
+		0A5761861AFB9D850006B544 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1151AF8B10800684E79 /* Constants.swift */; };
+		0A5761871AFB9D850006B544 /* PleekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF32C951AF9FC760058B32C /* PleekViewController.swift */; };
+		0A5761881AFB9D850006B544 /* TutoVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */; };
+		0A5761891AFB9D850006B544 /* PikiUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF10D1AF8ACC700684E79 /* PikiUserTableViewCell.swift */; };
+		0A57618A1AFB9D850006B544 /* PleekManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF32C931AF927ED0058B32C /* PleekManager.swift */; };
+		0A57618B1AFB9D850006B544 /* AddFriendsFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */; };
+		0A57618C1AFB9D850006B544 /* SearchUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF10B1AF8ACB300684E79 /* SearchUserTableViewCell.swift */; };
+		0A57618D1AFB9D850006B544 /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF261A1C988800318F45 /* TakePhotoViewController.swift */; };
+		0A57618E1AFB9D850006B544 /* ConstraintRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F51AF7A76600684E79 /* ConstraintRelation.swift */; };
+		0A57618F1AFB9D850006B544 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
+		0A5761901AFB9D850006B544 /* MemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */; };
+		0A5761911AFB9D850006B544 /* ConstraintDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F21AF7A76600684E79 /* ConstraintDescription.swift */; };
+		0A5761921AFB9D850006B544 /* NewReactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */; };
+		0A5761941AFB9D850006B544 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCC11ABC9A5D0025BA62 /* iAd.framework */; };
+		0A5761951AFB9D850006B544 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCBF1ABC97810025BA62 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0A5761961AFB9D850006B544 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E769F2621A8A3C5900E17DCB /* UIKit.framework */; };
+		0A5761971AFB9D850006B544 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E769F2601A8A210000E17DCB /* ImageIO.framework */; };
+		0A5761981AFB9D850006B544 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70A8DA41A29D82C0062D446 /* MessageUI.framework */; };
+		0A5761991AFB9D850006B544 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F628DF1AA8B907009329DE /* FBSDKMessengerShareKit.framework */; };
+		0A57619A1AFB9D850006B544 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */; };
+		0A57619B1AFB9D850006B544 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */; };
+		0A57619C1AFB9D850006B544 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */; };
+		0A57619D1AFB9D850006B544 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6119E6F60200D659AC /* Security.framework */; };
+		0A57619E1AFB9D850006B544 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */; };
+		0A57619F1AFB9D850006B544 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */; };
+		0A5761A01AFB9D850006B544 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5B19E6F5E500D659AC /* libz.dylib */; };
+		0A5761A11AFB9D850006B544 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCBD1ABC93220025BA62 /* libAppsFlyerLib.a */; };
+		0A5761A21AFB9D850006B544 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */; };
+		0A5761A31AFB9D850006B544 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5919E6F5D900D659AC /* CoreLocation.framework */; };
+		0A5761A41AFB9D850006B544 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5719E6F5D000D659AC /* CoreGraphics.framework */; };
+		0A5761A51AFB9D850006B544 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5519E6F5C900D659AC /* CFNetwork.framework */; };
+		0A5761A61AFB9D850006B544 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C9168719F94A900094710D /* Fabric.framework */; };
+		0A5761A71AFB9D850006B544 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */; };
+		0A5761A81AFB9D850006B544 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
+		0A5761AA1AFB9D850006B544 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */; };
+		0A5761AB1AFB9D850006B544 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
+		0A5761AC1AFB9D850006B544 /* pleek-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */; };
+		0A5761AD1AFB9D850006B544 /* TrashHand2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */; };
+		0A5761AE1AFB9D850006B544 /* BaronNeueBlack.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E71AE7DB94002B12C8 /* BaronNeueBlack.otf */; };
+		0A5761AF1AFB9D850006B544 /* BrushUp.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E81AE7DB94002B12C8 /* BrushUp.otf */; };
+		0A5761B01AFB9D850006B544 /* DaftBrush.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E91AE7DB94002B12C8 /* DaftBrush.otf */; };
+		0A5761B11AFB9D850006B544 /* FenotypeBanzaiBros.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EA1AE7DB94002B12C8 /* FenotypeBanzaiBros.otf */; };
+		0A5761B21AFB9D850006B544 /* Higher.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EB1AE7DB94002B12C8 /* Higher.otf */; };
+		0A5761B31AFB9D850006B544 /* Impact.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EC1AE7DB94002B12C8 /* Impact.ttf */; };
+		0A5761B41AFB9D850006B544 /* IndianTypeFoundryVolteBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98ED1AE7DB94002B12C8 /* IndianTypeFoundryVolteBold.otf */; };
+		0A5761B51AFB9D850006B544 /* LatinotypeTrendSansFour.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EE1AE7DB94002B12C8 /* LatinotypeTrendSansFour.otf */; };
+		0A5761B61AFB9D850006B544 /* RMUPlasticaPro.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EF1AE7DB94002B12C8 /* RMUPlasticaPro.otf */; };
+		0A5761B71AFB9D850006B544 /* story.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98F01AE7DB94002B12C8 /* story.otf */; };
+		0A5761B81AFB9D850006B544 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */; };
+		0A5761B91AFB9D850006B544 /* pleek-beta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */; };
+		0A5761BA1AFB9D850006B544 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */; };
+		0A5761BB1AFB9D850006B544 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E71AEFE01A6AE1EF00377E86 /* Localizable.strings */; };
+		0A5761BC1AFB9D850006B544 /* pleek-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */; };
+		0A5761BD1AFB9D850006B544 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		0A5761BE1AFB9D850006B544 /* Gotham-Rounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */; };
+		0A5761BF1AFB9D850006B544 /* Proxima-Nova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */; };
+		0A5761C01AFB9D850006B544 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */; };
+		0A5761C11AFB9D850006B544 /* faster.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5E1A4EA25100B69A2A /* faster.wav */; };
+		0A5761C21AFB9D850006B544 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
+		0A5761C31AFB9D850006B544 /* stronger.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB601A4EA25100B69A2A /* stronger.wav */; };
+		0A5761C41AFB9D850006B544 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
+		0A5761C51AFB9D850006B544 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
+		0A5761C61AFB9D850006B544 /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
+		0A5761C71AFB9D850006B544 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
+		0A5761C81AFB9D850006B544 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		0A5761C91AFB9D850006B544 /* harder.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5F1A4EA25100B69A2A /* harder.wav */; };
+		0A5761CA1AFB9D850006B544 /* better.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5D1A4EA25100B69A2A /* better.wav */; };
+		0A5761CB1AFB9D850006B544 /* DiallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */; };
+		0A5761CC1AFB9D850006B544 /* like_react_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = E770B9B31AEA33EE00781A0A /* like_react_sound.wav */; };
+		0A5761D71AFB9D890006B544 /* EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F71AF7A76600684E79 /* EdgeInsets.swift */; };
+		0A5761D81AFB9D890006B544 /* ContactPhoneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1091AF8AC9300684E79 /* ContactPhoneTableViewCell.swift */; };
+		0A5761D91AFB9D890006B544 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B1903B19F5695F0022617F /* MainViewController.swift */; };
+		0A5761DA1AFB9D890006B544 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
+		0A5761DB1AFB9D890006B544 /* inboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */; };
+		0A5761DC1AFB9D890006B544 /* MainPeekeeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */; };
+		0A5761DD1AFB9D890006B544 /* SearchFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755A1FD1A27325D007377A1 /* SearchFriendsViewController.swift */; };
+		0A5761DE1AFB9D890006B544 /* PhoneNumberViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7DF60851A10B6E8000CCD52 /* PhoneNumberViewController.swift */; };
+		0A5761DF1AFB9D890006B544 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */; };
+		0A5761E01AFB9D890006B544 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
+		0A5761E11AFB9D890006B544 /* ConstraintMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F41AF7A76600684E79 /* ConstraintMaker.swift */; };
+		0A5761E21AFB9D890006B544 /* Debugging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F61AF7A76600684E79 /* Debugging.swift */; };
+		0A5761E31AFB9D890006B544 /* AcountsAdviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E796CB271A5D27F100034F8B /* AcountsAdviceViewController.swift */; };
+		0A5761E41AFB9D890006B544 /* EditUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E720345E1A6A759C0058175B /* EditUsernameViewController.swift */; };
+		0A5761E51AFB9D890006B544 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E727F7011A5B0D3500BB8B0B /* WalkthroughViewController.swift */; };
+		0A5761E61AFB9D890006B544 /* CountriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */; };
+		0A5761E71AFB9D890006B544 /* ListRecipientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */; };
+		0A5761E81AFB9D890006B544 /* ReactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */; };
+		0A5761E91AFB9D890006B544 /* UIColor+PleekColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1101AF8AED900684E79 /* UIColor+PleekColor.swift */; };
+		0A5761EA1AFB9D890006B544 /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
+		0A5761EB1AFB9D890006B544 /* RBResizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5C19E6E6E9003DAAF8 /* RBResizer.swift */; };
+		0A5761EC1AFB9D890006B544 /* WaitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77913161AC3C58000E2CE89 /* WaitViewController.swift */; };
+		0A5761ED1AFB9D890006B544 /* View+SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0FB1AF7A76600684E79 /* View+SnapKit.swift */; };
+		0A5761EE1AFB9D890006B544 /* ChooseReceiversViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */; };
+		0A5761EF1AFB9D890006B544 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F01AF7A76600684E79 /* Constraint.swift */; };
+		0A5761F01AFB9D890006B544 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E7834C7E1A1A41CF00CDB32D /* MBProgressHUD.m */; };
+		0A5761F11AFB9D890006B544 /* LayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F81AF7A76600684E79 /* LayoutConstraint.swift */; };
+		0A5761F21AFB9D890006B544 /* EmojiLikeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EBA42C19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift */; };
+		0A5761F31AFB9D890006B544 /* FirstPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AE5D781A41CA1800A77A91 /* FirstPageViewController.swift */; };
+		0A5761F41AFB9D890006B544 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5419E6C42E003DAAF8 /* Utils.swift */; };
+		0A5761F51AFB9D890006B544 /* SnapKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0FA1AF7A76600684E79 /* SnapKit.swift */; };
+		0A5761F61AFB9D890006B544 /* CameraCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */; };
+		0A5761F71AFB9D890006B544 /* ChooseUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F089C91A110C8400B9C32A /* ChooseUsernameViewController.swift */; };
+		0A5761F81AFB9D890006B544 /* ConstraintItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F31AF7A76600684E79 /* ConstraintItem.swift */; };
+		0A5761F91AFB9D890006B544 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1151AF8B10800684E79 /* Constants.swift */; };
+		0A5761FA1AFB9D890006B544 /* PleekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF32C951AF9FC760058B32C /* PleekViewController.swift */; };
+		0A5761FB1AFB9D890006B544 /* TutoVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73A23DC1AA0B01900C65B7A /* TutoVideoViewController.swift */; };
+		0A5761FC1AFB9D890006B544 /* PikiUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF10D1AF8ACC700684E79 /* PikiUserTableViewCell.swift */; };
+		0A5761FD1AFB9D890006B544 /* PleekManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF32C931AF927ED0058B32C /* PleekManager.swift */; };
+		0A5761FE1AFB9D890006B544 /* AddFriendsFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76E33EE1A828CCB00C32C55 /* AddFriendsFirstViewController.swift */; };
+		0A5761FF1AFB9D890006B544 /* SearchUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF10B1AF8ACB300684E79 /* SearchUserTableViewCell.swift */; };
+		0A5762001AFB9D890006B544 /* TakePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E758CF261A1C988800318F45 /* TakePhotoViewController.swift */; };
+		0A5762011AFB9D890006B544 /* ConstraintRelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F51AF7A76600684E79 /* ConstraintRelation.swift */; };
+		0A5762021AFB9D890006B544 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
+		0A5762031AFB9D890006B544 /* MemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */; };
+		0A5762041AFB9D890006B544 /* ConstraintDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F21AF7A76600684E79 /* ConstraintDescription.swift */; };
+		0A5762051AFB9D890006B544 /* NewReactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */; };
+		0A5762071AFB9D890006B544 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCC11ABC9A5D0025BA62 /* iAd.framework */; };
+		0A5762081AFB9D890006B544 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCBF1ABC97810025BA62 /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0A5762091AFB9D890006B544 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E769F2621A8A3C5900E17DCB /* UIKit.framework */; };
+		0A57620A1AFB9D890006B544 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E769F2601A8A210000E17DCB /* ImageIO.framework */; };
+		0A57620B1AFB9D890006B544 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E70A8DA41A29D82C0062D446 /* MessageUI.framework */; };
+		0A57620C1AFB9D890006B544 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F628DF1AA8B907009329DE /* FBSDKMessengerShareKit.framework */; };
+		0A57620D1AFB9D890006B544 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7DF60A31A10C645000CCD52 /* CoreTelephony.framework */; };
+		0A57620E1AFB9D890006B544 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7FF61E31A0000F0005B0D12 /* MediaPlayer.framework */; };
+		0A57620F1AFB9D890006B544 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */; };
+		0A5762101AFB9D890006B544 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6119E6F60200D659AC /* Security.framework */; };
+		0A5762111AFB9D890006B544 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */; };
+		0A5762121AFB9D890006B544 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */; };
+		0A5762131AFB9D890006B544 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5B19E6F5E500D659AC /* libz.dylib */; };
+		0A5762141AFB9D890006B544 /* libAppsFlyerLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A0CCBD1ABC93220025BA62 /* libAppsFlyerLib.a */; };
+		0A5762151AFB9D890006B544 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */; };
+		0A5762161AFB9D890006B544 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5919E6F5D900D659AC /* CoreLocation.framework */; };
+		0A5762171AFB9D890006B544 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5719E6F5D000D659AC /* CoreGraphics.framework */; };
+		0A5762181AFB9D890006B544 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5519E6F5C900D659AC /* CFNetwork.framework */; };
+		0A5762191AFB9D890006B544 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C9168719F94A900094710D /* Fabric.framework */; };
+		0A57621A1AFB9D890006B544 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */; };
+		0A57621B1AFB9D890006B544 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
+		0A57621D1AFB9D890006B544 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */; };
+		0A57621E1AFB9D890006B544 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
+		0A57621F1AFB9D890006B544 /* pleek-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */; };
+		0A5762201AFB9D890006B544 /* TrashHand2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */; };
+		0A5762211AFB9D890006B544 /* BaronNeueBlack.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E71AE7DB94002B12C8 /* BaronNeueBlack.otf */; };
+		0A5762221AFB9D890006B544 /* BrushUp.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E81AE7DB94002B12C8 /* BrushUp.otf */; };
+		0A5762231AFB9D890006B544 /* DaftBrush.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98E91AE7DB94002B12C8 /* DaftBrush.otf */; };
+		0A5762241AFB9D890006B544 /* FenotypeBanzaiBros.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EA1AE7DB94002B12C8 /* FenotypeBanzaiBros.otf */; };
+		0A5762251AFB9D890006B544 /* Higher.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EB1AE7DB94002B12C8 /* Higher.otf */; };
+		0A5762261AFB9D890006B544 /* Impact.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EC1AE7DB94002B12C8 /* Impact.ttf */; };
+		0A5762271AFB9D890006B544 /* IndianTypeFoundryVolteBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98ED1AE7DB94002B12C8 /* IndianTypeFoundryVolteBold.otf */; };
+		0A5762281AFB9D890006B544 /* LatinotypeTrendSansFour.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EE1AE7DB94002B12C8 /* LatinotypeTrendSansFour.otf */; };
+		0A5762291AFB9D890006B544 /* RMUPlasticaPro.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98EF1AE7DB94002B12C8 /* RMUPlasticaPro.otf */; };
+		0A57622A1AFB9D890006B544 /* story.otf in Resources */ = {isa = PBXBuildFile; fileRef = E77B98F01AE7DB94002B12C8 /* story.otf */; };
+		0A57622B1AFB9D890006B544 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */; };
+		0A57622C1AFB9D890006B544 /* pleek-beta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */; };
+		0A57622D1AFB9D890006B544 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */; };
+		0A57622E1AFB9D890006B544 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E71AEFE01A6AE1EF00377E86 /* Localizable.strings */; };
+		0A57622F1AFB9D890006B544 /* pleek-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */; };
+		0A5762301AFB9D890006B544 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		0A5762311AFB9D890006B544 /* Gotham-Rounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */; };
+		0A5762321AFB9D890006B544 /* Proxima-Nova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */; };
+		0A5762331AFB9D890006B544 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */; };
+		0A5762341AFB9D890006B544 /* faster.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5E1A4EA25100B69A2A /* faster.wav */; };
+		0A5762351AFB9D890006B544 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
+		0A5762361AFB9D890006B544 /* stronger.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB601A4EA25100B69A2A /* stronger.wav */; };
+		0A5762371AFB9D890006B544 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
+		0A5762381AFB9D890006B544 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
+		0A5762391AFB9D890006B544 /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
+		0A57623A1AFB9D890006B544 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
+		0A57623B1AFB9D890006B544 /* (null) in Resources */ = {isa = PBXBuildFile; };
+		0A57623C1AFB9D890006B544 /* harder.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5F1A4EA25100B69A2A /* harder.wav */; };
+		0A57623D1AFB9D890006B544 /* better.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5D1A4EA25100B69A2A /* better.wav */; };
+		0A57623E1AFB9D890006B544 /* DiallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */; };
+		0A57623F1AFB9D890006B544 /* like_react_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = E770B9B31AEA33EE00781A0A /* like_react_sound.wav */; };
+		0ACD2B991AFB9B2100CADDEE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
 		0ADBF0FC1AF7A76600684E79 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F01AF7A76600684E79 /* Constraint.swift */; };
 		0ADBF0FD1AF7A76600684E79 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */; };
 		0ADBF0FE1AF7A76600684E79 /* ConstraintDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F21AF7A76600684E79 /* ConstraintDescription.swift */; };
@@ -43,7 +253,6 @@
 		E72E7D5E19E6F5EF00D659AC /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */; };
 		E72E7D6019E6F5F900D659AC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */; };
 		E72E7D6219E6F60200D659AC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6119E6F60200D659AC /* Security.framework */; };
-		E72E7D6419E6F60A00D659AC /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6319E6F60A00D659AC /* StoreKit.framework */; };
 		E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */; };
 		E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */; };
 		E72FC3171AEE2D6700243F78 /* TrashHand2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */; };
@@ -84,7 +293,6 @@
 		E7A46CF71AE6339100CC2609 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */; };
 		E7A46CF81AE6339100CC2609 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */; };
 		E7A46CFA1AE6531600CC2609 /* CameraCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */; };
-		E7A46CFC1AE6BAB700CC2609 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7A46CFB1AE6BAB700CC2609 /* Images.xcassets */; };
 		E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
 		E7AB74811A9B792E00EEA0D8 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
 		E7AB74831A9BC37700EEA0D8 /* MemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */; };
@@ -123,7 +331,13 @@
 
 /* Begin PBXFileReference section */
 		0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewReactViewController.swift; sourceTree = "<group>"; };
+		0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-beta.plist"; sourceTree = "<group>"; };
+		0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-dev.plist"; sourceTree = "<group>"; };
+		0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-prod.plist"; sourceTree = "<group>"; };
+		0A5761D21AFB9D850006B544 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A5762451AFB9D890006B544 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.debug.xcconfig"; sourceTree = "<group>"; };
+		0ACD2B981AFB9B2100CADDEE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0ADBF0F01AF7A76600684E79 /* Constraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintAttributes.swift; sourceTree = "<group>"; };
 		0ADBF0F21AF7A76600684E79 /* ConstraintDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintDescription.swift; sourceTree = "<group>"; };
@@ -163,7 +377,6 @@
 		E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		E72E7D6119E6F60200D659AC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		E72E7D6319E6F60A00D659AC /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		E72E7D6919E6F63D00D659AC /* ParseFacebookUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtils.framework; sourceTree = "<group>"; };
 		E72E7D6D19E7044300D659AC /* ReactsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -183,7 +396,6 @@
 		E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerificationCodePhoneViewController.swift; sourceTree = "<group>"; };
 		E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuteAllViewController.swift; sourceTree = "<group>"; };
 		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7665E3219E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7665E3819E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E7665E3D19E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -219,7 +431,6 @@
 		E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		E7A46CF91AE6531600CC2609 /* CameraCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraCollectionViewCell.swift; sourceTree = "<group>"; };
-		E7A46CFB1AE6BAB700CC2609 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Birdy_Notification2.wav; sourceTree = "<group>"; };
 		E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Space_Notification1.wav; sourceTree = "<group>"; };
 		E7AB74821A9BC37700EEA0D8 /* MemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -255,6 +466,62 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0A5761931AFB9D850006B544 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5761941AFB9D850006B544 /* iAd.framework in Frameworks */,
+				0A5761951AFB9D850006B544 /* AdSupport.framework in Frameworks */,
+				0A5761961AFB9D850006B544 /* UIKit.framework in Frameworks */,
+				0A5761971AFB9D850006B544 /* ImageIO.framework in Frameworks */,
+				0A5761981AFB9D850006B544 /* MessageUI.framework in Frameworks */,
+				0A5761991AFB9D850006B544 /* FBSDKMessengerShareKit.framework in Frameworks */,
+				0A57619A1AFB9D850006B544 /* CoreTelephony.framework in Frameworks */,
+				0A57619B1AFB9D850006B544 /* MediaPlayer.framework in Frameworks */,
+				0A57619C1AFB9D850006B544 /* SystemConfiguration.framework in Frameworks */,
+				0A57619D1AFB9D850006B544 /* Security.framework in Frameworks */,
+				0A57619E1AFB9D850006B544 /* QuartzCore.framework in Frameworks */,
+				0A57619F1AFB9D850006B544 /* MobileCoreServices.framework in Frameworks */,
+				0A5761A01AFB9D850006B544 /* libz.dylib in Frameworks */,
+				0A5761A11AFB9D850006B544 /* libAppsFlyerLib.a in Frameworks */,
+				0A5761A21AFB9D850006B544 /* Crashlytics.framework in Frameworks */,
+				0A5761A31AFB9D850006B544 /* CoreLocation.framework in Frameworks */,
+				0A5761A41AFB9D850006B544 /* CoreGraphics.framework in Frameworks */,
+				0A5761A51AFB9D850006B544 /* CFNetwork.framework in Frameworks */,
+				0A5761A61AFB9D850006B544 /* Fabric.framework in Frameworks */,
+				0A5761A71AFB9D850006B544 /* AudioToolbox.framework in Frameworks */,
+				0A5761A81AFB9D850006B544 /* libPods-Peekee.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A5762061AFB9D890006B544 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5762071AFB9D890006B544 /* iAd.framework in Frameworks */,
+				0A5762081AFB9D890006B544 /* AdSupport.framework in Frameworks */,
+				0A5762091AFB9D890006B544 /* UIKit.framework in Frameworks */,
+				0A57620A1AFB9D890006B544 /* ImageIO.framework in Frameworks */,
+				0A57620B1AFB9D890006B544 /* MessageUI.framework in Frameworks */,
+				0A57620C1AFB9D890006B544 /* FBSDKMessengerShareKit.framework in Frameworks */,
+				0A57620D1AFB9D890006B544 /* CoreTelephony.framework in Frameworks */,
+				0A57620E1AFB9D890006B544 /* MediaPlayer.framework in Frameworks */,
+				0A57620F1AFB9D890006B544 /* SystemConfiguration.framework in Frameworks */,
+				0A5762101AFB9D890006B544 /* Security.framework in Frameworks */,
+				0A5762111AFB9D890006B544 /* QuartzCore.framework in Frameworks */,
+				0A5762121AFB9D890006B544 /* MobileCoreServices.framework in Frameworks */,
+				0A5762131AFB9D890006B544 /* libz.dylib in Frameworks */,
+				0A5762141AFB9D890006B544 /* libAppsFlyerLib.a in Frameworks */,
+				0A5762151AFB9D890006B544 /* Crashlytics.framework in Frameworks */,
+				0A5762161AFB9D890006B544 /* CoreLocation.framework in Frameworks */,
+				0A5762171AFB9D890006B544 /* CoreGraphics.framework in Frameworks */,
+				0A5762181AFB9D890006B544 /* CFNetwork.framework in Frameworks */,
+				0A5762191AFB9D890006B544 /* Fabric.framework in Frameworks */,
+				0A57621A1AFB9D890006B544 /* AudioToolbox.framework in Frameworks */,
+				0A57621B1AFB9D890006B544 /* libPods-Peekee.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E7665E2B19E5A3AB003DAAF8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -268,7 +535,6 @@
 				E7DF60A41A10C645000CCD52 /* CoreTelephony.framework in Frameworks */,
 				E7F0017F1A02A26A00F71017 /* MediaPlayer.framework in Frameworks */,
 				E72E7D6619E6F61500D659AC /* SystemConfiguration.framework in Frameworks */,
-				E72E7D6419E6F60A00D659AC /* StoreKit.framework in Frameworks */,
 				E72E7D6219E6F60200D659AC /* Security.framework in Frameworks */,
 				E72E7D6019E6F5F900D659AC /* QuartzCore.framework in Frameworks */,
 				E72E7D5E19E6F5EF00D659AC /* MobileCoreServices.framework in Frameworks */,
@@ -381,9 +647,9 @@
 		0ADBF1131AF8B0B200684E79 /* Others */ = {
 			isa = PBXGroup;
 			children = (
+				0ACD2B981AFB9B2100CADDEE /* Images.xcassets */,
 				E7665E7B19E6F2FB003DAAF8 /* Piki-Bridging-Header.h */,
 				E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */,
-				E7A46CFB1AE6BAB700CC2609 /* Images.xcassets */,
 				E7665E3119E5A3AB003DAAF8 /* Supporting Files */,
 				E71AEFE01A6AE1EF00377E86 /* Localizable.strings */,
 				0ADBF1151AF8B10800684E79 /* Constants.swift */,
@@ -456,6 +722,8 @@
 			children = (
 				E7665E2E19E5A3AB003DAAF8 /* Peekee.app */,
 				E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */,
+				0A5761D21AFB9D850006B544 /* Peekee.app */,
+				0A5762451AFB9D890006B544 /* Peekee.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -484,7 +752,9 @@
 		E7665E3119E5A3AB003DAAF8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				E7665E3219E5A3AB003DAAF8 /* Info.plist */,
+				0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */,
+				0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */,
+				0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -539,7 +809,6 @@
 				E7EBA42A19EC06E3006E8587 /* Crashlytics.framework */,
 				E72E7D6919E6F63D00D659AC /* ParseFacebookUtils.framework */,
 				E72E7D6519E6F61500D659AC /* SystemConfiguration.framework */,
-				E72E7D6319E6F60A00D659AC /* StoreKit.framework */,
 				E72E7D6119E6F60200D659AC /* Security.framework */,
 				E72E7D5F19E6F5F900D659AC /* QuartzCore.framework */,
 				E72E7D5D19E6F5EF00D659AC /* MobileCoreServices.framework */,
@@ -679,9 +948,49 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E7665E2D19E5A3AB003DAAF8 /* Peekee */ = {
+		0A5761611AFB9D850006B544 /* pleek-beta */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "Peekee" */;
+			buildConfigurationList = 0A5761CF1AFB9D850006B544 /* Build configuration list for PBXNativeTarget "pleek-beta" */;
+			buildPhases = (
+				0A5761621AFB9D850006B544 /* Check Pods Manifest.lock */,
+				0A5761631AFB9D850006B544 /* Sources */,
+				0A5761931AFB9D850006B544 /* Frameworks */,
+				0A5761A91AFB9D850006B544 /* Resources */,
+				0A5761CD1AFB9D850006B544 /* ShellScript */,
+				0A5761CE1AFB9D850006B544 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "pleek-beta";
+			productName = Piki;
+			productReference = 0A5761D21AFB9D850006B544 /* Peekee.app */;
+			productType = "com.apple.product-type.application";
+		};
+		0A5761D41AFB9D890006B544 /* pleek-dev */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A5762421AFB9D890006B544 /* Build configuration list for PBXNativeTarget "pleek-dev" */;
+			buildPhases = (
+				0A5761D51AFB9D890006B544 /* Check Pods Manifest.lock */,
+				0A5761D61AFB9D890006B544 /* Sources */,
+				0A5762061AFB9D890006B544 /* Frameworks */,
+				0A57621C1AFB9D890006B544 /* Resources */,
+				0A5762401AFB9D890006B544 /* ShellScript */,
+				0A5762411AFB9D890006B544 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "pleek-dev";
+			productName = Piki;
+			productReference = 0A5762451AFB9D890006B544 /* Peekee.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E7665E2D19E5A3AB003DAAF8 /* pleek-prod */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "pleek-prod" */;
 			buildPhases = (
 				F33917FF311AA444C2306A01 /* Check Pods Manifest.lock */,
 				E7665E2A19E5A3AB003DAAF8 /* Sources */,
@@ -694,7 +1003,7 @@
 			);
 			dependencies = (
 			);
-			name = Peekee;
+			name = "pleek-prod";
 			productName = Piki;
 			productReference = E7665E2E19E5A3AB003DAAF8 /* Peekee.app */;
 			productType = "com.apple.product-type.application";
@@ -726,6 +1035,12 @@
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = PikiChat;
 				TargetAttributes = {
+					0A5761611AFB9D850006B544 = {
+						DevelopmentTeam = S435857UNK;
+					};
+					0A5761D41AFB9D890006B544 = {
+						DevelopmentTeam = S435857UNK;
+					};
 					E7665E2D19E5A3AB003DAAF8 = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = S435857UNK;
@@ -764,18 +1079,106 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E7665E2D19E5A3AB003DAAF8 /* Peekee */,
+				E7665E2D19E5A3AB003DAAF8 /* pleek-prod */,
+				0A5761611AFB9D850006B544 /* pleek-beta */,
+				0A5761D41AFB9D890006B544 /* pleek-dev */,
 				E7665E4219E5A3AB003DAAF8 /* PeekeeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0A5761A91AFB9D850006B544 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5761AA1AFB9D850006B544 /* peekee_tuto.mp4 in Resources */,
+				0A5761AB1AFB9D850006B544 /* Images.xcassets in Resources */,
+				0A5761AC1AFB9D850006B544 /* pleek-dev.plist in Resources */,
+				0A5761AD1AFB9D850006B544 /* TrashHand2.ttf in Resources */,
+				0A5761AE1AFB9D850006B544 /* BaronNeueBlack.otf in Resources */,
+				0A5761AF1AFB9D850006B544 /* BrushUp.otf in Resources */,
+				0A5761B01AFB9D850006B544 /* DaftBrush.otf in Resources */,
+				0A5761B11AFB9D850006B544 /* FenotypeBanzaiBros.otf in Resources */,
+				0A5761B21AFB9D850006B544 /* Higher.otf in Resources */,
+				0A5761B31AFB9D850006B544 /* Impact.ttf in Resources */,
+				0A5761B41AFB9D850006B544 /* IndianTypeFoundryVolteBold.otf in Resources */,
+				0A5761B51AFB9D850006B544 /* LatinotypeTrendSansFour.otf in Resources */,
+				0A5761B61AFB9D850006B544 /* RMUPlasticaPro.otf in Resources */,
+				0A5761B71AFB9D850006B544 /* story.otf in Resources */,
+				0A5761B81AFB9D850006B544 /* Montserrat-Bold.ttf in Resources */,
+				0A5761B91AFB9D850006B544 /* pleek-beta.plist in Resources */,
+				0A5761BA1AFB9D850006B544 /* Montserrat-Regular.ttf in Resources */,
+				0A5761BB1AFB9D850006B544 /* Localizable.strings in Resources */,
+				0A5761BC1AFB9D850006B544 /* pleek-prod.plist in Resources */,
+				0A5761BD1AFB9D850006B544 /* (null) in Resources */,
+				0A5761BE1AFB9D850006B544 /* Gotham-Rounded-Bold.ttf in Resources */,
+				0A5761BF1AFB9D850006B544 /* Proxima-Nova-Light.otf in Resources */,
+				0A5761C01AFB9D850006B544 /* Proxima-Nova-Bold.otf in Resources */,
+				0A5761C11AFB9D850006B544 /* faster.wav in Resources */,
+				0A5761C21AFB9D850006B544 /* Space_Notification1.wav in Resources */,
+				0A5761C31AFB9D850006B544 /* stronger.wav in Resources */,
+				0A5761C41AFB9D850006B544 /* Main.storyboard in Resources */,
+				0A5761C51AFB9D850006B544 /* Birdy_Notification2.wav in Resources */,
+				0A5761C61AFB9D850006B544 /* HansomFY-Regular_S.otf in Resources */,
+				0A5761C71AFB9D850006B544 /* LaunchScreen.xib in Resources */,
+				0A5761C81AFB9D850006B544 /* (null) in Resources */,
+				0A5761C91AFB9D850006B544 /* harder.wav in Resources */,
+				0A5761CA1AFB9D850006B544 /* better.wav in Resources */,
+				0A5761CB1AFB9D850006B544 /* DiallingCodes.plist in Resources */,
+				0A5761CC1AFB9D850006B544 /* like_react_sound.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A57621C1AFB9D890006B544 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A57621D1AFB9D890006B544 /* peekee_tuto.mp4 in Resources */,
+				0A57621E1AFB9D890006B544 /* Images.xcassets in Resources */,
+				0A57621F1AFB9D890006B544 /* pleek-dev.plist in Resources */,
+				0A5762201AFB9D890006B544 /* TrashHand2.ttf in Resources */,
+				0A5762211AFB9D890006B544 /* BaronNeueBlack.otf in Resources */,
+				0A5762221AFB9D890006B544 /* BrushUp.otf in Resources */,
+				0A5762231AFB9D890006B544 /* DaftBrush.otf in Resources */,
+				0A5762241AFB9D890006B544 /* FenotypeBanzaiBros.otf in Resources */,
+				0A5762251AFB9D890006B544 /* Higher.otf in Resources */,
+				0A5762261AFB9D890006B544 /* Impact.ttf in Resources */,
+				0A5762271AFB9D890006B544 /* IndianTypeFoundryVolteBold.otf in Resources */,
+				0A5762281AFB9D890006B544 /* LatinotypeTrendSansFour.otf in Resources */,
+				0A5762291AFB9D890006B544 /* RMUPlasticaPro.otf in Resources */,
+				0A57622A1AFB9D890006B544 /* story.otf in Resources */,
+				0A57622B1AFB9D890006B544 /* Montserrat-Bold.ttf in Resources */,
+				0A57622C1AFB9D890006B544 /* pleek-beta.plist in Resources */,
+				0A57622D1AFB9D890006B544 /* Montserrat-Regular.ttf in Resources */,
+				0A57622E1AFB9D890006B544 /* Localizable.strings in Resources */,
+				0A57622F1AFB9D890006B544 /* pleek-prod.plist in Resources */,
+				0A5762301AFB9D890006B544 /* (null) in Resources */,
+				0A5762311AFB9D890006B544 /* Gotham-Rounded-Bold.ttf in Resources */,
+				0A5762321AFB9D890006B544 /* Proxima-Nova-Light.otf in Resources */,
+				0A5762331AFB9D890006B544 /* Proxima-Nova-Bold.otf in Resources */,
+				0A5762341AFB9D890006B544 /* faster.wav in Resources */,
+				0A5762351AFB9D890006B544 /* Space_Notification1.wav in Resources */,
+				0A5762361AFB9D890006B544 /* stronger.wav in Resources */,
+				0A5762371AFB9D890006B544 /* Main.storyboard in Resources */,
+				0A5762381AFB9D890006B544 /* Birdy_Notification2.wav in Resources */,
+				0A5762391AFB9D890006B544 /* HansomFY-Regular_S.otf in Resources */,
+				0A57623A1AFB9D890006B544 /* LaunchScreen.xib in Resources */,
+				0A57623B1AFB9D890006B544 /* (null) in Resources */,
+				0A57623C1AFB9D890006B544 /* harder.wav in Resources */,
+				0A57623D1AFB9D890006B544 /* better.wav in Resources */,
+				0A57623E1AFB9D890006B544 /* DiallingCodes.plist in Resources */,
+				0A57623F1AFB9D890006B544 /* like_react_sound.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E7665E2C19E5A3AB003DAAF8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E724D0171AF75C6B0060B545 /* peekee_tuto.mp4 in Resources */,
+				0ACD2B991AFB9B2100CADDEE /* Images.xcassets in Resources */,
+				0A57615F1AFB9C4D0006B544 /* pleek-dev.plist in Resources */,
 				E72FC3171AEE2D6700243F78 /* TrashHand2.ttf in Resources */,
 				E77B98F11AE7DB9F002B12C8 /* BaronNeueBlack.otf in Resources */,
 				E77B98F21AE7DB9F002B12C8 /* BrushUp.otf in Resources */,
@@ -788,9 +1191,10 @@
 				E77B98F91AE7DB9F002B12C8 /* RMUPlasticaPro.otf in Resources */,
 				E77B98FA1AE7DB9F002B12C8 /* story.otf in Resources */,
 				E7A46CF71AE6339100CC2609 /* Montserrat-Bold.ttf in Resources */,
-				E7A46CFC1AE6BAB700CC2609 /* Images.xcassets in Resources */,
+				0A57615E1AFB9C4D0006B544 /* pleek-beta.plist in Resources */,
 				E7A46CF81AE6339100CC2609 /* Montserrat-Regular.ttf in Resources */,
 				E71AEFDE1A6AE1EF00377E86 /* Localizable.strings in Resources */,
+				0A5761601AFB9C4D0006B544 /* pleek-prod.plist in Resources */,
 				E74C1DF61A56F5F7002F86CC /* (null) in Resources */,
 				E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */,
 				E7BA49991A2F431B00DB1C96 /* Proxima-Nova-Light.otf in Resources */,
@@ -820,6 +1224,92 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0A5761621AFB9D850006B544 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		0A5761CD1AFB9D850006B544 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
+		};
+		0A5761CE1AFB9D850006B544 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Peekee/Pods-Peekee-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		0A5761D51AFB9D890006B544 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		0A5762401AFB9D890006B544 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
+		};
+		0A5762411AFB9D890006B544 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Peekee/Pods-Peekee-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E7EBA42919EC06BA006E8587 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -866,6 +1356,114 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0A5761631AFB9D850006B544 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5761641AFB9D850006B544 /* EdgeInsets.swift in Sources */,
+				0A5761651AFB9D850006B544 /* ContactPhoneTableViewCell.swift in Sources */,
+				0A5761661AFB9D850006B544 /* MainViewController.swift in Sources */,
+				0A5761671AFB9D850006B544 /* SettingsViewController.swift in Sources */,
+				0A5761681AFB9D850006B544 /* inboxTableViewCell.swift in Sources */,
+				0A5761691AFB9D850006B544 /* MainPeekeeCollectionViewCell.swift in Sources */,
+				0A57616A1AFB9D850006B544 /* SearchFriendsViewController.swift in Sources */,
+				0A57616B1AFB9D850006B544 /* PhoneNumberViewController.swift in Sources */,
+				0A57616C1AFB9D850006B544 /* ConstraintAttributes.swift in Sources */,
+				0A57616D1AFB9D850006B544 /* AppDelegate.swift in Sources */,
+				0A57616E1AFB9D850006B544 /* ConstraintMaker.swift in Sources */,
+				0A57616F1AFB9D850006B544 /* Debugging.swift in Sources */,
+				0A5761701AFB9D850006B544 /* AcountsAdviceViewController.swift in Sources */,
+				0A5761711AFB9D850006B544 /* EditUsernameViewController.swift in Sources */,
+				0A5761721AFB9D850006B544 /* WalkthroughViewController.swift in Sources */,
+				0A5761731AFB9D850006B544 /* CountriesTableViewController.swift in Sources */,
+				0A5761741AFB9D850006B544 /* ListRecipientsViewController.swift in Sources */,
+				0A5761751AFB9D850006B544 /* ReactsCollectionViewCell.swift in Sources */,
+				0A5761761AFB9D850006B544 /* UIColor+PleekColor.swift in Sources */,
+				0A5761771AFB9D850006B544 /* MuteAllViewController.swift in Sources */,
+				0A5761781AFB9D850006B544 /* RBResizer.swift in Sources */,
+				0A5761791AFB9D850006B544 /* WaitViewController.swift in Sources */,
+				0A57617A1AFB9D850006B544 /* View+SnapKit.swift in Sources */,
+				0A57617B1AFB9D850006B544 /* ChooseReceiversViewController.swift in Sources */,
+				0A57617C1AFB9D850006B544 /* Constraint.swift in Sources */,
+				0A57617D1AFB9D850006B544 /* MBProgressHUD.m in Sources */,
+				0A57617E1AFB9D850006B544 /* LayoutConstraint.swift in Sources */,
+				0A57617F1AFB9D850006B544 /* EmojiLikeCollectionViewCell.swift in Sources */,
+				0A5761801AFB9D850006B544 /* FirstPageViewController.swift in Sources */,
+				0A5761811AFB9D850006B544 /* Utils.swift in Sources */,
+				0A5761821AFB9D850006B544 /* SnapKit.swift in Sources */,
+				0A5761831AFB9D850006B544 /* CameraCollectionViewCell.swift in Sources */,
+				0A5761841AFB9D850006B544 /* ChooseUsernameViewController.swift in Sources */,
+				0A5761851AFB9D850006B544 /* ConstraintItem.swift in Sources */,
+				0A5761861AFB9D850006B544 /* Constants.swift in Sources */,
+				0A5761871AFB9D850006B544 /* PleekViewController.swift in Sources */,
+				0A5761881AFB9D850006B544 /* TutoVideoViewController.swift in Sources */,
+				0A5761891AFB9D850006B544 /* PikiUserTableViewCell.swift in Sources */,
+				0A57618A1AFB9D850006B544 /* PleekManager.swift in Sources */,
+				0A57618B1AFB9D850006B544 /* AddFriendsFirstViewController.swift in Sources */,
+				0A57618C1AFB9D850006B544 /* SearchUserTableViewCell.swift in Sources */,
+				0A57618D1AFB9D850006B544 /* TakePhotoViewController.swift in Sources */,
+				0A57618E1AFB9D850006B544 /* ConstraintRelation.swift in Sources */,
+				0A57618F1AFB9D850006B544 /* VerificationCodePhoneViewController.swift in Sources */,
+				0A5761901AFB9D850006B544 /* MemCollectionViewCell.swift in Sources */,
+				0A5761911AFB9D850006B544 /* ConstraintDescription.swift in Sources */,
+				0A5761921AFB9D850006B544 /* NewReactViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0A5761D61AFB9D890006B544 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A5761D71AFB9D890006B544 /* EdgeInsets.swift in Sources */,
+				0A5761D81AFB9D890006B544 /* ContactPhoneTableViewCell.swift in Sources */,
+				0A5761D91AFB9D890006B544 /* MainViewController.swift in Sources */,
+				0A5761DA1AFB9D890006B544 /* SettingsViewController.swift in Sources */,
+				0A5761DB1AFB9D890006B544 /* inboxTableViewCell.swift in Sources */,
+				0A5761DC1AFB9D890006B544 /* MainPeekeeCollectionViewCell.swift in Sources */,
+				0A5761DD1AFB9D890006B544 /* SearchFriendsViewController.swift in Sources */,
+				0A5761DE1AFB9D890006B544 /* PhoneNumberViewController.swift in Sources */,
+				0A5761DF1AFB9D890006B544 /* ConstraintAttributes.swift in Sources */,
+				0A5761E01AFB9D890006B544 /* AppDelegate.swift in Sources */,
+				0A5761E11AFB9D890006B544 /* ConstraintMaker.swift in Sources */,
+				0A5761E21AFB9D890006B544 /* Debugging.swift in Sources */,
+				0A5761E31AFB9D890006B544 /* AcountsAdviceViewController.swift in Sources */,
+				0A5761E41AFB9D890006B544 /* EditUsernameViewController.swift in Sources */,
+				0A5761E51AFB9D890006B544 /* WalkthroughViewController.swift in Sources */,
+				0A5761E61AFB9D890006B544 /* CountriesTableViewController.swift in Sources */,
+				0A5761E71AFB9D890006B544 /* ListRecipientsViewController.swift in Sources */,
+				0A5761E81AFB9D890006B544 /* ReactsCollectionViewCell.swift in Sources */,
+				0A5761E91AFB9D890006B544 /* UIColor+PleekColor.swift in Sources */,
+				0A5761EA1AFB9D890006B544 /* MuteAllViewController.swift in Sources */,
+				0A5761EB1AFB9D890006B544 /* RBResizer.swift in Sources */,
+				0A5761EC1AFB9D890006B544 /* WaitViewController.swift in Sources */,
+				0A5761ED1AFB9D890006B544 /* View+SnapKit.swift in Sources */,
+				0A5761EE1AFB9D890006B544 /* ChooseReceiversViewController.swift in Sources */,
+				0A5761EF1AFB9D890006B544 /* Constraint.swift in Sources */,
+				0A5761F01AFB9D890006B544 /* MBProgressHUD.m in Sources */,
+				0A5761F11AFB9D890006B544 /* LayoutConstraint.swift in Sources */,
+				0A5761F21AFB9D890006B544 /* EmojiLikeCollectionViewCell.swift in Sources */,
+				0A5761F31AFB9D890006B544 /* FirstPageViewController.swift in Sources */,
+				0A5761F41AFB9D890006B544 /* Utils.swift in Sources */,
+				0A5761F51AFB9D890006B544 /* SnapKit.swift in Sources */,
+				0A5761F61AFB9D890006B544 /* CameraCollectionViewCell.swift in Sources */,
+				0A5761F71AFB9D890006B544 /* ChooseUsernameViewController.swift in Sources */,
+				0A5761F81AFB9D890006B544 /* ConstraintItem.swift in Sources */,
+				0A5761F91AFB9D890006B544 /* Constants.swift in Sources */,
+				0A5761FA1AFB9D890006B544 /* PleekViewController.swift in Sources */,
+				0A5761FB1AFB9D890006B544 /* TutoVideoViewController.swift in Sources */,
+				0A5761FC1AFB9D890006B544 /* PikiUserTableViewCell.swift in Sources */,
+				0A5761FD1AFB9D890006B544 /* PleekManager.swift in Sources */,
+				0A5761FE1AFB9D890006B544 /* AddFriendsFirstViewController.swift in Sources */,
+				0A5761FF1AFB9D890006B544 /* SearchUserTableViewCell.swift in Sources */,
+				0A5762001AFB9D890006B544 /* TakePhotoViewController.swift in Sources */,
+				0A5762011AFB9D890006B544 /* ConstraintRelation.swift in Sources */,
+				0A5762021AFB9D890006B544 /* VerificationCodePhoneViewController.swift in Sources */,
+				0A5762031AFB9D890006B544 /* MemCollectionViewCell.swift in Sources */,
+				0A5762041AFB9D890006B544 /* ConstraintDescription.swift in Sources */,
+				0A5762051AFB9D890006B544 /* NewReactViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E7665E2A19E5A3AB003DAAF8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -933,7 +1531,7 @@
 /* Begin PBXTargetDependency section */
 		E7665E4519E5A3AB003DAAF8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E7665E2D19E5A3AB003DAAF8 /* Peekee */;
+			target = E7665E2D19E5A3AB003DAAF8 /* pleek-prod */;
 			targetProxy = E7665E4419E5A3AB003DAAF8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -976,6 +1574,122 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0A5761D01AFB9D850006B544 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-beta";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-beta.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Piki",
+				);
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0A5761D11AFB9D850006B544 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-beta";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-beta.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Piki",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		0A5762431AFB9D890006B544 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-dev.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Piki",
+				);
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0A5762441AFB9D890006B544 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-dev.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
+					"$(PROJECT_DIR)/Piki",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
 		E74C1DF81A56F609002F86CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1019,7 +1733,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-prod";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1028,7 +1742,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = Piki/Info.plist;
+				INFOPLIST_FILE = "Piki/pleek-prod.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1105,7 +1819,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-prod";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1114,7 +1828,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = Piki/Info.plist;
+				INFOPLIST_FILE = "Piki/pleek-prod.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1150,6 +1864,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0A5761CF1AFB9D850006B544 /* Build configuration list for PBXNativeTarget "pleek-beta" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A5761D01AFB9D850006B544 /* Release */,
+				0A5761D11AFB9D850006B544 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A5762421AFB9D890006B544 /* Build configuration list for PBXNativeTarget "pleek-dev" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A5762431AFB9D890006B544 /* Release */,
+				0A5762441AFB9D890006B544 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E7665E2919E5A3AA003DAAF8 /* Build configuration list for PBXProject "Peekee" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1159,7 +1891,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "Peekee" */ = {
+		E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "pleek-prod" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E7665E4F19E5A3AB003DAAF8 /* Release */,
