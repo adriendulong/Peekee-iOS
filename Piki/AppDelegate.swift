@@ -11,11 +11,6 @@ import UIKit
 import Fabric
 import Crashlytics
 
-func LocalizedString(string: String) -> String {
-    return NSLocalizedString(string, comment: string)
-}
-
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerDelegate {
 

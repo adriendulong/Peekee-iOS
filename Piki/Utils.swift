@@ -17,6 +17,10 @@ import MobileCoreServices
 //    case lightGrey: UIColor = UIColor(white: 250/255, alpha: 1.0)
 //}
 
+func LocalizedString(string: String) -> String {
+    return NSLocalizedString(string, comment: string)
+}
+
 class Utils {
     
     //URL Share App
