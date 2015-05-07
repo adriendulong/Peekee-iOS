@@ -20,7 +20,8 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
     var labelTapToReply:UILabel!
     var isRecording:Bool = false
     var grantAccessView:UIView!
-    
+    var heightConstraint: Constraint = Constraint()
+    var bottomConstraint: Constraint = Constraint()
     
     func loadCell(){
         
@@ -29,8 +30,7 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
         previewCameraView = UIView(frame: self.contentView.frame)
         contentView.addSubview(previewCameraView)
         
-        
-        textViewOverPhoto = UITextView(frame: CGRect(x: 15, y: self.contentView.frame.height - 50, width: self.contentView.frame.width - 20, height: self.contentView.frame.height))
+        textViewOverPhoto = UITextView(frame: CGRect(x: 8, y: self.contentView.frame.height - 50, width: self.contentView.frame.width - 16, height: self.contentView.frame.height))
         textViewOverPhoto.font = UIFont(name: "BanzaiBros", size: 30.0)
         textViewOverPhoto.textColor = UIColor.whiteColor()
         textViewOverPhoto.backgroundColor = UIColor.clearColor()
@@ -43,8 +43,22 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
         textViewOverPhoto.autocorrectionType = UITextAutocorrectionType.No
         textViewOverPhoto.keyboardAppearance = UIKeyboardAppearance.Dark
         textViewOverPhoto.returnKeyType = UIReturnKeyType.Send
-        self.reloadPositionTextView()
+        textViewOverPhoto.textContainerInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        textViewOverPhoto.textContainer.lineFragmentPadding = 0.0
+        textViewOverPhoto.textContainer.layoutManager?.usesFontLeading = false
+        textViewOverPhoto.scrollEnabled = true
+        
+        
         contentView.addSubview(textViewOverPhoto)
+        
+        textViewOverPhoto.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(self.contentView.snp_leading).offset(8)
+            make.trailing.equalTo(self.contentView.snp_trailing).offset(-8)
+            self.bottomConstraint = make.bottom.equalTo(self.contentView.snp_bottom).offset(-8).constraint
+            self.heightConstraint = make.height.equalTo(30.0).constraint
+        }
+        
+        self.reloadPositionTextView()
         
         memeImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: contentView.frame.width, height: contentView.frame.height))
         memeImageView.hidden = true
@@ -102,56 +116,30 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        
-        
-        if text == "\n"{
-            //self.delegate!.postTextReact()
+        if text == "\n" {
+          
             return false
-        }
-        
-        
-        
-        
-        var textEntered:NSString = textView.text as NSString
-        textEntered = textEntered.stringByReplacingCharactersInRange(range, withString: text)
-        
-
-
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
-            textView.frame = CGRect(x: 15, y: self.contentView.frame.height - (self.getNbLines(textView, string: textEntered) * (textView.font.lineHeight + 5)) - 5, width: self.contentView.frame.width - 20, height: self.contentView.frame.height)
-        }) { (finished) -> Void in
-            
         }
         
         return true
     }
     
-    func getNbLines(textView : UITextView, string : NSString) -> CGFloat{
-        var textEntered:NSString = string
-        let textAttributes:[String:AnyObject] = [NSFontAttributeName: textView.font]
-        
-        var textWidth:CGFloat = CGRectGetWidth(UIEdgeInsetsInsetRect(textView.frame, textView.textContainerInset))
-        textWidth = textWidth - 2.0 * textView.textContainer.lineFragmentPadding
-        
-        let boundingRect:CGRect = textEntered.boundingRectWithSize(CGSizeMake(textWidth, 0),
-            options: NSStringDrawingOptions.UsesLineFragmentOrigin,
-            attributes: [NSFontAttributeName: textView.font],
-            context: nil)
-        
-        let nbLines = CGRectGetHeight(boundingRect) / textView.font.lineHeight
-        
-        return nbLines
+    func textViewDidChange(textView: UITextView) {
+        self.reloadPositionTextView()
     }
     
-    
-    func reloadPositionTextView(){
+    func reloadPositionTextView() {
+        let sizeThatFitsTextView = self.textViewOverPhoto.sizeThatFits(CGSizeMake(self.textViewOverPhoto.frame.width, CGFloat(MAXFLOAT)))
         
-        
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
-            self.textViewOverPhoto.frame = CGRect(x: 15, y: self.contentView.frame.height - (self.getNbLines(self.textViewOverPhoto, string: self.textViewOverPhoto.text) * (self.textViewOverPhoto.font.lineHeight + 5)) - 5, width: self.contentView.frame.width - 20, height: self.contentView.frame.height)
-            }) { (finished) -> Void in
-                
+        self.heightConstraint.uninstall()
+        self.textViewOverPhoto.snp_makeConstraints { (make) -> Void in
+            self.heightConstraint = make.height.equalTo(sizeThatFitsTextView.height).constraint
         }
+        self.textViewOverPhoto.setContentOffset(CGPointZero, animated: false);
+
+        UIView.animateWithDuration(0.2, animations: { () -> Void in
+            self.contentView.setNeedsLayout()
+        }, completion: nil)
     }
     
     func startRecording(length : Double){

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A0458CF1AF8C2A300BC779E /* NewPleekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewPleekViewController.swift */; };
+		0A0458CF1AF8C2A300BC779E /* NewReactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */; };
 		0ADBF0FC1AF7A76600684E79 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F01AF7A76600684E79 /* Constraint.swift */; };
 		0ADBF0FD1AF7A76600684E79 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */; };
 		0ADBF0FE1AF7A76600684E79 /* ConstraintDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F21AF7A76600684E79 /* ConstraintDescription.swift */; };
@@ -122,7 +122,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0A0458CE1AF8C2A300BC779E /* NewPleekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewPleekViewController.swift; sourceTree = "<group>"; };
+		0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewReactViewController.swift; sourceTree = "<group>"; };
 		0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.debug.xcconfig"; sourceTree = "<group>"; };
 		0ADBF0F01AF7A76600684E79 /* Constraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintAttributes.swift; sourceTree = "<group>"; };
@@ -309,7 +309,7 @@
 			isa = PBXGroup;
 			children = (
 				E7CD3F431A44657800F38FB4 /* ListRecipientsViewController.swift */,
-				0A0458CE1AF8C2A300BC779E /* NewPleekViewController.swift */,
+				0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */,
 				0AF32C951AF9FC760058B32C /* PleekViewController.swift */,
 			);
 			name = Controllers;
@@ -723,7 +723,7 @@
 		E7665E2619E5A3AA003DAAF8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = PikiChat;
 				TargetAttributes = {
 					E7665E2D19E5A3AB003DAAF8 = {
@@ -916,7 +916,7 @@
 				E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */,
 				E7AB74831A9BC37700EEA0D8 /* MemCollectionViewCell.swift in Sources */,
 				0ADBF0FE1AF7A76600684E79 /* ConstraintDescription.swift in Sources */,
-				0A0458CF1AF8C2A300BC779E /* NewPleekViewController.swift in Sources */,
+				0A0458CF1AF8C2A300BC779E /* NewReactViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1007,6 +1007,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

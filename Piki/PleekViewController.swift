@@ -19,9 +19,9 @@ protocol PleekControllerProtocol {
     func updatePikis()
 }
 
-class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, PBJVisionDelegate, UIActionSheetDelegate, NewPleekViewControllerDelegate, ReactManagerDelegate {
+class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, PBJVisionDelegate, UIActionSheetDelegate, NewReactViewControllerDelegate, ReactManagerDelegate {
     
-    var newPleekViewcontroller: NewPleekViewController?
+    var newReactViewcontroller: NewReactViewController?
     
     var collectionView: UICollectionView?
     var mainPhotoView : UIView?
@@ -192,12 +192,32 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         backImageView.contentMode = UIViewContentMode.Center
         topBarView.addSubview(backImageView)
         
-        let usernameLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 150, height: 40))
+        let colorShareButton:UIView = UIView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
+        colorShareButton.backgroundColor = Utils().primaryColorDark
+        topBarView.addSubview(colorShareButton)
+        
+        backShareButton = UIImageView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
+        backShareButton!.contentMode = UIViewContentMode.Center
+        backShareButton!.hidden = true
+        backShareButton!.alpha = 0.5
+        topBarView.addSubview(backShareButton!)
+        
+//        let usernameLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 150, height: 40))
+        let usernameLabel:UILabel = UILabel(frame: CGRectZero)
         usernameLabel.center = CGPoint(x: self.view.frame.width/2, y: 25)
         usernameLabel.textAlignment = NSTextAlignment.Center
         usernameLabel.font = UIFont(name: Utils().customFontSemiBold, size: 18)
         usernameLabel.textColor = UIColor.whiteColor()
         topBarView.addSubview(usernameLabel)
+        
+        usernameLabel.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(backLeftView.snp_trailing)
+            make.trailing.equalTo(colorShareButton.snp_leading)
+            make.top.equalTo(topBarView.snp_top).offset(8)
+            make.bottom.equalTo(topBarView.snp_centerY)
+        }
+        
+        
         if self.mainPiki!["user"] != nil {
             
             var user = self.mainPiki!["user"] as! PFUser
@@ -213,14 +233,23 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
         }
         
-        let recipientsNumberLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 150, height: 30))
+//        let recipientsNumberLabel:UILabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.view.frame.width - 150, height: 30))
+        let recipientsNumberLabel:UILabel = UILabel(frame: CGRectZero)
         recipientsNumberLabel.center = CGPoint(x: self.view.frame.width/2, y: 45)
         recipientsNumberLabel.textAlignment = NSTextAlignment.Center
-        recipientsNumberLabel.font = UIFont(name: Utils().customFontSemiBold, size: 14)
+        recipientsNumberLabel.font = UIFont(name: Utils().customFontSemiBold, size: 13)
         recipientsNumberLabel.textColor = Utils().statusBarColor
         topBarView.addSubview(recipientsNumberLabel)
+        
+        recipientsNumberLabel.snp_makeConstraints { (make) -> Void in
+            make.leading.equalTo(backLeftView.snp_trailing)
+            make.trailing.equalTo(colorShareButton.snp_leading)
+            make.top.equalTo(topBarView.snp_centerY)
+            make.bottom.equalTo(topBarView.snp_bottom).offset(-8)
+        }
+        
         if isPublicPleek {
-            recipientsNumberLabel.text = "Public"
+            recipientsNumberLabel.text = "PUBLIC"
         }
         else{
             if recipients != nil{
@@ -233,20 +262,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         }
         
         
-        println(recipientsNumberLabel.font)
         
-        
-        
-        
-        let colorShareButton:UIView = UIView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
-        colorShareButton.backgroundColor = Utils().primaryColorDark
-        topBarView.addSubview(colorShareButton)
-        
-        backShareButton = UIImageView(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
-        backShareButton!.contentMode = UIViewContentMode.Center
-        backShareButton!.hidden = true
-        backShareButton!.alpha = 0.5
-        topBarView.addSubview(backShareButton!)
         
         
         let shareButton:UIButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
@@ -258,13 +274,10 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         //Collection View Layout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top:0, left: 0, bottom: 0, right: 0)
-        
         layout.minimumInteritemSpacing = 1
         layout.minimumLineSpacing = 1
-        
         layout.itemSize = CGSize(width: UIScreen.mainScreen().bounds.width/2 - 0.5, height: UIScreen.mainScreen().bounds.width/2 - 0.5)
-    println(CGSize(width: UIScreen.mainScreen().bounds.width/2 - 0.5, height: UIScreen.mainScreen().bounds.width/2 - 0.5))
-        println(CGRect(x: 0, y: 60, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 60))
+
         collectionView = UICollectionView(frame: CGRect(x: 0, y: 60, width: UIScreen.mainScreen().bounds.width, height: UIScreen.mainScreen().bounds.height - 60) , collectionViewLayout: layout)
         //collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collectionView!.dataSource = self
@@ -3161,13 +3174,13 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
         buildMenu(keyboardSize)
-        self.newPleekViewcontroller?.getLastMem()
+        self.newReactViewcontroller?.getLastMem()
         self.collectionView!.frame = CGRect(x: self.collectionView!.frame.origin.x, y: self.collectionView!.frame.origin.y, width: self.collectionView!.frame.width, height: self.collectionView!.frame.height+self.view.frame.width)
         self.collectionView!.scrollEnabled = false
    
         self.constraint?.uninstall()
         
-        self.newPleekViewcontroller!.view.snp_makeConstraints { (make) -> Void in
+        self.newReactViewcontroller!.view.snp_makeConstraints { (make) -> Void in
             self.constraint = make.height.equalTo(95.0 + 60.0 + keyboardSize.height).constraint
         }
 
@@ -3175,7 +3188,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             self.collectionView!.transform = CGAffineTransformMakeTranslation(0, -self.view.frame.width - 2)
             
             if !Utils().hasSeenVideoTuto(){
-                self.newPleekViewcontroller?.tutorialView.alpha = 1.0
+                self.newReactViewcontroller?.tutorialView.alpha = 1.0
             }
             
             //AppearOverlays
@@ -3185,7 +3198,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     func keyboardWillHide(notification : NSNotification){
-        self.newPleekViewcontroller?.keyboardButton.selected = false
+        self.newReactViewcontroller?.keyboardButton.selected = false
         let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         quitAnimation(animationDuration)
     }
@@ -3257,7 +3270,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     func buildMenu(keyboardSize : CGSize){
 //        NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
 
-        if self.newPleekViewcontroller == nil {
+        if self.newReactViewcontroller == nil {
             var differencePositionOverlay:CGFloat = 80 + self.view.frame.width/2
             
             //Overlays
@@ -3277,17 +3290,17 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             var tapGestureSecondOverlay:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("quitCameraMenu"))
             secondOverlayCameraView!.addGestureRecognizer(tapGestureSecondOverlay)
             
-            self.newPleekViewcontroller = NewPleekViewController()
+            self.newReactViewcontroller = NewReactViewController()
             var vision:PBJVision = PBJVision.sharedInstance()
-            vision.delegate = self.newPleekViewcontroller!
+            vision.delegate = self.newReactViewcontroller!
 
-            self.newPleekViewcontroller?.delegate = self
-            self.newPleekViewcontroller?.pleekManager.isPublicPleek = self.isPublicPleek
-            self.newPleekViewcontroller?.pleekManager.mainPleek = self.mainPiki
-            self.newPleekViewcontroller?.pleekManager.delegate = self
-            self.view.addSubview(self.newPleekViewcontroller!.view)
+            self.newReactViewcontroller?.delegate = self
+            self.newReactViewcontroller?.pleekManager.isPublicPleek = self.isPublicPleek
+            self.newReactViewcontroller?.pleekManager.mainPleek = self.mainPiki
+            self.newReactViewcontroller?.pleekManager.delegate = self
+            self.view.addSubview(self.newReactViewcontroller!.view)
             
-            self.newPleekViewcontroller!.view.snp_makeConstraints { (make) -> Void in
+            self.newReactViewcontroller!.view.snp_makeConstraints { (make) -> Void in
                 make.leading.equalTo(self.view.snp_leading)
                 make.trailing.equalTo(self.view.snp_trailing)
                 self.constraint = make.height.equalTo(95.0 + 60.0 + keyboardSize.height).constraint
@@ -3295,7 +3308,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             }
         }
         else {
-            self.newPleekViewcontroller?.view.hidden = false
+            self.newReactViewcontroller?.view.hidden = false
         }
     }
     
@@ -3328,14 +3341,14 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
 
             UIView.animateWithDuration(duration, animations: { () -> Void in
                 self.collectionView!.transform = CGAffineTransformIdentity
-                self.newPleekViewcontroller?.view.transform = CGAffineTransformIdentity
-                self.newPleekViewcontroller?.view.alpha = 0
+                self.newReactViewcontroller?.view.transform = CGAffineTransformIdentity
+                self.newReactViewcontroller?.view.alpha = 0
 
             }) { (finished) -> Void in
 
                 self.collectionView!.frame = CGRect(x: self.collectionView!.frame.origin.x, y: self.collectionView!.frame.origin.y, width: self.collectionView!.frame.width, height: self.view.frame.height - 60)
-                self.newPleekViewcontroller?.view.hidden = true
-                self.newPleekViewcontroller?.view.alpha = 1
+                self.newReactViewcontroller?.view.hidden = true
+                self.newReactViewcontroller?.view.alpha = 1
                 self.isLeavingCameraMode = false
                 self.collectionView!.scrollEnabled = true
 

@@ -115,20 +115,20 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
         
         
         topBarView = UIView(frame: CGRect(x: 0, y: -40, width: self.view.frame.size.width, height: 40))
-        topBarView!.backgroundColor = UIColor(red: 67.0/255.0, green: 68.0/255.0, blue: 71.0/255.0, alpha: 1.0)
-        topBarView!.alpha = 0.80
+        topBarView!.backgroundColor = UIColor.blackColor()
+        topBarView!.alpha = 0.9
         topBarView!.hidden = true
         
-        let bezel = UIView(frame: CGRectZero)
-        bezel.backgroundColor = UIColor.Theme.BezelDarkColor
-        topBarView?.addSubview(bezel)
-        
-        bezel.snp_makeConstraints { (make) -> Void in
-            make.leading.equalTo(self.topBarView!.snp_leading)
-            make.trailing.equalTo(self.topBarView!.snp_trailing)
-            make.top.equalTo(self.topBarView!.snp_top)
-            make.height.equalTo(Dimensions.BezelHeight)
-        }
+//        let bezel = UIView(frame: CGRectZero)
+//        bezel.backgroundColor = UIColor.Theme.BezelDarkColor
+//        topBarView?.addSubview(bezel)
+//        
+//        bezel.snp_makeConstraints { (make) -> Void in
+//            make.leading.equalTo(self.topBarView!.snp_leading)
+//            make.trailing.equalTo(self.topBarView!.snp_trailing)
+//            make.top.equalTo(self.topBarView!.snp_top)
+//            make.height.equalTo(Dimensions.BezelHeight)
+//        }
         
         self.view.addSubview(topBarView!)
         

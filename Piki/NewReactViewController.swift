@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol NewPleekViewControllerDelegate {
+protocol NewReactViewControllerDelegate {
     func dismissKeyboard()
     func presentKeyboard()
     func startRecording()
@@ -18,13 +18,13 @@ protocol NewPleekViewControllerDelegate {
     func toName3(indexPath: NSIndexPath)
 }
 
-class NewPleekViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PBJVisionDelegate {
+class NewReactViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, PBJVisionDelegate {
     
     var collectionShown:Int = 0
     var memeCellSelected:Int?
     var textCellSelected:Int?
     var mems : Array<PFObject> = Array<PFObject>()
-    var delegate: NewPleekViewControllerDelegate? = nil
+    var delegate: NewReactViewControllerDelegate? = nil
     var isTakingPhoto: Bool = false
     var isRecording: Bool = false
     var imageFile:PFFile?
