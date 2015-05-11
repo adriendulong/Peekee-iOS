@@ -23,6 +23,11 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
     var moreInfosButton:UIButton!
     var spinnerView:LLARingSpinnerView!
     
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "scrollStarted", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "startNewVideo", object: nil)
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -117,15 +122,8 @@ class MainPeekeeCollectionViewCell : UICollectionViewCell{
         }
         
     }
-
     
-    
-    
-    func moreInfos(){
-        
+    func moreInfos() {
         NSNotificationCenter.defaultCenter().postNotificationName("moreInfosPleek", object: nil, userInfo: nil)
-        
     }
-    
-    
 }

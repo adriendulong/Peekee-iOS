@@ -20,8 +20,8 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
     var labelTapToReply:UILabel!
     var isRecording:Bool = false
     var grantAccessView:UIView!
-    var heightConstraint: Constraint = Constraint()
-    var bottomConstraint: Constraint = Constraint()
+    weak var heightConstraint: Constraint? = Constraint()
+    weak var bottomConstraint: Constraint? = Constraint()
     
     func loadCell(){
         
@@ -131,7 +131,7 @@ class CameraCollectionViewCell: UICollectionViewCell, UITextViewDelegate {
     func reloadPositionTextView() {
         let sizeThatFitsTextView = self.textViewOverPhoto.sizeThatFits(CGSizeMake(self.textViewOverPhoto.frame.width, CGFloat(MAXFLOAT)))
         
-        self.heightConstraint.uninstall()
+        self.heightConstraint?.uninstall()
         self.textViewOverPhoto.snp_makeConstraints { (make) -> Void in
             self.heightConstraint = make.height.equalTo(sizeThatFitsTextView.height).constraint
         }

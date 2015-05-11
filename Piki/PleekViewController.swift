@@ -19,7 +19,7 @@ protocol PleekControllerProtocol {
     func updatePikis()
 }
 
-class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, PBJVisionDelegate, UIActionSheetDelegate, NewReactViewControllerDelegate, ReactManagerDelegate {
+class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate, NewReactViewControllerDelegate, ReactManagerDelegate {
     
     var newReactViewcontroller: NewReactViewController?
     
@@ -37,7 +37,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     var photoTaken:UIImage?
     var statusBarHidden:Bool = false
     var cameraText:UITextField?
-    var constraint: Constraint?
+    weak var constraint: Constraint?
     
     var previewCameraCell:ReactsCollectionViewCell?
     
@@ -131,6 +131,12 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     var reactToShare:PFObject?
     var tutorialView:UIView?
     var reactToRemove:AnyObject?
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "moreInfosPleek", object: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -261,10 +267,6 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
         }
         
-        
-        
-        
-        
         let shareButton:UIButton = UIButton(frame: CGRect(x: self.view.frame.size.width - 60, y: 0, width: 60, height: 60))
         shareButton.setImage(UIImage(named: "share_icon"), forState: UIControlState.Normal)
         shareButton.addTarget(self, action: Selector("buildViewSharePopUp"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -340,17 +342,15 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         PBJVision.sharedInstance().stopPreview()
     }
     
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
     override func viewDidAppear(animated: Bool) {
-        
-        
-        
         let betterPath = NSBundle.mainBundle().pathForResource("like_react_sound", ofType: "wav")
         let betterURL = NSURL(fileURLWithPath: betterPath!)
         likeSoundPlayer = AVAudioPlayer(contentsOfURL: betterURL, error: nil)
         likeSoundPlayer!.prepareToPlay()
-        
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -975,7 +975,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     // Quit button
     func quit(){
-        
+        println("quit \(self)")
         //removeAudio()
         NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
         Utils().setPikiAsView(self.mainPiki!)
@@ -1043,10 +1043,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     * VIDEOS MANIP
     */
     
-    func startVideoOnVisibleCells(){
-        
-        
-        
+    func startVideoOnVisibleCells() {
         dispatch_async(dispatch_get_global_queue(0, 0), { ()->() in
             for cell in self.collectionView!.visibleCells() as! Array<ReactsCollectionViewCell> {
                 
@@ -1140,10 +1137,6 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                 
             }
         })
-        
-        
-        
-        
     }
     
     
@@ -1766,25 +1759,30 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
         }
         else {
-            var actionSheet:UIActionSheet = UIActionSheet(title: LocalizedString("More"),
-                delegate: self,
-                cancelButtonTitle: LocalizedString("Cancel"),
-                destructiveButtonTitle: nil,
-                otherButtonTitles: LocalizedString("Show Recipients"), LocalizedString("Report this Pleek"))
-            actionSheet.showInView(self.view)
+            if isPublicPleek {
+                UIActionSheet(title: LocalizedString("More"),
+                    delegate: self,
+                    cancelButtonTitle: LocalizedString("Cancel"),
+                    destructiveButtonTitle: nil,
+                    otherButtonTitles: LocalizedString("Report this Pleek")).showInView(self.view)
+            } else {
+                UIActionSheet(title: LocalizedString("More"),
+                    delegate: self,
+                    cancelButtonTitle: LocalizedString("Cancel"),
+                    destructiveButtonTitle: nil,
+                    otherButtonTitles: LocalizedString("Show Recipients"), LocalizedString("Report this Pleek")).showInView(self.view)
+            }
             println("UIAlertController can NOT be instantiated")
-            
-            //make and use a UIAlertView
         }
         
         
     }
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        switch buttonIndex{
-        case 1:
+        switch actionSheet.buttonTitleAtIndex(buttonIndex){
+        case LocalizedString("Show Recipients"):
             self.performSegueWithIdentifier("showRecipients", sender: self)
-        case 2:
+        case LocalizedString("Report this Pleek"):
             PFCloud.callFunctionInBackground("reportPiki ",
                 withParameters: ["pikiId" : self.mainPiki!.objectId!], block: { (result, error) -> Void in
                     if error != nil{
@@ -2920,6 +2918,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
         }
         
+        println(messageController)
         
         self.presentViewController(messageController, animated: true) { () -> Void in
             

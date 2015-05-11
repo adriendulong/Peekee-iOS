@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol NewReactViewControllerDelegate {
+protocol NewReactViewControllerDelegate: class {
     func dismissKeyboard()
     func presentKeyboard()
     func startRecording()
@@ -24,7 +24,7 @@ class NewReactViewController: UIViewController, UICollectionViewDataSource, UICo
     var memeCellSelected:Int?
     var textCellSelected:Int?
     var mems : Array<PFObject> = Array<PFObject>()
-    var delegate: NewReactViewControllerDelegate? = nil
+    weak var delegate: NewReactViewControllerDelegate? = nil
     var isTakingPhoto: Bool = false
     var isRecording: Bool = false
     var imageFile:PFFile?

@@ -9,7 +9,7 @@
 import AVFoundation
 
 
-protocol ReactsCellProtocol {
+protocol ReactsCellProtocol: class {
     func removeReact(react : AnyObject, isReport : Bool)
     func shareOneVsOne(react : PFObject)
     
@@ -20,7 +20,7 @@ protocol ReactsCellProtocol {
 
 class ReactsCollectionViewCell : UICollectionViewCell {
     
-    var delegate:ReactsCellProtocol? = nil
+    weak var delegate:ReactsCellProtocol? = nil
     
     var mainViewCell:UIView!
     var flipView:UIView!
@@ -80,6 +80,13 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     
     var spinnerView:LLARingSpinnerView!
     var spinnerViewAddFriend:LLARingSpinnerView!
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "startNewVideo", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "scrollStarted", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "startFlip", object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: "updateLikeInfos", object: nil)
+    }
     
     func loadCell(){
         

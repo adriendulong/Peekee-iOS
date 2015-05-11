@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ReactManagerDelegate {
+protocol ReactManagerDelegate: class {
     func quitCameraMenu()
     func addPhotoToCollectionView(modifyImage: UIImage, randomNumber: Int)
     func addVideoToCollectionView(photo: UIImage, path: String, randomNumber: Int)
@@ -19,9 +19,13 @@ protocol ReactManagerDelegate {
 
 class PleekManager {
     
-    var delegate: ReactManagerDelegate?
+    deinit {
+        println("PleekManager deinited  \(self)")
+    }
+    
+    weak var delegate: ReactManagerDelegate?
     var isPublicPleek: Bool = false
-    var mainPleek: PFObject?
+    weak var mainPleek: PFObject?
     //MARK: PARSE UPLOAD PHOTO
     func uploadNewReact(imageData:NSData){
         
