@@ -259,13 +259,6 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             
             return nil
         }
-        
-        
-        
-        
-        
-        
-        
     }
     
     

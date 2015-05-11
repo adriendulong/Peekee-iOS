@@ -217,6 +217,21 @@
 		0A57623D1AFB9D890006B544 /* better.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5D1A4EA25100B69A2A /* better.wav */; };
 		0A57623E1AFB9D890006B544 /* DiallingCodes.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7DF60A51A10C73F000CCD52 /* DiallingCodes.plist */; };
 		0A57623F1AFB9D890006B544 /* like_react_sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = E770B9B31AEA33EE00781A0A /* like_react_sound.wav */; };
+		0AA0155D1B00C2E3003DCE3D /* Pleek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0155C1B00C2E3003DCE3D /* Pleek.swift */; };
+		0AA015601B00C5CF003DCE3D /* Pleek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0155C1B00C2E3003DCE3D /* Pleek.swift */; };
+		0AA015611B00C5D4003DCE3D /* Pleek.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0155C1B00C2E3003DCE3D /* Pleek.swift */; };
+		0AA015FC1B011495003DCE3D /* InboxNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015F81B011495003DCE3D /* InboxNavigationBar.swift */; };
+		0AA015FD1B011495003DCE3D /* InboxNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015F81B011495003DCE3D /* InboxNavigationBar.swift */; };
+		0AA015FE1B011495003DCE3D /* InboxNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015F81B011495003DCE3D /* InboxNavigationBar.swift */; };
+		0AA015FF1B011495003DCE3D /* InboxNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015F91B011495003DCE3D /* InboxNavigationController.swift */; };
+		0AA016001B011495003DCE3D /* InboxNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015F91B011495003DCE3D /* InboxNavigationController.swift */; };
+		0AA016011B011495003DCE3D /* InboxNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015F91B011495003DCE3D /* InboxNavigationController.swift */; };
+		0AA016021B011495003DCE3D /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015FA1B011495003DCE3D /* InboxViewController.swift */; };
+		0AA016031B011495003DCE3D /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015FA1B011495003DCE3D /* InboxViewController.swift */; };
+		0AA016041B011495003DCE3D /* InboxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015FA1B011495003DCE3D /* InboxViewController.swift */; };
+		0AA016051B011495003DCE3D /* InboxCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015FB1B011495003DCE3D /* InboxCell.swift */; };
+		0AA016061B011495003DCE3D /* InboxCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015FB1B011495003DCE3D /* InboxCell.swift */; };
+		0AA016071B011495003DCE3D /* InboxCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA015FB1B011495003DCE3D /* InboxCell.swift */; };
 		0ACD2B991AFB9B2100CADDEE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
 		0ADBF0FC1AF7A76600684E79 /* Constraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F01AF7A76600684E79 /* Constraint.swift */; };
 		0ADBF0FD1AF7A76600684E79 /* ConstraintAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */; };
@@ -337,6 +352,11 @@
 		0A5761D21AFB9D850006B544 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A5762451AFB9D890006B544 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.debug.xcconfig"; sourceTree = "<group>"; };
+		0AA0155C1B00C2E3003DCE3D /* Pleek.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pleek.swift; sourceTree = "<group>"; };
+		0AA015F81B011495003DCE3D /* InboxNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxNavigationBar.swift; sourceTree = "<group>"; };
+		0AA015F91B011495003DCE3D /* InboxNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxNavigationController.swift; sourceTree = "<group>"; };
+		0AA015FA1B011495003DCE3D /* InboxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxViewController.swift; sourceTree = "<group>"; };
+		0AA015FB1B011495003DCE3D /* InboxCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxCell.swift; sourceTree = "<group>"; };
 		0ACD2B981AFB9B2100CADDEE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0ADBF0F01AF7A76600684E79 /* Constraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintAttributes.swift; sourceTree = "<group>"; };
@@ -581,6 +601,33 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
+		0AA0155E1B00C2E7003DCE3D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0AA0155F1B00C2ED003DCE3D /* Parse */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		0AA0155F1B00C2ED003DCE3D /* Parse */ = {
+			isa = PBXGroup;
+			children = (
+				0AA0155C1B00C2E3003DCE3D /* Pleek.swift */,
+			);
+			name = Parse;
+			sourceTree = "<group>";
+		};
+		0AA015621B00CD08003DCE3D /* Inbox */ = {
+			isa = PBXGroup;
+			children = (
+				0AA015F81B011495003DCE3D /* InboxNavigationBar.swift */,
+				0AA015F91B011495003DCE3D /* InboxNavigationController.swift */,
+				0AA015FA1B011495003DCE3D /* InboxViewController.swift */,
+				0AA015FB1B011495003DCE3D /* InboxCell.swift */,
+			);
+			name = Inbox;
+			sourceTree = "<group>";
+		};
 		0ADBF0EF1AF7A76600684E79 /* SnapKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -723,6 +770,8 @@
 		E7665E3019E5A3AB003DAAF8 /* Piki */ = {
 			isa = PBXGroup;
 			children = (
+				0AA015621B00CD08003DCE3D /* Inbox */,
+				0AA0155E1B00C2E7003DCE3D /* Models */,
 				E7DF60871A10C584000CCD52 /* Vendors */,
 				0ADBF1131AF8B0B200684E79 /* Others */,
 				0ADBF1121AF8B09F00684E79 /* Views */,
@@ -1352,6 +1401,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AA015611B00C5D4003DCE3D /* Pleek.swift in Sources */,
 				0A5761641AFB9D850006B544 /* EdgeInsets.swift in Sources */,
 				0A5761651AFB9D850006B544 /* ContactPhoneTableViewCell.swift in Sources */,
 				0A5761661AFB9D850006B544 /* MainViewController.swift in Sources */,
@@ -1361,14 +1411,17 @@
 				0A57616A1AFB9D850006B544 /* SearchFriendsViewController.swift in Sources */,
 				0A57616B1AFB9D850006B544 /* PhoneNumberViewController.swift in Sources */,
 				0A57616C1AFB9D850006B544 /* ConstraintAttributes.swift in Sources */,
+				0AA016061B011495003DCE3D /* InboxCell.swift in Sources */,
 				0A57616D1AFB9D850006B544 /* AppDelegate.swift in Sources */,
 				0A57616E1AFB9D850006B544 /* ConstraintMaker.swift in Sources */,
 				0A57616F1AFB9D850006B544 /* Debugging.swift in Sources */,
 				0A5761701AFB9D850006B544 /* AcountsAdviceViewController.swift in Sources */,
+				0AA016001B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				0A5761711AFB9D850006B544 /* EditUsernameViewController.swift in Sources */,
 				0A5761721AFB9D850006B544 /* WalkthroughViewController.swift in Sources */,
 				0A5761731AFB9D850006B544 /* CountriesTableViewController.swift in Sources */,
 				0A5761741AFB9D850006B544 /* ListRecipientsViewController.swift in Sources */,
+				0AA016031B011495003DCE3D /* InboxViewController.swift in Sources */,
 				0A5761751AFB9D850006B544 /* ReactsCollectionViewCell.swift in Sources */,
 				0A5761761AFB9D850006B544 /* UIColor+PleekColor.swift in Sources */,
 				0A5761771AFB9D850006B544 /* MuteAllViewController.swift in Sources */,
@@ -1383,6 +1436,7 @@
 				0A5761801AFB9D850006B544 /* FirstPageViewController.swift in Sources */,
 				0A5761811AFB9D850006B544 /* Utils.swift in Sources */,
 				0A5761821AFB9D850006B544 /* SnapKit.swift in Sources */,
+				0AA015FD1B011495003DCE3D /* InboxNavigationBar.swift in Sources */,
 				0A5761831AFB9D850006B544 /* CameraCollectionViewCell.swift in Sources */,
 				0A5761841AFB9D850006B544 /* ChooseUsernameViewController.swift in Sources */,
 				0A5761851AFB9D850006B544 /* ConstraintItem.swift in Sources */,
@@ -1406,6 +1460,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AA015601B00C5CF003DCE3D /* Pleek.swift in Sources */,
 				0A5761D71AFB9D890006B544 /* EdgeInsets.swift in Sources */,
 				0A5761D81AFB9D890006B544 /* ContactPhoneTableViewCell.swift in Sources */,
 				0A5761D91AFB9D890006B544 /* MainViewController.swift in Sources */,
@@ -1415,14 +1470,17 @@
 				0A5761DD1AFB9D890006B544 /* SearchFriendsViewController.swift in Sources */,
 				0A5761DE1AFB9D890006B544 /* PhoneNumberViewController.swift in Sources */,
 				0A5761DF1AFB9D890006B544 /* ConstraintAttributes.swift in Sources */,
+				0AA016071B011495003DCE3D /* InboxCell.swift in Sources */,
 				0A5761E01AFB9D890006B544 /* AppDelegate.swift in Sources */,
 				0A5761E11AFB9D890006B544 /* ConstraintMaker.swift in Sources */,
 				0A5761E21AFB9D890006B544 /* Debugging.swift in Sources */,
 				0A5761E31AFB9D890006B544 /* AcountsAdviceViewController.swift in Sources */,
+				0AA016011B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				0A5761E41AFB9D890006B544 /* EditUsernameViewController.swift in Sources */,
 				0A5761E51AFB9D890006B544 /* WalkthroughViewController.swift in Sources */,
 				0A5761E61AFB9D890006B544 /* CountriesTableViewController.swift in Sources */,
 				0A5761E71AFB9D890006B544 /* ListRecipientsViewController.swift in Sources */,
+				0AA016041B011495003DCE3D /* InboxViewController.swift in Sources */,
 				0A5761E81AFB9D890006B544 /* ReactsCollectionViewCell.swift in Sources */,
 				0A5761E91AFB9D890006B544 /* UIColor+PleekColor.swift in Sources */,
 				0A5761EA1AFB9D890006B544 /* MuteAllViewController.swift in Sources */,
@@ -1437,6 +1495,7 @@
 				0A5761F31AFB9D890006B544 /* FirstPageViewController.swift in Sources */,
 				0A5761F41AFB9D890006B544 /* Utils.swift in Sources */,
 				0A5761F51AFB9D890006B544 /* SnapKit.swift in Sources */,
+				0AA015FE1B011495003DCE3D /* InboxNavigationBar.swift in Sources */,
 				0A5761F61AFB9D890006B544 /* CameraCollectionViewCell.swift in Sources */,
 				0A5761F71AFB9D890006B544 /* ChooseUsernameViewController.swift in Sources */,
 				0A5761F81AFB9D890006B544 /* ConstraintItem.swift in Sources */,
@@ -1470,14 +1529,17 @@
 				E7DF60861A10B6E8000CCD52 /* PhoneNumberViewController.swift in Sources */,
 				0ADBF0FD1AF7A76600684E79 /* ConstraintAttributes.swift in Sources */,
 				E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */,
+				0AA016051B011495003DCE3D /* InboxCell.swift in Sources */,
 				0ADBF1001AF7A76600684E79 /* ConstraintMaker.swift in Sources */,
 				0ADBF1021AF7A76600684E79 /* Debugging.swift in Sources */,
 				E796CB281A5D27F100034F8B /* AcountsAdviceViewController.swift in Sources */,
 				E720345F1A6A759C0058175B /* EditUsernameViewController.swift in Sources */,
+				0AA015FF1B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				E727F7021A5B0D3500BB8B0B /* WalkthroughViewController.swift in Sources */,
 				E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */,
 				E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */,
 				E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */,
+				0AA016021B011495003DCE3D /* InboxViewController.swift in Sources */,
 				0ADBF1111AF8AED900684E79 /* UIColor+PleekColor.swift in Sources */,
 				E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */,
 				E7665E5D19E6E6E9003DAAF8 /* RBResizer.swift in Sources */,
@@ -1492,6 +1554,7 @@
 				E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */,
 				0ADBF1051AF7A76600684E79 /* SnapKit.swift in Sources */,
 				E7A46CFA1AE6531600CC2609 /* CameraCollectionViewCell.swift in Sources */,
+				0AA015FC1B011495003DCE3D /* InboxNavigationBar.swift in Sources */,
 				E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */,
 				0ADBF0FF1AF7A76600684E79 /* ConstraintItem.swift in Sources */,
 				0ADBF1161AF8B10800684E79 /* Constants.swift in Sources */,
@@ -1499,6 +1562,7 @@
 				E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */,
 				0ADBF10E1AF8ACC700684E79 /* PikiUserTableViewCell.swift in Sources */,
 				0AF32C941AF927ED0058B32C /* PleekManager.swift in Sources */,
+				0AA0155D1B00C2E3003DCE3D /* Pleek.swift in Sources */,
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
 				0ADBF10C1AF8ACB300684E79 /* SearchUserTableViewCell.swift in Sources */,
 				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,

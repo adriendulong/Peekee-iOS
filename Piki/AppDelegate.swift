@@ -62,10 +62,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             self.window!.rootViewController = phoneViewController*/
 
 
-            var storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
-            //self.window?.makeKeyAndVisible()
-            self.window!.rootViewController = phoneViewController
+//            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
+//            //self.window?.makeKeyAndVisible()
+//            self.window!.rootViewController = phoneViewController
+            
+            let vc = InboxViewController()
+            vc.view.backgroundColor = UIColor.redColor()
+            
+            let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
+            root.view.frame = self.window!.frame
+            
+            root.viewControllers = [vc]
+            self.window?.rootViewController = root
 
         }
         else if PFUser.currentUser()!["userInfos"] == nil{
@@ -76,6 +85,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             self.window!.rootViewController = phoneViewController
 
         }
+        
+        let vc = InboxViewController()
+        vc.view.backgroundColor = UIColor.redColor()
+        
+        let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
+        root.view.frame = self.window!.frame
+        
+        root.viewControllers = [vc]
+        self.window?.rootViewController = root
 
 
         _messengerUrlHandler = FBSDKMessengerURLHandler()
@@ -125,30 +143,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         Mixpanel.sharedInstance().people.set(["Last App Open" : NSDate()])
 
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        if PFUser.currentUser() != nil {
-            var navController:UINavigationController = window!.rootViewController as! UINavigationController
-            var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
-            //rootController.updatePikis()
-
-
-            Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
-
-
-                //If no name and launched the app 10 times : ask for his name
-                Utils().nbVisitAppIncrement()
-                if Utils().isMomentForRealName(){
-                    if PFUser.currentUser()!["name"] == nil{
-                        rootController.setName()
-                    }
-                    else if count(PFUser.currentUser()!["name"] as! String) == 0{
-                        rootController.setName()
-                    }
-
-                }
-
-                return nil
-            })
-        }
+//        if PFUser.currentUser() != nil {
+//            var navController:UINavigationController = window!.rootViewController as! UINavigationController
+//            var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
+//            //rootController.updatePikis()
+//
+//
+//            Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
+//
+//
+//                //If no name and launched the app 10 times : ask for his name
+//                Utils().nbVisitAppIncrement()
+//                if Utils().isMomentForRealName(){
+//                    if PFUser.currentUser()!["name"] == nil{
+//                        rootController.setName()
+//                    }
+//                    else if count(PFUser.currentUser()!["name"] as! String) == 0{
+//                        rootController.setName()
+//                    }
+//
+//                }
+//
+//                return nil
+//            })
+//        }
 
     }
 
