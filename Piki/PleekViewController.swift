@@ -1731,7 +1731,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     func morePeekee(){
         
         
-        if objc_getClass("UIAlertController") != nil {
+        if Utils().iOS8 {
             
             var alert = UIAlertController(title: NSLocalizedString("More", comment : "More"),
                 message: NSLocalizedString("More actions for this Pleek", comment : "More actions for this Pleek"), preferredStyle: UIAlertControllerStyle.ActionSheet)
@@ -1766,11 +1766,11 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
         }
         else {
-            var actionSheet:UIActionSheet = UIActionSheet(title: NSLocalizedString("More", comment : "More"),
+            var actionSheet:UIActionSheet = UIActionSheet(title: LocalizedString("More"),
                 delegate: self,
                 cancelButtonTitle: LocalizedString("Cancel"),
                 destructiveButtonTitle: nil,
-                otherButtonTitles: LocalizedString("Show Recipients"), NSLocalizedString("Report this Pleek", comment : "Report this Pleek"))
+                otherButtonTitles: LocalizedString("Show Recipients"), LocalizedString("Report this Pleek"))
             actionSheet.showInView(self.view)
             println("UIAlertController can NOT be instantiated")
             
@@ -1788,12 +1788,12 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             PFCloud.callFunctionInBackground("reportPiki ",
                 withParameters: ["pikiId" : self.mainPiki!.objectId!], block: { (result, error) -> Void in
                     if error != nil{
-                        let alert = UIAlertView(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Problem while reporting this Pleek. Please try again later", comment :"Problem while reporting this Pleek. Please try again later") ,
+                        let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while reporting this Pleek. Please try again later") ,
                             delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
                     else{
-                        let alert = UIAlertView(title: LocalizedString("Confirmation"), message: NSLocalizedString( "This Pleek has been reported. Thank you.", comment :  "This Pleek has been reported. Thank you."),
+                        let alert = UIAlertView(title: LocalizedString("Confirmation"), message: LocalizedString( "This Pleek has been reported. Thank you."),
                             delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                         alert.show()
                     }
