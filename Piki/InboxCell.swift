@@ -250,10 +250,14 @@ class InboxCell: UITableViewCell {
 extension InboxCell {
     
     func configureFor(pleek: PFObject) {
-        let user = pleek["user"] as! PFUser
-        self.fromLabel.attributedText = self.attributedTextForFrom(user["name"] as! String)
         
-        if (pleek["isPublic"] as! Bool) {
+        println(pleek)
+        
+        let user = pleek["user"] as! PFUser
+        println(user)
+        self.fromLabel.attributedText = self.attributedTextForFrom(user["username"] as! String)
+        
+        if (pleek["isPublic"] as? Bool ?? false) {
             self.toXFriendsLabel.text = "PUBLIC"
             self.toXFriendsImageView.image = UIImage(named: "public-icon")
         } else {
@@ -261,8 +265,8 @@ extension InboxCell {
             self.toXFriendsImageView.image = UIImage(named: "private-icon")
         }
         
-        self.repliesLabel.text = String(format: NSLocalizedString("%@ REPLIES", comment: ""), self.formatNumber(pleek["nbReaction"] as! Int))
-        self.newRepliesLabel.text = String(format: NSLocalizedString("%@ NEW", comment: ""), self.formatNumber(pleek["nbReaction"] as! Int))
+        self.repliesLabel.text = String(format: NSLocalizedString("%@ REPLIES", comment: ""), self.formatNumber(pleek["nbReaction"] as? Int ?? 0))
+        self.newRepliesLabel.text = String(format: NSLocalizedString("%@ NEW", comment: ""), self.formatNumber(pleek["nbReaction"] as? Int ?? 0))
     }
     
     func configureFor(name: String, indexPath: NSIndexPath) {
