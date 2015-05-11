@@ -968,11 +968,16 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
     
     func problemSendingPiki(error : NSError){
         MBProgressHUD.hideHUDForView(self.view, animated: true)
-        var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
-            message: NSLocalizedString("We had a problem while sending your Pleek, please try again later", comment : "We had a problem while sending your Pleek, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
         
+        if Utils().iOS8 {
+            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"),
+                message: LocalizedString("We had a problem while sending your Pleek, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else {
+            UIAlertView(title: LocalizedString("Error"), message: LocalizedString("We had a problem while sending your Pleek, please try again later"), delegate: nil, cancelButtonTitle: LocalizedString("Ok")).show()
+        }
     }
     
     

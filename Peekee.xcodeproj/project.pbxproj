@@ -728,9 +728,9 @@
 				0ADBF1121AF8B09F00684E79 /* Views */,
 				0ADBF1071AF8AC6200684E79 /* Search */,
 				E704D5A61A6A5BFA008BE745 /* Settings */,
-				E7CD3F421A44207300F38FB4 /* Piki */,
+				E7CD3F421A44207300F38FB4 /* Pleek */,
 				E7BA499B1A2F548200DB1C96 /* Menu */,
-				E7C3B32B1A2485660059F78D /* New Piki */,
+				E7C3B32B1A2485660059F78D /* New Pleek */,
 				E78548C61A1B5336001F83FC /* Resources */,
 				E7DF60841A10B6CE000CCD52 /* SignUp */,
 				E7665E5319E6C409003DAAF8 /* Utility */,
@@ -890,23 +890,23 @@
 			name = Cell;
 			sourceTree = "<group>";
 		};
-		E7C3B32B1A2485660059F78D /* New Piki */ = {
+		E7C3B32B1A2485660059F78D /* New Pleek */ = {
 			isa = PBXGroup;
 			children = (
 				E758CF261A1C988800318F45 /* TakePhotoViewController.swift */,
 				E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */,
 			);
-			name = "New Piki";
+			name = "New Pleek";
 			sourceTree = "<group>";
 		};
-		E7CD3F421A44207300F38FB4 /* Piki */ = {
+		E7CD3F421A44207300F38FB4 /* Pleek */ = {
 			isa = PBXGroup;
 			children = (
 				0AF32C921AF927D80058B32C /* Models */,
 				0A0458CD1AF8C26A00BC779E /* Controllers */,
 				0A0458CC1AF8C25700BC779E /* Cells */,
 			);
-			name = Piki;
+			name = Pleek;
 			sourceTree = "<group>";
 		};
 		E7DF60841A10B6CE000CCD52 /* SignUp */ = {

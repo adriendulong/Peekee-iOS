@@ -216,6 +216,20 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
         self.navigationController!.popViewControllerAnimated(true)
     }
     
+    // MARK : Error Handler
+    
+    func problemConnectingWithPhoneNumberErrorHandler() {
+        if Utils().iOS8 {
+            var alert = UIAlertController(title:LocalizedString("Error") ,
+                message: LocalizedString("We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else {
+            UIAlertView(title: LocalizedString("Error"), message: LocalizedString("We had a problem while connecting you with your phone number, please try again later"), delegate: nil, cancelButtonTitle: LocalizedString("Ok")).show()
+        }
+    }
+    
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
 
@@ -265,14 +279,9 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                             if error != nil {
                                 println("Error : \(error!.localizedDescription)")
-                                var alert = UIAlertController(title:NSLocalizedString("Error", comment : "Error") ,
-                                    message: NSLocalizedString("We had a problem while connecting you with your phone number, please try again later", comment : "We had a problem while connecting you with your phone number, please try again later"), preferredStyle: UIAlertControllerStyle.Alert)
-                                alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
-                                self.presentViewController(alert, animated: true, completion: nil)
+                                self.problemConnectingWithPhoneNumberErrorHandler()
                             }
                             else{
-                                
-                                
                                 //Associate the user in Mixpanel
                                 Mixpanel.sharedInstance().identify(PFUser.currentUser()!.objectId)
                                 if self.phoneNumber != nil{

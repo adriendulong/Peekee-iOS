@@ -345,6 +345,31 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
     @IBAction func chooseCountry(sender: AnyObject) {
     }
     
+    // MARK: Error Handler
+    
+    func confirmationCodeErrorHandler() {
+        if Utils().iOS8 {
+            var alert = UIAlertController(title: LocalizedString("Error"),
+                message: LocalizedString("Error while getting the confirmation code. Please try again later."), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else {
+            UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Error while getting the confirmation code. Please try again later."), delegate: nil, cancelButtonTitle: LocalizedString("Ok")).show()
+        }
+    }
+    
+    func wrongPhoneNumberErrorHandler() {
+        if Utils().iOS8 {
+            var alert = UIAlertController(title: LocalizedString("Error"), message: LocalizedString("Sorry but your phone number is not valid") , preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else {
+            UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Sorry but your phone number is not valid"), delegate: nil, cancelButtonTitle: LocalizedString("Ok")).show()
+        }
+    }
+    
     
     //Verify Phone Number and send verification code
     func sendConfCode(sender : UIButton){
@@ -376,10 +401,7 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                             PFCloud.callFunctionInBackground("confirmPhoneNumber", withParameters: ["phoneNumber":phoneNumber], block: { (object, error) -> Void in
                                 MBProgressHUD.hideHUDForView(self.view, animated: true)
                                 if error != nil {
-                                    var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error") ,
-                                        message: NSLocalizedString("Error while getting the confirmation code. Please try again later.", comment : "Error while getting the confirmation code. Please try again later."), preferredStyle: UIAlertControllerStyle.Alert)
-                                    alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
-                                    self.presentViewController(alert, animated: true, completion: nil)
+                                    self.confirmationCodeErrorHandler()
                                 }
                                 else{
                                     var result:AnyObject = object![0]
@@ -389,20 +411,14 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                                     if let username: String? = result["username"] as? String{
                                         self.username = username
                                     }
-                                    
-                                    
-                                    
-                                    
+
                                     self.verificationCode = "\(code)"
                                     
                                     if self.verificationCode != nil {
                                         self.performSegueWithIdentifier("verificationCode", sender: self)
                                     }
                                     else{
-                                        var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error") ,
-                                            message: NSLocalizedString("Error while getting the confirmation code. Please try again later.", comment : "Error while getting the confirmation code. Please try again later."), preferredStyle: UIAlertControllerStyle.Alert)
-                                        alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
-                                        self.presentViewController(alert, animated: true, completion: nil)
+                                        self.confirmationCodeErrorHandler()
                                     }
                                     
                                 }
@@ -411,27 +427,17 @@ class PhoneNumberViewController: UIViewController, UITextFieldDelegate, Countrie
                         else{
                             println("Problem formating the nb")
                         }
-                        
-                        
-                        
                     }
                     else{
                         //Not valid number
-                        var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: NSLocalizedString("Sorry but your phone number is not valid", comment : "Sorry but your phone number is not valid") , preferredStyle: UIAlertControllerStyle.Alert)
-                        alert.addAction(UIAlertAction(title: LocalizedString("Ok"), style: UIAlertActionStyle.Default, handler: nil))
-                        self.presentViewController(alert, animated: true, completion: nil)
+                        self.wrongPhoneNumberErrorHandler()
                     }
                 }
                 else{
                     println("Problem parsing the phone number")
                 }
             }
-            
-            
         }
-        
-        
-        
     }
     
     

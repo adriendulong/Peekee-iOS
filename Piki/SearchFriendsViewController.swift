@@ -1248,10 +1248,6 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
             })
             break
         }
-        
-        
-        
-        
     }
     
     func removeUnlockContactsBar(){
@@ -1332,8 +1328,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     self.checkContactsOnPiki()
                 }
                 else if (error != nil) {
-                    let alert = UIAlertView(title: "Error", message: error.localizedDescription,
-                        delegate: nil, cancelButtonTitle: "OK")
+                    let alert = UIAlertView(title: LocalizedString("Error"), message: error.localizedDescription,
+                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
                     alert.show()
                 }
         })
@@ -1558,19 +1554,18 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
         case .OrderedSame, .OrderedDescending:
-            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: "To find friends on Pleek you need to grant access to your contacts. Do you want to go to the settings to give access to your contacts?", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("No", comment : "No"), style: UIAlertActionStyle.Cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Yes", comment : "Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
+            var alert = UIAlertController(title: LocalizedString("Error"), message: LocalizedString("To find friends on Pleek you need to grant access to your contacts. Do you want to go to the settings to give access to your contacts?"), preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: LocalizedString("No"), style: UIAlertActionStyle.Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: LocalizedString("Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 
                 self.openSettings()
             }))
             self.presentViewController(alert, animated: true, completion: nil)
+            break
         case .OrderedAscending:
-            var alert = UIAlertController(title: NSLocalizedString("Error", comment : "Error"), message: "To find friends on Pleek you need to grant access to your contacts. Please go to Settings > Confidentiality > Contacts and allow it for Pleek", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment : "Ok"), style: UIAlertActionStyle.Cancel, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            UIAlertView(title: LocalizedString("Error"), message: LocalizedString("To find friends on Pleek you need to grant access to your contacts. Please go to Settings > Confidentiality > Contacts and allow it for Pleek"), delegate: nil, cancelButtonTitle: LocalizedString("Ok")).show()
+            break
         }
-        
     }
     
     

@@ -230,6 +230,9 @@
 "Score : %d" = "Score : %d";
 "10 000 SELECTED" = "10 000 SELECTED";
 "CODE" = "CODE";
+"To find friends on Pleek you need to grant access to your contacts. Please go to Settings > Confidentiality > Contacts and allow it for Pleek" = "To find friends on Pleek you need to grant access to your contacts. Please go to Settings > Confidentiality > Contacts and allow it for Pleek";
+"To find friends on Pleek you need to grant access to your contacts. Do you want to go to the settings to give access to your contacts?" = "To find friends on Pleek you need to grant access to your contacts. Do you want to go to the settings to give access to your contacts?";
+
 
 
 // Already Trad in lower/uppercase version
