@@ -10,8 +10,8 @@ import UIKit
 
 class InboxCell: UITableViewCell {
     
-    lazy var pleekImageView: UIImageView = {
-        let pleekIM = UIImageView()
+    lazy var pleekImageView: PFImageView = {
+        let pleekIM = PFImageView()
         
         self.contentView.addSubview(pleekIM)
         
@@ -22,7 +22,7 @@ class InboxCell: UITableViewCell {
             make.height.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0 * 2.0 - 2)
         })
         
-        pleekIM.backgroundColor = UIColor.whiteColor()
+        pleekIM.backgroundColor = UIColor.Theme.PleekBackGroundColor
         pleekIM.layer.shadowColor = UIColor.blackColor().CGColor
         pleekIM.layer.shadowOffset = CGSizeMake(0, 0)
         pleekIM.layer.shadowOpacity = 0.2
@@ -31,6 +31,22 @@ class InboxCell: UITableViewCell {
         pleekIM.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
         
         return pleekIM
+    } ()
+    
+    lazy var pleekImageSpinner: LLARingSpinnerView = {
+        let pleekIS = LLARingSpinnerView()
+        pleekIS.hidesWhenStopped = true
+        pleekIS.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        pleekIS.tintColor = UIColor.Theme.PleekSpinnerColor
+        pleekIS.lineWidth = Dimensions.SpinnerLineWidth
+        self.pleekImageView.addSubview(pleekIS)
+        
+        pleekIS.snp_makeConstraints({ (make) -> Void in
+            make.center.equalTo(self.pleekImageView.snp_center)
+            make.size.equalTo(30)
+        })
+        
+        return pleekIS
     } ()
     
     lazy var contentReactView: UIView = {
@@ -45,7 +61,7 @@ class InboxCell: UITableViewCell {
             make.height.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0 * 2.0 - 2)
         })
         
-        contentRV.backgroundColor = UIColor.whiteColor()
+        contentRV.backgroundColor = UIColor.Theme.PleekBackGroundColor
         contentRV.layer.shadowColor = UIColor.blackColor().CGColor
         contentRV.layer.shadowOffset = CGSizeMake(0, 0)
         contentRV.layer.shadowOpacity = 0.2
@@ -56,9 +72,9 @@ class InboxCell: UITableViewCell {
         return contentRV
     } ()
     
-    lazy var reactTopImageView: UIImageView = {
-        let reacTopIV = UIImageView()
-        reacTopIV.backgroundColor = UIColor.whiteColor()
+    lazy var reactTopImageView: PFImageView = {
+        let reacTopIV = PFImageView()
+        reacTopIV.backgroundColor = UIColor.Theme.PleekBackGroundColor
 
         self.contentReactView.addSubview(reacTopIV)
         
@@ -72,9 +88,26 @@ class InboxCell: UITableViewCell {
         return reacTopIV
     } ()
     
-    lazy var reactBottomImageView: UIImageView = {
-        let reactBottomIV = UIImageView()
-        reactBottomIV.backgroundColor = UIColor.whiteColor()
+    lazy var reactTopImageSpinner: LLARingSpinnerView = {
+        let reactTIS = LLARingSpinnerView()
+        reactTIS.hidesWhenStopped = true
+        reactTIS.lineWidth = Dimensions.SpinnerLineWidth
+        reactTIS.tintColor = UIColor.Theme.PleekSpinnerColor
+        reactTIS.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        
+        self.reactTopImageView.addSubview(reactTIS)
+        
+        reactTIS.snp_makeConstraints({ (make) -> Void in
+            make.center.equalTo(self.reactTopImageView.snp_center)
+            make.size.equalTo(18)
+        })
+        
+        return reactTIS
+    } ()
+    
+    lazy var reactBottomImageView: PFImageView = {
+        let reactBottomIV = PFImageView()
+        reactBottomIV.backgroundColor = UIColor.Theme.PleekBackGroundColor
         
         self.contentReactView.addSubview(reactBottomIV)
         
@@ -88,17 +121,78 @@ class InboxCell: UITableViewCell {
         return reactBottomIV
     } ()
     
+    lazy var reactBottomImageSpinner: LLARingSpinnerView = {
+        let reactBIS = LLARingSpinnerView()
+        reactBIS.hidesWhenStopped = true
+        reactBIS.lineWidth = Dimensions.SpinnerLineWidth
+        reactBIS.tintColor = UIColor.Theme.PleekSpinnerColor
+        reactBIS.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        
+        self.reactBottomImageView.addSubview(reactBIS)
+        
+        reactBIS.snp_makeConstraints({ (make) -> Void in
+            make.center.equalTo(self.reactBottomImageView.snp_center)
+            make.size.equalTo(18)
+        })
+        
+        return reactBIS
+    } ()
+    
+    var noReactViewTopConstraint: Constraint = Constraint()
+    
+    lazy var noReactView: UIView = {
+        let noReactV = UIView()
+        noReactV.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        
+        self.contentReactView.addSubview(noReactV)
+        
+        noReactV.snp_makeConstraints { (make) -> Void in
+            self.noReactViewTopConstraint = make.top.equalTo(self.reactBottomImageView.snp_top).constraint
+            make.leading.equalTo(self.contentReactView.snp_leading)
+            make.trailing.equalTo(self.contentReactView.snp_trailing)
+            make.bottom.equalTo(self.contentReactView.snp_bottom)
+        }
+        
+        let replyLabel = UILabel()
+        replyLabel.text = LocalizedString("REPLY")
+        replyLabel.textAlignment = .Center
+        replyLabel.font = UIFont(name: "Montserrat-Regular", size: 12)!
+        replyLabel.textColor = UIColor.Theme.DarkTextColor
+        replyLabel.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        
+        noReactV.addSubview(replyLabel)
+        
+        replyLabel.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(noReactV.snp_centerX)
+            make.top.equalTo(noReactV.snp_centerY).offset(8)
+        }
+        
+        let replyImageView = UIImageView()
+        replyImageView.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        replyImageView.image = UIImage(named: "reply-cta")
+        
+        noReactV.addSubview(replyImageView)
+        
+        replyImageView.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(noReactV.snp_centerX)
+            make.bottom.equalTo(noReactV.snp_centerY).offset(-8)
+            make.width.equalTo(28.5)
+            make.height.equalTo(24.5)
+        }
+        
+        return noReactV
+    } ()
+    
     lazy var fromLabel: UILabel = {
         let fromL = UILabel(frame: CGRectZero)
         
         self.contentView.addSubview(fromL)
         
-        fromL.snp_makeConstraints({ (make) -> Void in
+        fromL.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(self.contentView.snp_top).offset(25)
             make.height.equalTo(18)
             make.leading.equalTo(self.contentView.snp_leading).offset(20)
-            //make.width.equalTo(185.0)
-        })
+        }
         
         return fromL
     } ()
@@ -110,12 +204,12 @@ class InboxCell: UITableViewCell {
         
         self.contentView.addSubview(certifiedAIV)
         
-        certifiedAIV.snp_makeConstraints({ (make) -> Void in
+        certifiedAIV.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(24)
             make.height.equalTo(25.5)
             make.leading.equalTo(self.fromLabel.snp_trailing).offset(8)
             make.centerY.equalTo(self.fromLabel.snp_centerY)
-        })
+        }
         
         return certifiedAIV
     } ()
@@ -127,11 +221,11 @@ class InboxCell: UITableViewCell {
         toXFL.textColor = UIColor(red: 193.0/255.0, green: 204.0/255.0, blue: 217.0/255.0, alpha: 1.0)
         self.contentView.addSubview(toXFL)
         
-        toXFL.snp_makeConstraints({ (make) -> Void in
+        toXFL.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(self.contentView.snp_top).offset(25)
             make.height.equalTo(18)
             make.trailing.equalTo(self.contentView.snp_trailing).offset(-20)
-        })
+        }
         
         return toXFL
     } ()
@@ -143,13 +237,31 @@ class InboxCell: UITableViewCell {
         
         self.contentView.addSubview(toXFIV)
         
-        toXFIV.snp_makeConstraints({ (make) -> Void in
+        toXFIV.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(12)
             make.trailing.equalTo(self.toXFriendsLabel.snp_leading).offset(-7)
             make.centerY.equalTo(self.toXFriendsLabel.snp_centerY)
-        })
+        }
         
         return toXFIV
+    } ()
+    
+    lazy var contentRepliesView: UIView = {
+        let contentRV = UIView()
+        contentRV.clipsToBounds = true
+        
+        self.contentView.addSubview(contentRV)
+        
+        contentRV.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(self.pleekImageView.snp_bottom)
+            make.bottom.equalTo(self.contentView.snp_bottom)
+            make.leading.equalTo(self.contentView.snp_leading)
+            make.trailing.equalTo(self.contentView.snp_trailing)
+        }
+        
+        contentRV.backgroundColor = UIColor.whiteColor()
+        
+        return contentRV
     } ()
     
     lazy var repliesImageView: UIImageView = {
@@ -158,14 +270,14 @@ class InboxCell: UITableViewCell {
         repliesIV.image = UIImage(named: "repliescount-icon")
         
         
-        self.contentView.addSubview(repliesIV)
+        self.contentRepliesView.addSubview(repliesIV)
         
-        repliesIV.snp_makeConstraints({ (make) -> Void in
+        repliesIV.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(13.5)
             make.height.equalTo(11.5)
-            make.leading.equalTo(self.contentView.snp_leading).offset(20)
-            make.top.equalTo(self.pleekImageView.snp_bottom).offset(17)
-        })
+            make.leading.equalTo(self.contentRepliesView.snp_leading).offset(20)
+            make.top.equalTo(self.contentRepliesView.snp_top).offset(17)
+        }
         
         return repliesIV
     } ()
@@ -175,13 +287,13 @@ class InboxCell: UITableViewCell {
         repliesL.backgroundColor = UIColor.clearColor()
         repliesL.font = UIFont(name: "ProximaNova-Semibold", size: 12.0)
         repliesL.textColor = UIColor(red: 26.0/255.0, green: 27.0/255.0, blue: 31.0/255.0, alpha: 1.0)
-        self.contentView.addSubview(repliesL)
+        self.contentRepliesView.addSubview(repliesL)
         
-        repliesL.snp_makeConstraints({ (make) -> Void in
+        repliesL.snp_makeConstraints { (make) -> Void in
             make.height.equalTo(13)
             make.centerY.equalTo(self.repliesImageView.snp_centerY)
             make.leading.equalTo(self.repliesImageView.snp_trailing).offset(8)
-        })
+        }
         
         return repliesL
     } ()
@@ -191,12 +303,12 @@ class InboxCell: UITableViewCell {
         newRIV.backgroundColor = UIColor.clearColor()
         newRIV.image = UIImage(named: "next-icon")
         
-        self.contentView.addSubview(newRIV)
+        self.contentRepliesView.addSubview(newRIV)
         
         newRIV.snp_makeConstraints({ (make) -> Void in
             make.width.equalTo(6.5)
             make.height.equalTo(11)
-            make.trailing.equalTo(self.contentView.snp_trailing).offset(-20)
+            make.trailing.equalTo(self.contentRepliesView.snp_trailing).offset(-20)
             make.top.equalTo(self.pleekImageView.snp_bottom).offset(17)
         })
         
@@ -208,7 +320,7 @@ class InboxCell: UITableViewCell {
         newRL.backgroundColor = UIColor.clearColor()
         newRL.font = UIFont(name: "ProximaNova-Semibold", size: 12.0)
         newRL.textColor = UIColor(red: 26.0/255.0, green: 27.0/255.0, blue: 31.0/255.0, alpha: 1.0)
-        self.contentView.addSubview(newRL)
+        self.contentRepliesView.addSubview(newRL)
         
         newRL.snp_makeConstraints({ (make) -> Void in
             make.height.equalTo(13)
@@ -223,70 +335,117 @@ class InboxCell: UITableViewCell {
         let cellSV = UIView()
         cellSV.backgroundColor = UIColor(white: 234.0/255.0, alpha: 1.0)
        
-        self.contentView.addSubview(cellSV)
+        self.contentRepliesView.addSubview(cellSV)
         
         cellSV.snp_makeConstraints({ (make) -> Void in
             make.height.equalTo(1)
-            make.bottom.equalTo(self.contentView.snp_bottom)
-            make.leading.equalTo(self.contentView.snp_leading)
-            make.trailing.equalTo(self.contentView.snp_trailing)
+            make.bottom.equalTo(self.contentRepliesView.snp_bottom)
+            make.leading.equalTo(self.contentRepliesView.snp_leading)
+            make.trailing.equalTo(self.contentRepliesView.snp_trailing)
         })
         
         return cellSV
     } ()
     
     func setupView() {
-        let v1 = self.pleekImageView
+        let v1 = self.pleekImageSpinner
         let v2 = self.contentReactView
-        let v3 = self.reactTopImageView
-        let v4 = self.reactBottomImageView
+        let v3 = self.reactTopImageSpinner
+        let v4 = self.reactBottomImageSpinner
         let v5 = self.certifiedAccountImageView
+        let v7 = self.contentRepliesView
         let v6 = self.cellSeparatorView
+        self.contentReactView.bringSubviewToFront(self.noReactView)
+        self.contentView.bringSubviewToFront(self.contentReactView)
         self.contentView.bringSubviewToFront(self.pleekImageView)
+        
+        self.clipsToBounds = true
+        self.selectionStyle = .None
     }
 }
 
-
 extension InboxCell {
     
-    func configureFor(pleek: PFObject) {
+    func configureFor(pleek: Pleek) {
         
-        println(pleek)
+        self.setupView()
         
-        let user = pleek["user"] as! PFUser
-        println(user)
-        self.fromLabel.attributedText = self.attributedTextForFrom(user["username"] as! String)
+        self.fromLabel.attributedText = self.attributedTextForFrom(pleek.user.username ?? "")
         
-        if (pleek["isPublic"] as? Bool ?? false) {
+        if pleek.isPublic {
             self.toXFriendsLabel.text = "PUBLIC"
             self.toXFriendsImageView.image = UIImage(named: "public-icon")
         } else {
-            self.toXFriendsLabel.text = String(format: NSLocalizedString("TO %d FRIENDS", comment: ""), 5)
+            self.toXFriendsLabel.text = String(format: LocalizedString("TO %d FRIENDS"), pleek.getRealRecipientsNumber())
             self.toXFriendsImageView.image = UIImage(named: "private-icon")
         }
         
-        self.repliesLabel.text = String(format: NSLocalizedString("%@ REPLIES", comment: ""), self.formatNumber(pleek["nbReaction"] as? Int ?? 0))
-        self.newRepliesLabel.text = String(format: NSLocalizedString("%@ NEW", comment: ""), self.formatNumber(pleek["nbReaction"] as? Int ?? 0))
-    }
-    
-    func configureFor(name: String, indexPath: NSIndexPath) {
-        self.fromLabel.attributedText = self.attributedTextForFrom(name)
-
-        if (indexPath.row % 2  == 0) {
-            self.toXFriendsLabel.text = "PUBLIC"
-            self.toXFriendsImageView.image = UIImage(named: "public-icon")
+        if pleek.nbReaction > 0 {
+            self.contentRepliesView.hidden = false
+            self.repliesLabel.text = String(format: LocalizedString("%@ REPLIES"), self.formatNumber(pleek.nbReaction))
+            self.newRepliesLabel.text = String(format: LocalizedString("%@ NEW"), self.formatNumber(pleek.nbReaction))
         } else {
-            self.toXFriendsLabel.text = String(format: NSLocalizedString("TO %d FRIENDS", comment: ""), 5)
-            self.toXFriendsImageView.image = UIImage(named: "private-icon")
+            self.contentRepliesView.hidden = true
         }
         
-        self.repliesLabel.text = String(format: NSLocalizedString("%@ REPLIES", comment: ""), self.formatNumber((indexPath.row + 1) * 3654))
-        self.newRepliesLabel.text = String(format: NSLocalizedString("%@ NEW", comment: ""), self.formatNumber((indexPath.row + 1) * 254))
+        weak var weakSelf = self
+        
+        self.pleekImageView.image = nil
+        self.pleekImageSpinner.hidden = false
+        self.pleekImageSpinner.startAnimating()
+        self.pleekImageView.file = pleek.extraSmallPiki
+        self.pleekImageView.loadInBackground { (image, error) -> Void in
+            weakSelf?.pleekImageSpinner.hidden = true
+        }
+        
+        self.reactTopImageView.image = nil
+        self.reactBottomImageView.image = nil
+        self.noReactView.hidden = true
+        
+        if let react1 = pleek.react1 {
+            self.reactTopImageSpinner.hidden = false
+            self.reactTopImageSpinner.startAnimating()
+            self.reactTopImageView.file = react1
+            self.reactTopImageView.loadInBackground { (image, error) -> Void in
+                weakSelf?.reactTopImageSpinner.hidden = true
+            }
+        }
+        
+        if let react2 = pleek.react2 {
+            self.reactBottomImageSpinner.hidden = false
+            self.reactBottomImageSpinner.startAnimating()
+            self.reactBottomImageView.file = react2
+            self.reactBottomImageView.loadInBackground { (image, error) -> Void in
+                weakSelf?.reactBottomImageSpinner.hidden = true
+            }
+        }
+        
+        self.noReactViewTopConstraint.uninstall()
+        
+        if pleek.react1 == nil {
+            self.noReactView.hidden = false
+            self.noReactView.snp_makeConstraints { (make) -> Void in
+                self.noReactViewTopConstraint = make.top.equalTo(self.contentReactView.snp_top).constraint
+            }
+        } else if pleek.react2 == nil {
+            self.noReactView.hidden = false
+            self.noReactView.snp_makeConstraints { (make) -> Void in
+                self.noReactViewTopConstraint = make.top.equalTo(self.contentReactView.snp_centerY).constraint
+            }
+        }
+        
+        self.contentReactView.setNeedsLayout()
+        
+        if pleek.user.isCertified {
+            self.certifiedAccountImageView.hidden = false
+        } else {
+            self.certifiedAccountImageView.hidden = true
+        }
     }
     
     func attributedTextForFrom(name: String) -> NSAttributedString {
-        let from = NSLocalizedString("FROM", comment: "")
-        let fromWithName = NSLocalizedString("FROM  %@", comment: "")
+        let from = LocalizedString("FROM")
+        let fromWithName = LocalizedString("FROM  %@")
         let finalString = String(format: fromWithName, name)
         
         var string = NSMutableAttributedString(string: finalString)
@@ -309,23 +468,3 @@ extension InboxCell {
         return formatter.stringFromNumber(number)!
     }
 }
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-////        let dd = self.pleekImageView
-//    }
-//
-//    required init(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-////        let dd = self.pleekImageView
-//    }
-//
-//    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-////        let dd = self.pleekImageView
-//    }
-//
-//    override func setSelected(selected: Bool, animated: Bool) {
-//        super.setSelected(selected, animated: animated)
-//
-//        // Configure the view for the selected state
-//    }

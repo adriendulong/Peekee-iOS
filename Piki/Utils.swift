@@ -1907,8 +1907,6 @@ class Utils {
         }
         
         return pleeksHided!
-        
-        
     }
     
     func hidePleek(pleekId : String){

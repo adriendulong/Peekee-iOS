@@ -18,11 +18,11 @@ class InboxNavigationBar: UINavigationBar {
     }
     */
     
-    override func sizeThatFits(size: CGSize) -> CGSize {
-        var size = super.sizeThatFits(size)
-        size.height = 120.0
-        return size
-    }
+//    override func sizeThatFits(size: CGSize) -> CGSize {
+//        var size = super.sizeThatFits(size)
+//        size.height = 120.0
+//        return size
+//    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

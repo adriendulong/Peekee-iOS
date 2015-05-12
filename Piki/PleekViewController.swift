@@ -973,6 +973,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     
+    // TODO: back
     // Quit button
     func quit(){
         println("quit \(self)")
@@ -981,15 +982,15 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         Utils().setPikiAsView(self.mainPiki!)
         
         if self.hasNewReacts{
-            self.delegate!.updateReactsForPiki(self.mainPiki!, updateAll : true)
+//            self.delegate!.updateReactsForPiki(self.mainPiki!, updateAll : true)
         }
         else{
-            self.delegate!.updateReactsForPiki(self.mainPiki!, updateAll : false)
+//            self.delegate!.updateReactsForPiki(self.mainPiki!, updateAll : false)
         }
         
+        self.navigationController?.popToRootViewControllerAnimated(true)
         
-        
-        self.performSegueWithIdentifier("returnToMenu", sender: self)
+//        self.performSegueWithIdentifier("returnToMenu", sender: self)
         
     }
     

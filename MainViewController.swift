@@ -188,11 +188,6 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
         
     }
 
-    
-    
-    
-    
-    
     /*
     * Other
     */
@@ -370,7 +365,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             
             
             
-        }
+    }
         else if segue.identifier == "showVideoTuto"{
             var tutController: TutoVideoViewController = segue.destinationViewController as! TutoVideoViewController
             tutController.delegate = self

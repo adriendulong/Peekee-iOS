@@ -152,10 +152,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         nbLikes.textColor = greyNotSelected
         nbLikes.text = "0"
         likesView.addSubview(nbLikes)
-        
-        
-        
-        
+
         
         let bottomFlipView:UIView = UIView(frame: CGRect(x: 0, y: flipView.frame.height/2, width: flipView.frame.width, height: flipView.frame.height/2))
         bottomFlipView.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 251/255, alpha: 1.0)

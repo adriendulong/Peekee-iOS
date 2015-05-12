@@ -36,7 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         #endif
         
        
-
+        User.registerSubclass()
+        
         Parse.setApplicationId(AppID, clientKey: ClientKey)
         Mixpanel.sharedInstanceWithToken(mixpanelKey)
         
@@ -58,23 +59,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
 
             /*var storyboard = UIStoryboard(name: "Main", bundle: nil)
             var phoneViewController:UIViewController = storyboard.instantiateViewControllerWithIdentifier("waitView") as UIViewController
-            //self.window?.makeKeyAndVisible()
+            self.window?.makeKeyAndVisible()
             self.window!.rootViewController = phoneViewController*/
 
 
-//            var storyboard = UIStoryboard(name: "Main", bundle: nil)
-//            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
-//            //self.window?.makeKeyAndVisible()
-//            self.window!.rootViewController = phoneViewController
+            var storyboard = UIStoryboard(name: "Main", bundle: nil)
+            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
+            //self.window?.makeKeyAndVisible()
+            self.window!.rootViewController = phoneViewController
             
-            let vc = InboxViewController()
-            vc.view.backgroundColor = UIColor.redColor()
-            
-            let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
-            root.view.frame = self.window!.frame
-            
-            root.viewControllers = [vc]
-            self.window?.rootViewController = root
+//            let vc = InboxViewController()
+//            vc.view.backgroundColor = UIColor.redColor()
+//            
+//            let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
+//            root.view.frame = self.window!.frame
+//            
+//            root.viewControllers = [vc]
+//            self.window?.rootViewController = root
 
         }
         else if PFUser.currentUser()!["userInfos"] == nil{
@@ -84,18 +85,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             //self.window?.makeKeyAndVisible()
             self.window!.rootViewController = phoneViewController
 
+        } else {
+            let vc = InboxViewController()
+            vc.view.backgroundColor = UIColor.redColor()
+    
+            let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
+            root.view.frame = self.window!.frame
+    
+            root.viewControllers = [vc]
+            self.window?.rootViewController = root
         }
         
-        let vc = InboxViewController()
-        vc.view.backgroundColor = UIColor.redColor()
-        
-        let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
-        root.view.frame = self.window!.frame
-        
-        root.viewControllers = [vc]
-        self.window?.rootViewController = root
-
-
         _messengerUrlHandler = FBSDKMessengerURLHandler()
         _messengerUrlHandler!.delegate = self
 
@@ -142,7 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         Mixpanel.sharedInstance().timeEvent("Session")
         Mixpanel.sharedInstance().people.set(["Last App Open" : NSDate()])
 
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+//         Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 //        if PFUser.currentUser() != nil {
 //            var navController:UINavigationController = window!.rootViewController as! UINavigationController
 //            var rootController:MainViewController = navController.viewControllers[0] as! MainViewController

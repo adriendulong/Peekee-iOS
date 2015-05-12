@@ -10,98 +10,96 @@ import UIKit
 
 class InboxViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var pleeks: [PFObject] = []
+    var pleeks: [Pleek] = []
     var tableView = UITableView()
+    
     // MARK: Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.frame = self.view.frame
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+
+        super.viewWillAppear(animated)
+        
         self.tableView.registerClass(InboxCell.self, forCellReuseIdentifier: "InboxTableViewCellIdentifier")
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .None
         self.view.addSubview(self.tableView)
-        // Do any additional setup after loading the view.
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        self.tableView.rowHeight = CGRectGetWidth(self.view.frame) / 3.0 * 2.0 + 114.0
         
-        self.getPikis(false)
+        self.tableView.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(self.view.snp_top)
+            make.bottom.equalTo(self.view.snp_bottom)
+            make.leading.equalTo(self.view.snp_leading)
+            make.trailing.equalTo(self.view.snp_trailing)
+        }
+        
+        self.setNeedsStatusBarAppearanceUpdate()
+        
+        weak var weakSelf = self
+        User.currentUser()!.getPleeks(true, completed: { (pleeks, error) -> () in
+            if error != nil {
+                println("Error : \(error!.localizedDescription)")
+            }
+            else {
+                weakSelf?.pleeks = pleeks!
+                weakSelf?.tableView.reloadData()
+            }
+        })
+        
+        self.navigationController?.navigationBarHidden = true
+        
         self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return count(pleeks)
+        return count(self.pleeks)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("InboxTableViewCellIdentifier", forIndexPath: indexPath) as! InboxCell
-        cell.setupView()
-        cell.configureFor(pleeks[indexPath.row])
+        cell.configureFor(self.pleeks[indexPath.row])
         return cell
     }
     
     // MARK: UITableViewDelegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var pleekVC: PleekViewController = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as! PleekViewController
+        pleekVC.mainPiki = self.pleeks[indexPath.row]
         
+        self.navigationController?.pushViewController(pleekVC, animated: true)
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let heigth = CGRectGetWidth(self.view.frame) / 3.0 * 2.0 + 114.0
-        return heigth
-    }
-    
-    func getPikis(withCache: Bool){
+        let pleek = self.pleeks[indexPath.row]
         
-        //Get the list of friends : to get the pleek from them
-        var friendsObjects:Array<PFUser> = Array<PFUser>()
-        Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
-            if task.error == nil{
-                friendsObjects = Utils().getListOfUserObjectFromJoinObject(task.result as! Array<PFObject>)
-            }
-            
-            friendsObjects.append(PFUser(withoutDataWithObjectId: PFUser.currentUser()!.objectId))
-            
-            //Get the pleek of the friends list
-            var requestPiki:PFQuery = PFQuery(className: "Piki")
-            requestPiki.orderByDescending("lastUpdate")
-            requestPiki.includeKey("user")
-            requestPiki.whereKey("user", containedIn: friendsObjects)
-            requestPiki.whereKey("objectId", notContainedIn: Utils().getHidesPleek())
-            
-            if withCache{
-                requestPiki.cachePolicy = PFCachePolicy.CacheThenNetwork
-            }
-            else{
-                requestPiki.cachePolicy = PFCachePolicy.NetworkElseCache
-            }
-            
-            
-            requestPiki.limit = 30
-            
-            requestPiki.findObjectsInBackgroundWithBlock { (pikis : [AnyObject]?, error : NSError?) -> Void in
-                if error != nil{
-                    println("Error : \(error!.localizedDescription)")
-                    
-                }
-                else{
-                    self.pleeks = pikis as! [PFObject]
-                    self.tableView.reloadData()
-                    
-                }
-            }
-            
-            return nil
+        if pleek.nbReaction > 0 {
+            return CGRectGetWidth(self.view.frame) / 3.0 * 2.0 + 114.0
+        } else {
+            return CGRectGetWidth(self.view.frame) / 3.0 * 2.0 + 56.0
         }
     }
+    
+    // MARK: Appearance
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return false
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
+    // MARK: Navigation
+
 }

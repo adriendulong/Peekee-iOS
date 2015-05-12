@@ -3,6 +3,7 @@
 //
 
 #import <Parse/Parse.h>
+#import <Parse/PFObject+Subclass.h>
 #import <Bolts/Bolts.h>
 #import <ParseUI/ParseUI.h> 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>

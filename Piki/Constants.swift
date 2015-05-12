@@ -19,4 +19,10 @@ struct Dimensions {
     static let NewPleekMenuHeight: CGFloat = 95.0
     static let BackgroundBaseTabHeight: CGFloat = 50.0
     static let BezelHeight: CGFloat = 1.0
+    static let SpinnerLineWidth: CGFloat = 2.0
+}
+
+struct Constants {
+    static let LoadPleekLimit: Int = 20
+    static let LoadFriendLimit: Int = 500
 }
