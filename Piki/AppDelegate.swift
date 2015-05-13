@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             let vc = InboxViewController()
             vc.view.backgroundColor = UIColor.redColor()
     
-            let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
+            let root = InboxNavigationController()
             root.view.frame = self.window!.frame
     
             root.viewControllers = [vc]
