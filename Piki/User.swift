@@ -26,15 +26,19 @@ import Foundation
         }
     }
 
-    func getPleeks(withCache: Bool, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
+    func getReceivedPleeks(withCache: Bool, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
         var friendsObjects: [User] = []
         self.getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
             
             if task.error == nil{
                 friendsObjects = self.getListOfUserObjectFromJoinObject(task.result as! [Friend])
             }
+
+            let autoFriend: [User] = friendsObjects.filter({ (user) -> Bool in
+                return (user.objectId! == self.objectId!)
+            })
             
-            friendsObjects.append(self)
+            friendsObjects.removeObject(autoFriend.first!)
             
             var pleeksQuery = Pleek.query()!
             
@@ -57,6 +61,29 @@ import Foundation
             }
             
             return nil
+        }
+    }
+    
+    func getSentPleeks(withCache: Bool, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
+        
+        var pleeksQuery = Pleek.query()!
+        
+        pleeksQuery.orderByDescending("lastUpdate")
+        pleeksQuery.includeKey("user")
+        pleeksQuery.whereKey("user", containedIn: [self])
+        pleeksQuery.whereKey("objectId", notContainedIn: self.pleeksHided)
+        
+        if withCache {
+            pleeksQuery.cachePolicy = PFCachePolicy.CacheThenNetwork
+        }
+        else {
+            pleeksQuery.cachePolicy = PFCachePolicy.NetworkElseCache
+        }
+        
+        pleeksQuery.limit = Constants.LoadPleekLimit
+        
+        pleeksQuery.findObjectsInBackgroundWithBlock { (pleeks : [AnyObject]?, error : NSError?) -> Void in
+            completed(pleeks: pleeks as? [Pleek], error: error)
         }
     }
     

@@ -22,7 +22,6 @@ class PleekNavigationButton: UIButton {
             }
         }
     }
-
     
     private lazy var containerView: UIView = {
         let containerV = UIView()
@@ -62,7 +61,7 @@ class PleekNavigationButton: UIButton {
         textL.userInteractionEnabled = false
         textL.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
         textL.textColor = UIColor.whiteColor()
-        textL.font = UIFont(name: "Montserrat-Regular", size: 12.0)!
+        textL.font = UIFont(name: "ProximaNova-Bold", size: 13.0)!
         
         self.containerView.addSubview(textL)
         
@@ -87,7 +86,6 @@ class PleekNavigationButton: UIButton {
             make.centerY.equalTo(self.containerView.snp_centerY)
             make.size.equalTo(5)
         }
-        
         
         return newCIV
     } ()

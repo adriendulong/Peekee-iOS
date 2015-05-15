@@ -8,6 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		0A0458CF1AF8C2A300BC779E /* NewReactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */; };
+		0A227CFF1B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */; };
+		0A227D001B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */; };
+		0A227D011B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */; };
+		0A227D021B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */; };
+		0A227D031B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */; };
+		0A227D041B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */; };
+		0A227D0B1B0641050032AD40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A227D091B0641050032AD40 /* Main.storyboard */; };
+		0A227D0C1B0641050032AD40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A227D091B0641050032AD40 /* Main.storyboard */; };
+		0A227D0D1B0641050032AD40 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A227D091B0641050032AD40 /* Main.storyboard */; };
 		0A57615E1AFB9C4D0006B544 /* pleek-beta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */; };
 		0A57615F1AFB9C4D0006B544 /* pleek-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */; };
 		0A5761601AFB9C4D0006B544 /* pleek-prod.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */; };
@@ -101,11 +110,9 @@
 		0A5761BD1AFB9D850006B544 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		0A5761BE1AFB9D850006B544 /* Gotham-Rounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */; };
 		0A5761BF1AFB9D850006B544 /* Proxima-Nova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */; };
-		0A5761C01AFB9D850006B544 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */; };
 		0A5761C11AFB9D850006B544 /* faster.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5E1A4EA25100B69A2A /* faster.wav */; };
 		0A5761C21AFB9D850006B544 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
 		0A5761C31AFB9D850006B544 /* stronger.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB601A4EA25100B69A2A /* stronger.wav */; };
-		0A5761C41AFB9D850006B544 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
 		0A5761C51AFB9D850006B544 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
 		0A5761C61AFB9D850006B544 /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
 		0A5761C71AFB9D850006B544 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
@@ -204,11 +211,9 @@
 		0A5762301AFB9D890006B544 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		0A5762311AFB9D890006B544 /* Gotham-Rounded-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */; };
 		0A5762321AFB9D890006B544 /* Proxima-Nova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */; };
-		0A5762331AFB9D890006B544 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */; };
 		0A5762341AFB9D890006B544 /* faster.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5E1A4EA25100B69A2A /* faster.wav */; };
 		0A5762351AFB9D890006B544 /* Space_Notification1.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB74801A9B792E00EEA0D8 /* Space_Notification1.wav */; };
 		0A5762361AFB9D890006B544 /* stronger.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB601A4EA25100B69A2A /* stronger.wav */; };
-		0A5762371AFB9D890006B544 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
 		0A5762381AFB9D890006B544 /* Birdy_Notification2.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7AB747E1A9B791000EEA0D8 /* Birdy_Notification2.wav */; };
 		0A5762391AFB9D890006B544 /* HansomFY-Regular_S.otf in Resources */ = {isa = PBXBuildFile; fileRef = E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */; };
 		0A57623A1AFB9D890006B544 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
@@ -300,7 +305,6 @@
 		E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E759CC021A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift */; };
 		E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */; };
 		E7665E3419E5A3AB003DAAF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */; };
-		E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3719E5A3AB003DAAF8 /* Main.storyboard */; };
 		E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
 		E7665E4A19E5A3AB003DAAF8 /* PeekeeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E4919E5A3AB003DAAF8 /* PeekeeTests.swift */; };
 		E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7665E5419E6C42E003DAAF8 /* Utils.swift */; };
@@ -339,7 +343,6 @@
 		E7B4EB631A4EA25100B69A2A /* harder.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB5F1A4EA25100B69A2A /* harder.wav */; };
 		E7B4EB641A4EA25100B69A2A /* stronger.wav in Resources */ = {isa = PBXBuildFile; fileRef = E7B4EB601A4EA25100B69A2A /* stronger.wav */; };
 		E7BA49991A2F431B00DB1C96 /* Proxima-Nova-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */; };
-		E7BA499A1A2F431B00DB1C96 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */; };
 		E7BA499E1A2F54A800DB1C96 /* inboxTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */; };
 		E7C3B32D1A24858D0059F78D /* ChooseReceiversViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */; };
 		E7C9168819F94A900094710D /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C9168719F94A900094710D /* Fabric.framework */; };
@@ -367,6 +370,9 @@
 
 /* Begin PBXFileReference section */
 		0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewReactViewController.swift; sourceTree = "<group>"; };
+		0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Bold.otf"; sourceTree = "<group>"; };
+		0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Sbold.otf"; sourceTree = "<group>"; };
+		0A227D0A1B0641050032AD40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-beta.plist"; sourceTree = "<group>"; };
 		0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-dev.plist"; sourceTree = "<group>"; };
 		0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-prod.plist"; sourceTree = "<group>"; };
@@ -445,7 +451,6 @@
 		E75D4FEF1AA476E100FF878A /* MuteAllViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuteAllViewController.swift; sourceTree = "<group>"; };
 		E7665E2E19E5A3AB003DAAF8 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E3319E5A3AB003DAAF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E7665E3819E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E7665E3D19E5A3AB003DAAF8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		E7665E4319E5A3AB003DAAF8 /* PeekeeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeekeeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7665E4819E5A3AB003DAAF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -489,7 +494,6 @@
 		E7B4EB5F1A4EA25100B69A2A /* harder.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = harder.wav; sourceTree = "<group>"; };
 		E7B4EB601A4EA25100B69A2A /* stronger.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = stronger.wav; sourceTree = "<group>"; };
 		E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Proxima-Nova-Light.otf"; path = "Font/Proxima-Nova-Light.otf"; sourceTree = SOURCE_ROOT; };
-		E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Proxima-Nova-Bold.otf"; path = "Font/Proxima-Nova-Bold.otf"; sourceTree = SOURCE_ROOT; };
 		E7BA499D1A2F54A800DB1C96 /* inboxTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = inboxTableViewCell.swift; sourceTree = "<group>"; };
 		E7C3B32C1A24858D0059F78D /* ChooseReceiversViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseReceiversViewController.swift; sourceTree = "<group>"; };
 		E7C9168719F94A900094710D /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -720,8 +724,8 @@
 		0ADBF1121AF8B09F00684E79 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E7665E3719E5A3AB003DAAF8 /* Main.storyboard */,
 				E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */,
+				0A227D091B0641050032AD40 /* Main.storyboard */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -945,12 +949,13 @@
 		E78548C71A1B535A001F83FC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */,
+				0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */,
 				E77B98E61AE7DB85002B12C8 /* Fonts Replies */,
 				E7CD3F451A447B1C00F38FB4 /* Gotham-Rounded-Bold.ttf */,
 				E7BA49971A2F42E400DB1C96 /* Proxima-Nova-Light.otf */,
 				E7A46CF51AE6337900CC2609 /* Montserrat-Bold.ttf */,
 				E7A46CF61AE6337900CC2609 /* Montserrat-Regular.ttf */,
-				E7BA49981A2F42E400DB1C96 /* Proxima-Nova-Bold.otf */,
 				E78548C81A1B5362001F83FC /* HansomFY-Regular_S.otf */,
 			);
 			name = Fonts;
@@ -1179,7 +1184,9 @@
 				0A5761AA1AFB9D850006B544 /* peekee_tuto.mp4 in Resources */,
 				0A5761AB1AFB9D850006B544 /* Images.xcassets in Resources */,
 				0A5761AC1AFB9D850006B544 /* pleek-dev.plist in Resources */,
+				0A227D031B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */,
 				0A5761AD1AFB9D850006B544 /* TrashHand2.ttf in Resources */,
+				0A227D0C1B0641050032AD40 /* Main.storyboard in Resources */,
 				0A5761AE1AFB9D850006B544 /* BaronNeueBlack.otf in Resources */,
 				0A5761AF1AFB9D850006B544 /* BrushUp.otf in Resources */,
 				0A5761B01AFB9D850006B544 /* DaftBrush.otf in Resources */,
@@ -1198,17 +1205,16 @@
 				0A5761BD1AFB9D850006B544 /* (null) in Resources */,
 				0A5761BE1AFB9D850006B544 /* Gotham-Rounded-Bold.ttf in Resources */,
 				0A5761BF1AFB9D850006B544 /* Proxima-Nova-Light.otf in Resources */,
-				0A5761C01AFB9D850006B544 /* Proxima-Nova-Bold.otf in Resources */,
 				0A5761C11AFB9D850006B544 /* faster.wav in Resources */,
 				0A5761C21AFB9D850006B544 /* Space_Notification1.wav in Resources */,
 				0A5761C31AFB9D850006B544 /* stronger.wav in Resources */,
-				0A5761C41AFB9D850006B544 /* Main.storyboard in Resources */,
 				0A5761C51AFB9D850006B544 /* Birdy_Notification2.wav in Resources */,
 				0A5761C61AFB9D850006B544 /* HansomFY-Regular_S.otf in Resources */,
 				0A5761C71AFB9D850006B544 /* LaunchScreen.xib in Resources */,
 				0A5761C81AFB9D850006B544 /* (null) in Resources */,
 				0A5761C91AFB9D850006B544 /* harder.wav in Resources */,
 				0A5761CA1AFB9D850006B544 /* better.wav in Resources */,
+				0A227D001B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */,
 				0A5761CB1AFB9D850006B544 /* DiallingCodes.plist in Resources */,
 				0A5761CC1AFB9D850006B544 /* like_react_sound.wav in Resources */,
 			);
@@ -1221,7 +1227,9 @@
 				0A57621D1AFB9D890006B544 /* peekee_tuto.mp4 in Resources */,
 				0A57621E1AFB9D890006B544 /* Images.xcassets in Resources */,
 				0A57621F1AFB9D890006B544 /* pleek-dev.plist in Resources */,
+				0A227D041B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */,
 				0A5762201AFB9D890006B544 /* TrashHand2.ttf in Resources */,
+				0A227D0D1B0641050032AD40 /* Main.storyboard in Resources */,
 				0A5762211AFB9D890006B544 /* BaronNeueBlack.otf in Resources */,
 				0A5762221AFB9D890006B544 /* BrushUp.otf in Resources */,
 				0A5762231AFB9D890006B544 /* DaftBrush.otf in Resources */,
@@ -1240,17 +1248,16 @@
 				0A5762301AFB9D890006B544 /* (null) in Resources */,
 				0A5762311AFB9D890006B544 /* Gotham-Rounded-Bold.ttf in Resources */,
 				0A5762321AFB9D890006B544 /* Proxima-Nova-Light.otf in Resources */,
-				0A5762331AFB9D890006B544 /* Proxima-Nova-Bold.otf in Resources */,
 				0A5762341AFB9D890006B544 /* faster.wav in Resources */,
 				0A5762351AFB9D890006B544 /* Space_Notification1.wav in Resources */,
 				0A5762361AFB9D890006B544 /* stronger.wav in Resources */,
-				0A5762371AFB9D890006B544 /* Main.storyboard in Resources */,
 				0A5762381AFB9D890006B544 /* Birdy_Notification2.wav in Resources */,
 				0A5762391AFB9D890006B544 /* HansomFY-Regular_S.otf in Resources */,
 				0A57623A1AFB9D890006B544 /* LaunchScreen.xib in Resources */,
 				0A57623B1AFB9D890006B544 /* (null) in Resources */,
 				0A57623C1AFB9D890006B544 /* harder.wav in Resources */,
 				0A57623D1AFB9D890006B544 /* better.wav in Resources */,
+				0A227D011B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */,
 				0A57623E1AFB9D890006B544 /* DiallingCodes.plist in Resources */,
 				0A57623F1AFB9D890006B544 /* like_react_sound.wav in Resources */,
 			);
@@ -1263,7 +1270,9 @@
 				E724D0171AF75C6B0060B545 /* peekee_tuto.mp4 in Resources */,
 				0ACD2B991AFB9B2100CADDEE /* Images.xcassets in Resources */,
 				0A57615F1AFB9C4D0006B544 /* pleek-dev.plist in Resources */,
+				0A227D021B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */,
 				E72FC3171AEE2D6700243F78 /* TrashHand2.ttf in Resources */,
+				0A227D0B1B0641050032AD40 /* Main.storyboard in Resources */,
 				E77B98F11AE7DB9F002B12C8 /* BaronNeueBlack.otf in Resources */,
 				E77B98F21AE7DB9F002B12C8 /* BrushUp.otf in Resources */,
 				E77B98F31AE7DB9F002B12C8 /* DaftBrush.otf in Resources */,
@@ -1282,17 +1291,16 @@
 				E74C1DF61A56F5F7002F86CC /* (null) in Resources */,
 				E7CD3F461A447B2A00F38FB4 /* Gotham-Rounded-Bold.ttf in Resources */,
 				E7BA49991A2F431B00DB1C96 /* Proxima-Nova-Light.otf in Resources */,
-				E7BA499A1A2F431B00DB1C96 /* Proxima-Nova-Bold.otf in Resources */,
 				E7B4EB621A4EA25100B69A2A /* faster.wav in Resources */,
 				E7AB74811A9B792E00EEA0D8 /* Space_Notification1.wav in Resources */,
 				E7B4EB641A4EA25100B69A2A /* stronger.wav in Resources */,
-				E7665E3919E5A3AB003DAAF8 /* Main.storyboard in Resources */,
 				E7AB747F1A9B791000EEA0D8 /* Birdy_Notification2.wav in Resources */,
 				E78548C91A1B5388001F83FC /* HansomFY-Regular_S.otf in Resources */,
 				E7665E3E19E5A3AB003DAAF8 /* LaunchScreen.xib in Resources */,
 				E74C1DF71A56F5F7002F86CC /* (null) in Resources */,
 				E7B4EB631A4EA25100B69A2A /* harder.wav in Resources */,
 				E7B4EB611A4EA25100B69A2A /* better.wav in Resources */,
+				0A227CFF1B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */,
 				E7DF60A61A10C73F000CCD52 /* DiallingCodes.plist in Resources */,
 				E770B9B41AEA33EE00781A0A /* like_react_sound.wav in Resources */,
 			);
@@ -1657,6 +1665,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		0A227D091B0641050032AD40 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0A227D0A1B0641050032AD40 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
 		E71AEFE01A6AE1EF00377E86 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1672,14 +1688,6 @@
 				E7D716971A8A59FA004B7148 /* pt */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		E7665E3719E5A3AB003DAAF8 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E7665E3819E5A3AB003DAAF8 /* Base */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */ = {

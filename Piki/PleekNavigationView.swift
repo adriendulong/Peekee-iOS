@@ -27,7 +27,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         return (self.minimumOffset + self.maximumOffset) / 2.0
     } ()
     
-    private let startDelta: CGFloat = 150
+    private let startDelta: CGFloat = 120
     
     private lazy var topContainerView: UIView = {
         let topCV = UIView()
@@ -273,7 +273,6 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         sender.superview!.setNeedsLayout()
         
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: nil, animations: { () -> Void in
-            
             sender.superview!.layoutIfNeeded()
         }, completion: nil)
         
@@ -287,18 +286,21 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         if recognizer.state == .Began {
             self.startY = recognizer.locationInView(self.superview!).y
             self.startOffset = CGRectGetMinY(self.frame)
+
             return
         } else if recognizer.state == .Changed {
-            var newOffset = recognizer.locationInView(self.superview!).y - self.startY
+            let delta = recognizer.locationInView(self.superview!).y - self.startY
+
             
-            if abs(newOffset) < startDelta {
+            if abs(delta) < self.startDelta {
                 return
             }
+            var newOffset = delta
             
-            if newOffset > 0 {
-                newOffset -= startDelta
+            if delta > 0 {
+                newOffset -= self.startDelta
             } else {
-                newOffset += startDelta
+                newOffset += self.startDelta
             }
             
             if newOffset + self.startOffset <= self.minimumOffset {
@@ -315,13 +317,16 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
             
             return
         } else if recognizer.state == .Ended || recognizer.state == .Cancelled {
-            var newOffset = recognizer.locationInView(self.superview!).y - self.startY
-            
-            if newOffset > 0 {
-                newOffset -= startDelta
-            } else {
-                newOffset += startDelta
+            let delta = recognizer.locationInView(self.superview!).y - self.startY
+
+            if abs(delta) <= self.startDelta {
+                if let delegate = self.delegate {
+                    delegate.navigationView(self, shouldUpdateTopConstraintOffset: self.startOffset, animated: true)
+                }
+                return
             }
+            
+            var newOffset = delta
             
             if newOffset + self.startOffset <= self.minimumOffset || newOffset <= -middleOffset {
                 newOffset = self.minimumOffset

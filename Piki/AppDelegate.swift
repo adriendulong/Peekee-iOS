@@ -87,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
 
         } else {
             let vc = InboxViewController()
-            vc.view.backgroundColor = UIColor.redColor()
+            vc.view.backgroundColor = UIColor.whiteColor()
     
             let root = InboxNavigationController()
             root.view.frame = self.window!.frame

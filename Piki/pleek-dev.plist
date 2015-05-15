@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -81,6 +81,7 @@
 		<string>HansomFY-Regular_S.otf</string>
 		<string>Proxima-Nova-Light.otf</string>
 		<string>Proxima-Nova-Bold.otf</string>
+		<string>Proxima-Nova-Sbold.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

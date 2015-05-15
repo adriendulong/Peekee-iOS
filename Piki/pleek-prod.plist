@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -73,6 +73,7 @@
 		<string>Higher.otf</string>
 		<string>FenotypeBanzaiBros.otf</string>
 		<string>DaftBrush.otf</string>
+		<string>Proxima-Nova-Sbold.otf</string>
 		<string>BrushUp.otf</string>
 		<string>BaronNeueBlack.otf</string>
 		<string>Montserrat-Regular.ttf</string>
