@@ -899,7 +899,7 @@ class MainViewController : UIViewController, UIScrollViewDelegate, PleekControll
             var alert = UIAlertController(title: LocalizedString("Confirmation"), message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."), preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: LocalizedString("No"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
                 self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+//                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, indeletePikin: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
             }))
             alert.addAction(UIAlertAction(title: LocalizedString("Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
                 println("Yes")

@@ -20,6 +20,7 @@ extension UIColor {
         static let LightGreyBlue = UIColor(red: 242.0/255.0, green: 245.0/255.0, blue: 247.0/255.0, alpha: 1.0)
         static let DarkGreyBlue = UIColor(red: 128.0/255.0, green: 137.0/255.0, blue: 147.0/255.0, alpha: 1.0)
         static let GreyBlue = UIColor(red: 161.0/255.0, green: 175.0/255.0, blue: 191.0/255.0, alpha: 1.0)
+        static let Red = UIColor(red: 239/255.0, green: 83/255.0, blue: 80/255.0, alpha: 1.0)
     }
     
     struct Theme {
@@ -31,5 +32,6 @@ extension UIColor {
         static let PleekBackGroundColor = PrivateColors.LightGreyBlue
         static let PleekSpinnerColor = PrivateColors.DarkGreyBlue
         static let DarkTextColor = PrivateColors.GreyBlue
+        static let DeletePleekBackGroundColor = PrivateColors.Red
     }
 }

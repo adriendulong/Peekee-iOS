@@ -72,4 +72,29 @@ import Foundation
         
         return count(recipients)
     }
+    
+    func deleteOrHide() {
+        if self.user.objectId == User.currentUser()!.objectId || self {
+            PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
+                withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
+                    if error != nil {
+
+                        let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
+                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
+                        alert.show()
+
+                        println("Error : \(error!.localizedDescription)")
+
+                        self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
+                        self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
+                    }
+                    else{
+
+                        self.getPikisWithoutUpdate()
+                        
+                    }
+            })
+        }
+
+    }
 }

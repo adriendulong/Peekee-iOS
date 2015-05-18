@@ -8,23 +8,77 @@
 
 import UIKit
 
-class InboxCell: UITableViewCell {
+protocol InboxCellDelegate: class {
+    func deletePleek(cell : InboxCell)
+}
+
+class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
     
-    var currentWidth: CGFloat = 0.0
+    weak var delegate: InboxCellDelegate? = nil
     
-    var countLog = 0
+    lazy var deleteView: UIView = {
+        let deleteV = UIView()
+        deleteV.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        
+        self.contentView.addSubview(deleteV)
+        
+        deleteV.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(self.contentView)
+            make.trailing.equalTo(self.contentView)
+            make.leading.equalTo(self.contentView)
+            make.bottom.equalTo(self.contentView).offset(-10)
+        })
+        
+        return deleteV
+    } ()
     
+    lazy var trashImageView: UIImageView = {
+        let trashIV = UIImageView()
+        trashIV.image = UIImage(named: "trash-icon-inactive")
+        trashIV.backgroundColor = UIColor.clearColor()
+        
+        self.deleteView.addSubview(trashIV)
+        
+        trashIV.snp_makeConstraints({ (make) -> Void in
+            make.centerY.equalTo(self.deleteView)
+            make.trailing.lessThanOrEqualTo(self.deleteView).offset(-35.5)
+            make.size.equalTo(CGSizeMake(17, 22.5))
+            make.leading.equalTo(self.mainContainerView.snp_trailing).offset(35.5).priorityLow()
+        })
+        
+        return trashIV
+    } ()
+    
+    var mainContainerViewTrailingConstraint: Constraint = Constraint()
+    
+    lazy var mainContainerView: UIView = {
+        let mainCV = UIView()
+        mainCV.backgroundColor = UIColor.whiteColor()
+        
+        self.contentView.addSubview(mainCV)
+
+        mainCV.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(self.contentView)
+            self.mainContainerViewTrailingConstraint = make.trailing.equalTo(self.contentView).constraint
+            make.width.equalTo(self.contentView)
+            make.bottom.equalTo(self.contentView).offset(-10)
+        })
+        
+        return mainCV
+    } ()
+    
+
     lazy var containerView: UIView = {
         let containerV = UIView()
         containerV.backgroundColor = UIColor.whiteColor()
         
-        self.contentView.addSubview(containerV)
+        self.mainContainerView.addSubview(containerV)
         
         containerV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentView.snp_top)
-            make.trailing.equalTo(self.contentView.snp_trailing)
-            make.leading.equalTo(self.contentView.snp_leading)
-            make.height.equalTo(self.contentView.snp_height).offset(-10)
+            make.top.equalTo(self.mainContainerView)
+            make.trailing.equalTo(self.mainContainerView)
+            make.leading.equalTo(self.mainContainerView)
+            make.height.equalTo(self.mainContainerView)
         })
         
         return containerV
@@ -38,8 +92,8 @@ class InboxCell: UITableViewCell {
         self.containerView.addSubview(pleekIM)
         
         pleekIM.snp_makeConstraints({ (make) -> Void in
-            make.bottom.equalTo(self.containerView.snp_bottom)
-            make.leading.equalTo(self.containerView.snp_leading)
+            make.bottom.equalTo(self.containerView)
+            make.leading.equalTo(self.containerView)
             make.width.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0 * 2.0 - 2)
             make.height.equalTo(pleekIM.snp_width)
         })
@@ -65,7 +119,7 @@ class InboxCell: UITableViewCell {
         pleekPIM.snp_makeConstraints({ (make) -> Void in
             make.width.equalTo(31)
             make.height.equalTo(37.5)
-            make.center.equalTo(self.pleekImageView.snp_center)
+            make.center.equalTo(self.pleekImageView)
         })
 
         return pleekPIM
@@ -74,13 +128,13 @@ class InboxCell: UITableViewCell {
     lazy var pleekImageSpinner: LLARingSpinnerView = {
         let pleekIS = LLARingSpinnerView()
         pleekIS.hidesWhenStopped = true
-        pleekIS.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        pleekIS.backgroundColor = UIColor.clearColor()
         pleekIS.tintColor = UIColor.Theme.PleekSpinnerColor
-        pleekIS.lineWidth = Dimensions.SpinnerLineWidth
+        pleekIS.lineWidth = Dimensions.SpinnerLineFatWidth
         self.pleekImageView.addSubview(pleekIS)
         
         pleekIS.snp_makeConstraints({ (make) -> Void in
-            make.center.equalTo(self.pleekImageView.snp_center)
+            make.center.equalTo(self.pleekImageView)
             make.size.equalTo(30)
         })
         
@@ -93,10 +147,10 @@ class InboxCell: UITableViewCell {
         self.containerView.addSubview(contentRV)
         
         contentRV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.pleekImageView.snp_top)
-            make.trailing.equalTo(self.containerView.snp_trailing)
+            make.top.equalTo(self.pleekImageView)
+            make.trailing.equalTo(self.containerView)
             make.width.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0)
-            make.height.equalTo(self.pleekImageView.snp_height)
+            make.height.equalTo(self.pleekImageView)
         })
         
         contentRV.backgroundColor = UIColor.Theme.PleekBackGroundColor
@@ -122,10 +176,10 @@ class InboxCell: UITableViewCell {
         self.contentReactView.addSubview(reacTopIV)
         
         reacTopIV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentReactView.snp_top)
+            make.top.equalTo(self.contentReactView)
             self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).constraint
-            make.leading.equalTo(self.contentReactView.snp_leading)
-            make.trailing.equalTo(self.contentReactView.snp_trailing)
+            make.leading.equalTo(self.contentReactView)
+            make.trailing.equalTo(self.contentReactView)
         })
         
         return reacTopIV
@@ -134,21 +188,19 @@ class InboxCell: UITableViewCell {
     lazy var reactTopImageSpinner: LLARingSpinnerView = {
         let reactTIS = LLARingSpinnerView()
         reactTIS.hidesWhenStopped = true
-        reactTIS.lineWidth = Dimensions.SpinnerLineWidth
+        reactTIS.lineWidth = Dimensions.SpinnerLineThinWidth
         reactTIS.tintColor = UIColor.Theme.PleekSpinnerColor
-        reactTIS.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        reactTIS.backgroundColor = UIColor.clearColor()
         
         self.reactTopImageView.addSubview(reactTIS)
         
         reactTIS.snp_makeConstraints({ (make) -> Void in
-            make.center.equalTo(self.reactTopImageView.snp_center)
+            make.center.equalTo(self.reactTopImageView)
             make.size.equalTo(18)
         })
         
         return reactTIS
     } ()
-    
-    
     
     lazy var reactBottomImageView: PFImageView = {
         let reactBottomIV = PFImageView()
@@ -158,9 +210,9 @@ class InboxCell: UITableViewCell {
         
         reactBottomIV.snp_makeConstraints({ (make) -> Void in
             make.top.equalTo(self.contentReactView.snp_centerY)
-            make.bottom.equalTo(self.contentReactView.snp_bottom)
-            make.leading.equalTo(self.contentReactView.snp_leading)
-            make.trailing.equalTo(self.contentReactView.snp_trailing)
+            make.bottom.equalTo(self.contentReactView)
+            make.leading.equalTo(self.contentReactView)
+            make.trailing.equalTo(self.contentReactView)
         })
         
         return reactBottomIV
@@ -169,14 +221,14 @@ class InboxCell: UITableViewCell {
     lazy var reactBottomImageSpinner: LLARingSpinnerView = {
         let reactBIS = LLARingSpinnerView()
         reactBIS.hidesWhenStopped = true
-        reactBIS.lineWidth = Dimensions.SpinnerLineWidth
+        reactBIS.lineWidth = Dimensions.SpinnerLineThinWidth
         reactBIS.tintColor = UIColor.Theme.PleekSpinnerColor
-        reactBIS.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        reactBIS.backgroundColor = UIColor.clearColor()
         
         self.reactBottomImageView.addSubview(reactBIS)
         
         reactBIS.snp_makeConstraints({ (make) -> Void in
-            make.center.equalTo(self.reactBottomImageView.snp_center)
+            make.center.equalTo(self.reactBottomImageView)
             make.size.equalTo(18)
         })
         
@@ -190,10 +242,10 @@ class InboxCell: UITableViewCell {
         self.containerView.addSubview(fromIV)
         
         fromIV.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(self.containerView.snp_top).offset(20)
+            make.top.equalTo(self.containerView).offset(20)
             make.width.equalTo(12)
             make.height.equalTo(12.5)
-            make.leading.equalTo(self.containerView.snp_leading).offset(20)
+            make.leading.equalTo(self.containerView).offset(20)
         }
         
         return fromIV
@@ -207,7 +259,7 @@ class InboxCell: UITableViewCell {
         self.containerView.addSubview(usernameL)
         
         usernameL.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(self.fromImageView.snp_centerY)
+            make.centerY.equalTo(self.fromImageView)
             make.leading.equalTo(self.fromImageView.snp_trailing).offset(9)
         }
         
@@ -225,7 +277,7 @@ class InboxCell: UITableViewCell {
             make.width.equalTo(24)
             make.height.equalTo(25.5)
             make.leading.equalTo(self.usernameLabel.snp_trailing).offset(8)
-            make.centerY.equalTo(self.usernameLabel.snp_centerY)
+            make.centerY.equalTo(self.usernameLabel)
         }
         
         return certifiedAIV
@@ -241,13 +293,12 @@ class InboxCell: UITableViewCell {
         actionIV.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(6.5)
             make.height.equalTo(11)
-            make.trailing.equalTo(self.containerView.snp_trailing).offset(-20)
+            make.trailing.equalTo(self.containerView).offset(-20)
             make.centerY.equalTo(self.fromImageView.snp_centerY).offset(-1)
         }
 
         return actionIV
     } ()
-    
     
     lazy var infoLabel: UILabel = {
         let infoLabel = UILabel()
@@ -259,7 +310,7 @@ class InboxCell: UITableViewCell {
         self.containerView.addSubview(infoLabel)
         
         infoLabel.snp_makeConstraints { (make) -> Void in
-            make.centerY.equalTo(self.fromImageView.snp_centerY)
+            make.centerY.equalTo(self.fromImageView)
             make.trailing.equalTo(self.actionImageView.snp_leading).offset(-10)
         }
         
@@ -276,7 +327,7 @@ class InboxCell: UITableViewCell {
         
         infoIV.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(12)
-            make.centerY.equalTo(self.fromImageView.snp_centerY)
+            make.centerY.equalTo(self.fromImageView)
             make.trailing.equalTo(self.infoLabel.snp_leading).offset(-5)
         }
         
@@ -291,9 +342,9 @@ class InboxCell: UITableViewCell {
         
         cellSV.snp_makeConstraints({ (make) -> Void in
             make.height.equalTo(0.5)
-            make.top.equalTo(self.contentView.snp_top)
-            make.leading.equalTo(self.contentView.snp_leading)
-            make.trailing.equalTo(self.contentView.snp_trailing)
+            make.top.equalTo(self.contentView)
+            make.leading.equalTo(self.contentView)
+            make.trailing.equalTo(self.contentView)
         })
         
         return cellSV
@@ -312,9 +363,10 @@ class InboxCell: UITableViewCell {
     }
     
     func setupView() {
-        
         self.contentView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         
+        let v111 = self.trashImageView
+        let v112 = self.mainContainerView
         let v11 = self.pleekPlayImageView
         let v1 = self.pleekImageSpinner
         let v2 = self.contentReactView
@@ -324,14 +376,16 @@ class InboxCell: UITableViewCell {
         let v7 = self.infoImageView
         let v6 = self.cellSeparatorView
 
-        self.contentView.bringSubviewToFront(self.contentReactView)
-        self.contentView.bringSubviewToFront(self.pleekImageView)
+        self.mainContainerView.bringSubviewToFront(self.contentReactView)
+        self.mainContainerView.bringSubviewToFront(self.pleekImageView)
         
         
         self.clipsToBounds = true
         self.selectionStyle = .None
         
-//        self.setNeedsUpdateConstraints()
+        let panGestureRecognizer:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("handlePan:"))
+        panGestureRecognizer.delegate = self
+        self.addGestureRecognizer(panGestureRecognizer)
     }
     
     override func layoutSubviews() {
@@ -354,12 +408,69 @@ class InboxCell: UITableViewCell {
         
         super.updateConstraints()
     }
+    
+    // MARK: Action
+    
+    func handlePan(recognizer: UIPanGestureRecognizer!) {
+        
+        let translation = recognizer.translationInView(recognizer.view!)
+        
+        if recognizer.state == .Began {
+            return
+        } else if recognizer.state == .Changed {
+            if translation.x < 0 {
+                if abs(translation.x) >= CGRectGetWidth(self.frame) / 3.0 {
+                    self.deleteView.backgroundColor = UIColor.Theme.DeletePleekBackGroundColor
+                    self.trashImageView.image = UIImage(named: "trash-icon-active")
+                } else {
+                    self.deleteView.backgroundColor = UIColor.Theme.PleekBackGroundColor
+                    self.trashImageView.image = UIImage(named: "trash-icon-inactive")
+                }
+
+                self.mainContainerViewTrailingConstraint.updateOffset(translation.x)
+                self.deleteView.setNeedsLayout()
+                self.deleteView.layoutIfNeeded()
+            }
+            return
+        } else if recognizer.state == .Ended || recognizer.state == .Cancelled {
+            var finalColor = UIColor.Theme.PleekBackGroundColor
+            var offset: CGFloat = 0
+            var image = UIImage(named: "trash-icon-inactive")
+            var shouldDelete = false
+            if abs(translation.x) >= CGRectGetWidth(self.frame) / 3.0 {
+                finalColor = UIColor.Theme.DeletePleekBackGroundColor
+                offset = -CGRectGetWidth(self.frame)
+                image = UIImage(named: "trash-icon-active")
+                shouldDelete = true
+            }
+            
+            self.mainContainerViewTrailingConstraint.updateOffset(offset)
+            self.contentView.setNeedsLayout()
+            
+            UIView.animateWithDuration(0.2, animations: { () -> Void in
+                self.deleteView.backgroundColor = finalColor
+                self.contentView.layoutIfNeeded()
+                self.trashImageView.image = image
+            }) { (finished) -> Void in
+                if let delegate = self.delegate {
+                    if shouldDelete {
+                        delegate.deletePleek(self)
+                    }
+                }
+            }
+            return
+        }
+    }
+
 }
 
 extension InboxCell {
     
     func configureFor(pleek: Pleek) {
 
+        self.mainContainerViewTrailingConstraint.updateOffset(0)
+        self.deleteView.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        
         self.usernameLabel.text = pleek.user.username
         
         weak var weakSelf = self
@@ -457,6 +568,17 @@ extension InboxCell {
         formatter.locale = NSLocale.currentLocale()
         return formatter.stringFromNumber(number)!
     }
+    
+    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer.isKindOfClass(UIPanGestureRecognizer) {
+            let uiPanGesture:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
+            let velocity:CGPoint = uiPanGesture.velocityInView(self)
+            return fabs(velocity.y) < fabs(velocity.x)
+        } else {
+            return true
+        }
+    }
+
 }
 
 

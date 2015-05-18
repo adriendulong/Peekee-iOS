@@ -8,22 +8,25 @@
 
 import UIKit
 
-class InboxViewController: UIViewController, PleekNavigationViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekTableViewDelegate {
 
-    var receivedPleeks: [Pleek] = []
-    var sentPleeks: [Pleek] = []
-    var currentPleekLists: [Pleek] = []
+    var receivedPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol()
+    var sentPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol()
     
     var receivedPleeksTableViewTrailingConstraint = Constraint()
     
     lazy var receivedPleeksTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-        tableView.delegate = self
-        tableView.dataSource = self
+        self.receivedPleeksProtocol.delegate = self
+        tableView.dataSource = self.receivedPleeksProtocol
+        tableView.delegate = self.receivedPleeksProtocol
+        self.receivedPleeksProtocol.tableView = tableView
         tableView.separatorStyle = .None
+        tableView.scrollsToTop = true
         
         tableView.registerClass(InboxCell.self, forCellReuseIdentifier: "InboxTableViewCellIdentifier")
+        tableView.registerClass(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
         
         let panGesture = UIPanGestureRecognizer(target: self.navigationView, action: Selector("handlePan:"))
         panGesture.minimumNumberOfTouches = 1
@@ -46,11 +49,15 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, UITabl
     lazy var sentPleeksTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-        tableView.delegate = self
-        tableView.dataSource = self
+        self.sentPleeksProtocol.delegate = self
+        tableView.dataSource = self.sentPleeksProtocol
+        tableView.delegate = self.sentPleeksProtocol
+        self.sentPleeksProtocol.tableView = tableView
         tableView.separatorStyle = .None
+        tableView.scrollsToTop = false
         
         tableView.registerClass(InboxCell.self, forCellReuseIdentifier: "InboxTableViewCellIdentifier")
+        tableView.registerClass(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
         
         let panGesture = UIPanGestureRecognizer(target: self.navigationView, action: Selector("handlePan:"))
         panGesture.minimumNumberOfTouches = 1
@@ -152,21 +159,31 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, UITabl
         self.navigationController?.navigationBarHidden = true
         
         weak var weakSelf = self
-        User.currentUser()!.getReceivedPleeks(true, completed: { (pleeks, error) -> () in
+        User.currentUser()!.getReceivedPleeks(true, skip: 0, completed: { (pleeks, error) -> () in
             if error != nil {
                 println("Error : \(error!.localizedDescription)")
             } else {
-                weakSelf?.receivedPleeks = pleeks!
+                if count(pleeks!) < Constants.LoadPleekLimit {
+                    weakSelf?.receivedPleeksProtocol.shouldLoadMore = false
+                } else {
+                    weakSelf?.receivedPleeksProtocol.shouldLoadMore = true
+                }
+                weakSelf?.receivedPleeksProtocol.pleeks = pleeks!
                 weakSelf?.receivedPleeksTableView.reloadData()
                 NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("popNewPleekButton"), userInfo: nil, repeats: false)
             }
         })
         
-        User.currentUser()!.getSentPleeks(true, completed: { (pleeks, error) -> () in
+        User.currentUser()!.getSentPleeks(true, skip: 0, completed: { (pleeks, error) -> () in
             if error != nil {
                 println("Error : \(error!.localizedDescription)")
             } else {
-                weakSelf?.sentPleeks = pleeks!
+                if count(pleeks!) < Constants.LoadPleekLimit {
+                    weakSelf?.sentPleeksProtocol.shouldLoadMore = false
+                } else {
+                    weakSelf?.sentPleeksProtocol.shouldLoadMore = true
+                }
+                weakSelf?.sentPleeksProtocol.pleeks = pleeks!
                 weakSelf?.sentPleeksTableView.reloadData()
             }
         })
@@ -175,62 +192,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, UITabl
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    // MARK: UITableViewDataSource
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == self.receivedPleeksTableView {
-            return count(self.receivedPleeks)
-        } else {
-            return count(self.sentPleeks)
-        }
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("InboxTableViewCellIdentifier", forIndexPath: indexPath) as! InboxCell
-        
-        if tableView == self.receivedPleeksTableView {
-            cell.configureFor(self.receivedPleeks[indexPath.row])
-        } else {
-            cell.configureFor(self.sentPleeks[indexPath.row])
-        }
-        
-        return cell
-    }
-    
-    // MARK: UITableViewDelegate
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let pleekVC: PleekViewController = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as! PleekViewController
-        
-        if tableView == self.receivedPleeksTableView {
-            pleekVC.mainPiki = self.receivedPleeks[indexPath.row]
-        } else {
-            pleekVC.mainPiki = self.sentPleeks[indexPath.row]
-        }
-    
-        self.navigationController?.pushViewController(pleekVC, animated: true)
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if tableView == self.receivedPleeksTableView {
-            let pleek = self.receivedPleeks[indexPath.row]
-            if pleek.nbReaction > 0 {
-                return CGRectGetWidth(self.view.frame) / 3.0 * 2.0 + 60.0
-            } else {
-                return CGRectGetWidth(self.view.frame) + 60
-            }
-        } else {
-            let pleek = self.sentPleeks[indexPath.row]
-            if pleek.nbReaction > 0 {
-                return CGRectGetWidth(self.view.frame) / 3.0 * 2.0 + 60.0
-            } else {
-                return CGRectGetWidth(self.view.frame) + 60
-            }
-        }
-    }
-    
+  
     // MARK: Appearance
     
     override func prefersStatusBarHidden() -> Bool {
@@ -253,10 +215,15 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, UITabl
     // MARK: PleekNavigationViewDelegate
     
     func navigationView(navigationView: PleekNavigationView, didSelectTabAtIndex index: UInt) {
+        self.receivedPleeksTableView.scrollsToTop = false
+        self.sentPleeksTableView.scrollsToTop = false
+        
         if index == 0 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(0)
+            self.receivedPleeksTableView.scrollsToTop = true
         } else if index == 1 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(-CGRectGetWidth(self.view.frame))
+            self.sentPleeksTableView.scrollsToTop = true
         }
         
         self.view.setNeedsLayout()
@@ -278,6 +245,40 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, UITabl
         } else {
             self.view.layoutIfNeeded()
         }
+    }
+    
+    // MARK: PleekTableViewDelegate
+    
+    func pleekTableView(tableView: UITableView, didSelectPleek pleek: Pleek, atIndexPath indexPath: NSIndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let pleekVC: PleekViewController = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as! PleekViewController
+        pleekVC.mainPiki = pleek
+        self.navigationController?.pushViewController(pleekVC, animated: true)
+    }
+    
+    func pleekTableViewLoadMore(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, toSkip: Int) {
+        if tableView == self.receivedPleeksTableView {
+            User.currentUser()!.getReceivedPleeks(true, skip: toSkip, completed: { (pleeks, error) -> () in
+                self.pleekTableViewLoadMoreResult(pleekProtocol, tableView: tableView, pleeks: pleeks, error: error)
+            })
+        } else if tableView == self.sentPleeksTableView {
+            User.currentUser()!.getSentPleeks(true, skip: toSkip, completed: { (pleeks, error) -> () in
+                self.pleekTableViewLoadMoreResult(pleekProtocol, tableView: tableView, pleeks: pleeks, error: error)
+            })
+        }
+    }
+    
+    func pleekTableViewLoadMoreResult(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, pleeks: [Pleek]?, error: NSError?) {
+        if let error = error {
+            println("Error : \(error.localizedDescription)")
+        } else {
+            pleekProtocol.updateTableView(tableView, pleeks: pleeks!)
+        }
+        pleekProtocol.isLoadingMore = false
+    }
+    
+    func scrollViewDidScrollToTop() {
+        self.navigationView.openView()
     }
     
     // MARK: Action

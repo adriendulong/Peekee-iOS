@@ -341,5 +341,11 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
             return
         }
     }
+    
+    func openView() {
+        if let delegate = self.delegate {
+            delegate.navigationView(self, shouldUpdateTopConstraintOffset: self.maximumOffset, animated: true)
+        }
+    }
 
 }

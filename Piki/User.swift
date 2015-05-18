@@ -26,7 +26,7 @@ import Foundation
         }
     }
 
-    func getReceivedPleeks(withCache: Bool, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
+    func getReceivedPleeks(withCache: Bool, skip: Int, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
         var friendsObjects: [User] = []
         self.getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
             
@@ -55,6 +55,7 @@ import Foundation
             }
             
             pleeksQuery.limit = Constants.LoadPleekLimit
+            pleeksQuery.skip = skip
             
             pleeksQuery.findObjectsInBackgroundWithBlock { (pleeks : [AnyObject]?, error : NSError?) -> Void in
                 completed(pleeks: pleeks as? [Pleek], error: error)
@@ -64,7 +65,7 @@ import Foundation
         }
     }
     
-    func getSentPleeks(withCache: Bool, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
+    func getSentPleeks(withCache: Bool, skip: Int, completed: (pleeks: [Pleek]?, error: NSError?) -> ()) {
         
         var pleeksQuery = Pleek.query()!
         
@@ -81,6 +82,7 @@ import Foundation
         }
         
         pleeksQuery.limit = Constants.LoadPleekLimit
+        pleeksQuery.skip = skip
         
         pleeksQuery.findObjectsInBackgroundWithBlock { (pleeks : [AnyObject]?, error : NSError?) -> Void in
             completed(pleeks: pleeks as? [Pleek], error: error)
