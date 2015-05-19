@@ -550,19 +550,16 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
     func getFriends(){
         
         Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
-            
-            var queryFriends:PFQuery = PFUser.query()!
-            queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
+            let ids: [String] = Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>)
+            var queryFriends: PFQuery = User.query()!
+            queryFriends.whereKey("objectId", containedIn: ids)
             queryFriends.orderByAscending("username")
             queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
             queryFriends.limit = 50
-            
+
             queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
                 if error != nil {
-                    
-                }
-                else{
-                    
+                } else {
                     self.userFriends = friends as! Array<PFUser>
                     self.userFriendsAll = friends as! Array<PFUser>
                     self.tableView.reloadData()
@@ -584,7 +581,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
         Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
             
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
             queryFriends.orderByAscending("username")
             queryFriends.limit = 100
@@ -784,7 +781,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
         Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
             
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
             queryFriends.whereKey("username", containsString: username)
             queryFriends.orderByAscending("username")
@@ -1031,11 +1028,10 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         var topFriendsInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
         
         for friendObject in friendsObjects{
-            
-            var topFriendInfo:[String:AnyObject] = ["user" : friendObject["friend"]!, "score" : friendObject["score"]!]
+            if let user = friendObject["friend"] as? PFUser {
+                var topFriendInfo:[String:AnyObject] = ["user" : user, "score" : friendObject["score"]!]
             topFriendsInfos.append(topFriendInfo)
-
-            
+            }
         }
         
         self.topFriendsInfosAll = topFriendsInfos

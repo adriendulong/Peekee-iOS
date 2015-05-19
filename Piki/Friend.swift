@@ -10,9 +10,10 @@ import Foundation
 
 class Friend: PFObject, PFSubclassing {
     
-    @NSManaged var friend: User
-    @NSManaged var user: User
+    @NSManaged var friend: User?
+    @NSManaged var user: User?
     @NSManaged var friendId: String
+    @NSManaged var score: Int
     
     override class func initialize() {
         struct Static {

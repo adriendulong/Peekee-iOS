@@ -139,7 +139,7 @@ class TakePhotoViewController : UIViewController, UIImagePickerControllerDelegat
 
         //INIT CAMERA
         previewLayer = PBJVision.sharedInstance().previewLayer
-        previewLayer!.frame = CGRect(x: 0, y: 0, width: cameraView!.frame.width, height: cameraView!.frame.height)
+        previewLayer!.frame = CGRect(x: 0, y: 0, width: cameraView!.frame.width, height: cameraView!.frame.width)
         previewLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView!.layer.addSublayer(previewLayer)
         PBJVision.sharedInstance().presentationFrame = cameraView!.frame

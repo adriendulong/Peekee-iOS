@@ -819,7 +819,7 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="kb2-YN-134" id="jO7-vA-4hh"/>
+                        <outlet property="tableView" destination="kb2-YN-134" id="JOa-YR-NLe"/>
                         <segue destination="tX9-nA-DBF" kind="show" identifier="addFriends" id="1e5-R0-VAq"/>
                     </connections>
                 </viewController>

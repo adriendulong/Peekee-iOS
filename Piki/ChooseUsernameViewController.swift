@@ -194,7 +194,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
             self.termsLabel!.hidden = true
             
             if Utils().usernameValid(finalString){
-                var userQuery:PFQuery = PFUser.query()!
+                var userQuery:PFQuery = User.query()!
                 userQuery.whereKey("username", equalTo: finalString.lowercaseString)
                 userQuery.findObjectsInBackgroundWithBlock({ (users, error) -> Void in
                     if error == nil {

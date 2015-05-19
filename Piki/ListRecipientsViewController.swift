@@ -173,7 +173,7 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
         var arrayFriendsId:Array<String>? = mainPiki!["recipients"] as? Array<String>
         
         if arrayFriendsId != nil{
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
             queryFriends.orderByAscending("username")
             queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork

@@ -141,7 +141,7 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
             finalString.lowercaseString
             
             if Utils().usernameValid(finalString){
-                var userQuery:PFQuery = PFUser.query()!
+                var userQuery:PFQuery = User.query()!
                 userQuery.whereKey("username", equalTo: finalString.lowercaseString)
                 userQuery.findObjectsInBackgroundWithBlock({ (users, error) -> Void in
                     if error == nil {

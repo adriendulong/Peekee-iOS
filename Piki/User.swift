@@ -76,8 +76,7 @@ import Foundation
         
         if withCache {
             pleeksQuery.cachePolicy = PFCachePolicy.CacheThenNetwork
-        }
-        else {
+        } else {
             pleeksQuery.cachePolicy = PFCachePolicy.NetworkElseCache
         }
         
@@ -107,8 +106,7 @@ import Foundation
             
             if queryFriends.hasCachedResult() {
                 queryFriends.cachePolicy = PFCachePolicy.CacheOnly
-            }
-            else{
+            } else{
                 needToUpdateLocalFriendsList = true
                 queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
             }
@@ -120,10 +118,9 @@ import Foundation
         
         queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
             
-            if error != nil {
-                friendsCompletionTask.setError(error!)
-            }
-            else {
+            if let error = error {
+                friendsCompletionTask.setError(error)
+            } else {
                 self.updateLocalFriendsIdList(friends as! [Friend])
                 friendsCompletionTask.setResult(friends)
             }
@@ -149,5 +146,22 @@ import Foundation
         friends.map { appDelegate.friendsIdList.append($0.friendId) }
     }
     
+    func getTopFriends(withCache: Bool, skip: Int, completed: (friends: [Friend]?, error: NSError?) -> ()) {
+
+        let topFriendsQuery: PFQuery = Friend.query()!
+        topFriendsQuery.orderByDescending("score")
+        topFriendsQuery.limit = 10
+        topFriendsQuery.whereKey("user", equalTo: self)
+        topFriendsQuery.includeKey("friend")
+        if withCache {
+            topFriendsQuery.cachePolicy = PFCachePolicy.CacheThenNetwork
+        } else {
+            topFriendsQuery.cachePolicy = PFCachePolicy.NetworkElseCache
+        }
+        
+        topFriendsQuery.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
+            completed(friends: friends as? [Friend], error: error)
+        }
+    }
     
 }

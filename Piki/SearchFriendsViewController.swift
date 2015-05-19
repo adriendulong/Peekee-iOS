@@ -810,7 +810,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
             
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
             queryFriends.orderByAscending("username")
             queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
@@ -843,7 +843,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         Utils().getFriends(true).continueWithBlock { (task : BFTask!) -> AnyObject! in
             
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
             queryFriends.orderByAscending("username")
             queryFriends.limit = 100
@@ -1496,7 +1496,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     completionTask.setError(task.error)
                 }
                 else{
-                    var queryFriends:PFQuery = PFUser.query()!
+                    var queryFriends:PFQuery = User.query()!
                     queryFriends.whereKey("objectId", containedIn: Utils().getListOfFriendIdFromJoinObjects(task.result as! Array<PFObject>))
                     queryFriends.whereKey("username", containsString: username)
                     queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
@@ -1528,7 +1528,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         var completionTask:BFTaskCompletionSource = BFTaskCompletionSource()
         
-        var queryFriends:PFQuery = PFUser.query()!
+        var queryFriends:PFQuery = User.query()!
         queryFriends.whereKey("username", equalTo: username)
         queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
         

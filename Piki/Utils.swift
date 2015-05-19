@@ -1700,7 +1700,7 @@ class Utils {
         for friendObject in friendsObjects{
             friendsId.append(friendObject["friendId"] as! String)
         }
-        
+
         return friendsId
     }
     

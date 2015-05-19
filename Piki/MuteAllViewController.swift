@@ -369,7 +369,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
         var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
         
         if arrayFriendsId != nil{
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: arrayFriendsId!)
             queryFriends.orderByAscending("username")
             queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
@@ -402,7 +402,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
         println("Size friends : \(arrayFriendsId!.count), size filtered : \(finalArrayFriends.count)")
         
         if arrayFriendsId != nil {
-            var queryFriends:PFQuery = PFUser.query()!
+            var queryFriends:PFQuery = User.query()!
             queryFriends.whereKey("objectId", containedIn: finalArrayFriends)
             queryFriends.orderByAscending("username")
             queryFriends.limit = 100
