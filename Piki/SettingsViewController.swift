@@ -94,6 +94,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @IBAction func leaveSettings(sender: AnyObject) {
+//        self.navigationController?.popToRootViewControllerAnimated(true)
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             
         })

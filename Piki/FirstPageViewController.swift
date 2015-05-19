@@ -10,15 +10,8 @@ import Foundation
 
 
 class FirstPageViewController: UIViewController{
-    
-    @IBOutlet weak var catchPhraseLabel: UILabel!
     @IBOutlet weak var nextButton: UIButton!
     
-    override func viewDidLoad() {
-        catchPhraseLabel.font = UIFont(name: Utils().customFontSemiBold, size: 30.0)
-        
-
-    }
     
     override func viewDidAppear(animated: Bool) {
         //goBig()

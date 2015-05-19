@@ -7,22 +7,44 @@
 //
 
 protocol PleekTableViewDelegate: class {
-    func pleekTableView(tableView: UITableView, didSelectPleek pleek:Pleek, atIndexPath indexPath: NSIndexPath)
+    func pleekTableView(tableView: UITableView?, didSelectPleek pleek:Pleek, atIndexPath indexPath: NSIndexPath?)
     func pleekTableViewLoadMore(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, toSkip: Int)
     func scrollViewDidScrollToTop()
 }
 
 import UIKit
 
-class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelegate, InboxCellDelegate {
+class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelegate, InboxCellDelegate, UISearchBarDelegate {
     
-    var pleeks: [Pleek] = []
+    let isSearchable: Bool
+    var pleeks: [Pleek] = [] {
+        didSet {
+            if count(self.pleeks) > 0 && self.isSearchable {
+                self.tableView?.tableHeaderView = self.searchBar
+            } else {
+                self.tableView?.tableHeaderView = nil
+            }
+        }
+    }
     
-    weak var tableView: UITableView? = nil
+    weak var tableView: UITableView?
     
     weak var delegate: PleekTableViewDelegate? = nil
+    lazy var searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView!.frame), 50)
+        searchBar.barTintColor = UIColor(red: 57.0/255.0, green: 73.0/255.0, blue: 171.0/255.0, alpha: 1.0)
+        return searchBar
+    } ()
+    
     var isLoadingMore: Bool = false
     var shouldLoadMore: Bool = true
+
+    
+    init(searchable: Bool) {
+        self.isSearchable = searchable
+        super.init()
+    }
     
     // MARK: UITableViewDataSource
     

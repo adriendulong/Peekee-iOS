@@ -100,7 +100,9 @@ class AccountsTableViewCell : UITableViewCell{
         let imageFile:PFFile? = self.user["recommendPicture"] as? PFFile
         if imageFile != nil{
             imageFile!.getDataInBackgroundWithBlock({ (data, error) -> Void in
-                self.accountImageView.image = UIImage(data: data!)
+                if let data = data {
+                    self.accountImageView.image = UIImage(data: data)
+                }
             })
         }
         

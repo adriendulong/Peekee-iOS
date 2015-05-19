@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14D87h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="Proxima-Nova-Bold.otf">
+        <mutableArray key="Proxima-Nova-Sbold.otf">
             <string>ProximaNova-Semibold</string>
         </mutableArray>
     </customFonts>
@@ -16,18 +16,11 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OIr-32-vMP">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="10"/>
-                    <color key="backgroundColor" red="0.18823529410000001" green="0.2470588235" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="10" id="fxf-Bn-nxb"/>
-                    </constraints>
-                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pJ6-4v-UXm">
-                    <rect key="frame" x="0.0" y="10" width="600" height="592"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="React with your camera." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aHj-Wr-cxT">
-                            <rect key="frame" x="133" y="256" width="333" height="80"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="React with your camera." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="aHj-Wr-cxT">
+                            <rect key="frame" x="0.0" y="260" width="600" height="80"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="194" id="2br-sz-ol3"/>
                                 <constraint firstAttribute="height" constant="80" id="xlj-XY-VDn"/>
@@ -35,9 +28,14 @@
                             <fontDescription key="fontDescription" name="ProximaNova-Semibold" family="Proxima Nova" pointSize="30"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="2br-sz-ol3"/>
+                                </mask>
+                            </variation>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_first_page" translatesAutoresizingMaskIntoConstraints="NO" id="KI1-FP-pL7">
-                            <rect key="frame" x="232" y="119" width="136" height="136"/>
+                            <rect key="frame" x="232" y="123" width="136" height="136"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="136" id="WWt-uu-RLs"/>
                                 <constraint firstAttribute="height" constant="136" id="wgO-24-05Q"/>
@@ -46,10 +44,19 @@
                     </subviews>
                     <color key="backgroundColor" red="0.24313725489999999" green="0.31372549020000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
+                        <constraint firstAttribute="trailing" secondItem="aHj-Wr-cxT" secondAttribute="trailing" id="2zN-eu-IDi"/>
                         <constraint firstAttribute="centerY" secondItem="aHj-Wr-cxT" secondAttribute="centerY" id="4Hj-zY-tai"/>
                         <constraint firstAttribute="centerX" secondItem="KI1-FP-pL7" secondAttribute="centerX" id="DJi-MD-ezP"/>
+                        <constraint firstItem="aHj-Wr-cxT" firstAttribute="leading" secondItem="pJ6-4v-UXm" secondAttribute="leading" id="Dv3-c8-qII"/>
                         <constraint firstAttribute="centerX" secondItem="aHj-Wr-cxT" secondAttribute="centerX" id="Ifu-Vn-QQB"/>
                         <constraint firstItem="aHj-Wr-cxT" firstAttribute="top" secondItem="KI1-FP-pL7" secondAttribute="bottom" constant="1" id="PeC-ga-aPb"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OIr-32-vMP">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="20"/>
+                    <color key="backgroundColor" red="0.18823529410000001" green="0.2470588235" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="fxf-Bn-nxb"/>
                     </constraints>
                 </view>
             </subviews>
@@ -58,11 +65,17 @@
                 <constraint firstItem="pJ6-4v-UXm" firstAttribute="leading" secondItem="hRB-XP-Ej0" secondAttribute="leading" id="35q-KI-vBr"/>
                 <constraint firstAttribute="trailing" secondItem="pJ6-4v-UXm" secondAttribute="trailing" id="A7D-e0-diC"/>
                 <constraint firstItem="OIr-32-vMP" firstAttribute="top" secondItem="hRB-XP-Ej0" secondAttribute="top" id="MC0-dv-lRu"/>
-                <constraint firstAttribute="bottom" secondItem="pJ6-4v-UXm" secondAttribute="bottom" constant="-2" id="Ogi-aS-lL7"/>
+                <constraint firstAttribute="bottom" secondItem="pJ6-4v-UXm" secondAttribute="bottom" id="Ogi-aS-lL7"/>
                 <constraint firstItem="pJ6-4v-UXm" firstAttribute="top" secondItem="OIr-32-vMP" secondAttribute="bottom" id="SYv-b4-i4N"/>
                 <constraint firstItem="OIr-32-vMP" firstAttribute="leading" secondItem="hRB-XP-Ej0" secondAttribute="leading" id="XNu-Xb-kbp"/>
                 <constraint firstAttribute="trailing" secondItem="OIr-32-vMP" secondAttribute="trailing" id="fAC-p2-EY4"/>
+                <constraint firstItem="pJ6-4v-UXm" firstAttribute="top" secondItem="hRB-XP-Ej0" secondAttribute="top" id="rig-AR-0YD"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="SYv-b4-i4N"/>
+                </mask>
+            </variation>
         </view>
     </objects>
     <resources>

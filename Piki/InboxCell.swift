@@ -12,7 +12,8 @@ protocol InboxCellDelegate: class {
     func deletePleek(cell : InboxCell)
 }
 
-class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
+class InboxCell: UITableViewCell,
+                 UIGestureRecognizerDelegate {
     
     weak var delegate: InboxCellDelegate? = nil
     
@@ -570,9 +571,8 @@ extension InboxCell {
     }
     
     override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer.isKindOfClass(UIPanGestureRecognizer) {
-            let uiPanGesture:UIPanGestureRecognizer = gestureRecognizer as! UIPanGestureRecognizer
-            let velocity:CGPoint = uiPanGesture.velocityInView(self)
+        if let panGesture = gestureRecognizer as? UIPanGestureRecognizer {
+            let velocity:CGPoint = panGesture.velocityInView(self)
             return fabs(velocity.y) < fabs(velocity.x)
         } else {
             return true

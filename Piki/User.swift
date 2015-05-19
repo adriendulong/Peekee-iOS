@@ -124,7 +124,6 @@ import Foundation
                 friendsCompletionTask.setError(error!)
             }
             else {
-                println(friends)
                 self.updateLocalFriendsIdList(friends as! [Friend])
                 friendsCompletionTask.setResult(friends)
             }

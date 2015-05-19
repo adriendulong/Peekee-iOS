@@ -11,6 +11,8 @@ import UIKit
 protocol PleekNavigationViewDelegate: class {
     func navigationView(navigationView: PleekNavigationView, didSelectTabAtIndex index: UInt)
     func navigationView(navigationView: PleekNavigationView, shouldUpdateTopConstraintOffset offset: CGFloat, animated: Bool)
+    func navigationViewShowSettings(navigationView: PleekNavigationView)
+    func navigationViewShowFriends(navigationView: PleekNavigationView)
 }
 
 class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
@@ -64,6 +66,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         let settingsB = UIButton()
         settingsB.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
         settingsB.setImage(UIImage(named: "settings-icon"), forState: .Normal)
+        settingsB.addTarget(self, action: Selector("settingsAction:"), forControlEvents: .TouchUpInside)
         
         self.topContainerView.addSubview(settingsB)
         
@@ -97,6 +100,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         let friendsB = UIButton()
         friendsB.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
         friendsB.setImage(UIImage(named: "friends-icon"), forState: .Normal)
+        friendsB.addTarget(self, action: Selector("friendsAction:"), forControlEvents: .TouchUpInside)
         
         self.topContainerView.addSubview(friendsB)
         
@@ -236,6 +240,18 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     }
     
     // MARK: Action
+    
+    func settingsAction(sender: UIButton) {
+        if let delegate = self.delegate {
+            delegate.navigationViewShowSettings(self)
+        }
+    }
+    
+    func friendsAction(sender: UIButton) {
+        if let delegate = self.delegate {
+            delegate.navigationViewShowFriends(self)
+        }
+    }
     
     func didSelectButton(sender: PleekNavigationButton) {
         

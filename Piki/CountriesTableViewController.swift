@@ -48,15 +48,16 @@ class CountriesTableViewController : UITableViewController{
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell:UITableViewCell = self.tableView.dequeueReusableCellWithIdentifier("countryCell") as! UITableViewCell
         
-        cell.textLabel?.text = countriesInfos[indexPath.row]["countryName"]
+        let name: String = countriesInfos[indexPath.row]["countryName"] ?? ""
+        let code: String = countriesInfos[indexPath.row]["countryCode"] ?? ""
+        cell.textLabel?.text = "\(name) +\(code)"
         
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var countryName = countriesInfos[indexPath.row]["countryName"]
-        println("country selected : \(countryName)")
-        
+        println(countriesInfos[indexPath.row])
         
         self.delegate!.choseCountry(countriesInfos[indexPath.row])
         self.dismissViewControllerAnimated(true, completion: { () -> Void in

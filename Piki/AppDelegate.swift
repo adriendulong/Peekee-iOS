@@ -53,47 +53,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         //See if present mandatory screen add friends
         getIfFriendsMandatory()
 
-        if PFUser.currentUser() == nil {
-            Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
-
-
-            /*var storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var phoneViewController:UIViewController = storyboard.instantiateViewControllerWithIdentifier("waitView") as UIViewController
-            self.window?.makeKeyAndVisible()
-            self.window!.rootViewController = phoneViewController*/
-
-
-            var storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
-            //self.window?.makeKeyAndVisible()
-            self.window!.rootViewController = phoneViewController
-            
-//            let vc = InboxViewController()
-//            vc.view.backgroundColor = UIColor.redColor()
-//            
-//            let root = InboxNavigationController(navigationBarClass: InboxNavigationBar.self, toolbarClass: nil)
-//            root.view.frame = self.window!.frame
-//            
-//            root.viewControllers = [vc]
-//            self.window?.rootViewController = root
-
-        }
-        else if PFUser.currentUser()!["userInfos"] == nil{
-            PFUser.logOut()
-            var storyboard = UIStoryboard(name: "Main", bundle: nil)
-            var phoneViewController:UINavigationController = storyboard.instantiateViewControllerWithIdentifier("loginNav") as! UINavigationController
-            //self.window?.makeKeyAndVisible()
-            self.window!.rootViewController = phoneViewController
-
+        
+        if let user = PFUser.currentUser() {
+            if user["userInfos"] == nil {
+                PFUser.logOut()
+                var storyboard = UIStoryboard(name: "Subscribe", bundle: nil)
+                if let phoneNavController = storyboard.instantiateInitialViewController() as? UINavigationController {
+                    self.window!.rootViewController = phoneNavController
+                }
+            } else {
+                let vc = InboxViewController()
+                vc.view.backgroundColor = UIColor.whiteColor()
+                
+                let root = InboxNavigationController()
+                root.view.frame = self.window!.frame
+                
+                root.viewControllers = [vc]
+                self.window?.rootViewController = root
+            }
         } else {
-            let vc = InboxViewController()
-            vc.view.backgroundColor = UIColor.whiteColor()
-    
-            let root = InboxNavigationController()
-            root.view.frame = self.window!.frame
-    
-            root.viewControllers = [vc]
-            self.window?.rootViewController = root
+            Mixpanel.sharedInstance().identify(Mixpanel.sharedInstance().distinctId)
+            
+            var storyboard = UIStoryboard(name: "Subscribe", bundle: nil)
+            if let phoneNavController = storyboard.instantiateInitialViewController() as? UINavigationController {
+                self.window!.rootViewController = phoneNavController
+            }
+
         }
         
         _messengerUrlHandler = FBSDKMessengerURLHandler()
@@ -141,33 +126,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         FBSDKAppEvents.activateApp()
         Mixpanel.sharedInstance().timeEvent("Session")
         Mixpanel.sharedInstance().people.set(["Last App Open" : NSDate()])
-
-//         Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//        if PFUser.currentUser() != nil {
-//            var navController:UINavigationController = window!.rootViewController as! UINavigationController
-//            var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
-//            //rootController.updatePikis()
-//
-//
-//            Utils().updateUser().continueWithBlock({ (task : BFTask!) -> AnyObject! in
-//
-//
-//                //If no name and launched the app 10 times : ask for his name
-//                Utils().nbVisitAppIncrement()
-//                if Utils().isMomentForRealName(){
-//                    if PFUser.currentUser()!["name"] == nil{
-//                        rootController.setName()
-//                    }
-//                    else if count(PFUser.currentUser()!["name"] as! String) == 0{
-//                        rootController.setName()
-//                    }
-//
-//                }
-//
-//                return nil
-//            })
-//        }
-
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -187,8 +145,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         else{
             println("Waiting list subscription")
         }
-
-
     }
 
 
@@ -220,9 +176,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
                                 completionHandler(UIBackgroundFetchResult.Failed)
                             }
                             else{
-                                var navController:UINavigationController = self.window!.rootViewController as! UINavigationController
-                                var rootController:MainViewController = navController.viewControllers[0] as! MainViewController
-                                rootController.goToPiki(piki!)
+                                
+                                
+                                if let navController = self.window!.rootViewController as? UINavigationController,
+                                    let rootController = navController.viewControllers[0] as? InboxViewController,
+                                    let pleek = piki as? Pleek {
+                                        
+                                    rootController.pleekTableView(nil, didSelectPleek: pleek, atIndexPath: nil)
+                                }
+
+                                
                                 NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)
                                 completionHandler(UIBackgroundFetchResult.NewData)
                             }
@@ -241,11 +204,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
             }
         }
 
-
-
-
-
-
     }
 
 
@@ -259,7 +217,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
                 withParameters: ["Test" : "Test"],
                 block: { (result, error ) -> Void in
                     println("Result : \(result)")
-                    if error == nil{
+                    if error == nil {
                         var resultDict : [String:AnyObject] = result as! [String:AnyObject]
                         var invitFriends:Bool = resultDict["forceFriends"] as! Bool
                         var limitFriends:Int = resultDict["numberToAdd"] as! Int
@@ -276,60 +234,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
 
         }
     }
-
-    /*
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
-
-
-        if _messengerUrlHandler!.canOpenURL(url, sourceApplication: sourceApplication){
-            _messengerUrlHandler!.openURL(url, sourceApplication: sourceApplication)
-        }
-        else{
-            FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
-
-            FBSDKApplicationDelegate.handleOpenURL(url, sourceApplication: sourceApplication, fallbackHandler: { (call : FBSDKApplicationDelegate!) -> Void in
-
-            })
-        }
-
-
-        return true
-    }
-
-
-    func messengerURLHandler(messengerURLHandler: FBSDKMessengerURLHandler!, didHandleReplyWithContext context: FBSDKMessengerURLHandlerReplyContext!) {
-        var metadata:String = context.metadata
-
-        println("Metadata : \(metadata)")
-
-        _replyMessengerContext = context
-        Utils().comeFromMessengerPleek(metadata)
-
-        var pikiObject:PFObject = PFObject(withoutDataWithClassName: "Piki", objectId: metadata)
-
-        var queryPiki:PFQuery = PFQuery(className: "Piki")
-        queryPiki.whereKey("objectId", equalTo: metadata)
-        queryPiki.includeKey("user")
-        queryPiki.cachePolicy = PFCachePolicy.CacheElseNetwork
-
-        queryPiki.getFirstObjectInBackgroundWithBlock({ (pikiObject, error) -> Void in
-            if error != nil {
-            }
-            else{
-                PFCloud.callFunctionInBackground("addToAPublicPleek", withParameters: ["pleekId" : metadata])
-
-                var navController:UINavigationController = self.window!.rootViewController as UINavigationController
-                var rootController:MainViewController = navController.viewControllers[0] as MainViewController
-                rootController.goToPiki(pikiObject)
-            }
-        })
-
-
-
-
-
-
-    }*/
 
 
 }

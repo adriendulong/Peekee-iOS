@@ -337,8 +337,15 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                                     
                                     MBProgressHUD.hideHUDForView(self.view, animated: true)
                                     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                                    appDelegate.window?.rootViewController = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()).instantiateInitialViewController() as! UINavigationController
+                                    let vc = InboxViewController()
+                                    vc.view.backgroundColor = UIColor.whiteColor()
                                     
+                                    let root = InboxNavigationController()
+                                    root.view.frame = appDelegate.window!.frame
+                                    
+                                    root.viewControllers = [vc]
+                                    appDelegate.window?.rootViewController = root
+
                                     return nil
                                 })
                                 
