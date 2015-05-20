@@ -285,7 +285,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         
         self.view.setNeedsLayout()
         
-        UIView.animateWithDuration(0.2, animations: { () -> Void in
+        UIView.animateWithDuration(0.1, animations: { () -> Void in
             self.view.layoutIfNeeded()
         })
     }

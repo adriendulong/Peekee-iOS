@@ -288,7 +288,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         self.indicatorCenterXConstraint.updateOffset(CGRectGetMidX(sender.frame) - CGRectGetMidX(self.inboxButton.frame))
         sender.superview!.setNeedsLayout()
         
-        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: nil, animations: { () -> Void in
+        UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 8.0, options: nil, animations: { () -> Void in
             sender.superview!.layoutIfNeeded()
         }, completion: nil)
         
