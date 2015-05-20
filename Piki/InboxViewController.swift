@@ -253,6 +253,15 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }, completion: nil)
     }
     
+    func hideNewPleekButton() {
+        self.newPleekButtonBottomConstraint.updateOffset(80.5)
+        self.newPleekButton.setNeedsLayout()
+        
+        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: nil, animations: { () -> Void in
+            self.newPleekButton.layoutIfNeeded()
+            }, completion: nil)
+    }
+    
     // MARK: PleekNavigationViewDelegate
     
     func navigationView(navigationView: PleekNavigationView, didSelectTabAtIndex index: UInt) {
@@ -263,12 +272,15 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         if index == 0 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(0)
             self.receivedPleeksTableView.scrollsToTop = true
+            self.popNewPleekButton()
         } else if index == 1 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(-CGRectGetWidth(self.view.frame))
             self.sentPleeksTableView.scrollsToTop = true
+            self.popNewPleekButton()
         } else if index == 2 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(-CGRectGetWidth(self.view.frame) * 2)
             self.bestPleekCollectionView.scrollsToTop = true
+            self.hideNewPleekButton()
         }
         
         self.view.setNeedsLayout()
