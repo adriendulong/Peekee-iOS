@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekTableViewDelegate {
+class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekTableViewDelegate, PleekCollectionViewDelegate {
 
     var receivedPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol(searchable: true)
     lazy var receivedPleekRefreshControl: UIRefreshControl = {
@@ -21,6 +21,13 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     lazy var sentPleekRefreshControl: UIRefreshControl  = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshSentPleek"), forControlEvents: UIControlEvents.ValueChanged)
+        return refreshControl
+    }()
+    
+    var bestPleeksProtocol: PleekCollectionViewProtocol = PleekCollectionViewProtocol()
+    lazy var bestPleekRefreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: Selector("refreshBestPleek"), forControlEvents: UIControlEvents.ValueChanged)
         return refreshControl
     }()
     
@@ -41,7 +48,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         tableView.scrollsToTop = true
         
         tableView.registerClass(InboxCell.self, forCellReuseIdentifier: "InboxTableViewCellIdentifier")
-        tableView.registerClass(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
+        tableView.registerClass(LoadMoreTableViewCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
         
         let panGesture = UIPanGestureRecognizer(target: self.navigationView, action: Selector("handlePan:"))
         panGesture.minimumNumberOfTouches = 1
@@ -73,7 +80,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         tableView.scrollsToTop = false
         
         tableView.registerClass(InboxCell.self, forCellReuseIdentifier: "InboxTableViewCellIdentifier")
-        tableView.registerClass(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
+        tableView.registerClass(LoadMoreTableViewCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
         
         let panGesture = UIPanGestureRecognizer(target: self.navigationView, action: Selector("handlePan:"))
         panGesture.minimumNumberOfTouches = 1
@@ -91,6 +98,45 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return tableView
+    }()
+    
+    lazy var bestPleekCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 4
+        layout.minimumInteritemSpacing = 4
+        layout.scrollDirection = .Vertical
+        layout.sectionInset = UIEdgeInsets(top:4, left: 4, bottom: 4, right: 4)
+
+        let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        collectionView.addSubview(self.bestPleekRefreshControl)
+        collectionView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
+        
+        self.bestPleeksProtocol.delegate = self
+        collectionView.dataSource = self.bestPleeksProtocol
+        collectionView.delegate = self.bestPleeksProtocol
+        self.bestPleeksProtocol.collectionView = collectionView
+        collectionView.scrollsToTop = false
+
+        
+        collectionView.registerClass(BestCell.self, forCellWithReuseIdentifier: "BestCollectionViewCell")
+        collectionView.registerClass(LoadMoreCollectionViewCell.self, forCellWithReuseIdentifier: "LoadMoreCollectionViewCellIdentifier")
+        
+        let panGesture = UIPanGestureRecognizer(target: self.navigationView, action: Selector("handlePan:"))
+        panGesture.minimumNumberOfTouches = 1
+        panGesture.maximumNumberOfTouches = 1
+        panGesture.delegate = self.navigationView
+        collectionView.addGestureRecognizer(panGesture)
+        
+        self.view.addSubview(collectionView)
+        
+        collectionView.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo(self.navigationView.snp_bottom)
+            make.bottom.equalTo(self.view)
+            make.width.equalTo(self.view)
+            make.leading.equalTo(self.sentPleeksTableView.snp_trailing)
+        }
+        
+        return collectionView
     }()
     
     lazy var statusBarView: UIView = {
@@ -163,6 +209,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         let sent = self.sentPleeksTableView
         let navigationView = self.navigationView
         let statusBar = self.statusBarView
+        let best = self.bestPleekCollectionView
         let newPleekButton = self.newPleekButton
         
         self.view.bringSubviewToFront(self.navigationView)
@@ -170,6 +217,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         
         self.getReceivedPleek(true)
         self.getSentPleek(true)
+        self.getBestPleek(true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -210,6 +258,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     func navigationView(navigationView: PleekNavigationView, didSelectTabAtIndex index: UInt) {
         self.receivedPleeksTableView.scrollsToTop = false
         self.sentPleeksTableView.scrollsToTop = false
+        self.bestPleekCollectionView.scrollsToTop = false
         
         if index == 0 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(0)
@@ -217,6 +266,9 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         } else if index == 1 {
             self.receivedPleeksTableViewTrailingConstraint.updateOffset(-CGRectGetWidth(self.view.frame))
             self.sentPleeksTableView.scrollsToTop = true
+        } else if index == 2 {
+            self.receivedPleeksTableViewTrailingConstraint.updateOffset(-CGRectGetWidth(self.view.frame) * 2)
+            self.bestPleekCollectionView.scrollsToTop = true
         }
         
         self.view.setNeedsLayout()
@@ -256,26 +308,22 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     // MARK: PleekTableViewDelegate
     
     func pleekTableView(tableView: UITableView?, didSelectPleek pleek: Pleek, atIndexPath indexPath: NSIndexPath?) {
-        
         if let tableView = tableView, let indexPath = indexPath {
             self.toUpdate = (tableView, indexPath)
         }
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let pleekVC = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as? PleekViewController {
-            pleekVC.mainPiki = pleek
-            self.navigationController?.pushViewController(pleekVC, animated: true)
-        }
+        self.showPleek(pleek)
     }
     
     func pleekTableViewLoadMore(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, toSkip: Int) {
+        weak var weakSelf = self
         if tableView == self.receivedPleeksTableView {
             User.currentUser()!.getReceivedPleeks(true, skip: toSkip, completed: { (pleeks, error) -> () in
-                self.pleekTableViewLoadMoreResult(pleekProtocol, tableView: tableView, pleeks: pleeks, error: error)
+                weakSelf?.pleekTableViewLoadMoreResult(pleekProtocol, tableView: tableView, pleeks: pleeks, error: error)
             })
         } else if tableView == self.sentPleeksTableView {
             User.currentUser()!.getSentPleeks(true, skip: toSkip, completed: { (pleeks, error) -> () in
-                self.pleekTableViewLoadMoreResult(pleekProtocol, tableView: tableView, pleeks: pleeks, error: error)
+                weakSelf?.pleekTableViewLoadMoreResult(pleekProtocol, tableView: tableView, pleeks: pleeks, error: error)
             })
         }
     }
@@ -293,7 +341,37 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         self.navigationView.openView()
     }
     
+    // MARK: PleekCollectionViewViewDelegate
+    
+    func pleekCollectionView(tableView: UICollectionView?, didSelectPleek pleek: Pleek, atIndexPath indexPath: NSIndexPath?) {
+        self.showPleek(pleek)
+    }
+    
+    func pleekCollectionViewLoadMore(pleekProtocol: PleekCollectionViewProtocol, collectionView: UICollectionView, toSkip: Int) {
+        weak var weakSelf = self
+        Pleek.getBestPleek(true, skip: toSkip) { (pleeks, error) -> Void in
+            weakSelf?.pleekCollectionViewLoadMoreResult(pleekProtocol, collectionView: collectionView, pleeks: pleeks, error: error)
+        }
+    }
+    
+    func pleekCollectionViewLoadMoreResult(pleekProtocol: PleekCollectionViewProtocol, collectionView: UICollectionView, pleeks: [Pleek]?, error: NSError?) {
+        if let error = error {
+            println("Error : \(error.localizedDescription)")
+        } else {
+            pleekProtocol.updateCollectionView(collectionView, pleeks: pleeks!)
+        }
+        pleekProtocol.isLoadingMore = false
+    }
+    
     // MARK: Action
+    
+    func showPleek(pleek: Pleek) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let pleekVC = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as? PleekViewController {
+            pleekVC.mainPiki = pleek
+            self.navigationController?.pushViewController(pleekVC, animated: true)
+        }
+    }
     
     func newPleekAction(sender: UIButton) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -308,6 +386,10 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     func refreshSentPleek() {
         self.getSentPleek(false)
+    }
+    
+    func refreshBestPleek() {
+        self.getBestPleek(false)
     }
     
     // MARK: Data
@@ -348,5 +430,24 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 weakSelf?.sentPleeksTableView.reloadData()
             }
         })
+    }
+    
+    func getBestPleek(withCache: Bool) {
+        weak var weakSelf = self
+        Pleek.getBestPleek(withCache, skip: 0, completed: { (pleeks, error) -> () in
+            if error != nil {
+                println("Error : \(error!.localizedDescription)")
+            } else {
+                if count(pleeks!) < Constants.LoadPleekLimit {
+                    weakSelf?.bestPleeksProtocol.shouldLoadMore = false
+                } else {
+                    weakSelf?.bestPleeksProtocol.shouldLoadMore = true
+                }
+                weakSelf?.bestPleeksProtocol.pleeks = pleeks!
+                weakSelf?.bestPleekRefreshControl.endRefreshing()
+                weakSelf?.bestPleekCollectionView.reloadData()
+            }
+        })
+
     }
 }

@@ -279,7 +279,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
             index = 1
         break
         case self.bestButton:
-            index = 3
+            index = 2
         break
         default:
             return

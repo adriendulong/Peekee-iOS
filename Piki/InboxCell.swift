@@ -477,39 +477,38 @@ extension InboxCell {
         weak var weakSelf = self
         
         self.pleekImageView.image = nil
-        self.pleekImageSpinner.hidden = false
         self.pleekImageSpinner.startAnimating()
+        self.pleekPlayImageView.hidden = true
         
         if pleek.isVideo {
             self.pleekImageView.file = pleek.previewImage
-            self.pleekPlayImageView.hidden = false
         } else {
             self.pleekImageView.file = pleek.photo
-            self.pleekPlayImageView.hidden = true
         }
         
         self.pleekImageView.loadInBackground { (image, error) -> Void in
-            weakSelf?.pleekImageSpinner.hidden = true
+            weakSelf?.pleekImageSpinner.stopAnimating()
+            if pleek.isVideo {
+                self.pleekPlayImageView.hidden = false
+            }
         }
         
         self.reactTopImageView.image = nil
         self.reactBottomImageView.image = nil
 
         if let react1 = pleek.react1 {
-            self.reactTopImageSpinner.hidden = false
             self.reactTopImageSpinner.startAnimating()
             self.reactTopImageView.file = react1
             self.reactTopImageView.loadInBackground { (image, error) -> Void in
-                weakSelf?.reactTopImageSpinner.hidden = true
+                weakSelf?.reactTopImageSpinner.stopAnimating()
             }
         }
         
         if let react2 = pleek.react2 {
-            self.reactBottomImageSpinner.hidden = false
             self.reactBottomImageSpinner.startAnimating()
             self.reactBottomImageView.file = react2
             self.reactBottomImageView.loadInBackground { (image, error) -> Void in
-                weakSelf?.reactBottomImageSpinner.hidden = true
+                weakSelf?.reactBottomImageSpinner.stopAnimating()
             }
         }
         

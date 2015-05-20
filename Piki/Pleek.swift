@@ -96,4 +96,20 @@ import Foundation
             Utils().hidePleek(self.objectId!)
         }
     }
+    
+    class func getBestPleek(withCache: Bool, skip: Int, completed: (pleeks: [Pleek]?, error: NSError?) -> Void) {
+        Best.getAllBest(withCache, skip: skip) { (bests, error) -> () in
+            var pleeks: [Pleek]?
+            
+            if let bests: [Best] = bests {
+                pleeks = []
+                bests.map { (best: Best) -> () in
+                    if let pleek: Pleek = best.pleek {
+                        pleeks?.append(pleek)
+                    }
+                }
+            }
+            completed(pleeks: pleeks, error: error)
+        }
+    }
 }

@@ -240,9 +240,9 @@
 		0AD6F1241B09D18900A041C0 /* PleekTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */; };
 		0AD6F1251B09D53000A041C0 /* PleekTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */; };
 		0AD6F1261B09D53700A041C0 /* PleekTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */; };
-		0AD6F1281B09F0C100A041C0 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreCell.swift */; };
-		0AD6F1291B09F12200A041C0 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreCell.swift */; };
-		0AD6F12A1B09F12600A041C0 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreCell.swift */; };
+		0AD6F1281B09F0C100A041C0 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */; };
+		0AD6F1291B09F12200A041C0 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */; };
+		0AD6F12A1B09F12600A041C0 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */; };
 		0AD6F12C1B0A32BE00A041C0 /* PleekAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F12B1B0A32BE00A041C0 /* PleekAlertView.swift */; };
 		0AD6F12D1B0A3E1900A041C0 /* PleekAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F12B1B0A32BE00A041C0 /* PleekAlertView.swift */; };
 		0AD6F12E1B0A3E2100A041C0 /* PleekAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F12B1B0A32BE00A041C0 /* PleekAlertView.swift */; };
@@ -273,6 +273,21 @@
 		0AF4D9AF1B0B5CEB00BF051D /* Subscribe.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AF4D9A41B0B5CAA00BF051D /* Subscribe.storyboard */; };
 		0AF4D9B01B0B5CEB00BF051D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = E7665E3C19E5A3AB003DAAF8 /* LaunchScreen.xib */; };
 		0AF4D9B11B0B5CEB00BF051D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A227D091B0641050032AD40 /* Main.storyboard */; };
+		0AF4D9B31B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */; };
+		0AF4D9B41B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */; };
+		0AF4D9B51B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */; };
+		0AF4D9B71B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */; };
+		0AF4D9B81B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */; };
+		0AF4D9B91B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */; };
+		0AF4D9BB1B0C6D8100BF051D /* BestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */; };
+		0AF4D9BC1B0C6D8100BF051D /* BestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */; };
+		0AF4D9BD1B0C6D8100BF051D /* BestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */; };
+		0AF4D9BF1B0C7D0800BF051D /* Best.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BE1B0C7D0800BF051D /* Best.swift */; };
+		0AF4D9C01B0C7D0800BF051D /* Best.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BE1B0C7D0800BF051D /* Best.swift */; };
+		0AF4D9C11B0C7D0800BF051D /* Best.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BE1B0C7D0800BF051D /* Best.swift */; };
+		0AF4D9C31B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */; };
+		0AF4D9C41B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */; };
+		0AF4D9C51B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */; };
 		5E4C9A334D9FAF59B9CB4BE2 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
 		E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */; };
 		E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
@@ -384,7 +399,7 @@
 		0AA0166E1B039E9F003DCE3D /* PleekNavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekNavigationButton.swift; sourceTree = "<group>"; };
 		0ACD2B981AFB9B2100CADDEE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekTableViewProtocol.swift; sourceTree = "<group>"; };
-		0AD6F1271B09F0C100A041C0 /* LoadMoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
+		0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreTableViewCell.swift; sourceTree = "<group>"; };
 		0AD6F12B1B0A32BE00A041C0 /* PleekAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekAlertView.swift; sourceTree = "<group>"; };
 		0ADBF0F01AF7A76600684E79 /* Constraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
 		0ADBF0F11AF7A76600684E79 /* ConstraintAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstraintAttributes.swift; sourceTree = "<group>"; };
@@ -406,6 +421,11 @@
 		0AF32C931AF927ED0058B32C /* PleekManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekManager.swift; sourceTree = "<group>"; };
 		0AF32C951AF9FC760058B32C /* PleekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekViewController.swift; sourceTree = "<group>"; };
 		0AF4D9A51B0B5CAA00BF051D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Subscribe.storyboard; sourceTree = "<group>"; };
+		0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekBestCollectionViewLayout.swift; sourceTree = "<group>"; };
+		0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekCollectionViewProtocol.swift; sourceTree = "<group>"; };
+		0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestCell.swift; sourceTree = "<group>"; };
+		0AF4D9BE1B0C7D0800BF051D /* Best.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Best.swift; sourceTree = "<group>"; };
+		0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreCollectionViewCell.swift; sourceTree = "<group>"; };
 		A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Peekee.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.release.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.release.xcconfig"; sourceTree = "<group>"; };
 		E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountriesTableViewController.swift; sourceTree = "<group>"; };
@@ -643,6 +663,7 @@
 				0AA0160C1B01DF22003DCE3D /* Friend.swift */,
 				0AA016181B0243F6003DCE3D /* Certified.swift */,
 				0AA0161C1B024ECE003DCE3D /* React.swift */,
+				0AF4D9BE1B0C7D0800BF051D /* Best.swift */,
 			);
 			name = Parse;
 			sourceTree = "<group>";
@@ -661,10 +682,13 @@
 		0AA0166C1B039E93003DCE3D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0AD6F1271B09F0C100A041C0 /* LoadMoreCell.swift */,
+				0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */,
 				0AA015FB1B011495003DCE3D /* InboxCell.swift */,
 				0AA0166D1B039E9F003DCE3D /* PleekNavigationView.swift */,
 				0AA0166E1B039E9F003DCE3D /* PleekNavigationButton.swift */,
+				0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */,
+				0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */,
+				0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -673,6 +697,7 @@
 			isa = PBXGroup;
 			children = (
 				0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */,
+				0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1428,7 +1453,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AD6F12E1B0A3E2100A041C0 /* PleekAlertView.swift in Sources */,
-				0AD6F1291B09F12200A041C0 /* LoadMoreCell.swift in Sources */,
+				0AD6F1291B09F12200A041C0 /* LoadMoreTableViewCell.swift in Sources */,
 				0AD6F1261B09D53700A041C0 /* PleekTableViewProtocol.swift in Sources */,
 				0AA015611B00C5D4003DCE3D /* Pleek.swift in Sources */,
 				0A5761641AFB9D850006B544 /* EdgeInsets.swift in Sources */,
@@ -1446,9 +1471,12 @@
 				0A5761701AFB9D850006B544 /* AcountsAdviceViewController.swift in Sources */,
 				0AA0161E1B024ECE003DCE3D /* React.swift in Sources */,
 				0AA0160E1B01DF22003DCE3D /* Friend.swift in Sources */,
+				0AF4D9BC1B0C6D8100BF051D /* BestCell.swift in Sources */,
+				0AF4D9B41B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */,
 				0AA016001B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				0A5761711AFB9D850006B544 /* EditUsernameViewController.swift in Sources */,
 				0A5761721AFB9D850006B544 /* WalkthroughViewController.swift in Sources */,
+				0AF4D9B81B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */,
 				0A5761731AFB9D850006B544 /* CountriesTableViewController.swift in Sources */,
 				0A5761741AFB9D850006B544 /* ListRecipientsViewController.swift in Sources */,
 				0AA016031B011495003DCE3D /* InboxViewController.swift in Sources */,
@@ -1475,12 +1503,14 @@
 				0A5761851AFB9D850006B544 /* ConstraintItem.swift in Sources */,
 				0A5761861AFB9D850006B544 /* Constants.swift in Sources */,
 				0A5761871AFB9D850006B544 /* PleekViewController.swift in Sources */,
+				0AF4D9C01B0C7D0800BF051D /* Best.swift in Sources */,
 				0A5761881AFB9D850006B544 /* TutoVideoViewController.swift in Sources */,
 				0A5761891AFB9D850006B544 /* PikiUserTableViewCell.swift in Sources */,
 				0A57618A1AFB9D850006B544 /* PleekManager.swift in Sources */,
 				0A57618B1AFB9D850006B544 /* AddFriendsFirstViewController.swift in Sources */,
 				0AA016121B02014B003DCE3D /* PFObject.swift in Sources */,
 				0A57618C1AFB9D850006B544 /* SearchUserTableViewCell.swift in Sources */,
+				0AF4D9C41B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */,
 				0A57618D1AFB9D850006B544 /* TakePhotoViewController.swift in Sources */,
 				0A57618E1AFB9D850006B544 /* ConstraintRelation.swift in Sources */,
 				0A57618F1AFB9D850006B544 /* VerificationCodePhoneViewController.swift in Sources */,
@@ -1495,7 +1525,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AD6F12D1B0A3E1900A041C0 /* PleekAlertView.swift in Sources */,
-				0AD6F12A1B09F12600A041C0 /* LoadMoreCell.swift in Sources */,
+				0AD6F12A1B09F12600A041C0 /* LoadMoreTableViewCell.swift in Sources */,
 				0AD6F1251B09D53000A041C0 /* PleekTableViewProtocol.swift in Sources */,
 				0AA015601B00C5CF003DCE3D /* Pleek.swift in Sources */,
 				0A5761D71AFB9D890006B544 /* EdgeInsets.swift in Sources */,
@@ -1513,9 +1543,12 @@
 				0A5761E31AFB9D890006B544 /* AcountsAdviceViewController.swift in Sources */,
 				0AA0161F1B024ECE003DCE3D /* React.swift in Sources */,
 				0AA0160F1B01DF22003DCE3D /* Friend.swift in Sources */,
+				0AF4D9BD1B0C6D8100BF051D /* BestCell.swift in Sources */,
+				0AF4D9B51B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */,
 				0AA016011B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				0A5761E41AFB9D890006B544 /* EditUsernameViewController.swift in Sources */,
 				0A5761E51AFB9D890006B544 /* WalkthroughViewController.swift in Sources */,
+				0AF4D9B91B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */,
 				0A5761E61AFB9D890006B544 /* CountriesTableViewController.swift in Sources */,
 				0A5761E71AFB9D890006B544 /* ListRecipientsViewController.swift in Sources */,
 				0AA016041B011495003DCE3D /* InboxViewController.swift in Sources */,
@@ -1542,12 +1575,14 @@
 				0A5761F81AFB9D890006B544 /* ConstraintItem.swift in Sources */,
 				0A5761F91AFB9D890006B544 /* Constants.swift in Sources */,
 				0A5761FA1AFB9D890006B544 /* PleekViewController.swift in Sources */,
+				0AF4D9C11B0C7D0800BF051D /* Best.swift in Sources */,
 				0A5761FB1AFB9D890006B544 /* TutoVideoViewController.swift in Sources */,
 				0A5761FC1AFB9D890006B544 /* PikiUserTableViewCell.swift in Sources */,
 				0A5761FD1AFB9D890006B544 /* PleekManager.swift in Sources */,
 				0A5761FE1AFB9D890006B544 /* AddFriendsFirstViewController.swift in Sources */,
 				0AA016131B02014B003DCE3D /* PFObject.swift in Sources */,
 				0A5761FF1AFB9D890006B544 /* SearchUserTableViewCell.swift in Sources */,
+				0AF4D9C51B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */,
 				0A5762001AFB9D890006B544 /* TakePhotoViewController.swift in Sources */,
 				0A5762011AFB9D890006B544 /* ConstraintRelation.swift in Sources */,
 				0A5762021AFB9D890006B544 /* VerificationCodePhoneViewController.swift in Sources */,
@@ -1563,7 +1598,7 @@
 			files = (
 				0ADBF1031AF7A76600684E79 /* EdgeInsets.swift in Sources */,
 				0ADBF10A1AF8AC9300684E79 /* ContactPhoneTableViewCell.swift in Sources */,
-				0AD6F1281B09F0C100A041C0 /* LoadMoreCell.swift in Sources */,
+				0AD6F1281B09F0C100A041C0 /* LoadMoreTableViewCell.swift in Sources */,
 				E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */,
 				E70A55BA1A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift in Sources */,
 				E755A1FE1A27325D007377A1 /* SearchFriendsViewController.swift in Sources */,
@@ -1580,9 +1615,12 @@
 				0AA0160D1B01DF22003DCE3D /* Friend.swift in Sources */,
 				0AA015FF1B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				E727F7021A5B0D3500BB8B0B /* WalkthroughViewController.swift in Sources */,
+				0AF4D9BB1B0C6D8100BF051D /* BestCell.swift in Sources */,
+				0AF4D9B31B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */,
 				E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */,
 				E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */,
 				E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */,
+				0AF4D9B71B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */,
 				0AA016021B011495003DCE3D /* InboxViewController.swift in Sources */,
 				0AD6F12C1B0A32BE00A041C0 /* PleekAlertView.swift in Sources */,
 				0ADBF1111AF8AED900684E79 /* UIColor+PleekColor.swift in Sources */,
@@ -1609,12 +1647,14 @@
 				0ADBF1161AF8B10800684E79 /* Constants.swift in Sources */,
 				0AF32C961AF9FC760058B32C /* PleekViewController.swift in Sources */,
 				E73A23DD1AA0B01900C65B7A /* TutoVideoViewController.swift in Sources */,
+				0AF4D9BF1B0C7D0800BF051D /* Best.swift in Sources */,
 				0ADBF10E1AF8ACC700684E79 /* PikiUserTableViewCell.swift in Sources */,
 				0AF32C941AF927ED0058B32C /* PleekManager.swift in Sources */,
 				0AA0155D1B00C2E3003DCE3D /* Pleek.swift in Sources */,
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
 				0AA016111B02014B003DCE3D /* PFObject.swift in Sources */,
 				0ADBF10C1AF8ACB300684E79 /* SearchUserTableViewCell.swift in Sources */,
+				0AF4D9C31B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */,
 				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,
 				0ADBF1011AF7A76600684E79 /* ConstraintRelation.swift in Sources */,
 				E759CC031A10FB7900E64EC3 /* VerificationCodePhoneViewController.swift in Sources */,

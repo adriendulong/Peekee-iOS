@@ -40,8 +40,6 @@ class Certified: PFObject, PFSubclassing {
         
         return  certifiedUsers
     }
-    
-
 }
 
 private let _SomeManagerSharedInstance = CertifiedManager()

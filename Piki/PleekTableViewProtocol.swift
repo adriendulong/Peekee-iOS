@@ -59,7 +59,7 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         if indexPath.row == count(self.pleeks) && self.shouldLoadMore {
-            let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreTableViewCellIdentifier", forIndexPath: indexPath) as! LoadMoreCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreTableViewCellIdentifier", forIndexPath: indexPath) as! LoadMoreTableViewCell
             cell.spinner.startAnimating()
             return cell
         }

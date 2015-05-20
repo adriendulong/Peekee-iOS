@@ -1,15 +1,14 @@
 //
-//  LoadMoreCell.swift
+//  LoadMoreCollectionViewCell.swift
 //  Peekee
 //
-//  Created by Kevin CATHALY on 18/05/2015.
+//  Created by Kevin CATHALY on 20/05/2015.
 //  Copyright (c) 2015 PikiChat. All rights reserved.
 //
 
 import UIKit
 
-class LoadMoreCell: UITableViewCell {
-    
+class LoadMoreCollectionViewCell: UICollectionViewCell {
     lazy var spinner: LLARingSpinnerView = {
         let spinner = LLARingSpinnerView()
         spinner.hidesWhenStopped = true
@@ -25,13 +24,13 @@ class LoadMoreCell: UITableViewCell {
         })
         
         return spinner
-    } ()
-
+        } ()
+    
     
     // MARK: Life Cycle
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         self.setupView()
     }
     
@@ -43,7 +42,6 @@ class LoadMoreCell: UITableViewCell {
     func setupView() {
         self.contentView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         self.clipsToBounds = true
-        self.selectionStyle = .None
         spinner.startAnimating()
     }
     
