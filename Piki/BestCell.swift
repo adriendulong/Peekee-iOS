@@ -23,12 +23,32 @@ class BestCell: UICollectionViewCell {
             make.bottom.equalTo(self.contentView)
         })
         
-        containerV.layer.borderWidth = 0.5
-        containerV.layer.borderColor = UIColor.whiteColor().CGColor
         containerV.layer.cornerRadius = 3.0
         containerV.clipsToBounds = true
         
         return containerV
+    } ()
+    
+    lazy var shadowView: UIView = {
+        let shadowV = UIView()
+        shadowV.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
+        
+        self.contentView.addSubview(shadowV)
+        
+        shadowV.snp_makeConstraints({ (make) -> Void in
+            make.leading.equalTo(self.contentView)
+            make.trailing.equalTo(self.contentView)
+            make.top.equalTo(self.contentView)
+            make.bottom.equalTo(self.contentView)
+        })
+        
+        shadowV.layer.cornerRadius = 3.0
+        shadowV.layer.shadowColor = UIColor.blackColor().CGColor
+        shadowV.layer.shadowOffset = CGSizeMake(0, 2.0)
+        shadowV.layer.shadowRadius = 2.0
+        shadowV.layer.shadowOpacity = 0.24
+        
+        return shadowV
     } ()
     
     lazy var pleekImageView: PFImageView = {
@@ -188,18 +208,19 @@ class BestCell: UICollectionViewCell {
     func setupView() {
         self.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         self.contentView.backgroundColor = UIColor.clearColor()
+        let shadowView = self.shadowView
         let containerView = self.containerView
         let pleekS = self.pleekImageSpinner
         let react1 = self.react1Spinner
         let react2 = self.react2Spinner
         let react3 = self.react3Spinner
         let play = self.pleekPlayImageView
-        
-        self.contentView.backgroundColor = UIColor.Theme.PleekBackGroundColor
+
+        self.contentView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         self.contentView.layer.cornerRadius = 3.0
         self.contentView.layer.shadowColor = UIColor.blackColor().CGColor
         self.contentView.layer.shadowOffset = CGSizeMake(0, 0)
-        self.contentView.layer.shadowOpacity = 0.4
+        self.contentView.layer.shadowOpacity = 0.12
         self.contentView.layer.shadowRadius = 2.0
     }
 }

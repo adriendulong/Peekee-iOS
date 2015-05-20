@@ -74,22 +74,11 @@ import Foundation
     }
     
     func deleteOrHide(completion: ((result : AnyObject?, error : NSError?) -> Void)?) {
-        if self.user.objectId == User.currentUser()!.objectId {
+        if self.user.objectId == User.currentUser()!.objectId || !self.isPublic {
             PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
                 withParameters: ["pikiId" : self.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
-                    if error != nil {
-
-                        let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
-                            delegate: nil, cancelButtonTitle: LocalizedString("OK"))
-                        alert.show()
-
-                        println("Error : \(error!.localizedDescription)")
-
-                    } else {
-//                        self.getPikisWithoutUpdate()
-                    }
                     if let completion = completion {
-//                        completion(result : AnyObject?, error : NSError?)
+                        completion(result : result, error : error)
                     }
             })
         } else {

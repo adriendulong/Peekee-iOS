@@ -102,15 +102,15 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     lazy var bestPleekCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 4
-        layout.minimumInteritemSpacing = 4
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 10
         layout.scrollDirection = .Vertical
-        layout.sectionInset = UIEdgeInsets(top:4, left: 4, bottom: 4, right: 4)
+        layout.sectionInset = UIEdgeInsets(top:10, left: 10, bottom: 10, right: 10)
 
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
-        collectionView.addSubview(self.bestPleekRefreshControl)
         collectionView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-        
+        collectionView.addSubview(self.bestPleekRefreshControl)
+        collectionView.alwaysBounceVertical = true
         self.bestPleeksProtocol.delegate = self
         collectionView.dataSource = self.bestPleeksProtocol
         collectionView.delegate = self.bestPleeksProtocol
@@ -151,6 +151,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
             make.top.equalTo(self.view.snp_top)
             make.height.equalTo(20)
         }
+        
         return statusBV
     }()
     
@@ -168,7 +169,6 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
             self.navigationViewTopConstraint = make.top.equalTo(self.view.snp_top).offset(20).constraint
             make.height.equalTo(100)
         }
-        
         
         return navigationV
     }()
@@ -245,7 +245,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     }
     
     func popNewPleekButton() {
-        self.newPleekButtonBottomConstraint.updateOffset(-20)
+        self.newPleekButtonBottomConstraint.updateOffset(-20.0)
         self.newPleekButton.setNeedsLayout()
         
         UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 10.0, options: nil, animations: { () -> Void in

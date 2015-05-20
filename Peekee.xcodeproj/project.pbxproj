@@ -218,9 +218,6 @@
 		0AA0160D1B01DF22003DCE3D /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0160C1B01DF22003DCE3D /* Friend.swift */; };
 		0AA0160E1B01DF22003DCE3D /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0160C1B01DF22003DCE3D /* Friend.swift */; };
 		0AA0160F1B01DF22003DCE3D /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0160C1B01DF22003DCE3D /* Friend.swift */; };
-		0AA016111B02014B003DCE3D /* PFObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA016101B02014B003DCE3D /* PFObject.swift */; };
-		0AA016121B02014B003DCE3D /* PFObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA016101B02014B003DCE3D /* PFObject.swift */; };
-		0AA016131B02014B003DCE3D /* PFObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA016101B02014B003DCE3D /* PFObject.swift */; };
 		0AA016151B023AB1003DCE3D /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA016141B023AB1003DCE3D /* Array+Extension.swift */; };
 		0AA016161B023AB1003DCE3D /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA016141B023AB1003DCE3D /* Array+Extension.swift */; };
 		0AA016171B023AB1003DCE3D /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA016141B023AB1003DCE3D /* Array+Extension.swift */; };
@@ -391,7 +388,6 @@
 		0AA015FB1B011495003DCE3D /* InboxCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxCell.swift; sourceTree = "<group>"; };
 		0AA016081B01D8EA003DCE3D /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0AA0160C1B01DF22003DCE3D /* Friend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
-		0AA016101B02014B003DCE3D /* PFObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFObject.swift; sourceTree = "<group>"; };
 		0AA016141B023AB1003DCE3D /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		0AA016181B0243F6003DCE3D /* Certified.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Certified.swift; sourceTree = "<group>"; };
 		0AA0161C1B024ECE003DCE3D /* React.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = React.swift; sourceTree = "<group>"; };
@@ -650,7 +646,6 @@
 			isa = PBXGroup;
 			children = (
 				0AA0155F1B00C2ED003DCE3D /* Parse */,
-				0AA016101B02014B003DCE3D /* PFObject.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1508,7 +1503,6 @@
 				0A5761891AFB9D850006B544 /* PikiUserTableViewCell.swift in Sources */,
 				0A57618A1AFB9D850006B544 /* PleekManager.swift in Sources */,
 				0A57618B1AFB9D850006B544 /* AddFriendsFirstViewController.swift in Sources */,
-				0AA016121B02014B003DCE3D /* PFObject.swift in Sources */,
 				0A57618C1AFB9D850006B544 /* SearchUserTableViewCell.swift in Sources */,
 				0AF4D9C41B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */,
 				0A57618D1AFB9D850006B544 /* TakePhotoViewController.swift in Sources */,
@@ -1580,7 +1574,6 @@
 				0A5761FC1AFB9D890006B544 /* PikiUserTableViewCell.swift in Sources */,
 				0A5761FD1AFB9D890006B544 /* PleekManager.swift in Sources */,
 				0A5761FE1AFB9D890006B544 /* AddFriendsFirstViewController.swift in Sources */,
-				0AA016131B02014B003DCE3D /* PFObject.swift in Sources */,
 				0A5761FF1AFB9D890006B544 /* SearchUserTableViewCell.swift in Sources */,
 				0AF4D9C51B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */,
 				0A5762001AFB9D890006B544 /* TakePhotoViewController.swift in Sources */,
@@ -1652,7 +1645,6 @@
 				0AF32C941AF927ED0058B32C /* PleekManager.swift in Sources */,
 				0AA0155D1B00C2E3003DCE3D /* Pleek.swift in Sources */,
 				E76E33EF1A828CCB00C32C55 /* AddFriendsFirstViewController.swift in Sources */,
-				0AA016111B02014B003DCE3D /* PFObject.swift in Sources */,
 				0ADBF10C1AF8ACB300684E79 /* SearchUserTableViewCell.swift in Sources */,
 				0AF4D9C31B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */,
 				E758CF271A1C988800318F45 /* TakePhotoViewController.swift in Sources */,

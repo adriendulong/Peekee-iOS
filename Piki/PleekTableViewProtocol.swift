@@ -163,106 +163,16 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
                 self.pleeks.insert(pleek, atIndex: indexPath.row)
                 self.tableView?.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             }, secondAction: { () -> Void in
-                
+                pleek.deleteOrHide({ (result, error) -> Void in
+                    if let error = error {
+                        PleekAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."), firstButtonTitle: LocalizedString("OK"), secondButtonTitle: nil, firstAction: nil, secondAction: nil)
+                        println("Error : \(error.localizedDescription)")
+                    }
+                })
             })
             
             self.pleeks.removeAtIndex(indexPath.row)
             self.tableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
-    
-//    func deletePiki(cell: inboxTableViewCell) {
-//        
-//        if Utils().iOS8{
-//            var alert = UIAlertController(title: LocalizedString("Confirmation"), message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."), preferredStyle: UIAlertControllerStyle.Alert)
-//            alert.addAction(UIAlertAction(title: LocalizedString("No"), style: UIAlertActionStyle.Cancel, handler: { (action) -> Void in
-//                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-//                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, indeletePikin: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-//            }))
-//            alert.addAction(UIAlertAction(title: LocalizedString("Yes"), style: UIAlertActionStyle.Default , handler: { (action) -> Void in
-//                println("Yes")
-//                
-//                //Delete or Hide
-//                let userPiki:PFUser = self.pikiToDelete!["user"] as! PFUser
-//                
-//                //Delete
-//                if userPiki.objectId == (PFUser.currentUser()! as PFUser).objectId{
-//                    PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
-//                        withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
-//                            if error != nil {
-//                                
-//                                let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
-//                                    delegate: nil, cancelButtonTitle: LocalizedString("OK"))
-//                                alert.show()
-//                                
-//                                println("Error : \(error!.localizedDescription)")
-//                                
-//                                self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-//                                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-//                            }
-//                            else{
-//                                
-//                                self.getPikisWithoutUpdate()
-//                                
-//                            }
-//                    })
-//                }
-//                    //Hide
-//                else{
-//                    if (self.pikiToDelete!["isPublic"] as! Bool){
-//                        Utils().hidePleek(self.pikiToDelete!.objectId!)
-//                        self.getPikisWithoutUpdate()
-//                    }
-//                    else{
-//                        PFCloud.callFunctionInBackground("hideOrRemovePikiV2",
-//                            withParameters: ["pikiId" : self.pikiToDelete!.objectId!], block: { (result : AnyObject?, error : NSError?) -> Void in
-//                                if error != nil {
-//                                    
-//                                    let alert = UIAlertView(title: LocalizedString("Error"), message: LocalizedString("Problem while deleting this Pleek. Please try again later."),
-//                                        delegate: nil, cancelButtonTitle: LocalizedString("OK"))
-//                                    alert.show()
-//                                    
-//                                    println("Error : \(error!.localizedDescription)")
-//                                    
-//                                    self.lastPikis.insert(self.pikiToDelete!, atIndex: self.positionPeekeeToDelete!)
-//                                    self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: self.positionPeekeeToDelete!, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Fade)
-//                                }
-//                                else{
-//                                    
-//                                    self.getPikisWithoutUpdate()
-//                                    
-//                                }
-//                        })
-//                    }
-//                    
-//                    
-//                }
-//            }))
-//            self.presentViewController(alert, animated: true, completion: nil)
-//        }
-//        else{
-//            var alertView = UIAlertView(title: LocalizedString("Confirmation"),
-//                message: NSLocalizedString("Are you sure you want to delete this Pleek? There is no way to get back then.", comment : "Are you sure you want to delete this Pleek? There is no way to get back then."),
-//                delegate: self, cancelButtonTitle: NSLocalizedString("No", comment : "No"),
-//                otherButtonTitles: NSLocalizedString("Yes", comment : "Yes"))
-//            
-//            alertView.tag = 1
-//            alertView.show()
-//        }
-//        
-//        
-//        var indexPath:NSIndexPath = self.tableView.indexPathForCell(cell)!
-//        
-//        var piki:PFObject = self.lastPikis[indexPath.row]
-//        self.pikiToDelete = piki
-//        self.positionPeekeeToDelete = indexPath.row
-//        
-//        
-//        self.lastPikis.removeAtIndex(indexPath.row)
-//        self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
-//        
-//        
-//        
-//    }
-
 }

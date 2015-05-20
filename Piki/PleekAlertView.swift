@@ -13,10 +13,10 @@ class PleekAlertView: NSObject, UIAlertViewDelegate {
     var secondAction: (() -> Void)?
     var title: String
     var message: String
-    var firstButtonTitle: String
-    var secondButtonTitle: String
+    var firstButtonTitle: String?
+    var secondButtonTitle: String?
     
-    init(title: String, message: String, firstButtonTitle: String, secondButtonTitle: String, firstAction: (() -> Void)?, secondAction: (() -> Void)?) {
+    init(title: String, message: String, firstButtonTitle: String?, secondButtonTitle: String?, firstAction: (() -> Void)?, secondAction: (() -> Void)?) {
         self.title = title
         self.message = message
         self.firstButtonTitle = firstButtonTitle
@@ -36,25 +36,35 @@ class PleekAlertView: NSObject, UIAlertViewDelegate {
     func presentAlertController() {
         var alert = UIAlertController(title: self.title, message: self.message, preferredStyle: .Alert)
         
-        alert.addAction(UIAlertAction(title: self.firstButtonTitle, style: .Default, handler: { (action) -> Void in
-            if let firstAction = self.firstAction {
-                firstAction()
-            }
-        }))
-            
-        alert.addAction(UIAlertAction(title: self.secondButtonTitle, style: .Default, handler: { (action) -> Void in
-            if let secondAction = self.secondAction {
-                secondAction()
-            }
-        }))
-           
+        if let firstButtonTitle = self.firstButtonTitle {
+            alert.addAction(UIAlertAction(title: firstButtonTitle, style: .Default, handler: { (action) -> Void in
+                if let firstAction = self.firstAction {
+                    firstAction()
+                }
+            }))
+        }
+        
+        if let secondButtonTitle = self.secondButtonTitle {
+            alert.addAction(UIAlertAction(title: secondButtonTitle, style: .Default, handler: { (action) -> Void in
+                if let secondAction = self.secondAction {
+                    secondAction()
+                }
+            }))
+        }
+        
         UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
     }
     
     func presentAlertView() {
-        let alertView = UIAlertView(title: self.title, message: self.message, delegate: self, cancelButtonTitle: self.firstButtonTitle, otherButtonTitles: self.secondButtonTitle)
-        alertView.alertViewStyle = .Default
-        alertView.show()
+        if let firstButtonTitle = self.firstButtonTitle {
+            let alertView = UIAlertView(title: self.title, message: self.message, delegate: self, cancelButtonTitle: nil, otherButtonTitles: firstButtonTitle)
+            alertView.alertViewStyle = .Default
+            alertView.show()
+        } else if let secondButtonTitle = self.secondButtonTitle {
+            let alertView = UIAlertView(title: self.title, message: self.message, delegate: self, cancelButtonTitle: self.firstButtonTitle, otherButtonTitles: secondButtonTitle)
+            alertView.alertViewStyle = .Default
+            alertView.show()
+        }
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {

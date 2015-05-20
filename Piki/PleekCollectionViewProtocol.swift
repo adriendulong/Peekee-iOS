@@ -71,7 +71,7 @@ class PleekCollectionViewProtocol: NSObject, UICollectionViewDataSource, UIColle
             return CGSizeMake(CGRectGetWidth(collectionView.frame), 90.0)
         }
         
-        let width = (CGRectGetWidth(collectionView.frame) - 12.0) / 2.0
+        let width = (CGRectGetWidth(collectionView.frame) - 30.0) / 2.0
         let height = width / 3.0 * 4.0
         
         return CGSizeMake(width, height)
