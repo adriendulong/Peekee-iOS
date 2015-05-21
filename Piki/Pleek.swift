@@ -7,6 +7,13 @@
 //
 
 import Foundation
+
+enum PleekState {
+    case NotSeenVideo
+    case NotSeenPhoto
+    case SeenNotNewReact
+    case SeenNewReact
+}
     
 @objc class Pleek: PFObject, PFSubclassing {
     
@@ -21,6 +28,20 @@ import Foundation
     @NSManaged var nbReaction: Int
     @NSManaged var user: User
     @NSManaged var recipients: [String]?
+    
+    var state: PleekState {
+        if self.isSeen {
+            if self.nbNewReaction > 0 {
+                return .SeenNewReact
+            }
+            return .SeenNotNewReact
+        } else {
+            if self.isVideo {
+                return .NotSeenVideo
+            }
+            return .NotSeenPhoto
+        }
+    }
     
     var react: [React] = []
     

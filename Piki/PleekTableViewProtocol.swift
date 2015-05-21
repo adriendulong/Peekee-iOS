@@ -98,10 +98,19 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
         
         let pleek = self.pleeks[indexPath.row]
         let screenRect = UIScreen.mainScreen().bounds
-        if pleek.nbReaction > 0 {
-            return CGRectGetWidth(screenRect) / 3.0 * 2.0 + 60.0
+        
+        switch (pleek.state, pleek.nbReaction > 0) {
+            case (.NotSeenVideo, true), (.NotSeenPhoto, true), (.SeenNewReact, true):
+                return round((CGRectGetWidth(screenRect) - 12.5) / 3.0 * 2.0 + 15.0 + 90.0)
+            case (.SeenNotNewReact, true):
+                return round((CGRectGetWidth(screenRect) - 12.5) / 3.0 * 2.0 + 15 + 45 + 12.5)
+            case (.NotSeenVideo, false), (.NotSeenPhoto, false), (.SeenNewReact, false):
+                return round(CGRectGetWidth(screenRect) - 10.0 + 15.0 + 90.0)
+            case (.SeenNotNewReact, false):
+                return round(CGRectGetWidth(screenRect) - 10.0 + 15 + 45 + 12.5)
+            default:
+                return 0
         }
-        return CGRectGetWidth(screenRect) + 60
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

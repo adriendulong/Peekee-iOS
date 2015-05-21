@@ -8,18 +8,25 @@
 
 import UIKit
 
+enum InboxCellType {
+    case BlueBandLargePhoto
+    case BlueBandSmallPhoto
+    case LargePhoto
+    case SmallPhoto
+}
+
 protocol InboxCellDelegate: class {
     func deletePleek(cell : InboxCell)
 }
 
-class InboxCell: UITableViewCell,
-                 UIGestureRecognizerDelegate {
+class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
     
     weak var delegate: InboxCellDelegate? = nil
+    var type: InboxCellType = .BlueBandSmallPhoto
     
     lazy var deleteView: UIView = {
         let deleteV = UIView()
-        deleteV.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        deleteV.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         
         self.contentView.addSubview(deleteV)
         
@@ -27,7 +34,7 @@ class InboxCell: UITableViewCell,
             make.top.equalTo(self.contentView)
             make.trailing.equalTo(self.contentView)
             make.leading.equalTo(self.contentView)
-            make.bottom.equalTo(self.contentView).offset(-10)
+            make.bottom.equalTo(self.contentView)
         })
         
         return deleteV
@@ -54,24 +61,41 @@ class InboxCell: UITableViewCell,
     
     lazy var mainContainerView: UIView = {
         let mainCV = UIView()
-        mainCV.backgroundColor = UIColor.whiteColor()
+        mainCV.backgroundColor = UIColor.clearColor()
         
         self.contentView.addSubview(mainCV)
 
         mainCV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentView)
+            make.top.equalTo(self.contentView).offset(12.0)
             self.mainContainerViewTrailingConstraint = make.trailing.equalTo(self.contentView).constraint
             make.width.equalTo(self.contentView)
-            make.bottom.equalTo(self.contentView).offset(-10)
+            make.bottom.equalTo(self.contentView).offset(-3.0)
         })
         
         return mainCV
     } ()
     
+    lazy var cardView: UIView = {
+        let cardV = UIView()
+        cardV.backgroundColor = UIColor.whiteColor()
+        cardV.layer.cornerRadius = 5.0
+        cardV.clipsToBounds = true
+        
+        self.mainContainerView.addSubview(cardV)
+        
+        cardV.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(self.mainContainerView)
+            make.centerX.equalTo(self.mainContainerView)
+            make.width.equalTo(self.mainContainerView).offset(-20)
+            make.bottom.equalTo(self.mainContainerView)
+        })
+        
+        return cardV
+    } ()
 
     lazy var containerView: UIView = {
         let containerV = UIView()
-        containerV.backgroundColor = UIColor.whiteColor()
+        containerV.backgroundColor = UIColor.clearColor()
         
         self.mainContainerView.addSubview(containerV)
         
@@ -79,7 +103,7 @@ class InboxCell: UITableViewCell,
             make.top.equalTo(self.mainContainerView)
             make.trailing.equalTo(self.mainContainerView)
             make.leading.equalTo(self.mainContainerView)
-            make.height.equalTo(self.mainContainerView)
+            make.bottom.equalTo(self.mainContainerView)
         })
         
         return containerV
@@ -89,23 +113,24 @@ class InboxCell: UITableViewCell,
     
     lazy var pleekImageView: PFImageView = {
         let pleekIM = PFImageView()
+         pleekIM.backgroundColor = UIColor.clearColor()
         
         self.containerView.addSubview(pleekIM)
         
         pleekIM.snp_makeConstraints({ (make) -> Void in
-            make.bottom.equalTo(self.containerView)
-            make.leading.equalTo(self.containerView)
-            make.width.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0 * 2.0 - 2)
+            make.top.equalTo(self.containerView).offset(45.0)
+            make.leading.equalTo(self.containerView).offset(5.0)
+            make.width.equalTo(CGRectGetWidth(self.contentView.frame) - 10.0)
             make.height.equalTo(pleekIM.snp_width)
         })
         
-        pleekIM.backgroundColor = UIColor.Theme.PleekBackGroundColor
-        pleekIM.layer.shadowColor = UIColor.blackColor().CGColor
-        pleekIM.layer.shadowOffset = CGSizeMake(0, 0)
-        pleekIM.layer.shadowOpacity = 0.4
-        pleekIM.layer.shadowRadius = 2.0
-        let shadowRect = CGRectInset(pleekIM.bounds, 0, 2.0)
-        pleekIM.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
+       
+//        pleekIM.layer.shadowColor = UIColor.blackColor().CGColor
+//        pleekIM.layer.shadowOffset = CGSizeMake(0, 0)
+//        pleekIM.layer.shadowOpacity = 0.4
+//        pleekIM.layer.shadowRadius = 2.0
+//        let shadowRect = CGRectInset(pleekIM.bounds, 0, 2.0)
+//        pleekIM.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
         
         return pleekIM
     } ()
@@ -144,23 +169,23 @@ class InboxCell: UITableViewCell,
     
     lazy var contentReactView: UIView = {
         let contentRV = UIView()
+        contentRV.backgroundColor = UIColor.clearColor()
         
         self.containerView.addSubview(contentRV)
         
         contentRV.snp_makeConstraints({ (make) -> Void in
             make.top.equalTo(self.pleekImageView)
-            make.trailing.equalTo(self.containerView)
-            make.width.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0)
+            make.trailing.equalTo(self.containerView).offset(-5.0)
+            make.width.equalTo((CGRectGetWidth(self.contentView.frame) - 12.5) / 3.0)
             make.height.equalTo(self.pleekImageView)
         })
         
-        contentRV.backgroundColor = UIColor.Theme.PleekBackGroundColor
-        contentRV.layer.shadowColor = UIColor.blackColor().CGColor
-        contentRV.layer.shadowOffset = CGSizeMake(0, 0)
-        contentRV.layer.shadowOpacity = 0.4
-        contentRV.layer.shadowRadius = 2.0
-        let shadowRect = CGRectInset(contentRV.bounds, 0, 2.0)
-        contentRV.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
+//        contentRV.layer.shadowColor = UIColor.blackColor().CGColor
+//        contentRV.layer.shadowOffset = CGSizeMake(0, 0)
+//        contentRV.layer.shadowOpacity = 0.4
+//        contentRV.layer.shadowRadius = 2.0
+//        let shadowRect = CGRectInset(contentRV.bounds, 0, 2.0)
+//        contentRV.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
         
         return contentRV
     } ()
@@ -178,7 +203,7 @@ class InboxCell: UITableViewCell,
         
         reacTopIV.snp_makeConstraints({ (make) -> Void in
             make.top.equalTo(self.contentReactView)
-            self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).constraint
+            self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).offset(-1.25).constraint
             make.leading.equalTo(self.contentReactView)
             make.trailing.equalTo(self.contentReactView)
         })
@@ -210,7 +235,7 @@ class InboxCell: UITableViewCell,
         self.contentReactView.addSubview(reactBottomIV)
         
         reactBottomIV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentReactView.snp_centerY)
+            make.top.equalTo(self.contentReactView.snp_centerY).offset(1.25)
             make.bottom.equalTo(self.contentReactView)
             make.leading.equalTo(self.contentReactView)
             make.trailing.equalTo(self.contentReactView)
@@ -301,54 +326,84 @@ class InboxCell: UITableViewCell,
         return actionIV
     } ()
     
-    lazy var infoLabel: UILabel = {
-        let infoLabel = UILabel()
-        infoLabel.backgroundColor = UIColor.whiteColor()
-        infoLabel.font = UIFont(name: "Montserrat-Regular", size: 11.0)
-        infoLabel.textColor = UIColor(red: 26.0/255.0, green: 27.0/255.0, blue: 31.0/255.0, alpha: 1.0)
-        infoLabel.text = LocalizedString("NEW REPLIES")
+    lazy var replyLabel: UILabel = {
+        let replyLabel = UILabel()
+        replyLabel.backgroundColor = UIColor.whiteColor()
+        replyLabel.font = UIFont(name: "Montserrat-Regular", size: 11.0)
+        replyLabel.textColor = UIColor(red: 26.0/255.0, green: 27.0/255.0, blue: 31.0/255.0, alpha: 1.0)
+        replyLabel.text = LocalizedString("NEW REPLIES")
         
-        self.containerView.addSubview(infoLabel)
+        self.containerView.addSubview(replyLabel)
         
-        infoLabel.snp_makeConstraints { (make) -> Void in
+        replyLabel.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(self.fromImageView)
             make.trailing.equalTo(self.actionImageView.snp_leading).offset(-10)
         }
         
-        return infoLabel
+        return replyLabel
     } ()
+    
+    lazy var blueCardView: UIView = {
+        let cardV = UIView()
+        cardV.backgroundColor = UIColor(red: 85.0/255.0, green: 114.0/255.0, blue: 250.0/255.0, alpha: 1.0)
+        cardV.layer.cornerRadius = 5.0
+        
+        self.cardView.addSubview(cardV)
+        
+        cardV.snp_makeConstraints({ (make) -> Void in
+            make.height.equalTo(45.0)
+            make.centerX.equalTo(self.mainContainerView)
+            make.width.equalTo(self.cardView)
+            make.bottom.equalTo(self.cardView)
+        })
+        
+        let innerTrick = UIView()
+        innerTrick.backgroundColor = UIColor(red: 85.0/255.0, green: 114.0/255.0, blue: 250.0/255.0, alpha: 1.0)
+        
+        cardV.addSubview(innerTrick)
+        
+        innerTrick.snp_makeConstraints({ (make) -> Void in
+            make.height.equalTo(10.0)
+            make.centerX.equalTo(cardV)
+            make.width.equalTo(cardV)
+            make.top.equalTo(cardV)
+        })
+        
+        return cardV
+    } ()
+    
 
     lazy var infoImageView: UIImageView = {
         let infoIV = UIImageView()
-        infoIV.backgroundColor = UIColor.whiteColor()
+        infoIV.backgroundColor = UIColor.clearColor()
         infoIV.contentMode = .Center
         infoIV.image = UIImage(named: "newpicture-icon")
         
-        self.containerView.addSubview(infoIV)
+        self.blueCardView.addSubview(infoIV)
         
         infoIV.snp_makeConstraints { (make) -> Void in
             make.size.equalTo(12)
-            make.centerY.equalTo(self.fromImageView)
-            make.trailing.equalTo(self.infoLabel.snp_leading).offset(-5)
+            make.trailing.equalTo(self.infoLabel.snp_leading).offset(-8)
+            make.centerY.equalTo(self.infoLabel)
         }
         
         return infoIV
     } ()
-
-    lazy var cellSeparatorView: UIView = {
-        let cellSV = UIView()
-        cellSV.backgroundColor = UIColor(red: 206.0/255.0, green: 212.0/255.0, blue: 220.0/255.0, alpha: 1.0)
-       
-        self.contentView.addSubview(cellSV)
+    
+    lazy var infoLabel: UILabel = {
+        let infoL = UILabel()
+        infoL.textColor = UIColor.whiteColor()
+        infoL.font = UIFont(name: "Montserrat-Regular", size: 12.0)
+        infoL.textAlignment = .Center
         
-        cellSV.snp_makeConstraints({ (make) -> Void in
-            make.height.equalTo(0.5)
-            make.top.equalTo(self.contentView)
-            make.leading.equalTo(self.contentView)
-            make.trailing.equalTo(self.contentView)
-        })
+        self.blueCardView.addSubview(infoL)
         
-        return cellSV
+        infoL.snp_makeConstraints { (make) -> Void in
+            make.centerY.equalTo(self.blueCardView)
+            make.centerX.equalTo(self.blueCardView).offset(10)
+        }
+        
+        return infoL
     } ()
     
     // MARK: Life Cycle
@@ -368,14 +423,16 @@ class InboxCell: UITableViewCell,
         
         let v111 = self.trashImageView
         let v112 = self.mainContainerView
+        let cardView = self.cardView
+        let blueCardView = self.blueCardView
         let v11 = self.pleekPlayImageView
         let v1 = self.pleekImageSpinner
         let v2 = self.contentReactView
         let v3 = self.reactTopImageSpinner
         let v4 = self.reactBottomImageSpinner
         let v5 = self.certifiedAccountImageView
-        let v7 = self.infoImageView
-        let v6 = self.cellSeparatorView
+        let infoImageView = self.infoImageView
+        let infoLabel = self.infoLabel
 
         self.mainContainerView.bringSubviewToFront(self.contentReactView)
         self.mainContainerView.bringSubviewToFront(self.pleekImageView)
@@ -396,17 +453,20 @@ class InboxCell: UITableViewCell,
     
     override func updateConstraints() {
         self.pleekImageView.snp_updateConstraints{ (make) -> Void in
-            if CGRectGetHeight(self.contentView.frame) == CGRectGetWidth(self.contentView.frame) + 60 {
-                make.width.equalTo(CGRectGetWidth(self.contentView.frame))
-            } else {
-                make.width.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0 * 2.0 - 2)
+            switch self.type {
+                case .BlueBandLargePhoto, .LargePhoto:
+                    make.width.equalTo(CGRectGetWidth(self.contentView.frame) - 10.0)
+                break
+                case .BlueBandSmallPhoto, .SmallPhoto:
+                    make.width.equalTo(round((CGRectGetWidth(self.contentView.frame) - 12.5) / 3.0 * 2.0))
+                break
             }
         }
         
         self.contentReactView.snp_updateConstraints{ (make) -> Void in
-            make.width.equalTo(CGRectGetWidth(self.contentView.frame) / 3.0)
+            make.width.equalTo(round((CGRectGetWidth(self.contentView.frame) - 12.5) / 3.0))
         }
-        
+
         super.updateConstraints()
     }
     
@@ -421,10 +481,8 @@ class InboxCell: UITableViewCell,
         } else if recognizer.state == .Changed {
             if translation.x < 0 {
                 if abs(translation.x) >= CGRectGetWidth(self.frame) / 3.0 {
-                    self.deleteView.backgroundColor = UIColor.Theme.DeletePleekBackGroundColor
                     self.trashImageView.image = UIImage(named: "trash-icon-active")
                 } else {
-                    self.deleteView.backgroundColor = UIColor.Theme.PleekBackGroundColor
                     self.trashImageView.image = UIImage(named: "trash-icon-inactive")
                 }
 
@@ -434,12 +492,10 @@ class InboxCell: UITableViewCell,
             }
             return
         } else if recognizer.state == .Ended || recognizer.state == .Cancelled {
-            var finalColor = UIColor.Theme.PleekBackGroundColor
             var offset: CGFloat = 0
             var image = UIImage(named: "trash-icon-inactive")
             var shouldDelete = false
             if abs(translation.x) >= CGRectGetWidth(self.frame) / 3.0 {
-                finalColor = UIColor.Theme.DeletePleekBackGroundColor
                 offset = -CGRectGetWidth(self.frame)
                 image = UIImage(named: "trash-icon-active")
                 shouldDelete = true
@@ -449,7 +505,6 @@ class InboxCell: UITableViewCell,
             self.contentView.setNeedsLayout()
             
             UIView.animateWithDuration(0.2, animations: { () -> Void in
-                self.deleteView.backgroundColor = finalColor
                 self.contentView.layoutIfNeeded()
                 self.trashImageView.image = image
             }) { (finished) -> Void in
@@ -468,9 +523,26 @@ class InboxCell: UITableViewCell,
 extension InboxCell {
     
     func configureFor(pleek: Pleek) {
-
+        
+        switch (pleek.state, pleek.nbReaction > 0) {
+        case (.NotSeenVideo, true), (.NotSeenPhoto, true), (.SeenNewReact, true):
+            self.type = .BlueBandSmallPhoto
+            break
+        case (.SeenNotNewReact, true):
+            self.type = .SmallPhoto
+            break
+        case (.NotSeenVideo, false), (.NotSeenPhoto, false), (.SeenNewReact, false):
+            self.type = .BlueBandLargePhoto
+            break
+        case (.SeenNotNewReact, false):
+            self.type = .LargePhoto
+            break
+        default:
+            break
+        }
+        
         self.mainContainerViewTrailingConstraint.updateOffset(0)
-        self.deleteView.backgroundColor = UIColor.Theme.PleekBackGroundColor
+        self.deleteView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         
         self.usernameLabel.text = pleek.user.username
         
@@ -518,13 +590,13 @@ extension InboxCell {
             self.contentReactView.hidden = false
             self.reactBottomImageView.hidden = false
             self.reactTopImageView.snp_makeConstraints { (make) -> Void in
-                self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).constraint
+                self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).offset(-1.25).constraint
             }
         } else if pleek.nbReaction > 0 {
             self.contentReactView.hidden = false
             self.reactBottomImageView.hidden = true
             self.reactTopImageView.snp_makeConstraints { (make) -> Void in
-                self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_bottom).constraint
+                self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView).constraint
             }
         } else {
             self.contentReactView.hidden = true
@@ -538,27 +610,32 @@ extension InboxCell {
             self.certifiedAccountImageView.hidden = true
         }
         
-        self.infoImageView.hidden = true
+        self.blueCardView.hidden = false
         
-        if !pleek.isSeen {
-            self.infoImageView.hidden = false
-            if pleek.isVideo {
-                self.infoLabel.text = LocalizedString("NEW VIDEO")
+        switch pleek.state {
+            case .NotSeenVideo:
                 self.infoImageView.image = UIImage(named: "newvideo-icon")
-            } else {
-                self.infoLabel.text = LocalizedString("NEW PICTURE")
+                self.infoLabel.text = LocalizedString("NEW VIDEO")
+                break
+            case .NotSeenPhoto:
                 self.infoImageView.image = UIImage(named: "newpicture-icon")
-            }
-        } else if pleek.nbNewReaction > 0 {
-            self.infoImageView.hidden = false
-            self.infoLabel.text = LocalizedString("NEW REPLIES")
-            self.infoImageView.image = UIImage(named: "newreplies-icon")
-        } else if pleek.nbReaction == 0 {
-            self.infoLabel.text = LocalizedString("REPLY FIRST")
+                self.infoLabel.text = LocalizedString("NEW PICTURE")
+                break
+            case .SeenNewReact:
+                self.infoImageView.image = UIImage(named: "newreplies-icon")
+                self.infoLabel.text = LocalizedString("NEW REPLIES")
+                break
+            case .SeenNotNewReact:
+                self.blueCardView.hidden = true
+                break
+        }
+        
+        if pleek.nbReaction == 0 {
+            self.replyLabel.text = LocalizedString("REPLY FIRST")
         } else if pleek.nbReaction == 1 {
-            self.infoLabel.text = LocalizedString("1 REPLY")
+            self.replyLabel.text = LocalizedString("1 REPLY")
         } else {
-            self.infoLabel.text = String(format: LocalizedString("%@ REPLIES"), self.formatNumber(pleek.nbReaction))
+            self.replyLabel.text = String(format: LocalizedString("%@ REPLIES"), self.formatNumber(pleek.nbReaction))
         }
     }
     

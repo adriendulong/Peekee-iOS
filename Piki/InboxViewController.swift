@@ -15,21 +15,21 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshReceivedPleek"), forControlEvents: UIControlEvents.ValueChanged)
         return refreshControl
-    }()
+    } ()
     
     var sentPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol(searchable: false)
     lazy var sentPleekRefreshControl: UIRefreshControl  = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshSentPleek"), forControlEvents: UIControlEvents.ValueChanged)
         return refreshControl
-    }()
+    } ()
     
     var bestPleeksProtocol: PleekCollectionViewProtocol = PleekCollectionViewProtocol()
     lazy var bestPleekRefreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshBestPleek"), forControlEvents: UIControlEvents.ValueChanged)
         return refreshControl
-    }()
+    } ()
     
     var toUpdate: (tableView: UITableView, indexPath: NSIndexPath)?
     
@@ -66,7 +66,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return tableView
-    }()
+    } ()
     
     lazy var sentPleeksTableView: UITableView = {
         let tableView = UITableView()
@@ -98,7 +98,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return tableView
-    }()
+    } ()
     
     lazy var bestPleekCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -137,7 +137,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return collectionView
-    }()
+    } ()
     
     lazy var statusBarView: UIView = {
         let statusBV = UIView()
@@ -153,7 +153,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return statusBV
-    }()
+    } ()
     
     var navigationViewTopConstraint = Constraint()
     
@@ -171,7 +171,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return navigationV
-    }()
+    } ()
     
     var newPleekButtonBottomConstraint = Constraint()
     
@@ -190,7 +190,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
         return newPB
-    }()
+    } ()
     
     // MARK: Life Cycle
     
