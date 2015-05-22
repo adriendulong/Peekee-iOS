@@ -165,7 +165,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         
         contentRV.snp_makeConstraints({ (make) -> Void in
             make.top.equalTo(self.pleekContainer)
-            make.trailing.equalTo(self.mainContainerView).offset(-2.5).priorityLow()
+            make.trailing.equalTo(self.mainContainerView)
             make.leading.equalTo(self.pleekImageView.snp_trailing)
             make.bottom.equalTo(self.pleekContainer)
         })
@@ -457,6 +457,17 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
     }
     
     override func updateConstraints() {
+        
+        self.contentReactView.snp_updateConstraints{ (make) -> Void in
+            switch self.type {
+            case .BlueBandLargePhoto, .LargePhoto:
+                make.trailing.equalTo(self.mainContainerView)
+                break
+            case .BlueBandSmallPhoto, .SmallPhoto:
+                make.trailing.equalTo(self.mainContainerView).offset(-2.5)
+                break
+            }
+        }
 
         self.pleekContainer.snp_updateConstraints{ (make) -> Void in
             switch self.type {
@@ -468,6 +479,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
                 break
             }
         }
+        
         
         super.updateConstraints()
     }

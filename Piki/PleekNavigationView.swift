@@ -29,6 +29,8 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         return (self.minimumOffset + self.maximumOffset) / 2.0
     } ()
     
+    private var isLock: Bool = false
+    
     private let startDelta: CGFloat = 120
     
     private lazy var topContainerView: UIView = {
@@ -299,6 +301,10 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     
     func handlePan(recognizer: UIPanGestureRecognizer!) {
         
+        if self.isLock {
+            return
+        }
+        
         if recognizer.state == .Began {
             self.startY = recognizer.locationInView(self.superview!).y
             self.startOffset = CGRectGetMinY(self.frame)
@@ -359,8 +365,24 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     }
     
     func openView() {
+        if self.isLock {
+            return
+        }
+        
         if let delegate = self.delegate {
             delegate.navigationView(self, shouldUpdateTopConstraintOffset: self.maximumOffset, animated: true)
+        }
+    }
+    
+    func unHideView() {
+        self.isLock = false
+        self.openView()
+    }
+    
+    func hideView() {
+        self.isLock = true
+        if let delegate = self.delegate {
+            delegate.navigationView(self, shouldUpdateTopConstraintOffset: -CGRectGetHeight(self.frame) + 20.0, animated: true)
         }
     }
 

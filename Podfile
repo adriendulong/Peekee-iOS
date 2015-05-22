@@ -2,7 +2,7 @@
 platform :ios, '7.0'
 
 
-target 'Peekee' do
+# target 'Peekee' do
 
 pod 'APAddressBook/Swift'
 pod 'Parse'
@@ -15,4 +15,4 @@ pod 'PBJVision'
 pod 'libPhoneNumber-iOS'
 pod 'LLARingSpinnerView'
 
-end
+# end

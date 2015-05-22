@@ -49,8 +49,7 @@ import Foundation
             
             if withCache {
                 pleeksQuery.cachePolicy = PFCachePolicy.CacheThenNetwork
-            }
-            else {
+            } else {
                 pleeksQuery.cachePolicy = PFCachePolicy.NetworkElseCache
             }
             

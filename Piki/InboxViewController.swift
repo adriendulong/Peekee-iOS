@@ -10,14 +10,14 @@ import UIKit
 
 class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekTableViewDelegate, PleekCollectionViewDelegate {
 
-    var receivedPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol(searchable: true)
+    var receivedPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol(searchState: .NotSearching)
     lazy var receivedPleekRefreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshReceivedPleek"), forControlEvents: UIControlEvents.ValueChanged)
         return refreshControl
     } ()
     
-    var sentPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol(searchable: false)
+    var sentPleeksProtocol: PleekTableViewProtocol = PleekTableViewProtocol(searchState: .Unsearchable)
     lazy var sentPleekRefreshControl: UIRefreshControl  = {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("refreshSentPleek"), forControlEvents: UIControlEvents.ValueChanged)
@@ -33,7 +33,6 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     var toUpdate: (tableView: UITableView, indexPath: NSIndexPath)?
     
-    
     var receivedPleeksTableViewTrailingConstraint = Constraint()
     
     lazy var receivedPleeksTableView: UITableView = {
@@ -44,6 +43,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         tableView.dataSource = self.receivedPleeksProtocol
         tableView.delegate = self.receivedPleeksProtocol
         self.receivedPleeksProtocol.tableView = tableView
+//        self.receivedPleeksProtocol.searchDisplayController = UISearchDisplayController(searchBar: self.receivedPleeksProtocol.searchBar, contentsController: self)
         tableView.separatorStyle = .None
         tableView.scrollsToTop = true
         
@@ -218,6 +218,20 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         self.getReceivedPleek(true)
         self.getSentPleek(true)
         self.getBestPleek(true)
+        
+        
+        Pleek.getPleeks("tia", withCache: true, skip: 0).continueWithBlock { (task) -> AnyObject! in
+            
+            if let error = task.error {
+                println(error)
+            }
+            
+            if let results = task.result as? [Pleek] {
+                println(results)
+            }
+            
+            return nil
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -353,6 +367,16 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         self.navigationView.openView()
     }
     
+    func searchBegin(tableView: UITableView?) {
+        self.hideNewPleekButton()
+        self.navigationView.hideView()
+    }
+    
+    func searchEnd(tableView: UITableView?) {
+        self.popNewPleekButton()
+        self.navigationView.unHideView()
+    }
+    
     // MARK: PleekCollectionViewViewDelegate
     
     func pleekCollectionView(tableView: UICollectionView?, didSelectPleek pleek: Pleek, atIndexPath indexPath: NSIndexPath?) {
@@ -417,7 +441,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 } else {
                     weakSelf?.receivedPleeksProtocol.shouldLoadMore = true
                 }
-                weakSelf?.receivedPleeksProtocol.pleeks = pleeks!
+                weakSelf?.receivedPleeksProtocol.pleeksList = pleeks!
                 weakSelf?.receivedPleekRefreshControl.endRefreshing()
                 weakSelf?.receivedPleeksTableView.reloadData()
                 weakSelf?.receivedPleeksTableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: false)
@@ -437,7 +461,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 } else {
                     weakSelf?.sentPleeksProtocol.shouldLoadMore = true
                 }
-                weakSelf?.sentPleeksProtocol.pleeks = pleeks!
+                weakSelf?.sentPleeksProtocol.pleeksList = pleeks!
                 weakSelf?.sentPleekRefreshControl.endRefreshing()
                 weakSelf?.sentPleeksTableView.reloadData()
             }
@@ -460,6 +484,5 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 weakSelf?.bestPleekCollectionView.reloadData()
             }
         })
-
     }
 }

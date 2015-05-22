@@ -1,4 +1,4 @@
-//
+ //
 //  PleekTableViewDataSource.swift
 //  Peekee
 //
@@ -10,22 +10,54 @@ protocol PleekTableViewDelegate: class {
     func pleekTableView(tableView: UITableView?, didSelectPleek pleek:Pleek, atIndexPath indexPath: NSIndexPath?)
     func pleekTableViewLoadMore(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, toSkip: Int)
     func scrollViewDidScrollToTop()
+    func searchBegin(tableView: UITableView?)
+    func searchEnd(tableView: UITableView?)
 }
+ 
+ enum PleekTableViewSearchingState: Int {
+    case Unsearchable = 0
+    case NotSearching = 1
+    case SearchBeginWithoutText = 2
+    case SearchBeginWithText = 3
+ }
 
 import UIKit
 
-class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelegate, InboxCellDelegate, UISearchBarDelegate {
+class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelegate, InboxCellDelegate, UISearchBarDelegate, UITextFieldDelegate, UIScrollViewDelegate {
     
-    let isSearchable: Bool
-    var pleeks: [Pleek] = [] {
+    var searchState: PleekTableViewSearchingState {
         didSet {
-            if count(self.pleeks) > 0 && self.isSearchable {
+            switch self.searchState {
+            case .Unsearchable, .NotSearching, .SearchBeginWithoutText :
+                self.pleeks = self.pleeksList
+                break
+            case .SearchBeginWithText:
+                self.pleeks = self.searchList
+                break
+            }
+            
+            self.tableView?.reloadData()
+        }
+    }
+    
+    var pleeksList: [Pleek] = [] {
+        didSet {
+            self.pleeks = self.pleeksList
+            if count(self.pleeksList) > 0 && self.searchState.rawValue > PleekTableViewSearchingState.Unsearchable.rawValue {
                 self.tableView?.tableHeaderView = self.searchBar
             } else {
                 self.tableView?.tableHeaderView = nil
             }
         }
     }
+    
+    var searchList: [Pleek] = [] {
+        didSet {
+            self.pleeks = self.searchList
+        }
+    }
+    
+    private var pleeks: [Pleek] = []
     
     weak var tableView: UITableView?
     
@@ -34,30 +66,34 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
         let searchBar = UISearchBar()
         searchBar.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView!.frame), 50)
         searchBar.barTintColor = UIColor(red: 57.0/255.0, green: 73.0/255.0, blue: 171.0/255.0, alpha: 1.0)
+        searchBar.delegate = self
+        
         return searchBar
     } ()
     
     var isLoadingMore: Bool = false
     var shouldLoadMore: Bool = true
 
-    
-    init(searchable: Bool) {
-        self.isSearchable = searchable
+    init(searchState: PleekTableViewSearchingState) {
+        self.searchState = searchState
+        
         super.init()
     }
     
     // MARK: UITableViewDataSource
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.shouldLoadMore {
-            return count(self.pleeks) + 1
+        let countPleeks = count(self.pleeks)
+        
+        if self.shouldLoadMore && countPleeks > 0{
+            return countPleeks + 1
         }
         
-        return count(self.pleeks)
+        return countPleeks
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
+
         if indexPath.row == count(self.pleeks) && self.shouldLoadMore {
             let cell = tableView.dequeueReusableCellWithIdentifier("LoadMoreTableViewCellIdentifier", forIndexPath: indexPath) as! LoadMoreTableViewCell
             cell.spinner.startAnimating()
@@ -68,6 +104,11 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCellWithIdentifier("InboxTableViewCellIdentifier", forIndexPath: indexPath) as! InboxCell
         let pleek = self.pleeks[indexPath.row]
         cell.configureFor(pleek)
+        if self.searchState == .SearchBeginWithoutText {
+            cell.contentView.alpha = 0.5
+        } else {
+            cell.contentView.alpha = 1.0
+        }
         cell.delegate = self
         
         //Load more
@@ -85,6 +126,11 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
     // MARK: UITableViewDelegate
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if self.searchState == .SearchBeginWithoutText {
+            return
+        }
+        
         if let delegate = self.delegate {
             delegate.pleekTableView(tableView, didSelectPleek: self.pleeks[indexPath.row], atIndexPath: indexPath)
         }
@@ -114,7 +160,7 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if indexPath.row == count(self.pleeks) && self.shouldLoadMore {
+        if indexPath.row == count(self.pleeks) && self.shouldLoadMore || self.searchState.rawValue > PleekTableViewSearchingState.NotSearching.rawValue {
             return false
         }
         
@@ -183,5 +229,47 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
             self.pleeks.removeAtIndex(indexPath.row)
             self.tableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
+    }
+    
+    // MARK UISearchBarDelegate
+
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        if count(searchBar.text) == 0 {
+            self.searchState = .SearchBeginWithoutText
+        }
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if let delegate = self.delegate {
+            if count(searchText) > 0 {
+                self.searchState = .SearchBeginWithText
+                delegate.searchBegin(self.tableView)
+            } else {
+                delegate.searchEnd(self.tableView)
+                NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("dismiss"), userInfo: nil, repeats: false)
+            }
+        }
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        if count(self.searchBar.text) == 0 {
+            self.searchState = .NotSearching
+        }
+    }
+
+    func dismiss() {
+        if count(self.searchBar.text) == 0 {
+            self.searchState = .NotSearching
+        }
+        
+        if self.searchBar.isFirstResponder() {
+            self.searchBar.resignFirstResponder()
+        }
+    }
+    
+    // MARK: UIScrollViewDelegate
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        searchBar.resignFirstResponder()
     }
 }
