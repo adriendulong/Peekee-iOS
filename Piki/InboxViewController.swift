@@ -102,10 +102,10 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     lazy var bestPleekCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 8
+        layout.minimumInteritemSpacing = 7
         layout.scrollDirection = .Vertical
-        layout.sectionInset = UIEdgeInsets(top:10, left: 10, bottom: 10, right: 10)
+        layout.sectionInset = UIEdgeInsets(top:9, left: 9, bottom: 8, right: 9)
 
         let collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)

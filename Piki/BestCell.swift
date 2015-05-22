@@ -10,45 +10,40 @@ import UIKit
 
 class BestCell: UICollectionViewCell {
     
+    lazy var shadowView: UIImageView = {
+        let shadowView = UIImageView()
+        shadowView.image = UIImage(named: "best-shadow")
+        shadowView.backgroundColor = UIColor.clearColor()
+        
+        self.contentView.addSubview(shadowView)
+        
+        shadowView.snp_makeConstraints({ (make) -> Void in
+            make.leading.equalTo(self.contentView)
+            make.trailing.equalTo(self.contentView)
+            make.top.equalTo(self.contentView)
+            make.bottom.equalTo(self.contentView)
+        })
+        
+        return shadowView
+    } ()
+    
     lazy var containerView: UIView = {
         let containerV = UIView()
         containerV.backgroundColor = UIColor.whiteColor()
         
-        self.contentView.addSubview(containerV)
+        self.shadowView.addSubview(containerV)
         
         containerV.snp_makeConstraints({ (make) -> Void in
-            make.leading.equalTo(self.contentView)
-            make.trailing.equalTo(self.contentView)
-            make.top.equalTo(self.contentView)
-            make.bottom.equalTo(self.contentView)
+            make.leading.equalTo(self.shadowView).offset(1)
+            make.trailing.equalTo(self.shadowView).offset(-1)
+            make.top.equalTo(self.shadowView).offset(1)
+            make.bottom.equalTo(self.shadowView).offset(-2)
         })
         
-        containerV.layer.cornerRadius = 3.0
+        containerV.layer.cornerRadius = 2.5
         containerV.clipsToBounds = true
         
         return containerV
-    } ()
-    
-    lazy var shadowView: UIView = {
-        let shadowV = UIView()
-        shadowV.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-        
-        self.contentView.addSubview(shadowV)
-        
-        shadowV.snp_makeConstraints({ (make) -> Void in
-            make.leading.equalTo(self.contentView)
-            make.trailing.equalTo(self.contentView)
-            make.top.equalTo(self.contentView)
-            make.bottom.equalTo(self.contentView)
-        })
-        
-        shadowV.layer.cornerRadius = 3.0
-        shadowV.layer.shadowColor = UIColor.blackColor().CGColor
-        shadowV.layer.shadowOffset = CGSizeMake(0, 2.0)
-        shadowV.layer.shadowRadius = 2.0
-        shadowV.layer.shadowOpacity = 0.24
-        
-        return shadowV
     } ()
     
     lazy var pleekImageView: PFImageView = {
@@ -141,7 +136,8 @@ class BestCell: UICollectionViewCell {
             make.centerX.equalTo(self.containerView)
             make.top.equalTo(self.react1ImaveView)
             make.bottom.equalTo(self.containerView)
-            make.width.equalTo(self.react1ImaveView)
+            make.leading.equalTo(self.react1ImaveView.snp_trailing).offset(0.5)
+            make.trailing.equalTo(self.react3ImaveView.snp_leading).offset(-0.5)
         })
         
         return reactIV
@@ -217,11 +213,6 @@ class BestCell: UICollectionViewCell {
         let play = self.pleekPlayImageView
 
         self.contentView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
-        self.contentView.layer.cornerRadius = 3.0
-        self.contentView.layer.shadowColor = UIColor.blackColor().CGColor
-        self.contentView.layer.shadowOffset = CGSizeMake(0, 0)
-        self.contentView.layer.shadowOpacity = 0.12
-        self.contentView.layer.shadowRadius = 2.0
     }
 }
 
