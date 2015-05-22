@@ -64,73 +64,63 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         mainCV.backgroundColor = UIColor.clearColor()
         
         self.contentView.addSubview(mainCV)
-
+        
         mainCV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentView).offset(12.0)
+            make.top.equalTo(self.contentView).offset(10.0)
             self.mainContainerViewTrailingConstraint = make.trailing.equalTo(self.contentView).constraint
             make.width.equalTo(self.contentView)
-            make.bottom.equalTo(self.contentView).offset(-3.0)
+            make.bottom.equalTo(self.contentView).offset(-2)
         })
         
         return mainCV
     } ()
     
-    lazy var cardView: UIView = {
-        let cardV = UIView()
-        cardV.backgroundColor = UIColor.whiteColor()
-        cardV.layer.cornerRadius = 5.0
-        cardV.clipsToBounds = true
-        
+    lazy var cardView: UIImageView = {
+        let cardV = UIImageView()
+        cardV.image = UIImage(named: "card-shadow")
+
         self.mainContainerView.addSubview(cardV)
         
         cardV.snp_makeConstraints({ (make) -> Void in
             make.top.equalTo(self.mainContainerView)
             make.centerX.equalTo(self.mainContainerView)
-            make.width.equalTo(self.mainContainerView).offset(-20)
+            make.width.equalTo(self.mainContainerView).offset(-18)
             make.bottom.equalTo(self.mainContainerView)
         })
-        
+
         return cardV
     } ()
-
-    lazy var containerView: UIView = {
-        let containerV = UIView()
-        containerV.backgroundColor = UIColor.clearColor()
+    
+    lazy var pleekContainer: UIImageView = {
+        let pleekContainer = UIImageView()
+        pleekContainer.backgroundColor = UIColor.clearColor()
+        pleekContainer.image = UIImage(named: "card-thumbnail-shadow")
         
-        self.mainContainerView.addSubview(containerV)
+        self.mainContainerView.addSubview(pleekContainer)
         
-        containerV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.mainContainerView)
-            make.trailing.equalTo(self.mainContainerView)
-            make.leading.equalTo(self.mainContainerView)
-            make.bottom.equalTo(self.mainContainerView)
+        pleekContainer.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(self.mainContainerView).offset(46.0)
+            make.leading.equalTo(self.mainContainerView).offset(2.5)
+            make.width.equalTo(round(CGRectGetWidth(self.contentView.frame) / 3.0))
+            make.height.equalTo(pleekContainer.snp_width)
         })
         
-        return containerV
+        
+        return pleekContainer
     } ()
-    
-    var pleekImageViewWidthConstraint: Constraint = Constraint()
     
     lazy var pleekImageView: PFImageView = {
         let pleekIM = PFImageView()
          pleekIM.backgroundColor = UIColor.clearColor()
         
-        self.containerView.addSubview(pleekIM)
+        self.pleekContainer.addSubview(pleekIM)
         
         pleekIM.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.containerView).offset(45.0)
-            make.leading.equalTo(self.containerView).offset(5.0)
-            make.width.equalTo(CGRectGetWidth(self.contentView.frame) - 10.0)
-            make.height.equalTo(pleekIM.snp_width)
+            make.top.equalTo(self.pleekContainer).offset(2)
+            make.leading.equalTo(self.pleekContainer).offset(2.5)
+            make.trailing.equalTo(self.pleekContainer).offset(-2.5)
+            make.bottom.equalTo(self.pleekContainer).offset(-3)
         })
-        
-       
-//        pleekIM.layer.shadowColor = UIColor.blackColor().CGColor
-//        pleekIM.layer.shadowOffset = CGSizeMake(0, 0)
-//        pleekIM.layer.shadowOpacity = 0.4
-//        pleekIM.layer.shadowRadius = 2.0
-//        let shadowRect = CGRectInset(pleekIM.bounds, 0, 2.0)
-//        pleekIM.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
         
         return pleekIM
     } ()
@@ -171,27 +161,36 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         let contentRV = UIView()
         contentRV.backgroundColor = UIColor.clearColor()
         
-        self.containerView.addSubview(contentRV)
+        self.mainContainerView.addSubview(contentRV)
         
         contentRV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.pleekImageView)
-            make.trailing.equalTo(self.containerView).offset(-5.0)
-            make.width.equalTo((CGRectGetWidth(self.contentView.frame) - 12.5) / 3.0)
-            make.height.equalTo(self.pleekImageView)
+            make.top.equalTo(self.pleekContainer)
+            make.trailing.equalTo(self.mainContainerView).offset(-2.5).priorityLow()
+            make.leading.equalTo(self.pleekImageView.snp_trailing)
+            make.bottom.equalTo(self.pleekContainer)
         })
-        
-//        contentRV.layer.shadowColor = UIColor.blackColor().CGColor
-//        contentRV.layer.shadowOffset = CGSizeMake(0, 0)
-//        contentRV.layer.shadowOpacity = 0.4
-//        contentRV.layer.shadowRadius = 2.0
-//        let shadowRect = CGRectInset(contentRV.bounds, 0, 2.0)
-//        contentRV.layer.shadowPath = UIBezierPath(rect: shadowRect).CGPath
         
         return contentRV
     } ()
     
     var topReactBottomConstraint: Constraint = Constraint()
     
+    lazy var reactTopContainer: UIImageView = {
+        let reactTopContainer = UIImageView()
+        reactTopContainer.image = UIImage(named: "card-thumbnail-shadow")
+        
+        self.contentReactView.addSubview(reactTopContainer)
+        
+        reactTopContainer.snp_makeConstraints({ (make) -> Void in
+            make.top.equalTo(self.contentReactView)
+            self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).offset(1.25).constraint
+            make.leading.equalTo(self.contentReactView)
+            make.trailing.equalTo(self.contentReactView)
+        })
+        
+        return reactTopContainer
+    } ()
+
     lazy var reactTopImageView: PFImageView = {
         let reacTopIV = PFImageView()
         reacTopIV.backgroundColor = UIColor.Theme.PleekBackGroundColor
@@ -199,13 +198,13 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         
         reacTopIV.clipsToBounds = true
         
-        self.contentReactView.addSubview(reacTopIV)
+        self.reactTopContainer.addSubview(reacTopIV)
         
         reacTopIV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentReactView)
-            self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).offset(-1.25).constraint
-            make.leading.equalTo(self.contentReactView)
-            make.trailing.equalTo(self.contentReactView)
+            make.top.equalTo(self.reactTopContainer).offset(2)
+            make.bottom.equalTo(self.reactTopContainer).offset(-3)
+            make.leading.equalTo(self.reactTopContainer).offset(2.5)
+            make.trailing.equalTo(self.reactTopContainer).offset(-2.5)
         })
         
         return reacTopIV
@@ -228,17 +227,33 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         return reactTIS
     } ()
     
+    lazy var reactBottomContainer: UIImageView = {
+        let reactBottomContainer = UIImageView()
+        reactBottomContainer.image = UIImage(named: "card-thumbnail-shadow")
+        
+        self.contentReactView.addSubview(reactBottomContainer)
+        
+        reactBottomContainer.snp_makeConstraints({ (make) -> Void in
+            make.bottom.equalTo(self.contentReactView)
+            make.top.equalTo(self.contentReactView.snp_centerY).offset(-1.25)
+            make.leading.equalTo(self.contentReactView)
+            make.trailing.equalTo(self.contentReactView)
+        })
+        
+        return reactBottomContainer
+    } ()
+    
     lazy var reactBottomImageView: PFImageView = {
         let reactBottomIV = PFImageView()
         reactBottomIV.backgroundColor = UIColor.Theme.PleekBackGroundColor
         
-        self.contentReactView.addSubview(reactBottomIV)
+        self.reactBottomContainer.addSubview(reactBottomIV)
         
         reactBottomIV.snp_makeConstraints({ (make) -> Void in
-            make.top.equalTo(self.contentReactView.snp_centerY).offset(1.25)
-            make.bottom.equalTo(self.contentReactView)
-            make.leading.equalTo(self.contentReactView)
-            make.trailing.equalTo(self.contentReactView)
+            make.top.equalTo(self.reactBottomContainer).offset(2)
+            make.bottom.equalTo(self.reactBottomContainer).offset(-3)
+            make.leading.equalTo(self.reactBottomContainer).offset(2.5)
+            make.trailing.equalTo(self.reactBottomContainer).offset(-2.5)
         })
         
         return reactBottomIV
@@ -265,13 +280,13 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         let fromIV = UIImageView(frame: CGRectZero)
         fromIV.image = UIImage(named: "incoming-icon")
         
-        self.containerView.addSubview(fromIV)
+        self.mainContainerView.addSubview(fromIV)
         
         fromIV.snp_makeConstraints { (make) -> Void in
-            make.top.equalTo(self.containerView).offset(20)
+            make.top.equalTo(self.mainContainerView).offset(20)
             make.width.equalTo(12)
             make.height.equalTo(12.5)
-            make.leading.equalTo(self.containerView).offset(20)
+            make.leading.equalTo(self.mainContainerView).offset(20)
         }
         
         return fromIV
@@ -282,7 +297,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         usernameL.font = UIFont(name: "ProximaNova-Semibold", size: 16.0)!
         usernameL.textColor = UIColor(red: 26.0/255.0, green: 27.0/255.0, blue: 31.0/255.0, alpha: 1.0)
         
-        self.containerView.addSubview(usernameL)
+        self.mainContainerView.addSubview(usernameL)
         
         usernameL.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(self.fromImageView)
@@ -297,7 +312,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         certifiedAIV.backgroundColor = UIColor.whiteColor()
         certifiedAIV.image = UIImage(named: "certified-icon")
         
-        self.containerView.addSubview(certifiedAIV)
+        self.mainContainerView.addSubview(certifiedAIV)
         
         certifiedAIV.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(24)
@@ -314,12 +329,12 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         actionIV.backgroundColor = UIColor.whiteColor()
         actionIV.image = UIImage(named: "next-icon")
         
-        self.containerView.addSubview(actionIV)
+        self.mainContainerView.addSubview(actionIV)
 
         actionIV.snp_makeConstraints { (make) -> Void in
             make.width.equalTo(6.5)
             make.height.equalTo(11)
-            make.trailing.equalTo(self.containerView).offset(-20)
+            make.trailing.equalTo(self.mainContainerView).offset(-20)
             make.centerY.equalTo(self.fromImageView.snp_centerY).offset(-1)
         }
 
@@ -333,7 +348,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         replyLabel.textColor = UIColor(red: 26.0/255.0, green: 27.0/255.0, blue: 31.0/255.0, alpha: 1.0)
         replyLabel.text = LocalizedString("NEW REPLIES")
         
-        self.containerView.addSubview(replyLabel)
+        self.mainContainerView.addSubview(replyLabel)
         
         replyLabel.snp_makeConstraints { (make) -> Void in
             make.centerY.equalTo(self.fromImageView)
@@ -343,30 +358,17 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         return replyLabel
     } ()
     
-    lazy var blueCardView: UIView = {
-        let cardV = UIView()
-        cardV.backgroundColor = UIColor(red: 85.0/255.0, green: 114.0/255.0, blue: 250.0/255.0, alpha: 1.0)
-        cardV.layer.cornerRadius = 5.0
+    lazy var blueCardView: UIImageView = {
+        let cardV = UIImageView()
+        cardV.image = UIImage(named: "card-footer-shadow")
         
         self.cardView.addSubview(cardV)
         
         cardV.snp_makeConstraints({ (make) -> Void in
-            make.height.equalTo(45.0)
+            make.height.equalTo(48.5)
             make.centerX.equalTo(self.mainContainerView)
             make.width.equalTo(self.cardView)
             make.bottom.equalTo(self.cardView)
-        })
-        
-        let innerTrick = UIView()
-        innerTrick.backgroundColor = UIColor(red: 85.0/255.0, green: 114.0/255.0, blue: 250.0/255.0, alpha: 1.0)
-        
-        cardV.addSubview(innerTrick)
-        
-        innerTrick.snp_makeConstraints({ (make) -> Void in
-            make.height.equalTo(10.0)
-            make.centerX.equalTo(cardV)
-            make.width.equalTo(cardV)
-            make.top.equalTo(cardV)
         })
         
         return cardV
@@ -425,6 +427,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         let v112 = self.mainContainerView
         let cardView = self.cardView
         let blueCardView = self.blueCardView
+        let pleekContainer = self.pleekContainer
         let v11 = self.pleekPlayImageView
         let v1 = self.pleekImageSpinner
         let v2 = self.contentReactView
@@ -435,7 +438,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         let infoLabel = self.infoLabel
 
         self.mainContainerView.bringSubviewToFront(self.contentReactView)
-        self.mainContainerView.bringSubviewToFront(self.pleekImageView)
+        self.mainContainerView.bringSubviewToFront(self.pleekContainer)
         
         
         self.clipsToBounds = true
@@ -444,6 +447,8 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
         let panGestureRecognizer:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("handlePan:"))
         panGestureRecognizer.delegate = self
         self.addGestureRecognizer(panGestureRecognizer)
+        
+        self.setNeedsUpdateConstraints()
     }
     
     override func layoutSubviews() {
@@ -452,21 +457,18 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
     }
     
     override func updateConstraints() {
-        self.pleekImageView.snp_updateConstraints{ (make) -> Void in
+
+        self.pleekContainer.snp_updateConstraints{ (make) -> Void in
             switch self.type {
                 case .BlueBandLargePhoto, .LargePhoto:
-                    make.width.equalTo(CGRectGetWidth(self.contentView.frame) - 10.0)
+                    make.width.equalTo(CGRectGetWidth(self.contentView.frame) - 5)
                 break
                 case .BlueBandSmallPhoto, .SmallPhoto:
-                    make.width.equalTo(round((CGRectGetWidth(self.contentView.frame) - 12.5) / 3.0 * 2.0))
+                    make.width.equalTo(round((CGRectGetWidth(self.contentView.frame) - 7.5) / 3.0 * 2.0))
                 break
             }
         }
         
-        self.contentReactView.snp_updateConstraints{ (make) -> Void in
-            make.width.equalTo(round((CGRectGetWidth(self.contentView.frame) - 12.5) / 3.0))
-        }
-
         super.updateConstraints()
     }
     
@@ -523,7 +525,6 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
 extension InboxCell {
     
     func configureFor(pleek: Pleek) {
-        
         switch (pleek.state, pleek.nbReaction > 0) {
         case (.NotSeenVideo, true), (.NotSeenPhoto, true), (.SeenNewReact, true):
             self.type = .BlueBandSmallPhoto
@@ -588,14 +589,14 @@ extension InboxCell {
         
         if pleek.nbReaction > 1 {
             self.contentReactView.hidden = false
-            self.reactBottomImageView.hidden = false
-            self.reactTopImageView.snp_makeConstraints { (make) -> Void in
-                self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).offset(-1.25).constraint
+            self.reactBottomContainer.hidden = false
+            self.reactTopContainer.snp_makeConstraints { (make) -> Void in
+                self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView.snp_centerY).offset(1.25).constraint
             }
         } else if pleek.nbReaction > 0 {
             self.contentReactView.hidden = false
-            self.reactBottomImageView.hidden = true
-            self.reactTopImageView.snp_makeConstraints { (make) -> Void in
+            self.reactBottomContainer.hidden = true
+            self.reactTopContainer.snp_makeConstraints { (make) -> Void in
                 self.topReactBottomConstraint = make.bottom.equalTo(self.contentReactView).constraint
             }
         } else {
