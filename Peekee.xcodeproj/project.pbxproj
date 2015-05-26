@@ -234,9 +234,9 @@
 		0AA016731B039E9F003DCE3D /* PleekNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0166E1B039E9F003DCE3D /* PleekNavigationButton.swift */; };
 		0AA016741B039E9F003DCE3D /* PleekNavigationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA0166E1B039E9F003DCE3D /* PleekNavigationButton.swift */; };
 		0ACD2B991AFB9B2100CADDEE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
-		0AD6F1241B09D18900A041C0 /* PleekTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */; };
-		0AD6F1251B09D53000A041C0 /* PleekTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */; };
-		0AD6F1261B09D53700A041C0 /* PleekTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */; };
+		0AD6F1241B09D18900A041C0 /* PleekTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */; };
+		0AD6F1251B09D53000A041C0 /* PleekTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */; };
+		0AD6F1261B09D53700A041C0 /* PleekTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */; };
 		0AD6F1281B09F0C100A041C0 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */; };
 		0AD6F1291B09F12200A041C0 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */; };
 		0AD6F12A1B09F12600A041C0 /* LoadMoreTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */; };
@@ -395,7 +395,7 @@
 		0AA0166D1B039E9F003DCE3D /* PleekNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekNavigationView.swift; sourceTree = "<group>"; };
 		0AA0166E1B039E9F003DCE3D /* PleekNavigationButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekNavigationButton.swift; sourceTree = "<group>"; };
 		0ACD2B981AFB9B2100CADDEE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekTableViewProtocol.swift; sourceTree = "<group>"; };
+		0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekTableViewController.swift; sourceTree = "<group>"; };
 		0AD6F1271B09F0C100A041C0 /* LoadMoreTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreTableViewCell.swift; sourceTree = "<group>"; };
 		0AD6F12B1B0A32BE00A041C0 /* PleekAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekAlertView.swift; sourceTree = "<group>"; };
 		0ADBF0F01AF7A76600684E79 /* Constraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constraint.swift; sourceTree = "<group>"; };
@@ -693,7 +693,7 @@
 		0AD6F1221B09D17900A041C0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				0AD6F1231B09D18900A041C0 /* PleekTableViewProtocol.swift */,
+				0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */,
 				0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */,
 			);
 			name = Models;
@@ -1405,7 +1405,7 @@
 			files = (
 				0AD6F12E1B0A3E2100A041C0 /* PleekAlertView.swift in Sources */,
 				0AD6F1291B09F12200A041C0 /* LoadMoreTableViewCell.swift in Sources */,
-				0AD6F1261B09D53700A041C0 /* PleekTableViewProtocol.swift in Sources */,
+				0AD6F1261B09D53700A041C0 /* PleekTableViewController.swift in Sources */,
 				0AA015611B00C5D4003DCE3D /* Pleek.swift in Sources */,
 				0A5761641AFB9D850006B544 /* EdgeInsets.swift in Sources */,
 				0A5761651AFB9D850006B544 /* ContactPhoneTableViewCell.swift in Sources */,
@@ -1476,7 +1476,7 @@
 			files = (
 				0AD6F12D1B0A3E1900A041C0 /* PleekAlertView.swift in Sources */,
 				0AD6F12A1B09F12600A041C0 /* LoadMoreTableViewCell.swift in Sources */,
-				0AD6F1251B09D53000A041C0 /* PleekTableViewProtocol.swift in Sources */,
+				0AD6F1251B09D53000A041C0 /* PleekTableViewController.swift in Sources */,
 				0AA015601B00C5CF003DCE3D /* Pleek.swift in Sources */,
 				0A5761D71AFB9D890006B544 /* EdgeInsets.swift in Sources */,
 				0A5761D81AFB9D890006B544 /* ContactPhoneTableViewCell.swift in Sources */,
@@ -1576,7 +1576,7 @@
 				E75D4FF01AA476E100FF878A /* MuteAllViewController.swift in Sources */,
 				E7665E5D19E6E6E9003DAAF8 /* RBResizer.swift in Sources */,
 				E77913171AC3C58000E2CE89 /* WaitViewController.swift in Sources */,
-				0AD6F1241B09D18900A041C0 /* PleekTableViewProtocol.swift in Sources */,
+				0AD6F1241B09D18900A041C0 /* PleekTableViewController.swift in Sources */,
 				0ADBF1061AF7A76600684E79 /* View+SnapKit.swift in Sources */,
 				E7C3B32D1A24858D0059F78D /* ChooseReceiversViewController.swift in Sources */,
 				0ADBF0FC1AF7A76600684E79 /* Constraint.swift in Sources */,
