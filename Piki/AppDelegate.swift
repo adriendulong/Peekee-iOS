@@ -182,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
                                     let rootController = navController.viewControllers[0] as? InboxViewController,
                                     let pleek = piki as? Pleek {
                                         
-                                    rootController.pleekTableView(nil, didSelectPleek: pleek, atIndexPath: nil)
+                                    rootController.showPleek(pleek)
                                 }
 
                                 
