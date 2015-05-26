@@ -163,4 +163,13 @@ import Foundation
         }
     }
     
+    class func find(name: String) -> BFTask {
+        let query = User.query()!
+        
+        query.whereKey("username", equalTo: name)
+        query.cachePolicy = PFCachePolicy.NetworkElseCache
+        
+        return query.findObjectsInBackground()
+    }
+    
 }

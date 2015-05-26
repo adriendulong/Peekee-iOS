@@ -10,13 +10,13 @@
 #define COCOAPODS_POD_AVAILABLE_APAddressBook_Core
 #define COCOAPODS_VERSION_MAJOR_APAddressBook_Core 0
 #define COCOAPODS_VERSION_MINOR_APAddressBook_Core 1
-#define COCOAPODS_VERSION_PATCH_APAddressBook_Core 6
+#define COCOAPODS_VERSION_PATCH_APAddressBook_Core 7
 
 // APAddressBook/Swift
 #define COCOAPODS_POD_AVAILABLE_APAddressBook_Swift
 #define COCOAPODS_VERSION_MAJOR_APAddressBook_Swift 0
 #define COCOAPODS_VERSION_MINOR_APAddressBook_Swift 1
-#define COCOAPODS_VERSION_PATCH_APAddressBook_Swift 6
+#define COCOAPODS_VERSION_PATCH_APAddressBook_Swift 7
 
 // Animated-Gif-iOS
 #define COCOAPODS_POD_AVAILABLE_Animated_Gif_iOS
@@ -124,5 +124,5 @@
 #define COCOAPODS_POD_AVAILABLE_libPhoneNumber_iOS
 #define COCOAPODS_VERSION_MAJOR_libPhoneNumber_iOS 0
 #define COCOAPODS_VERSION_MINOR_libPhoneNumber_iOS 8
-#define COCOAPODS_VERSION_PATCH_libPhoneNumber_iOS 4
+#define COCOAPODS_VERSION_PATCH_libPhoneNumber_iOS 5
 

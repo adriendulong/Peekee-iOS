@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A0458CF1AF8C2A300BC779E /* NewReactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */; };
+		0A220EE11B145D1D00E026BC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A220EE01B145D1D00E026BC /* libPods.a */; };
+		0A220EE31B145D2900E026BC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A220EE21B145D2900E026BC /* libPods.a */; };
 		0A227CFF1B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */; };
 		0A227D001B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */; };
 		0A227D011B063D950032AD40 /* Proxima-Nova-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */; };
@@ -79,7 +81,6 @@
 		0A5761A51AFB9D850006B544 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5519E6F5C900D659AC /* CFNetwork.framework */; };
 		0A5761A61AFB9D850006B544 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C9168719F94A900094710D /* Fabric.framework */; };
 		0A5761A71AFB9D850006B544 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */; };
-		0A5761A81AFB9D850006B544 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
 		0A5761AA1AFB9D850006B544 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */; };
 		0A5761AB1AFB9D850006B544 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
 		0A5761AD1AFB9D850006B544 /* TrashHand2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */; };
@@ -172,7 +173,6 @@
 		0A5762181AFB9D890006B544 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5519E6F5C900D659AC /* CFNetwork.framework */; };
 		0A5762191AFB9D890006B544 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C9168719F94A900094710D /* Fabric.framework */; };
 		0A57621A1AFB9D890006B544 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72E7D5319E6F5BF00D659AC /* AudioToolbox.framework */; };
-		0A57621B1AFB9D890006B544 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
 		0A57621D1AFB9D890006B544 /* peekee_tuto.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = E724D0161AF75C5C0060B545 /* peekee_tuto.mp4 */; };
 		0A57621E1AFB9D890006B544 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ACD2B981AFB9B2100CADDEE /* Images.xcassets */; };
 		0A5762201AFB9D890006B544 /* TrashHand2.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E72FC3161AEE2D5100243F78 /* TrashHand2.ttf */; };
@@ -285,7 +285,6 @@
 		0AF4D9C31B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */; };
 		0AF4D9C41B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */; };
 		0AF4D9C51B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */; };
-		5E4C9A334D9FAF59B9CB4BE2 /* libPods-Peekee.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */; };
 		E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */; };
 		E704D5A81A6A5C11008BE745 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
 		E70A55BA1A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */; };
@@ -374,6 +373,8 @@
 
 /* Begin PBXFileReference section */
 		0A0458CE1AF8C2A300BC779E /* NewReactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewReactViewController.swift; sourceTree = "<group>"; };
+		0A220EE01B145D1D00E026BC /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		0A220EE21B145D2900E026BC /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPods.a; path = "Pods/../build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
 		0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Bold.otf"; sourceTree = "<group>"; };
 		0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Sbold.otf"; sourceTree = "<group>"; };
 		0A227D0A1B0641050032AD40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -382,7 +383,6 @@
 		0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-prod.plist"; sourceTree = "<group>"; };
 		0A5761D21AFB9D850006B544 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A5762451AFB9D890006B544 /* Peekee.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peekee.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.debug.xcconfig"; sourceTree = "<group>"; };
 		0AA0155C1B00C2E3003DCE3D /* Pleek.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pleek.swift; sourceTree = "<group>"; };
 		0AA015F91B011495003DCE3D /* InboxNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxNavigationController.swift; sourceTree = "<group>"; };
 		0AA015FA1B011495003DCE3D /* InboxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InboxViewController.swift; sourceTree = "<group>"; };
@@ -423,8 +423,8 @@
 		0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestCell.swift; sourceTree = "<group>"; };
 		0AF4D9BE1B0C7D0800BF051D /* Best.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Best.swift; sourceTree = "<group>"; };
 		0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreCollectionViewCell.swift; sourceTree = "<group>"; };
+		51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A5663B8FEBB63CEEFAA88EA2 /* libPods-Peekee.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Peekee.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Peekee.release.xcconfig"; path = "Pods/Target Support Files/Pods-Peekee/Pods-Peekee.release.xcconfig"; sourceTree = "<group>"; };
 		E700E5121A1A01470004DE10 /* CountriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountriesTableViewController.swift; sourceTree = "<group>"; };
 		E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E70A55B91A7A2EA40024DDF7 /* MainPeekeeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainPeekeeCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -533,6 +533,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A220EE11B145D1D00E026BC /* libPods.a in Frameworks */,
 				0A5761941AFB9D850006B544 /* iAd.framework in Frameworks */,
 				0A5761951AFB9D850006B544 /* AdSupport.framework in Frameworks */,
 				0A5761961AFB9D850006B544 /* UIKit.framework in Frameworks */,
@@ -553,7 +554,6 @@
 				0A5761A51AFB9D850006B544 /* CFNetwork.framework in Frameworks */,
 				0A5761A61AFB9D850006B544 /* Fabric.framework in Frameworks */,
 				0A5761A71AFB9D850006B544 /* AudioToolbox.framework in Frameworks */,
-				0A5761A81AFB9D850006B544 /* libPods-Peekee.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,6 +561,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A220EE31B145D2900E026BC /* libPods.a in Frameworks */,
 				0A5762071AFB9D890006B544 /* iAd.framework in Frameworks */,
 				0A5762081AFB9D890006B544 /* AdSupport.framework in Frameworks */,
 				0A5762091AFB9D890006B544 /* UIKit.framework in Frameworks */,
@@ -581,7 +582,6 @@
 				0A5762181AFB9D890006B544 /* CFNetwork.framework in Frameworks */,
 				0A5762191AFB9D890006B544 /* Fabric.framework in Frameworks */,
 				0A57621A1AFB9D890006B544 /* AudioToolbox.framework in Frameworks */,
-				0A57621B1AFB9D890006B544 /* libPods-Peekee.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -609,7 +609,6 @@
 				E72E7D5619E6F5C900D659AC /* CFNetwork.framework in Frameworks */,
 				E7C9168819F94A900094710D /* Fabric.framework in Frameworks */,
 				E72E7D5419E6F5BF00D659AC /* AudioToolbox.framework in Frameworks */,
-				5E4C9A334D9FAF59B9CB4BE2 /* libPods-Peekee.a in Frameworks */,
 				F4273300F82D7644D269B529 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -779,11 +778,10 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		34DD7A52573B09F7B3A92CAD /* Pods */ = {
+		CE9107E187A2AD7B464BCAC3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */,
-				0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */,
+				51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -827,7 +825,7 @@
 				E7665E4619E5A3AB003DAAF8 /* PikiTests */,
 				E7665E2F19E5A3AB003DAAF8 /* Products */,
 				E7665E5E19E6EF3F003DAAF8 /* Frameworks */,
-				34DD7A52573B09F7B3A92CAD /* Pods */,
+				CE9107E187A2AD7B464BCAC3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -902,6 +900,8 @@
 		E7665E5E19E6EF3F003DAAF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A220EE21B145D2900E026BC /* libPods.a */,
+				0A220EE01B145D1D00E026BC /* libPods.a */,
 				E7A0CCC11ABC9A5D0025BA62 /* iAd.framework */,
 				E7A0CCBF1ABC97810025BA62 /* AdSupport.framework */,
 				E7F628DF1AA8B907009329DE /* FBSDKMessengerShareKit.framework */,
@@ -1052,7 +1052,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0A5761CF1AFB9D850006B544 /* Build configuration list for PBXNativeTarget "pleek-beta" */;
 			buildPhases = (
-				0A5761621AFB9D850006B544 /* Check Pods Manifest.lock */,
 				0A5761631AFB9D850006B544 /* Sources */,
 				0A5761931AFB9D850006B544 /* Frameworks */,
 				0A5761A91AFB9D850006B544 /* Resources */,
@@ -1072,7 +1071,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0A5762421AFB9D890006B544 /* Build configuration list for PBXNativeTarget "pleek-dev" */;
 			buildPhases = (
-				0A5761D51AFB9D890006B544 /* Check Pods Manifest.lock */,
 				0A5761D61AFB9D890006B544 /* Sources */,
 				0A5762061AFB9D890006B544 /* Frameworks */,
 				0A57621C1AFB9D890006B544 /* Resources */,
@@ -1092,7 +1090,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "pleek-prod" */;
 			buildPhases = (
-				F33917FF311AA444C2306A01 /* Check Pods Manifest.lock */,
 				E7665E2A19E5A3AB003DAAF8 /* Sources */,
 				E7665E2B19E5A3AB003DAAF8 /* Frameworks */,
 				E7665E2C19E5A3AB003DAAF8 /* Resources */,
@@ -1315,21 +1312,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0A5761621AFB9D850006B544 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		0A5761CD1AFB9D850006B544 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -1355,22 +1337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Peekee/Pods-Peekee-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		0A5761D51AFB9D890006B544 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		0A5762401AFB9D890006B544 /* ShellScript */ = {
@@ -1398,7 +1365,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Peekee/Pods-Peekee-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E7EBA42919EC06BA006E8587 /* ShellScript */ = {
@@ -1413,21 +1380,6 @@
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
-		};
-		F33917FF311AA444C2306A01 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
 		};
 		FB548DFAD071A44F88B97E59 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1724,37 +1676,9 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		0A5761D01AFB9D850006B544 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-beta";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				INFOPLIST_FILE = "Piki/pleek-beta.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Piki",
-				);
-				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
-				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 		0A5761D11AFB9D850006B544 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
+			baseConfigurationReference = 51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-beta";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1770,7 +1694,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/Piki",
 				);
 				ONLY_ACTIVE_ARCH = YES;
@@ -1781,38 +1704,9 @@
 			};
 			name = Debug;
 		};
-		0A5762431AFB9D890006B544 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				INFOPLIST_FILE = "Piki/pleek-dev.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Piki",
-				);
-				OTHER_SWIFT_FLAGS = "-DDEBUG";
-				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
-				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 		0A5762441AFB9D890006B544 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
+			baseConfigurationReference = 51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1828,7 +1722,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/Piki",
 				);
 				ONLY_ACTIVE_ARCH = YES;
@@ -1881,7 +1774,7 @@
 		};
 		E74C1DF91A56F609002F86CC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0A9F97B798FABAE2159CDA4E /* Pods-Peekee.debug.xcconfig */;
+			baseConfigurationReference = 51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-prod";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1897,7 +1790,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
 					"$(PROJECT_DIR)/Piki",
 				);
 				ONLY_ACTIVE_ARCH = YES;
@@ -1927,137 +1819,48 @@
 			};
 			name = Debug;
 		};
-		E7665E4C19E5A3AB003DAAF8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		E7665E4F19E5A3AB003DAAF8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B5C4A446E7932A56BE56A76C /* Pods-Peekee.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-prod";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				INFOPLIST_FILE = "Piki/pleek-prod.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Pods/build/Debug-iphoneos",
-					"$(PROJECT_DIR)/Piki",
-				);
-				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
-				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		E7665E5219E5A3AB003DAAF8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = PikiTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = PeekeeTests;
-				PROVISIONING_PROFILE = "";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Peekee.app/Peekee";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		0A5761CF1AFB9D850006B544 /* Build configuration list for PBXNativeTarget "pleek-beta" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0A5761D01AFB9D850006B544 /* Release */,
 				0A5761D11AFB9D850006B544 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		0A5762421AFB9D890006B544 /* Build configuration list for PBXNativeTarget "pleek-dev" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0A5762431AFB9D890006B544 /* Release */,
 				0A5762441AFB9D890006B544 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		E7665E2919E5A3AA003DAAF8 /* Build configuration list for PBXProject "Peekee" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E7665E4C19E5A3AB003DAAF8 /* Release */,
 				E74C1DF81A56F609002F86CC /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		E7665E4D19E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "pleek-prod" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E7665E4F19E5A3AB003DAAF8 /* Release */,
 				E74C1DF91A56F609002F86CC /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		E7665E5019E5A3AB003DAAF8 /* Build configuration list for PBXNativeTarget "PeekeeTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E7665E5219E5A3AB003DAAF8 /* Release */,
 				E74C1DFA1A56F609002F86CC /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

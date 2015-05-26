@@ -9,6 +9,7 @@
 protocol PleekTableViewDelegate: class {
     func pleekTableView(tableView: UITableView?, didSelectPleek pleek:Pleek, atIndexPath indexPath: NSIndexPath?)
     func pleekTableViewLoadMore(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, toSkip: Int)
+    func pleekTableViewResultSearchTextChange(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, text: String, skip: Int)
     func scrollViewDidScrollToTop()
     func searchBegin(tableView: UITableView?)
     func searchEnd(tableView: UITableView?)
@@ -244,6 +245,10 @@ class PleekTableViewProtocol: NSObject, UITableViewDataSource, UITableViewDelega
             if count(searchText) > 0 {
                 self.searchState = .SearchBeginWithText
                 delegate.searchBegin(self.tableView)
+                if count(searchText) > 2 {
+                    delegate.pleekTableViewResultSearchTextChange(self, tableView: self.tableView!, text: searchText, skip: 0)
+                }
+                
             } else {
                 delegate.searchEnd(self.tableView)
                 NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("dismiss"), userInfo: nil, repeats: false)

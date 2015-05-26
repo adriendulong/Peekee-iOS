@@ -123,15 +123,12 @@ enum PleekState {
         }
     }
     
-    class func getPleeks(username: String, withCache: Bool, skip: Int) -> BFTask {
-        
-        let userQuery = User.query()!
-        userQuery.whereKey("username", equalTo: username)
-        
+    class func find(user: User, skip: Int) -> BFTask {
         let predicate = NSPredicate(format: "isPublic = \(true) OR '\(User.currentUser()!.objectId!)' IN recipients", argumentArray: nil)
         let query = Pleek.queryWithPredicate(predicate)!
         query.orderByDescending("lastUpdate")
-        query.whereKey("user", matchesQuery: userQuery)
+        query.whereKey("user", equalTo: user)
+        query.includeKey("user")
 
         query.cachePolicy = PFCachePolicy.NetworkElseCache
         

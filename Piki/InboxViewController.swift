@@ -31,6 +31,8 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         return refreshControl
     } ()
     
+    var cancellationTokenSource = BFCancellationTokenSource()
+    
     var toUpdate: (tableView: UITableView, indexPath: NSIndexPath)?
     
     var receivedPleeksTableViewTrailingConstraint = Constraint()
@@ -218,20 +220,6 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         self.getReceivedPleek(true)
         self.getSentPleek(true)
         self.getBestPleek(true)
-        
-        
-        Pleek.getPleeks("tia", withCache: true, skip: 0).continueWithBlock { (task) -> AnyObject! in
-            
-            if let error = task.error {
-                println(error)
-            }
-            
-            if let results = task.result as? [Pleek] {
-                println(results)
-            }
-            
-            return nil
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -361,6 +349,51 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
             pleekProtocol.updateTableView(tableView, pleeks: pleeks!)
         }
         pleekProtocol.isLoadingMore = false
+    }
+    
+    func pleekTableViewResultSearchTextChange(pleekProtocol: PleekTableViewProtocol, tableView: UITableView, text: String, skip: Int) {
+        
+        self.cancellationTokenSource.cancel()
+        self.cancellationTokenSource = BFCancellationTokenSource()
+        
+        weak var weakSelf = self
+        
+        var secondBlock: BFContinuationBlock = { (task) -> AnyObject! in
+            if task.cancelled {
+                println("cancelled")
+            } else if let error = task.error {
+                println(error)
+            } else if let pleeks = task.result as? [Pleek] {
+                if count(pleeks) > 0 {
+                    println(pleeks)
+                    weakSelf?.receivedPleeksProtocol.searchList = pleeks
+                    weakSelf?.receivedPleeksTableView.reloadData()
+                } else {
+                    println("no pleeks available for this user")
+                }
+            }
+            
+            return "success"
+        }
+        
+        User.find(text).continueWithBlock({ (task) -> AnyObject! in
+            if let task = task {
+                if task.cancelled {
+                    println("cancelled")
+                } else if let error = task.error {
+                    println(error)
+                } else if let users = task.result as? [User] {
+                    println(users)
+                    if count(users) > 0 {
+                        weakSelf?.cancellationTokenSource = BFCancellationTokenSource()
+                        Pleek.find(users[0], skip: 0).continueWithBlock(secondBlock, cancellationToken: weakSelf?.cancellationTokenSource.token!)
+                    } else {
+                        println("no user with this name")
+                    }
+                }
+            }
+            return false
+            }, cancellationToken: self.cancellationTokenSource.token)
     }
     
     func scrollViewDidScrollToTop() {
