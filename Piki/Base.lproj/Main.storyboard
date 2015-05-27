@@ -982,7 +982,7 @@
         <!--Tuto Video View Controller-->
         <scene sceneID="KJF-CJ-rVa">
             <objects>
-                <viewController id="ukr-CZ-nnC" customClass="TutoVideoViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TutoVideoViewControllerID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ukr-CZ-nnC" customClass="TutoVideoViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NIW-sR-h7E"/>
                         <viewControllerLayoutGuide type="bottom" id="UKf-EC-quk"/>
@@ -1000,7 +1000,7 @@
         <!--Acounts Advice View Controller-->
         <scene sceneID="QaQ-zM-Sff">
             <objects>
-                <viewController storyboardIdentifier="AcountsAdviceViewControllerID" id="k1d-xI-rZZ" customClass="AcountsAdviceViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AcountsAdviceViewControllerID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="k1d-xI-rZZ" customClass="AcountsAdviceViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="akQ-SM-WDC"/>
                         <viewControllerLayoutGuide type="bottom" id="uFp-x5-jbJ"/>
@@ -1150,7 +1150,7 @@
         <!--Add Friends First View Controller-->
         <scene sceneID="xPq-1s-eHA">
             <objects>
-                <viewController id="ppa-iO-VnK" customClass="AddFriendsFirstViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddFriendsFirstViewControllerID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ppa-iO-VnK" customClass="AddFriendsFirstViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Y4f-p1-prL"/>
                         <viewControllerLayoutGuide type="bottom" id="elH-DS-FBQ"/>

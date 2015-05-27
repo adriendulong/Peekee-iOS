@@ -9,7 +9,7 @@
 import UIKit
 
 class InboxNavigationController: UINavigationController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,7 +21,7 @@ class InboxNavigationController: UINavigationController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     /*
     // MARK: - Navigation
 
@@ -31,5 +31,5 @@ class InboxNavigationController: UINavigationController {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
 }

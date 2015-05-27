@@ -339,11 +339,21 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     override func viewWillDisappear(animated: Bool) {
+        println(self.navigationController)
+        println(self.navigationController?.viewControllers)
+        println(self.navigationController?.viewControllers.first)
+        
+        if let controller = self.navigationController?.viewControllers.first as? InboxViewController {
+            controller.showFriend()
+        }
         PBJVision.sharedInstance().stopPreview()
+            
     }
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        
     }
     
     override func viewDidAppear(animated: Bool) {

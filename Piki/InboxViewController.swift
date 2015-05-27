@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekTableViewControllerDelegate, PleekCollectionViewControllerDelegate {
+class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekTableViewControllerDelegate, PleekCollectionViewControllerDelegate, SearchFriendsProtocol, UIAlertViewDelegate {
     
     
     // MARK: Old
@@ -171,28 +171,19 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     override func viewDidAppear(animated: Bool) {
         
+        println(User.currentUser()?.objectId)
+        
         //See if show Recommend Accounts
         if User.currentUser()!["hasSeenRecommanded"] != nil{
-            if !(User.currentUser()!["hasSeenRecommanded"] as! Bool){
+            if !(User.currentUser()!["hasSeenRecommanded"] as! Bool) {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 if let acountsAdviceViewController = storyboard.instantiateViewControllerWithIdentifier("AcountsAdviceViewControllerID") as? AcountsAdviceViewController {
                     self.presentViewController(acountsAdviceViewController, animated: true, completion: nil)
                 }
-            }
-            else if User.currentUser()!["hasSeenFriends"] == nil {
-                //self.performSegueWithIdentifier("showFriends", sender: self)
-            }
-            else if !(User.currentUser()!["hasSeenFriends"] as! Bool){
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let acountsAdviceViewController = storyboard.instantiateViewControllerWithIdentifier("AcountsAdviceViewControllerID") as? AcountsAdviceViewController {
-                    self.presentViewController(acountsAdviceViewController, animated: true, completion: nil)
-                }
-                self.performSegueWithIdentifier("showFriends", sender: self)
             }
             else{
                 //See if show tuto overlay
                 if User.currentUser()!["hasShownOverlayMenu"] != nil{
-                    
                     if !(User.currentUser()!["hasShownOverlayMenu"] as! Bool){
                         self.showTutoOverlay()
                         self.showTutoFirst = true
@@ -204,12 +195,9 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 }
             }
         }
-        else{
-            self.performSegueWithIdentifier("showRecommended", sender: self)
-        }
-        
-        
     }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -321,6 +309,12 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     func navigationViewShowFriends(navigationView: PleekNavigationView) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let searchFriendsVC = storyboard.instantiateViewControllerWithIdentifier("SearchFriendsViewControllerID") as? SearchFriendsViewController {
+            searchFriendsVC.delegate = self
+            
+            if firstUserUnlock != nil {
+                searchFriendsVC.firstUserUnlock = firstUserUnlock!
+                firstUserUnlock = nil
+            }
             self.navigationController?.pushViewController(searchFriendsVC, animated: true)
         }
     }
@@ -453,7 +447,16 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     }
     
     func showVideo(){
-        self.performSegueWithIdentifier("showVideoTuto", sender: self)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let tutoVideoViewController = storyboard.instantiateViewControllerWithIdentifier("TutoVideoViewControllerID") as? TutoVideoViewController {
+            println("d11")
+            
+            if showTutoFirst {
+                self.showTutoFirst = false
+                tutoVideoViewController.firstTimePlay = true
+            }
+            self.presentViewController(tutoVideoViewController, animated: true, completion: nil)
+        }
     }
     
     func askShowTutoVideo(){
@@ -552,6 +555,10 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         
     }
     
+    func leaveOverlayTuto(){
+        overlayTutoView!.removeFromSuperview()
+    }
+    
     func leavePopUpTuto(){
         
         UIView.animateWithDuration(0.1,
@@ -566,11 +573,6 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 self.popUpShowTuto = nil
                 self.overlayView!.removeFromSuperview()
                 self.overlayView = nil
-                
-                
-                let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
-                    delegate: nil, cancelButtonTitle: "Ok")
-                alert.show()
         }
         
     }
@@ -596,11 +598,328 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
         
     }
+
     
-    func letsSayWhereVideo(){
-        self.showTutoFirst = false
-        let alert = UIAlertView(title: NSLocalizedString("Find Tuto", comment : "Find Tuto"), message: NSLocalizedString("If you're lost anytime, just touch the parrot on the top left of the screen!", comment : "If you're lost anytime, just touch the parrot on the top left of the screen!"),
-            delegate: nil, cancelButtonTitle: "Ok")
-        alert.show()
+    func getInLoopNotif(){
+        
+        if overlayView == nil {
+            let tapGestureLeavePopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUp"))
+            overlayView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            overlayView!.backgroundColor = UIColor.blackColor()
+            overlayView!.alpha = 0.0
+            overlayView!.addGestureRecognizer(tapGestureLeavePopUp)
+            self.view.addSubview(overlayView!)
+        }
+        
+        if popUpLoopNotif == nil {
+            
+            popUpLoopNotif = UIView(frame: CGRect(x: 0, y: 0, width: 240, height: 346))
+            popUpLoopNotif!.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
+            popUpLoopNotif!.center = self.view.center
+            popUpLoopNotif!.layer.cornerRadius = 5
+            popUpLoopNotif!.clipsToBounds = true
+            self.view.addSubview(popUpLoopNotif!)
+            
+            //let header
+            let header:UIView = UIView(frame: CGRect(x: 0, y: 0, width: popUpLoopNotif!.frame.width, height: 48))
+            header.backgroundColor = Utils().secondColor
+            popUpLoopNotif!.addSubview(header)
+            
+            let labelBigTime:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: header.frame.width, height: header.frame.height))
+            labelBigTime.textAlignment = NSTextAlignment.Center
+            labelBigTime.font = UIFont(name: Utils().customFontSemiBold, size: 22)
+            labelBigTime.textColor = UIColor.whiteColor()
+            labelBigTime.text = NSLocalizedString("GET IN THE LOOP", comment : "GET IN THE LOOP")
+            labelBigTime.tag = 12
+            header.addSubview(labelBigTime)
+            
+            let dividerHorizontal:UIView = UIView(frame: CGRect(x: 0, y: 287, width: popUpLoopNotif!.frame.width, height: 1))
+            dividerHorizontal.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            popUpLoopNotif!.addSubview(dividerHorizontal)
+            
+            let dividerVertical:UIView = UIView(frame: CGRect(x: popUpLoopNotif!.frame.width/2, y: 287, width: 1, height: popUpLoopNotif!.frame.height - 287))
+            dividerVertical.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            popUpLoopNotif!.addSubview(dividerVertical)
+            
+            let tapGestureQuitPopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUp"))
+            let quitImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 287, width: popUpLoopNotif!.frame.width/2, height: popUpLoopNotif!.frame.height - 287))
+            quitImageView.contentMode = UIViewContentMode.Center
+            quitImageView.userInteractionEnabled = true
+            quitImageView.image = UIImage(named: "close_popup_icon")
+            quitImageView.addGestureRecognizer(tapGestureQuitPopUp)
+            popUpLoopNotif!.addSubview(quitImageView)
+            
+            let unlockNotifs:UIImageView = UIImageView(frame: CGRect(x: 0, y: 78, width: popUpLoopNotif!.frame.width, height: 60))
+            unlockNotifs.contentMode = UIViewContentMode.Center
+            unlockNotifs.image = UIImage(named: "notif_popup_icon")
+            popUpLoopNotif!.addSubview(unlockNotifs)
+            
+            
+            let validateAction:UIButton = UIButton(frame: CGRect(x: popUpLoopNotif!.frame.width/2, y: 287, width: popUpLoopNotif!.frame.width/2, height: popUpLoopNotif!.frame.height - 287))
+            validateAction.addTarget(self, action: Selector("validateNotifications"), forControlEvents: UIControlEvents.TouchUpInside)
+            validateAction.setImage(UIImage(named: "validate_pop_up"), forState: UIControlState.Normal)
+            popUpLoopNotif!.addSubview(validateAction)
+            
+            let labelPopUp:UILabel = UILabel(frame: CGRect(x: 18, y: 167, width: popUpLoopNotif!.frame.width - 36, height: 90))
+            labelPopUp.numberOfLines = 3
+            labelPopUp.textAlignment = NSTextAlignment.Center
+            labelPopUp.adjustsFontSizeToFitWidth = true
+            labelPopUp.font = UIFont(name: Utils().customFontNormal, size: 24.0)
+            labelPopUp.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            labelPopUp.text = NSLocalizedString("Don't miss the next pictures from your friends 😁", comment : "Don't miss the next pictures from your friends 😁")
+            popUpLoopNotif!.addSubview(labelPopUp)
+            
+            
+        }
+        
+        self.overlayView!.hidden = false
+        self.popUpLoopNotif!.transform =  CGAffineTransformMakeScale(0, 0)
+        
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            options: nil,
+            animations: { () -> Void in
+                self.overlayView!.alpha = 0.5
+                self.popUpLoopNotif!.transform = CGAffineTransformIdentity
+            }) { (finisehd) -> Void in
+                
+        }
+        
+        
+    }
+    
+    // MARK: SearchFriendsProtocol
+    
+    func leaveSearchFriends() {
+        
+        if !Utils().hasEverViewInLoop(){
+            self.getInLoopNotif()
+            Utils().viewInLoop()
+        }
+        
+    }
+    
+    func leavePopUp(){
+        leavePopUp(true)
+    }
+    
+    func leavePopUp(showingNextScreen : Bool){
+        
+        if self.popUpUnlockFriends != nil{
+            
+            if showingNextScreen {
+                self.firstUserUnlock = false
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let searchFriendsVC = storyboard.instantiateViewControllerWithIdentifier("SearchFriendsViewControllerID") as? SearchFriendsViewController {
+                    searchFriendsVC.delegate = self
+                    
+                    if firstUserUnlock != nil {
+                        searchFriendsVC.firstUserUnlock = firstUserUnlock!
+                        firstUserUnlock = nil
+                    }
+                    self.navigationController?.pushViewController(searchFriendsVC, animated: true)
+                }
+            }
+            
+            
+            UIView.animateWithDuration(0.1,
+                animations: { () -> Void in
+                    self.overlayView!.alpha = 0
+                    if self.popUpUnlockFriends != nil {
+                        self.popUpUnlockFriends!.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                    }
+                    
+                    if self.popUpLoopNotif != nil{
+                        self.popUpLoopNotif!.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                    }
+                    
+                    
+                }) { (finished) -> Void in
+                    if self.popUpUnlockFriends != nil {
+                        self.popUpUnlockFriends!.transform =  CGAffineTransformMakeScale(0, 0)
+                        self.popUpUnlockFriends!.removeFromSuperview()
+                        self.popUpUnlockFriends = nil
+                    }
+                    
+                    if self.popUpLoopNotif != nil{
+                        self.popUpLoopNotif!.transform =  CGAffineTransformMakeScale(0, 0)
+                        self.popUpLoopNotif!.removeFromSuperview()
+                        self.popUpLoopNotif = nil
+                    }
+                    self.overlayView!.removeFromSuperview()
+                    self.overlayView = nil
+                    
+                    
+                    
+            }
+        }
+        else{
+            UIView.animateWithDuration(0.3,
+                animations: { () -> Void in
+                    self.overlayView!.alpha = 0
+                    if self.popUpUnlockFriends != nil {
+                        self.popUpUnlockFriends!.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                    }
+                    
+                    if self.popUpLoopNotif != nil{
+                        self.popUpLoopNotif!.transform = CGAffineTransformMakeScale(0.01, 0.01)
+                    }
+                    
+                    
+                }) { (finished) -> Void in
+                    if self.popUpUnlockFriends != nil {
+                        self.popUpUnlockFriends!.transform =  CGAffineTransformMakeScale(0, 0)
+                        self.popUpUnlockFriends!.removeFromSuperview()
+                        self.popUpUnlockFriends = nil
+                    }
+                    
+                    if self.popUpLoopNotif != nil{
+                        self.popUpLoopNotif!.transform =  CGAffineTransformMakeScale(0, 0)
+                        self.popUpLoopNotif!.removeFromSuperview()
+                        self.popUpLoopNotif = nil
+                    }
+                    self.overlayView!.removeFromSuperview()
+                    self.overlayView = nil
+                    
+                    
+                    
+            }
+        }
+        
+        
+    }
+    
+    func unlockFriendsPopUp(){
+        
+        if overlayView == nil {
+            let tapGestureLeavePopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUp"))
+            overlayView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            overlayView!.backgroundColor = UIColor.blackColor()
+            overlayView!.alpha = 0.0
+            overlayView!.addGestureRecognizer(tapGestureLeavePopUp)
+            self.view.addSubview(overlayView!)
+        }
+        
+        if popUpUnlockFriends == nil {
+            
+            
+            
+            popUpUnlockFriends = UIView(frame: CGRect(x: 0, y: 0, width: 240, height: 284))
+            popUpUnlockFriends!.backgroundColor = UIColor(red: 250/255, green: 250/255, blue: 250/255, alpha: 1.0)
+            popUpUnlockFriends!.center = self.view.center
+            popUpUnlockFriends!.layer.cornerRadius = 5
+            popUpUnlockFriends!.clipsToBounds = true
+            self.view.addSubview(popUpUnlockFriends!)
+            
+            //let header
+            let header:UIView = UIView(frame: CGRect(x: 0, y: 0, width: popUpUnlockFriends!.frame.width, height: 48))
+            header.backgroundColor = Utils().secondColor
+            popUpUnlockFriends!.addSubview(header)
+            
+            let labelBigTime:UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: header.frame.width, height: header.frame.height))
+            labelBigTime.textAlignment = NSTextAlignment.Center
+            labelBigTime.font = UIFont(name: Utils().customFontSemiBold, size: 22)
+            labelBigTime.textColor = UIColor.whiteColor()
+            labelBigTime.text = NSLocalizedString("BIG TIME!", comment : "BIG TIME!")
+            labelBigTime.tag = 12
+            header.addSubview(labelBigTime)
+            
+            let dividerHorizontal:UIView = UIView(frame: CGRect(x: 0, y: 226, width: popUpUnlockFriends!.frame.width, height: 1))
+            dividerHorizontal.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            popUpUnlockFriends!.addSubview(dividerHorizontal)
+            
+            let dividerVertical:UIView = UIView(frame: CGRect(x: popUpUnlockFriends!.frame.width/2, y: 226, width: 1, height: popUpUnlockFriends!.frame.height - 226))
+            dividerVertical.backgroundColor = UIColor(red: 234/255, green: 234/255, blue: 234/255, alpha: 1.0)
+            popUpUnlockFriends!.addSubview(dividerVertical)
+            
+            let tapGestureQuitPopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUp"))
+            let quitImageView:UIImageView = UIImageView(frame: CGRect(x: 0, y: 226, width: popUpUnlockFriends!.frame.width/2, height: popUpUnlockFriends!.frame.height - 226))
+            quitImageView.contentMode = UIViewContentMode.Center
+            quitImageView.userInteractionEnabled = true
+            quitImageView.image = UIImage(named: "close_popup_icon")
+            quitImageView.addGestureRecognizer(tapGestureQuitPopUp)
+            popUpUnlockFriends!.addSubview(quitImageView)
+            
+            let unlockFriendsIcon:UIImageView = UIImageView(frame: CGRect(x: 0, y: 78, width: popUpUnlockFriends!.frame.width, height: 34))
+            unlockFriendsIcon.contentMode = UIViewContentMode.Center
+            unlockFriendsIcon.image = UIImage(named: "unlock_friends_icon")
+            popUpUnlockFriends!.addSubview(unlockFriendsIcon)
+            
+            
+            let validateAction:UIButton = UIButton(frame: CGRect(x: popUpUnlockFriends!.frame.width/2, y: 226, width: popUpUnlockFriends!.frame.width/2, height: popUpUnlockFriends!.frame.height - 226))
+            validateAction.addTarget(self, action: Selector("validateUnlockFriends"), forControlEvents: UIControlEvents.TouchUpInside)
+            validateAction.setImage(UIImage(named: "validate_pop_up"), forState: UIControlState.Normal)
+            popUpUnlockFriends!.addSubview(validateAction)
+            
+            let labelPopUp:UILabel = UILabel(frame: CGRect(x: 18, y: 136, width: popUpUnlockFriends!.frame.width - 36, height: 61))
+            labelPopUp.numberOfLines = 2
+            labelPopUp.textAlignment = NSTextAlignment.Center
+            labelPopUp.adjustsFontSizeToFitWidth = true
+            labelPopUp.font = UIFont(name: Utils().customFontNormal, size: 24.0)
+            labelPopUp.textColor = UIColor(red: 26/255, green: 27/255, blue: 31/255, alpha: 1.0)
+            labelPopUp.text = NSLocalizedString("Let's find your friends on the app! 🙇", comment : "Let's find your friends on the app! 🙇")
+            popUpUnlockFriends!.addSubview(labelPopUp)
+            
+            
+        }
+        
+        self.overlayView!.hidden = false
+        self.popUpUnlockFriends!.transform =  CGAffineTransformMakeScale(0, 0)
+        
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            options: nil,
+            animations: { () -> Void in
+                self.overlayView!.alpha = 0.5
+                self.popUpUnlockFriends!.transform = CGAffineTransformIdentity
+            }) { (finisehd) -> Void in
+                
+        }
+        
+        
+    }
+    
+    func showFriend() {
+        if !Utils().hasEverViewUnlockFriend(){
+            self.unlockFriendsPopUp()
+            Utils().viewUnlockFriend()
+        }
+    }
+    
+    func validateUnlockFriends(){
+        
+        leavePopUp(false)
+        self.firstUserUnlock = true
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let searchFriendsVC = storyboard.instantiateViewControllerWithIdentifier("SearchFriendsViewControllerID") as? SearchFriendsViewController {
+            searchFriendsVC.delegate = self
+            
+            if firstUserUnlock != nil {
+                searchFriendsVC.firstUserUnlock = firstUserUnlock!
+                firstUserUnlock = nil
+            }
+            self.navigationController?.pushViewController(searchFriendsVC, animated: true)
+        }
+       
+    }
+    
+    func validateNotifications(){
+        
+        self.leavePopUp(false)
+        //Ask For Notif
+        if PFUser.currentUser() != nil{
+            //Notifications
+            if UIApplication.sharedApplication().respondsToSelector(Selector("registerUserNotificationSettings:")){
+                let settings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert |
+                    UIUserNotificationType.Badge |
+                    UIUserNotificationType.Sound, categories: nil)
+                UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+                UIApplication.sharedApplication().registerForRemoteNotifications()
+            }
+            else{
+                UIApplication.sharedApplication().registerForRemoteNotificationTypes(UIRemoteNotificationType.Badge | UIRemoteNotificationType.Alert | UIRemoteNotificationType.Sound)
+            }
+        }
     }
 }
