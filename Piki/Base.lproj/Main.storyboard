@@ -1000,7 +1000,7 @@
         <!--Acounts Advice View Controller-->
         <scene sceneID="QaQ-zM-Sff">
             <objects>
-                <viewController id="k1d-xI-rZZ" customClass="AcountsAdviceViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AcountsAdviceViewControllerID" id="k1d-xI-rZZ" customClass="AcountsAdviceViewController" customModule="Peekee" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="akQ-SM-WDC"/>
                         <viewControllerLayoutGuide type="bottom" id="uFp-x5-jbJ"/>
@@ -1397,6 +1397,6 @@
         <image name="send_icon" width="25" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Lpb-34-bai"/>
+        <segue reference="Am7-AN-QR4"/>
     </inferredMetricsTieBreakers>
 </document>

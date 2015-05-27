@@ -22,6 +22,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     
     private var startY: CGFloat = 0
     private var startOffset: CGFloat = 0
+    private var index: UInt = 0
     
     private let minimumOffset: CGFloat = -35
     private let maximumOffset: CGFloat = 20
@@ -257,6 +258,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     
     func didSelectButton(sender: PleekNavigationButton) {
         
+        sender.newContent = false
         sender.selected = true
         
         if sender != self.inboxButton {
@@ -286,6 +288,8 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         default:
             return
         }
+        
+        self.index = index
 
         self.indicatorCenterXConstraint.updateOffset(CGRectGetMidX(sender.frame) - CGRectGetMidX(self.inboxButton.frame))
         sender.superview!.setNeedsLayout()
@@ -386,4 +390,25 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         }
     }
 
+    func newContent(atIndex index: UInt) {
+        
+        if index == self.index {
+            return
+        }
+        
+        switch index {
+        case 0:
+            self.inboxButton.newContent = true
+            break
+        case 1:
+            self.sentButton.newContent = true
+            break
+        case 2:
+            self.bestButton.newContent = true
+            break
+        default:
+            return
+        }
+
+    }
 }

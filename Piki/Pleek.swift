@@ -28,6 +28,16 @@ enum PleekState {
     @NSManaged var nbReaction: Int
     @NSManaged var user: User
     @NSManaged var recipients: [String]?
+    @NSManaged var lastUpdate: NSDate?
+    
+    var upatedAt: NSDate {
+        if let lastUpdate = self.lastUpdate {
+            return lastUpdate
+        }
+        
+        return NSDate(timeIntervalSince1970: 0)
+    }
+    
     
     var state: PleekState {
         if self.isSeen {
@@ -107,23 +117,45 @@ enum PleekState {
         }
     }
     
-    class func getBestPleek(withCache: Bool, skip: Int, completed: (pleeks: [Pleek]?, error: NSError?) -> Void) {
-        Best.getAllBest(withCache, skip: skip) { (bests, error) -> () in
-            var pleeks: [Pleek]?
-            
-            if let bests: [Best] = bests {
-                pleeks = []
-                bests.map { (best: Best) -> () in
-                    if let pleek: Pleek = best.pleek {
-                        pleeks?.append(pleek)
+    class func getBestPleek() -> (withCache: Bool, skip: Int, completed: PleekCompletionHandler) -> () {
+        func local(withCache: Bool, skip: Int, completed: PleekCompletionHandler) {
+            Best.getAllBest(withCache, skip: skip) { (bests, error) -> () in
+                var pleeks: [Pleek]?
+                
+                if let bests: [Best] = bests {
+                    pleeks = []
+                    bests.map { (best: Best) -> () in
+                        if let pleek: Pleek = best.pleek {
+                            pleeks?.append(pleek)
+                        }
                     }
                 }
+                completed(pleeks: pleeks, error: error)
             }
-            completed(pleeks: pleeks, error: error)
         }
+        
+        return local
     }
     
+//    class func getBestPleek(withCache: Bool, skip: Int, completed: (pleeks: [Pleek]?, error: NSError?) -> Void) {
+//        Best.getAllBest(withCache, skip: skip) { (bests, error) -> () in
+//            var pleeks: [Pleek]?
+//            
+//            if let bests: [Best] = bests {
+//                pleeks = []
+//                bests.map { (best: Best) -> () in
+//                    if let pleek: Pleek = best.pleek {
+//                        pleeks?.append(pleek)
+//                    }
+//                }
+//            }
+//            completed(pleeks: pleeks, error: error)
+//        }
+//    }
+    
     class func find(user: User, skip: Int) -> BFTask {
+        
+        
         let predicate = NSPredicate(format: "isPublic = \(true) OR '\(User.currentUser()!.objectId!)' IN recipients", argumentArray: nil)
         let query = Pleek.queryWithPredicate(predicate)!
         query.orderByDescending("lastUpdate")

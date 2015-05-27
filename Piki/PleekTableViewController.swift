@@ -10,6 +10,8 @@ protocol PleekTableViewControllerDelegate: class {
     func scrollViewDidScrollToTop()
     func searchBegin()
     func searchEnd()
+    func shouldRefresh()
+    func newContent(controller: UIViewController)
 }
  
  enum PleekTableViewSearchingState: Int {
@@ -23,11 +25,102 @@ import UIKit
 
 class PleekTableViewController: UITableViewController, InboxCellDelegate, UISearchBarDelegate, UITextFieldDelegate, UIScrollViewDelegate {
     
-    var toUpdate: NSIndexPath?
+    var key: String = ""
+    private var mostRecentDate: NSDate {
+        let userDefault = NSUserDefaults.standardUserDefaults()
+        
+        if let date = userDefault.objectForKey(self.key) as? NSDate {
+            return date
+        }
+        
+        return NSDate(timeIntervalSince1970: 0)
+    }
+    weak var delegate: PleekTableViewControllerDelegate? = nil
     
-    var cancellationTokenSource = BFCancellationTokenSource()
+    var dataSource: ((withCache: Bool, skip: Int, completed: PleekCompletionHandler) -> ())? {
+        didSet {
+            self.getPleeks(true)
+        }
+    }
     
-    lazy var noUserView: UIView = {
+    var searchState: PleekTableViewSearchingState = .NotSearching {
+        didSet {
+            self.cancellationTokenSource.cancel()
+            self.shouldLoadMore = true
+            self.tableView.backgroundView = nil
+            switch self.searchState {
+            case .Unsearchable, .NotSearching, .SearchBeginWithoutText:
+                self.refreshControl = UIRefreshControl()
+                self.refreshControl?.addTarget(self, action: Selector("refresh"), forControlEvents: UIControlEvents.ValueChanged)
+                self.searchList = []
+                self.pleeks = self.pleeksList
+                break
+            case .SearchBeginWithText:
+                self.refreshControl = nil
+                self.pleeks = self.searchList
+                break
+            }
+            self.tableView.reloadData()
+        }
+    }
+    
+    private var toUpdate: NSIndexPath?
+    private var pleeks: [Pleek] = []
+    private var user: User?
+    private var cancellationTokenSource = BFCancellationTokenSource()
+    private var isLoadingMore: Bool = false
+    private var shouldLoadMore: Bool = true
+    
+    private lazy var searchTextField: UITextField = {
+        let searchTF = UITextField()
+        searchTF.borderStyle = .None
+        searchTF.delegate = self
+        searchTF.tintColor = UIColor.whiteColor()
+        searchTF.font = UIFont(name: "ProximaNova-Semibold", size: 16.0)
+        searchTF.textColor = UIColor.whiteColor()
+        searchTF.addTarget(self, action: Selector("textFieldDidChange:"), forControlEvents: .EditingChanged)
+        searchTF.autocapitalizationType = .None
+        searchTF.autocorrectionType = .No
+        searchTF.returnKeyType = .Done
+
+        let str = NSAttributedString(string: LocalizedString("Search"), attributes: [NSForegroundColorAttributeName: UIColor(white: 1.0, alpha: 0.1), NSFontAttributeName: UIFont(name: "ProximaNova-Semibold", size: 16.0)!])
+        searchTF.attributedPlaceholder = str
+        
+        let clearButton = UIButton(frame: CGRectMake(0, 0, 50, 50))
+        clearButton.setImage(UIImage(named: "search-clear-icon"), forState: .Normal)
+        clearButton.addTarget(self, action: Selector("clearAction"), forControlEvents: .TouchUpInside)
+        searchTF.rightView = clearButton
+        searchTF.rightViewMode = .Always
+        
+        
+        
+        
+        let magnifying = UIImageView(frame: CGRectMake(0, 0, 50, 50))
+        magnifying.contentMode = .Center
+        magnifying.image = UIImage(named: "search-icon")
+        
+        searchTF.leftView = magnifying
+        searchTF.leftViewMode = .Always
+        
+        self.searchView.addSubview(searchTF)
+        
+        searchTF.snp_makeConstraints({ (make) -> Void in
+            make.leading.equalTo(self.searchView)
+            make.trailing.equalTo(self.searchView)
+            make.top.equalTo(self.searchView)
+            make.bottom.equalTo(self.searchView)
+        })
+        
+        return searchTF
+    } ()
+    
+    private lazy var searchView: UIView = {
+        let searchV = UIView(frame: CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 50.0))
+        searchV.backgroundColor = UIColor(red: 57.0/255.0, green: 73.0/255.0, blue: 171.0/255.0, alpha: 1.0)
+        return searchV
+    } ()
+    
+    private lazy var noUserView: UIView = {
         let noUV = UIView(frame: self.tableView.frame)
         noUV.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         
@@ -61,13 +154,13 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         return noUV
     } ()
     
-    lazy var noPleekView: UIView = {
+    private lazy var noPleekView: UIView = {
         let noPV = UIView(frame: self.tableView.frame)
         noPV.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         
         let imageView = UIImageView()
         imageView.image = UIImage(named: "nopublicpleeks-illu")
-        
+
         noPV.addSubview(imageView)
         
         imageView.snp_makeConstraints({ (make) -> Void in
@@ -95,28 +188,7 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         return noPV
     } ()
     
-    var searchState: PleekTableViewSearchingState = .NotSearching {
-        didSet {
-            self.cancellationTokenSource.cancel()
-            self.shouldLoadMore = true
-            self.tableView.backgroundView = nil
-            switch self.searchState {
-            case .Unsearchable, .NotSearching, .SearchBeginWithoutText:
-                self.refreshControl = UIRefreshControl()
-                self.refreshControl?.addTarget(self, action: Selector("refreshPleek"), forControlEvents: UIControlEvents.ValueChanged)
-                self.pleeks = self.pleeksList
-                break
-            case .SearchBeginWithText:
-                self.refreshControl = nil
-                self.pleeks = self.searchList
-                break
-            }
-            
-            self.tableView.reloadData()
-        }
-    }
-    
-    var pleeksList: [Pleek] = [] {
+    private var pleeksList: [Pleek] = [] {
         didSet {
             self.pleeks = self.pleeksList
             if count(self.pleeksList) > 0 && self.searchState.rawValue > PleekTableViewSearchingState.Unsearchable.rawValue {
@@ -127,37 +199,34 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         }
     }
     
-    var searchList: [Pleek] = [] {
+    private var searchList: [Pleek] = [] {
         didSet {
             self.pleeks = self.searchList
         }
     }
     
-    private var pleeks: [Pleek] = []
-    private var user: User?
-    
-    var dataSource: ((withCache: Bool, skip: Int, completed: PleekCompletionHandler) -> ())? {
-        didSet {
-            self.getPleeks(true)
-        }
-    }
-    
-    weak var delegate: PleekTableViewControllerDelegate? = nil
-    
-    lazy var searchBar: UISearchBar = {
+    private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView!.frame), 50)
-        searchBar.barTintColor = UIColor(red: 57.0/255.0, green: 73.0/255.0, blue: 171.0/255.0, alpha: 1.0)
-        searchBar.delegate = self
+        searchBar.layoutSubviews()
+        
+        let searchBarView: UIView = searchBar.subviews[0] as! UIView;
+        
+        for view in searchBar.subviews as! [UIView] {
+            view.hidden = true
+        }
+        
+        searchBarView.hidden = false
+        searchBarView.addSubview(self.searchView)
         
         return searchBar
     } ()
     
-    var isLoadingMore: Bool = false
-    var shouldLoadMore: Bool = true
+    // MARK: Controller Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let searchTextField = self.searchTextField
         self.tableView.backgroundColor = UIColor(red: 227.0/255.0, green: 234.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         self.tableView.registerClass(InboxCell.self, forCellReuseIdentifier: "InboxTableViewCellIdentifier")
         self.tableView.registerClass(LoadMoreTableViewCell.self, forCellReuseIdentifier: "LoadMoreTableViewCellIdentifier")
@@ -196,7 +265,6 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
             return cell
         }
         
-        
         let cell = tableView.dequeueReusableCellWithIdentifier("InboxTableViewCellIdentifier", forIndexPath: indexPath) as! InboxCell
         let pleek = self.pleeks[indexPath.row]
         cell.configureFor(pleek)
@@ -221,6 +289,7 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         if self.searchState == .SearchBeginWithoutText {
+            self.clearAction()
             return
         }
  
@@ -260,39 +329,6 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         return true
     }
     
-    // MARK: Others
-    
-    func updateList(pleeks: [Pleek]) -> [NSIndexPath] {
-        var indexPathToInsert: [NSIndexPath] = []
-        
-        for pleek: Pleek in pleeks {
-            self.pleeks.append(pleek)
-            indexPathToInsert.append(NSIndexPath(forRow: count(self.pleeks) - 1, inSection: 0))
-        }
-        
-        if count(pleeks) < Constants.LoadPleekLimit {
-            self.shouldLoadMore = false
-        }
-        
-        return indexPathToInsert
-    }
-    
-    func updateTableView(pleeks: [Pleek]) {
-        println(self.tableView)
-        var indexPaths = self.updateList(pleeks)
-        println(indexPaths)
-        
-        self.tableView.beginUpdates()
-        let indexPath = indexPaths[0]
-        indexPaths.removeAtIndex(0)
-        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        if self.shouldLoadMore {
-            indexPaths.append(NSIndexPath(forRow: indexPaths.last!.row + 1, inSection: 0))
-        }
-        self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
-        self.tableView.endUpdates()
-    }
-    
     // MARK: UIScrollViewDelegate
     
     override func scrollViewDidScrollToTop(scrollView: UIScrollView) {
@@ -302,7 +338,10 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
     }
     
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        searchBar.resignFirstResponder()
+        if self.searchTextField.isFirstResponder() {
+            self.view.endEditing(true)
+            self.view.endEditing(true)
+        }
     }
     
     // MARK: InboxCellDelegate
@@ -331,42 +370,52 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         }
     }
     
-    // MARK UISearchBarDelegate
-
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-        if count(searchBar.text) == 0 {
+    // MARK: UITextField
+    
+    func clearAction() {
+        self.searchTextField.text = ""
+        self.searchList = []
+        if let delegate = self.delegate {
+            delegate.searchEnd()
+        }
+        self.searchState = .NotSearching
+        self.view.endEditing(true)
+        self.view.endEditing(true)
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        if count(textField.text) == 0 {
+            if let delegate = self.delegate {
+                delegate.searchBegin()
+            }
             self.searchState = .SearchBeginWithoutText
         }
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        self.tableView.backgroundView = nil
-        if let delegate = self.delegate {
-            if count(searchText) > 0 {
-                self.searchState = .SearchBeginWithText
-                delegate.searchBegin()
-                self.searchText(searchText)
-            } else {
+    func textFieldDidEndEditing(textField: UITextField) {
+        if count(textField.text) == 0 {
+            if let delegate = self.delegate {
                 delegate.searchEnd()
-                NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("dismiss"), userInfo: nil, repeats: false)
             }
+            self.searchState = .NotSearching
         }
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-        if count(self.searchBar.text) == 0 {
-            self.searchState = .NotSearching
+    func textFieldDidChange(textField: UITextField) {
+        self.tableView.backgroundView = nil
+        if count(textField.text) > 0 {
+            self.searchState = .SearchBeginWithText
+            self.searchText(textField.text.lowercaseString)
+        } else {
+            self.view.endEditing(true)
+            self.view.endEditing(true)
         }
     }
-
-    func dismiss() {
-        if count(self.searchBar.text) == 0 {
-            self.searchState = .NotSearching
-        }
-        
-        if self.searchBar.isFirstResponder() {
-            self.searchBar.resignFirstResponder()
-        }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        self.view.endEditing(true)
+        return false
     }
     
     // MARK: Action
@@ -379,11 +428,46 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         }
     }
     
+    func refresh() {
+        if let delegate = self.delegate {
+            delegate.shouldRefresh()
+        }
+    }
+    
     func refreshPleek() {
         self.getPleeks(false)
     }
     
     // MARK: Data
+    
+    func updateList(pleeks: [Pleek]) -> [NSIndexPath] {
+        var indexPathToInsert: [NSIndexPath] = []
+        
+        for pleek: Pleek in pleeks {
+            self.pleeks.append(pleek)
+            indexPathToInsert.append(NSIndexPath(forRow: count(self.pleeks) - 1, inSection: 0))
+        }
+        
+        if count(pleeks) < Constants.LoadPleekLimit {
+            self.shouldLoadMore = false
+        }
+        
+        return indexPathToInsert
+    }
+    
+    func updateTableView(pleeks: [Pleek]) {
+        var indexPaths = self.updateList(pleeks)
+        
+        self.tableView.beginUpdates()
+        let indexPath = indexPaths[0]
+        indexPaths.removeAtIndex(0)
+        self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        if self.shouldLoadMore {
+            indexPaths.append(NSIndexPath(forRow: indexPaths.last!.row + 1, inSection: 0))
+        }
+        self.tableView.insertRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+        self.tableView.endUpdates()
+    }
     
     func getPleeks(withCache: Bool) {
         if let dataSource = self.dataSource {
@@ -392,6 +476,15 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                 if error != nil {
                     println("Error : \(error!.localizedDescription)")
                 } else {
+                    if pleeks!.count > 0 {
+                        if pleeks![0].updatedAt!.isGreaterThanDate(self.mostRecentDate) {
+                            self.setMostRecent(pleeks![0].updatedAt!)
+                            if let delegate = self.delegate {
+                                delegate.newContent(self)
+                            }
+                        }
+                    }
+                    
                     if count(pleeks!) < Constants.LoadPleekLimit {
                         weakSelf?.shouldLoadMore = false
                     } else {
@@ -406,8 +499,13 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         }
     }
     
+    func setMostRecent(date: NSDate) {
+        let userDefault = NSUserDefaults.standardUserDefaults()
+        userDefault.setObject(date, forKey: self.key)
+        userDefault.synchronize()
+    }
+    
     func loadMore() {
-        
         if self.searchState == .SearchBeginWithText {
             self.loadMoreSearch()
         } else if let dataSource = self.dataSource {
@@ -450,7 +548,6 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                 self.shouldLoadMore = false
                 self.tableView.reloadData()
             }
-            
         }
         self.isLoadingMore = false
     }
@@ -479,7 +576,7 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                     weakSelf?.searchList = pleeks
                     weakSelf?.tableView.reloadData()
                 } else {
-                    self.tableView.backgroundView = self.noPleekView
+                    weakSelf?.tableView.backgroundView = self.noPleekView
                 }
             }
             
@@ -499,7 +596,9 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                         weakSelf?.user = users[0]
                         Pleek.find(users[0], skip: 0).continueWithBlock(secondBlock, cancellationToken: weakSelf?.cancellationTokenSource.token!)
                     } else {
-                        self.tableView.backgroundView = self.noUserView
+                        weakSelf?.tableView.backgroundView = self.noUserView
+                        weakSelf?.searchList = []
+                        weakSelf?.tableView.reloadData()
                     }
                 }
             }

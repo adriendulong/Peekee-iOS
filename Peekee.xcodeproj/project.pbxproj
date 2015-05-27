@@ -16,6 +16,9 @@
 		0A227D021B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */; };
 		0A227D031B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */; };
 		0A227D041B063D950032AD40 /* Proxima-Nova-Sbold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */; };
+		0A30A7DB1B15F9D40071B541 /* Date+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A30A7DA1B15F9D40071B541 /* Date+Extention.swift */; };
+		0A30A7DC1B15F9D40071B541 /* Date+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A30A7DA1B15F9D40071B541 /* Date+Extention.swift */; };
+		0A30A7DD1B15F9D40071B541 /* Date+Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A30A7DA1B15F9D40071B541 /* Date+Extention.swift */; };
 		0A5761641AFB9D850006B544 /* EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF0F71AF7A76600684E79 /* EdgeInsets.swift */; };
 		0A5761651AFB9D850006B544 /* ContactPhoneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADBF1091AF8AC9300684E79 /* ContactPhoneTableViewCell.swift */; };
 		0A5761671AFB9D850006B544 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E704D5A71A6A5C11008BE745 /* SettingsViewController.swift */; };
@@ -273,9 +276,9 @@
 		0AF4D9B31B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */; };
 		0AF4D9B41B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */; };
 		0AF4D9B51B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */; };
-		0AF4D9B71B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */; };
-		0AF4D9B81B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */; };
-		0AF4D9B91B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */; };
+		0AF4D9B71B0B9BC600BF051D /* PleekCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewController.swift */; };
+		0AF4D9B81B0B9BC600BF051D /* PleekCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewController.swift */; };
+		0AF4D9B91B0B9BC600BF051D /* PleekCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewController.swift */; };
 		0AF4D9BB1B0C6D8100BF051D /* BestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */; };
 		0AF4D9BC1B0C6D8100BF051D /* BestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */; };
 		0AF4D9BD1B0C6D8100BF051D /* BestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */; };
@@ -378,6 +381,8 @@
 		0A227CFD1B063D950032AD40 /* Proxima-Nova-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Bold.otf"; sourceTree = "<group>"; };
 		0A227CFE1B063D950032AD40 /* Proxima-Nova-Sbold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima-Nova-Sbold.otf"; sourceTree = "<group>"; };
 		0A227D0A1B0641050032AD40 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		0A30A7D21B14D2470071B541 /* Pods.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		0A30A7DA1B15F9D40071B541 /* Date+Extention.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extention.swift"; sourceTree = "<group>"; };
 		0A57615B1AFB9C4D0006B544 /* pleek-beta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-beta.plist"; sourceTree = "<group>"; };
 		0A57615C1AFB9C4D0006B544 /* pleek-dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-dev.plist"; sourceTree = "<group>"; };
 		0A57615D1AFB9C4D0006B544 /* pleek-prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "pleek-prod.plist"; sourceTree = "<group>"; };
@@ -419,7 +424,7 @@
 		0AF32C951AF9FC760058B32C /* PleekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekViewController.swift; sourceTree = "<group>"; };
 		0AF4D9A51B0B5CAA00BF051D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Subscribe.storyboard; sourceTree = "<group>"; };
 		0AF4D9B21B0B9A0800BF051D /* PleekBestCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekBestCollectionViewLayout.swift; sourceTree = "<group>"; };
-		0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekCollectionViewProtocol.swift; sourceTree = "<group>"; };
+		0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PleekCollectionViewController.swift; sourceTree = "<group>"; };
 		0AF4D9BA1B0C6D8100BF051D /* BestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestCell.swift; sourceTree = "<group>"; };
 		0AF4D9BE1B0C7D0800BF051D /* Best.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Best.swift; sourceTree = "<group>"; };
 		0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadMoreCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -668,8 +673,9 @@
 		0AA015621B00CD08003DCE3D /* Inbox */ = {
 			isa = PBXGroup;
 			children = (
-				0AD6F1221B09D17900A041C0 /* Models */,
 				0AA0166C1B039E93003DCE3D /* Views */,
+				0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */,
+				0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewController.swift */,
 				0AA015F91B011495003DCE3D /* InboxNavigationController.swift */,
 				0AA015FA1B011495003DCE3D /* InboxViewController.swift */,
 			);
@@ -688,15 +694,6 @@
 				0AF4D9C21B0C8EDD00BF051D /* LoadMoreCollectionViewCell.swift */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		0AD6F1221B09D17900A041C0 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				0AD6F1231B09D18900A041C0 /* PleekTableViewController.swift */,
-				0AF4D9B61B0B9BC600BF051D /* PleekCollectionViewProtocol.swift */,
-			);
-			name = Models;
 			sourceTree = "<group>";
 		};
 		0ADBF0EF1AF7A76600684E79 /* SnapKit */ = {
@@ -743,6 +740,7 @@
 				0ADBF1101AF8AED900684E79 /* UIColor+PleekColor.swift */,
 				0AA016141B023AB1003DCE3D /* Array+Extension.swift */,
 				0AD6F12B1B0A32BE00A041C0 /* PleekAlertView.swift */,
+				0A30A7DA1B15F9D40071B541 /* Date+Extention.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -781,6 +779,7 @@
 		CE9107E187A2AD7B464BCAC3 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				0A30A7D21B14D2470071B541 /* Pods.release.xcconfig */,
 				51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */,
 			);
 			name = Pods;
@@ -1314,14 +1313,14 @@
 /* Begin PBXShellScriptBuildPhase section */
 		0A5761CD1AFB9D850006B544 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
 		};
@@ -1342,14 +1341,14 @@
 		};
 		0A5762401AFB9D890006B544 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
 		};
@@ -1370,14 +1369,14 @@
 		};
 		E7EBA42919EC06BA006E8587 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run 88d99ad9ad1a2be9b3d545a4ef1aef4066c5d820 f838ccfc2dd8b2304a738a797c5f164bb468c309f31e0a03c698c08223b8f413\n\n";
 		};
@@ -1427,7 +1426,7 @@
 				0AA016001B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				0A5761711AFB9D850006B544 /* EditUsernameViewController.swift in Sources */,
 				0A5761721AFB9D850006B544 /* WalkthroughViewController.swift in Sources */,
-				0AF4D9B81B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */,
+				0AF4D9B81B0B9BC600BF051D /* PleekCollectionViewController.swift in Sources */,
 				0A5761731AFB9D850006B544 /* CountriesTableViewController.swift in Sources */,
 				0A5761741AFB9D850006B544 /* ListRecipientsViewController.swift in Sources */,
 				0AA016031B011495003DCE3D /* InboxViewController.swift in Sources */,
@@ -1445,6 +1444,7 @@
 				0A57617E1AFB9D850006B544 /* LayoutConstraint.swift in Sources */,
 				0A57617F1AFB9D850006B544 /* EmojiLikeCollectionViewCell.swift in Sources */,
 				0A5761801AFB9D850006B544 /* FirstPageViewController.swift in Sources */,
+				0A30A7DC1B15F9D40071B541 /* Date+Extention.swift in Sources */,
 				0A5761811AFB9D850006B544 /* Utils.swift in Sources */,
 				0A5761821AFB9D850006B544 /* SnapKit.swift in Sources */,
 				0A5761831AFB9D850006B544 /* CameraCollectionViewCell.swift in Sources */,
@@ -1498,7 +1498,7 @@
 				0AA016011B011495003DCE3D /* InboxNavigationController.swift in Sources */,
 				0A5761E41AFB9D890006B544 /* EditUsernameViewController.swift in Sources */,
 				0A5761E51AFB9D890006B544 /* WalkthroughViewController.swift in Sources */,
-				0AF4D9B91B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */,
+				0AF4D9B91B0B9BC600BF051D /* PleekCollectionViewController.swift in Sources */,
 				0A5761E61AFB9D890006B544 /* CountriesTableViewController.swift in Sources */,
 				0A5761E71AFB9D890006B544 /* ListRecipientsViewController.swift in Sources */,
 				0AA016041B011495003DCE3D /* InboxViewController.swift in Sources */,
@@ -1516,6 +1516,7 @@
 				0A5761F11AFB9D890006B544 /* LayoutConstraint.swift in Sources */,
 				0A5761F21AFB9D890006B544 /* EmojiLikeCollectionViewCell.swift in Sources */,
 				0A5761F31AFB9D890006B544 /* FirstPageViewController.swift in Sources */,
+				0A30A7DD1B15F9D40071B541 /* Date+Extention.swift in Sources */,
 				0A5761F41AFB9D890006B544 /* Utils.swift in Sources */,
 				0A5761F51AFB9D890006B544 /* SnapKit.swift in Sources */,
 				0A5761F61AFB9D890006B544 /* CameraCollectionViewCell.swift in Sources */,
@@ -1569,7 +1570,7 @@
 				E700E5131A1A01470004DE10 /* CountriesTableViewController.swift in Sources */,
 				E7CD3F441A44657800F38FB4 /* ListRecipientsViewController.swift in Sources */,
 				E72E7D6E19E7044300D659AC /* ReactsCollectionViewCell.swift in Sources */,
-				0AF4D9B71B0B9BC600BF051D /* PleekCollectionViewProtocol.swift in Sources */,
+				0AF4D9B71B0B9BC600BF051D /* PleekCollectionViewController.swift in Sources */,
 				0AA016021B011495003DCE3D /* InboxViewController.swift in Sources */,
 				0AD6F12C1B0A32BE00A041C0 /* PleekAlertView.swift in Sources */,
 				0ADBF1111AF8AED900684E79 /* UIColor+PleekColor.swift in Sources */,
@@ -1587,6 +1588,7 @@
 				E7EBA42D19ECEFD7006E8587 /* EmojiLikeCollectionViewCell.swift in Sources */,
 				E7AE5D791A41CA1800A77A91 /* FirstPageViewController.swift in Sources */,
 				E7665E5519E6C42E003DAAF8 /* Utils.swift in Sources */,
+				0A30A7DB1B15F9D40071B541 /* Date+Extention.swift in Sources */,
 				0ADBF1051AF7A76600684E79 /* SnapKit.swift in Sources */,
 				E7A46CFA1AE6531600CC2609 /* CameraCollectionViewCell.swift in Sources */,
 				E7F089CA1A110C8400B9C32A /* ChooseUsernameViewController.swift in Sources */,
@@ -1676,6 +1678,149 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0A30A7CB1B14D1CF0071B541 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "797cae93-3e1b-42f4-abf6-5bfb706f074b";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0A30A7CC1B14D1CF0071B541 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A30A7D21B14D2470071B541 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-prod";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-prod.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Piki",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0A30A7CD1B14D1CF0071B541 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A30A7D21B14D2470071B541 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-beta";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-beta.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Piki",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0A30A7CE1B14D1CF0071B541 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A30A7D21B14D2470071B541 /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-dev";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = "Piki/pleek-dev.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Piki",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
+				PRODUCT_NAME = Peekee;
+				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0A30A7CF1B14D1CF0071B541 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PikiTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = PeekeeTests;
+				PROVISIONING_PROFILE = "";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Peekee.app/Peekee";
+			};
+			name = Release;
+		};
 		0A5761D11AFB9D850006B544 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 51D2C3BAC63B9714D3A03CE7 /* Pods.debug.xcconfig */;
@@ -1794,7 +1939,7 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1826,6 +1971,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0A5761D11AFB9D850006B544 /* Debug */,
+				0A30A7CD1B14D1CF0071B541 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -1834,6 +1980,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0A5762441AFB9D890006B544 /* Debug */,
+				0A30A7CE1B14D1CF0071B541 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -1842,6 +1989,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E74C1DF81A56F609002F86CC /* Debug */,
+				0A30A7CB1B14D1CF0071B541 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -1850,6 +1998,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E74C1DF91A56F609002F86CC /* Debug */,
+				0A30A7CC1B14D1CF0071B541 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -1858,6 +2007,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E74C1DFA1A56F609002F86CC /* Debug */,
+				0A30A7CF1B14D1CF0071B541 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
