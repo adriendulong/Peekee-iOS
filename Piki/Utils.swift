@@ -1628,6 +1628,7 @@ class Utils {
                             updateUserCompletionTask.setError(task.error)
                         }
                         else{
+                            
                             self.updateLocalFriendsIdList(task.result as! Array<PFObject>)
                             self.friendsHaveBeenUpdated()
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadPikis", object: nil)

@@ -201,7 +201,12 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateInbox"), name: "reloadPikis", object: nil)
         self.setupView()
+    }
+    
+    func updateInbox() {
+        self.receivedPleeksTableViewController.refreshPleek()
     }
     
     func setupView() {
