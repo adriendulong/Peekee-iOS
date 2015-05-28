@@ -226,6 +226,12 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
         
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        if let controller = self.navigationController?.viewControllers.first as? InboxViewController {
+            controller.receivedPleeksTableViewController.tableView.reloadData()
+        }
+    }
+    
     
     override func prefersStatusBarHidden() -> Bool {
         return true

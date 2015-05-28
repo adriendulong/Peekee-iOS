@@ -541,7 +541,12 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
             labelPopUp.text = NSLocalizedString("Do you want to watch a simple video to understand Pleek?", comment : "Look at this 10 sec' video to get the PLEEK concept?")
             popUpShowTuto!.addSubview(labelPopUp)
             
-            
+            User.currentUser()!["hasShownOverlayMenu"] = true
+            User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+                User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+                    println("UPDATE USER")
+                })
+            }
         }
         
         self.overlayView!.hidden = false
@@ -597,14 +602,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 self.popUpShowTuto = nil
                 self.overlayView!.removeFromSuperview()
                 self.overlayView = nil
-                User.currentUser()!["hasShownOverlayMenu"] = true
-                User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
-                    User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
-                        println("UPDATE USER")
-                    })
-                }
                 self.showVideo()
-                
         }
         
     }

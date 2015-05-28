@@ -511,6 +511,9 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
             }
             return
         } else if recognizer.state == .Ended || recognizer.state == .Cancelled {
+            if translation.x >= 0 {
+                return
+            }
             var offset: CGFloat = 0
             var image = UIImage(named: "trash-icon-inactive")
             var shouldDelete = false
