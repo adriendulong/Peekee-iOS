@@ -178,7 +178,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.mainSwitch.hidden = true
                 cell.secondLabel.hidden = false
                 cell.emojiImageView.image = UIImage(named: "username_emoji")
-                cell.secondLabel.text = "@\(PFUser.currentUser()!.username!)"
+                cell.secondLabel.text = "@\(User.currentUser()!.username!)"
             case 1:
                 cell.mainLabel.transform = CGAffineTransformMakeTranslation(0, -10)
                 cell.secondLabel.transform = CGAffineTransformMakeTranslation(0, -5)
@@ -187,8 +187,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.secondLabel.hidden = false
                 cell.emojiImageView.image = UIImage(named: "name_emoji")
                 
-                if PFUser.currentUser()!["name"] != nil{
-                    cell.secondLabel.text = PFUser.currentUser()!["name"] as? String
+                if User.currentUser()!["name"] != nil{
+                    cell.secondLabel.text = User.currentUser()!["name"] as? String
                 }
                 else{
                     cell.secondLabel.text = LocalizedString("undefined")
@@ -400,7 +400,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: HIDDEN Log Out
     
     func logOut(){
-        PFUser.logOut()
+        User.logOut()
     }
     
     

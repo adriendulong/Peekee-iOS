@@ -779,7 +779,7 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
         
         if Utils().iOS8{
             if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
+                messageController.addAttachmentURL(Utils().createGifInvit(User.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
             }
         }
         else{
@@ -977,11 +977,11 @@ class AddFriendsFirstViewController: UIViewController, UITableViewDelegate, UITa
     
     func goLeave(){
         
-        PFUser.currentUser()!["hasSeenFriends"] = true
+        User.currentUser()!["hasSeenFriends"] = true
         
         
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
-            PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+            User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
                 Utils().updateUser()
             }
         })

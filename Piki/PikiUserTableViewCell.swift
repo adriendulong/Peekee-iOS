@@ -13,7 +13,7 @@ class PikiUserTableViewCell : UITableViewCell {
     var usernameLabel: UILabel?
     var secondLabel: UILabel?
     var addUserButton: UIButton?
-    var user:PFUser?
+    var user:User?
     var loadIndicator:UIActivityIndicatorView?
     var searchController:SearchFriendsViewController?
     
@@ -44,7 +44,7 @@ class PikiUserTableViewCell : UITableViewCell {
         }
     }
     
-    func loadItem(user : PFUser, searchController : SearchFriendsViewController){
+    func loadItem(user : User, searchController : SearchFriendsViewController){
         
         self.searchController = searchController
         
@@ -195,7 +195,7 @@ class PikiUserTableViewCell : UITableViewCell {
                     
                     Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "search_friend"])
                     self.searchController!.getAllUsersFromContacts()
-                    self.searchController!.addUserInFriendsList(task.result as! PFUser)
+                    self.searchController!.addUserInFriendsList(task.result as! User)
                     self.searchController!.sortFriends()
                     self.searchController!.tableView.reloadData()
                     

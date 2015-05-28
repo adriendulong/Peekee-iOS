@@ -275,7 +275,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                     //If we have a username, the account already exists we connect the user
                     if self.username != nil {
                         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-                        PFUser.logInWithUsernameInBackground(self.username!, password: self.username!, block: { (user , error) -> Void in
+                        User.logInWithUsernameInBackground(self.username!, password: self.username!, block: { (user , error) -> Void in
                             MBProgressHUD.hideHUDForView(self.view, animated: true)
                             if error != nil {
                                 println("Error : \(error!.localizedDescription)")
@@ -283,7 +283,7 @@ class VerificationCodePhoneViewController: UIViewController, UITextFieldDelegate
                             }
                             else{
                                 //Associate the user in Mixpanel
-                                Mixpanel.sharedInstance().identify(PFUser.currentUser()!.objectId)
+                                Mixpanel.sharedInstance().identify(User.currentUser()!.objectId)
                                 if self.phoneNumber != nil{
                                     Mixpanel.sharedInstance().people.set(["$phone" : self.phoneNumber!])
                                 }

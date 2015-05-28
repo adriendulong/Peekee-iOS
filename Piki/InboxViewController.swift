@@ -102,6 +102,8 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         panGesture.delegate = self.navigationView
         collectionViewC.collectionView?.addGestureRecognizer(panGesture)
         
+        self.addChildViewController(collectionViewC)
+        
         self.view.addSubview(collectionViewC.view)
         
         collectionViewC.view.snp_makeConstraints { (make) -> Void in
@@ -170,29 +172,22 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     // MARK: Life Cycle
     
     override func viewDidAppear(animated: Bool) {
-        
-        println(User.currentUser()?.objectId)
-        
-        //See if show Recommend Accounts
-        if User.currentUser()!["hasSeenRecommanded"] != nil{
-            if !(User.currentUser()!["hasSeenRecommanded"] as! Bool) {
+        if let hasSeenRecommanded = User.currentUser()!["hasSeenRecommanded"] as? Bool {
+            if !hasSeenRecommanded {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 if let acountsAdviceViewController = storyboard.instantiateViewControllerWithIdentifier("AcountsAdviceViewControllerID") as? AcountsAdviceViewController {
                     self.presentViewController(acountsAdviceViewController, animated: true, completion: nil)
                 }
             }
-            else{
-                //See if show tuto overlay
-                if User.currentUser()!["hasShownOverlayMenu"] != nil{
-                    if !(User.currentUser()!["hasShownOverlayMenu"] as! Bool){
-                        self.showTutoOverlay()
-                        self.showTutoFirst = true
-                        self.askShowTutoVideo()
-                    }
+        } else {
+            if let hasShownOverlayMenu = User.currentUser()!["hasShownOverlayMenu"] as? Bool {
+                if !hasShownOverlayMenu {
+                    self.showTutoOverlay()
+                    self.showTutoFirst = true
+                    self.askShowTutoVideo()
                 }
-                else{
-                    showTutoOverlay()
-                }
+            } else {
+                showTutoOverlay()
             }
         }
     }
@@ -319,6 +314,10 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
     }
     
+    func navigationViewDidSelectLogo(navigationView: PleekNavigationView) {
+        self.showVideo()
+    }
+    
     // MARK: PleekTableViewDelegate
     
     func scrollViewDidScrollToTop() {
@@ -357,6 +356,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     func showPleek(pleek: Pleek) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let pleekVC = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as? PleekViewController {
+            pleekVC.from = "Notification"
             pleekVC.mainPiki = pleek
             self.navigationController?.pushViewController(pleekVC, animated: true)
         }
@@ -371,7 +371,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     // MARK : Old
     
-    func showTutoOverlay(){
+    func showTutoOverlay() {
         
         if overlayTutoView == nil{
             
@@ -446,11 +446,9 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         
     }
     
-    func showVideo(){
+    func showVideo() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let tutoVideoViewController = storyboard.instantiateViewControllerWithIdentifier("TutoVideoViewControllerID") as? TutoVideoViewController {
-            println("d11")
-            
             if showTutoFirst {
                 self.showTutoFirst = false
                 tutoVideoViewController.firstTimePlay = true
@@ -459,7 +457,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         }
     }
     
-    func askShowTutoVideo(){
+    func askShowTutoVideo() {
         
         if overlayView == nil {
             let tapGestureLeavePopUp:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leavePopUpTuto"))
@@ -908,7 +906,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         
         self.leavePopUp(false)
         //Ask For Notif
-        if PFUser.currentUser() != nil{
+        if User.currentUser() != nil{
             //Notifications
             if UIApplication.sharedApplication().respondsToSelector(Selector("registerUserNotificationSettings:")){
                 let settings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: UIUserNotificationType.Alert |

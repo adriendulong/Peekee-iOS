@@ -22,7 +22,7 @@ protocol PleekControllerProtocol {
 class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, ReactsCellProtocol, UINavigationControllerDelegate, MFMessageComposeViewControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate, NewReactViewControllerDelegate, ReactManagerDelegate {
     
     var newReactViewcontroller: NewReactViewController?
-    
+    var from: String = ""
     var collectionView: UICollectionView?
     var mainPhotoView : UIView?
     var mainPhotoImageView:UIImageView?
@@ -74,7 +74,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     // POP UP
     var popUpView:UIView?
     var overlayView:UIView?
-    var userPopUp:PFUser?
+    var userPopUp:User?
     
     //VIDEO
     var playerItmes:Array<[String:AnyObject]> = Array<[String:AnyObject]>()
@@ -143,13 +143,12 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         
 
-        if PFUser.currentUser() == nil {
+        if User.currentUser() == nil {
             println("NIL")
         }
         
         FBSDKAppEvents.logEvent(FBSDKAppEventNameViewedContent)
-        Mixpanel.sharedInstance().track("View Piki")
-        
+        Mixpanel.sharedInstance().track("View Piki", properties: ["From": self.from])
         self.view.backgroundColor = UIColor.whiteColor()
         
         tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: Selector("dismissKeyboard:"))
@@ -226,7 +225,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         if self.mainPiki!["user"] != nil {
             
-            var user = self.mainPiki!["user"] as! PFUser
+            var user = self.mainPiki!["user"] as! User
             
             if user["name"] != nil{
                 var name:String = user["name"] as! String
@@ -339,15 +338,10 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     override func viewWillDisappear(animated: Bool) {
-        println(self.navigationController)
-        println(self.navigationController?.viewControllers)
-        println(self.navigationController?.viewControllers.first)
-        
         if let controller = self.navigationController?.viewControllers.first as? InboxViewController {
             controller.showFriend()
         }
         PBJVision.sharedInstance().stopPreview()
-            
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -393,6 +387,30 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(6, 600)
         vision.outputFormat = PBJOutputFormat.Square
         vision.cameraMode = PBJCameraMode.Video
+        
+    }
+    
+    func stopMainPleekVideo(){
+        
+        if let mainCell = self.collectionView!.cellForItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) as? MainPeekeeCollectionViewCell{
+            
+            if let nbReplies = self.mainPiki!["nbReaction"] as? Int{
+                if nbReplies > 0{
+                    mainCell.nbRepliesLabel.text = String(format: LocalizedString("%@ REPLIES"), Utils().formatNumber(nbReplies))
+                }
+                else{
+                    mainCell.nbRepliesLabel.text = LocalizedString("REPLY FIRST")
+                }
+                
+            }
+            else{
+                mainCell.nbRepliesLabel.text = LocalizedString("REPLY FIRST")
+            }
+            
+            //mainCell.updateInfosPleek()
+        }
+        
+        //self.collectionView!.reloadItemsAtIndexPaths([NSIndexPath(forItem: 0, inSection: 0)])
         
     }
     
@@ -1485,7 +1503,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     // MARK: Pop Up
     
-    func presentPopUpForUser(user : PFUser){
+    func presentPopUpForUser(user : User){
         
         //muteAllVideos()
         
@@ -1654,7 +1672,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         var task = BFTaskCompletionSource()
         
-        let userPiki:PFUser = self.mainPiki!["user"] as! PFUser
+        let userPiki:User = self.mainPiki!["user"] as! User
         
         var recipients:Array<String> = Array<String>()
         if !isPublicPleek{
@@ -2447,7 +2465,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         viewMainPeekeeContainer.addSubview(iconPeekee)
         
         //User label
-        let userMainPeekee = self.mainPiki!["user"] as! PFUser
+        let userMainPeekee = self.mainPiki!["user"] as! User
         var userLabel = UILabel(frame: CGRect(x: iconPeekee.frame.origin.x + iconPeekee.frame.width + 20, y: iconPeekee.frame.origin.y, width: viewMainPeekeeContainer.frame.width - (iconPeekee.frame.origin.x + iconPeekee.frame.width + 20 + 10), height: 30))
         userLabel.font = UIFont(name: Utils().customFontSemiBold, size: 24.0)
         userLabel.textColor = UIColor.whiteColor()
@@ -2918,7 +2936,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         
         if Utils().iOS8{
             if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
+                messageController.addAttachmentURL(Utils().createGifInvit(User.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
             }
         }
         else{
@@ -3056,8 +3074,8 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         share1vs1View!.addSubview(labelWho)
         
         
-        var userReact:PFUser = react["user"] as! PFUser
-        var userPiki:PFUser = self.mainPiki!["user"] as! PFUser
+        var userReact:User = react["user"] as! User
+        var userPiki:User = self.mainPiki!["user"] as! User
         labelWho.text = String(format: LocalizedString("@%@ to @%@ on Pleek"), userReact.username!, userPiki.username!)
         
         
@@ -3175,6 +3193,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         let keyboardSize = info.objectForKey(UIKeyboardFrameEndUserInfoKey)!.CGRectValue().size
         let animationDuration: NSTimeInterval = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
         
+        NSNotificationCenter.defaultCenter().postNotificationName("scrollStarted", object: nil)
         self.collectionView!.scrollToItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
         buildMenu(keyboardSize)
         self.newReactViewcontroller?.getLastMem()
@@ -3368,7 +3387,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     func getLikesUser(){
         var likesQuery:PFQuery = PFQuery(className: "Like")
-        likesQuery.whereKey("user", equalTo: PFUser.currentUser()!)
+        likesQuery.whereKey("user", equalTo: User.currentUser()!)
         likesQuery.whereKey("piki", equalTo: self.mainPiki!)
         likesQuery.includeKey("react")
         likesQuery.cachePolicy = PFCachePolicy.CacheThenNetwork

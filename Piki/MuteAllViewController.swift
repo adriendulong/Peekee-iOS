@@ -16,9 +16,9 @@ class MuteAllFriendsTableViewCell : UITableViewCell{
     @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var friend:PFUser?
+    var friend:User?
     
-    func loadCell(friend : PFUser){
+    func loadCell(friend : User){
         
         self.friend = friend
         self.muteButton.addTarget(self, action: Selector("muteSelect"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -146,7 +146,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     @IBOutlet weak var titleSwitchLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    var friends:Array<PFUser> = Array<PFUser>()
+    var friends:Array<User> = Array<User>()
     var isLoadingMore:Bool = false
     
     
@@ -161,16 +161,16 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
         self.tableView.hidden = true
         
         // Update user
-        PFUser.currentUser()!.fetchInBackgroundWithBlock { (user, error) -> Void in
+        User.currentUser()!.fetchInBackgroundWithBlock { (user, error) -> Void in
             
-            if PFUser.currentUser()!["isMuteModeEnabled"] != nil{
+            if User.currentUser()!["isMuteModeEnabled"] != nil{
                 
                 
-                if (PFUser.currentUser()!["isMuteModeEnabled"] as! Bool){
+                if (User.currentUser()!["isMuteModeEnabled"] as! Bool){
                     
-                    if PFUser.currentUser()!["endMuteAllJob"] != nil{
+                    if User.currentUser()!["endMuteAllJob"] != nil{
                         // Is in activation
-                        if !(PFUser.currentUser()!["endMuteAllJob"] as! Bool){
+                        if !(User.currentUser()!["endMuteAllJob"] as! Bool){
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (activating)", comment : "Silent Mode Status (activating)")
                         }
                         else{
@@ -189,9 +189,9 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
-                    if PFUser.currentUser()!["endunmuteAllJob"] != nil{
+                    if User.currentUser()!["endunmuteAllJob"] != nil{
                         // Is in activation
-                        if !(PFUser.currentUser()!["endunmuteAllJob"] as! Bool){
+                        if !(User.currentUser()!["endunmuteAllJob"] as! Bool){
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (stopping)", comment : "Silent Mode Status (stopping)")
                         }
                         else{
@@ -250,10 +250,10 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
-                    PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+                    User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                         
-                        PFUser.currentUser()!["isMuteModeEnabled"] = true
-                        PFUser.currentUser()!.saveInBackgroundWithBlock({ (succedded, error) -> Void in
+                        User.currentUser()!["isMuteModeEnabled"] = true
+                        User.currentUser()!.saveInBackgroundWithBlock({ (succedded, error) -> Void in
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (activating)", comment : "Silent Mode Status (activating)")
                             
                             // Alert User it can take a while, he will receive a notification when the operation is completed
@@ -289,12 +289,12 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                 }
                 else{
                     
-                    PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+                    User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                         
                         self.tableView.hidden = true
                         
-                        PFUser.currentUser()!["isMuteModeEnabled"] = false
-                        PFUser.currentUser()!.saveInBackgroundWithBlock({ (succedded, error) -> Void in
+                        User.currentUser()!["isMuteModeEnabled"] = false
+                        User.currentUser()!.saveInBackgroundWithBlock({ (succedded, error) -> Void in
                             self.titleSwitchLabel.text = NSLocalizedString("Silent Mode Status (stopping)", comment : "Silent Mode Status (stopping)")
                             
                             // Alert User it can take a while, he will receive a notification when the operation is completed
@@ -336,7 +336,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
         cell.loadCell(self.friends[indexPath.row])
         
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
+        var arrayFriendsId:Array<String>? = User.currentUser()!["usersFriend"] as? Array<String>
         if arrayFriendsId!.count > friends.count{
             if indexPath.row == (friends.count - 20){
                 if friends.count > 0 && !isLoadingMore{
@@ -366,7 +366,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     
     func getFriends(){
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
+        var arrayFriendsId:Array<String>? = User.currentUser()!["usersFriend"] as? Array<String>
         
         if arrayFriendsId != nil{
             var queryFriends:PFQuery = User.query()!
@@ -380,7 +380,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                     
                 }
                 else{
-                    self.friends = friends as! Array<PFUser>
+                    self.friends = friends as! Array<User>
                     self.tableView.reloadData()
                     
                 }
@@ -393,7 +393,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
     func getMoreFriends(){
         
         
-        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
+        var arrayFriendsId:Array<String>? = User.currentUser()!["usersFriend"] as? Array<String>
         var finalArrayFriends:Array<String> = Array<String>()
         
         
@@ -418,7 +418,7 @@ class MuteAllViewController : UIViewController, UITableViewDataSource, UITableVi
                     
                     var indexPathToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
                     
-                    for friend in friends as! Array<PFUser>{
+                    for friend in friends as! Array<User>{
                         self.friends.append(friend)
                         indexPathToInsert.append(NSIndexPath(forRow: self.friends.count - 1, inSection: 0))
                         

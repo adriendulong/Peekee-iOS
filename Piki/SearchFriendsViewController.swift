@@ -24,8 +24,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     var pikiUsersFound:Array<AnyObject> = []
     var contactsPhone:Array<APContact> = []
     var sortedContactsPhone:Array<APContact> = []
-    var usersWhoAddedMe:Array<PFUser> = []
-    var usersIAlreadyAddedFriendship:Array<PFUser> = []
+    var usersWhoAddedMe:Array<User> = []
+    var usersIAlreadyAddedFriendship:Array<User> = []
     
     
     let addressBook = APAddressBook()
@@ -41,11 +41,11 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     var headerLabel:UILabel!
     
     //Friends
-    var friends:Array<PFUser> = []
+    var friends:Array<User> = []
     var isLoadingMore:Bool = false
     
     //Recipients
-    var recipients:Array<PFUser> = []
+    var recipients:Array<User> = []
     var isLoadingMoreRecipients:Bool = false
     
     //SEARCH
@@ -56,7 +56,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     var backgroundSearchLayer:UIView!
     var searchTableView:UITableView!
     var usernameInSearch:String?
-    var usernameUserFound:PFUser?
+    var usernameUserFound:User?
     var isSearchingUser:Bool = false
     
     //TABS
@@ -726,7 +726,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 else if task.result != nil{
                     if canChange{
-                        self.usernameUserFound = task.result as? PFUser
+                        self.usernameUserFound = task.result as? User
                         self.searchTableView.reloadData()
                     }
                     
@@ -789,7 +789,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     //MARK: GET FRIENDS
     
-    func addUserInFriendsList(user : PFUser){
+    func addUserInFriendsList(user : User){
         
         var canAdd:Bool = true
         
@@ -821,7 +821,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                 }
                 else{
-                    self.friends = friends as! Array<PFUser>
+                    self.friends = friends as! Array<User>
                     
                     if self.printMode == 1{
                         self.tableView.reloadData()
@@ -857,7 +857,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                     
                     var indexPathToInsert:Array<NSIndexPath> = Array<NSIndexPath>()
                     
-                    for friend in friends as! Array<PFUser>{
+                    for friend in friends as! Array<User>{
                         self.friends.append(friend)
                         indexPathToInsert.append(NSIndexPath(forRow: self.friends.count - 1, inSection: 1))
                     }
@@ -1057,9 +1057,9 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     
-    func isUserAlreadyAdded(user : PFUser) -> Bool{
+    func isUserAlreadyAdded(user : User) -> Bool{
         
-        for userId in PFUser.currentUser()!["usersFriend"] as! Array<String>{
+        for userId in User.currentUser()!["usersFriend"] as! Array<String>{
             if user.objectId == userId{
                 
                 return true
@@ -1071,12 +1071,12 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     }
 
     
-    func getUserAlreadyAdded(user : PFUser) -> PFObject{
+    func getUserAlreadyAdded(user : User) -> PFObject{
         
         var friendToReturn:PFObject?
         
         for friendsAdded in usersIAlreadyAddedFriendship{
-            var userFriend:PFUser = friendsAdded
+            var userFriend:User = friendsAdded
             if userFriend.objectId == user.objectId {
                 return friendsAdded
             }
@@ -1121,7 +1121,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
         
         if Utils().iOS8{
             if MFMessageComposeViewController.respondsToSelector(Selector("canSendAttachments")) && MFMessageComposeViewController.canSendAttachments(){
-                messageController.addAttachmentURL(Utils().createGifInvit(PFUser.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
+                messageController.addAttachmentURL(Utils().createGifInvit(User.currentUser()!.username!), withAlternateFilename: "invitationGif.gif")
             }
         }
         else{
@@ -1346,8 +1346,8 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     
     func getNumberOfRecipients() -> String{
         
-        if PFUser.currentUser()!["nbRecipients"] != nil{
-            return Utils().formatNumber(PFUser.currentUser()!["nbRecipients"] as! Int)
+        if User.currentUser()!["nbRecipients"] != nil{
+            return Utils().formatNumber(User.currentUser()!["nbRecipients"] as! Int)
         }
         else{
             return "0"
@@ -1361,7 +1361,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     func getRecipients(){
         
         var queryFriends = PFQuery(className: "Friend")
-        queryFriends.whereKey("friend", equalTo: PFUser.currentUser()!)
+        queryFriends.whereKey("friend", equalTo: User.currentUser()!)
         queryFriends.limit = 100
         queryFriends.cachePolicy = PFCachePolicy.CacheThenNetwork
         queryFriends.orderByDescending("createdAt")
@@ -1375,7 +1375,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 self.recipients.removeAll(keepCapacity: false)
                 
                 for recipientObject in recipientsObjects!{
-                    self.recipients.append(recipientObject["user"] as! PFUser)
+                    self.recipients.append(recipientObject["user"] as! User)
                 }
                 
                 if self.printMode == 2{
@@ -1389,7 +1389,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
     func getMoreRecipients(){
         
         var queryFriends = PFQuery(className: "Friend")
-        queryFriends.whereKey("friend", equalTo: PFUser.currentUser()!)
+        queryFriends.whereKey("friend", equalTo: User.currentUser()!)
         queryFriends.limit = 100
         queryFriends.cachePolicy = PFCachePolicy.NetworkOnly
         queryFriends.orderByDescending("createdAt")
@@ -1406,7 +1406,7 @@ class SearchFriendsViewController: UIViewController, UITableViewDelegate, UITabl
                 
                 if self.printMode == 2{
                     for recipient in recipientsObjects as! Array<PFObject>{
-                        self.recipients.append(recipient["user"] as! PFUser)
+                        self.recipients.append(recipient["user"] as! User)
                         indexPathToInsert.append(NSIndexPath(forRow: self.recipients.count - 1, inSection: 1))
                     }
                     

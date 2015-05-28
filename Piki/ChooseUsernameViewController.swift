@@ -268,7 +268,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
         if self.canSignUp{
             if Utils().usernameValid(textFieldString.lowercaseString){
                 //Create User Object
-                var user:PFUser = PFUser()
+                var user:User = User()
                 
                 user.username = textFieldString.lowercaseString
                 user.password = textFieldString.lowercaseString
@@ -313,7 +313,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                         
                         
                         
-                        Mixpanel.sharedInstance().createAlias(PFUser.currentUser()!.objectId!, forDistinctID: Mixpanel.sharedInstance().distinctId)
+                        Mixpanel.sharedInstance().createAlias(User.currentUser()!.objectId!, forDistinctID: Mixpanel.sharedInstance().distinctId)
                         if user.username != nil{
                             Mixpanel.sharedInstance().people.set(["Username" : user.username!])
                         }
@@ -327,7 +327,7 @@ class ChooseUsernameViewController: UIViewController, UITextFieldDelegate {
                             withParameters: ["Test" : "Test"],
                             block: { (result, error) -> Void in
                                 
-                                if let currentUser = PFUser.currentUser(){
+                                if let currentUser = User.currentUser(){
                                     println("There is a current user")
                                 }
                                 

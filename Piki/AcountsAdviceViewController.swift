@@ -12,7 +12,7 @@ import CoreTelephony
 
 protocol AccountsCellProtocol{
     
-    func addFriend(user : PFUser)
+    func addFriend(user : User)
     
 }
 
@@ -25,13 +25,13 @@ class AccountsTableViewCell : UITableViewCell{
     var actionbutton:UIButton!
     var loadIndicator:UIActivityIndicatorView!
     
-    var user:PFUser!
+    var user:User!
     var delegate:AccountsCellProtocol! = nil
     var alreadyAdded:Bool!
     
     
     
-    func loadCell(user : PFUser, alreadyAdded : Bool, cellDelegate : AccountsCellProtocol){
+    func loadCell(user : User, alreadyAdded : Bool, cellDelegate : AccountsCellProtocol){
         
         self.user = user
         self.delegate = cellDelegate
@@ -136,8 +136,8 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var goView: UIView!
     @IBOutlet weak var letsGoLabel: UILabel!
     
-    var recommandedUsers:Array<PFUser> = Array<PFUser>()
-    var usersAdded:Array<PFUser> = Array<PFUser>()
+    var recommandedUsers:Array<User> = Array<User>()
+    var usersAdded:Array<User> = Array<User>()
     var regionLabel:String?
     var recommendedAccountsAdded:Int = 0
     
@@ -270,7 +270,7 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
                 println("Certifieds : \(certifieds)")
                 self.recommandedUsers.removeAll(keepCapacity: false)
                 for certified in certifieds!{
-                    self.recommandedUsers.append(certified["user"] as! PFUser)
+                    self.recommandedUsers.append(certified["user"] as! User)
                 }
             }
             else{
@@ -283,7 +283,7 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK : Accounts Cell Protocol
     
-    func addFriend(user: PFUser) {
+    func addFriend(user: User) {
         
         Mixpanel.sharedInstance().track("Add Recommended Account", properties: ["username" : user.username!])
         recommendedAccountsAdded = recommendedAccountsAdded + 1
@@ -315,7 +315,7 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     
     // MARK : Utils Function
-    func isUserAlreadyAdded(user : PFUser) -> Bool{
+    func isUserAlreadyAdded(user : User) -> Bool{
         
         for userAdded in usersAdded{
             
@@ -339,13 +339,13 @@ class AcountsAdviceViewController: UIViewController, UITableViewDataSource, UITa
     
     func goLeave(){
         
-        PFUser.currentUser()!["hasSeenRecommanded"] = true
+        User.currentUser()!["hasSeenRecommanded"] = true
         
         self.dismissViewControllerAnimated(true, completion: { () -> Void in
             Mixpanel.sharedInstance().track("Close Recommended Account", properties: ["nd_added" : self.recommendedAccountsAdded])
             
             
-            PFUser.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+            User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
                 Utils().updateUser()
             }
         })

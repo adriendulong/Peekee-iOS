@@ -92,9 +92,6 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         searchTF.rightView = clearButton
         searchTF.rightViewMode = .Always
         
-        
-        
-        
         let magnifying = UIImageView(frame: CGRectMake(0, 0, 50, 50))
         magnifying.contentMode = .Center
         magnifying.image = UIImage(named: "search-icon")
@@ -201,6 +198,7 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
     
     private var searchList: [Pleek] = [] {
         didSet {
+            
             self.pleeks = self.searchList
         }
     }
@@ -273,6 +271,13 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         } else {
             cell.contentView.alpha = 1.0
         }
+        
+        if self.searchState == .SearchBeginWithText {
+            cell.isDeletable = false
+        } else {
+            cell.isDeletable = true
+        }
+        
         cell.delegate = self
         
         //Load more
@@ -423,6 +428,13 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
     func showPleek(pleek: Pleek) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let pleekVC = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as? PleekViewController {
+            if self.searchState == .Unsearchable {
+                pleekVC.from = "Inbox"
+            } else if self.searchState == .SearchBeginWithText {
+                pleekVC.from = "Sent"
+            } else {
+                pleekVC.from = "Search"
+            }
             pleekVC.mainPiki = pleek
             self.navigationController?.pushViewController(pleekVC, animated: true)
         }
@@ -477,8 +489,8 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                     println("Error : \(error!.localizedDescription)")
                 } else {
                     if pleeks!.count > 0 {
-                        if pleeks![0].updatedAt!.isGreaterThanDate(self.mostRecentDate) {
-                            self.setMostRecent(pleeks![0].updatedAt!)
+                        if pleeks![0].lastUpdateDate.isGreaterThanDate(self.mostRecentDate) {
+                            self.setMostRecent(pleeks![0].lastUpdateDate)
                             if let delegate = self.delegate {
                                 delegate.newContent(self)
                             }
@@ -572,7 +584,11 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                 println(error)
             } else if let pleeks = task.result as? [Pleek] {
                 if count(pleeks) > 0 {
-                    println(pleeks)
+                    if count(pleeks) < Constants.LoadPleekLimit {
+                        weakSelf?.shouldLoadMore = false
+                    } else {
+                        weakSelf?.shouldLoadMore = true
+                    }
                     weakSelf?.searchList = pleeks
                     weakSelf?.tableView.reloadData()
                 } else {
@@ -590,7 +606,6 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                 } else if let error = task.error {
                     println(error)
                 } else if let users = task.result as? [User] {
-                    println(users)
                     if count(users) > 0 {
                         weakSelf?.cancellationTokenSource = BFCancellationTokenSource()
                         weakSelf?.user = users[0]

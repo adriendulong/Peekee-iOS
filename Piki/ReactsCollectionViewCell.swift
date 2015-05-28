@@ -403,7 +403,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         if self.react != nil{
             
             if self.react!["user"] != nil{
-                var userReact:PFUser = self.react!["user"] as! PFUser
+                var userReact:User = self.react!["user"] as! User
                 usernameLabel.text = userReact.username!
                 
                 //Adapt Report/React CTA
@@ -518,35 +518,25 @@ class ReactsCollectionViewCell : UICollectionViewCell {
                         var fileManager:NSFileManager = NSFileManager()
                         if data!.writeToFile("\(NSTemporaryDirectory())_\(self.react!.objectId).mov", atomically: false){
                             
-                            
                             var filepath = NSURL(fileURLWithPath: "\(NSTemporaryDirectory())_\(self.react!.objectId).mov")
                             var playerItem:AVPlayerItem = AVPlayerItem(URL: filepath)
                             var player:AVPlayer = AVPlayer(playerItem: playerItem)
                             player.actionAtItemEnd = AVPlayerActionAtItemEnd.None
-                            
-                            
-                            
-                            
-                            
+
                             NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("videoDidEnd:"), name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
                             
                             dispatch_async(dispatch_get_main_queue(), { ()->() in
-                                
-                                
-                                if (self.delegate as! PleekViewController).isViewLoaded() && ((self.delegate as! PleekViewController).view.window != nil) {
-                                    self.loadIndicator!.hidden = true
-                                    
-                                    self.playerLayer.player = player
-                                    self.playerView.hidden = false
-                                    self.readVideoImageView.hidden = true
-                                    player.play()
+                                if let delegate = self.delegate as? PleekViewController {
+                                    if delegate.isViewLoaded() && delegate.view.window != nil {
+                                        self.loadIndicator!.hidden = true
+                                        self.playerLayer.player = player
+                                        self.playerView.hidden = false
+                                        self.readVideoImageView.hidden = true
+                                        player.play()
+                                    }
                                 }
-                                
-                                
                             })
                         }
-                        
-                        
                     })
                 }
             })
@@ -709,7 +699,7 @@ class ReactsCollectionViewCell : UICollectionViewCell {
     func addFriend(){
         println("add friend")
         if self.react != nil{
-            if let userReact = self.react!["user"] as? PFUser{
+            if let userReact = self.react!["user"] as? User{
                 spinnerViewAddFriend.hidden = false
                 addUserIcon.hidden = true
                 if Utils().isUserAFriend(userReact){
@@ -989,10 +979,10 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         if self.react != nil{
             
             if self.react!["user"] != nil{
-                var userReact:PFUser = self.react!["user"] as! PFUser
+                var userReact:User = self.react!["user"] as! User
                 
                 //Adapt Report/React CTA
-                if userReact.objectId == PFUser.currentUser()!.objectId{
+                if userReact.objectId == User.currentUser()!.objectId{
                     return true
                 }
 
@@ -1003,9 +993,9 @@ class ReactsCollectionViewCell : UICollectionViewCell {
         //Can remove if he is owner of the pleek
         if let pleek = self.mainPeekee{
             
-            if let userPleek = pleek["user"] as? PFUser{
+            if let userPleek = pleek["user"] as? User{
                 
-                if userPleek.objectId == PFUser.currentUser()!.objectId{
+                if userPleek.objectId == User.currentUser()!.objectId{
                     return true
                 }
                 

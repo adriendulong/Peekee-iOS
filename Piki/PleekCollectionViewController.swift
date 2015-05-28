@@ -125,6 +125,7 @@ class PleekCollectionViewController: UICollectionViewController {
     func showPleek(pleek: Pleek) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let pleekVC = storyboard.instantiateViewControllerWithIdentifier("PleekViewController") as? PleekViewController {
+            pleekVC.from = "Best"
             pleekVC.mainPiki = pleek
             self.navigationController?.pushViewController(pleekVC, animated: true)
         }
@@ -179,8 +180,8 @@ class PleekCollectionViewController: UICollectionViewController {
                 } else {
                     
                     if pleeks!.count > 0 {
-                        if pleeks![0].updatedAt!.isGreaterThanDate(self.mostRecentDate) {
-                            self.setMostRecent(pleeks![0].updatedAt!)
+                        if pleeks![0].lastUpdateDate.isGreaterThanDate(self.mostRecentDate) {
+                            self.setMostRecent(pleeks![0].lastUpdateDate)
                             if let delegate = self.delegate {
                                 delegate.newContent(self)
                             }

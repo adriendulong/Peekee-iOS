@@ -14,13 +14,13 @@ class RecipientsCell: UITableViewCell {
     var testLabel: UILabel?
     var secondLabel:UILabel?
     var selectView:UIView?
-    var user:PFUser?
+    var user:User?
     var chooseControler : ChooseReceiversViewController!
     
     @IBOutlet weak var selectedImageView: UIImageView!
     
     
-    func loadItem(#user : PFUser, isSelected:Bool){
+    func loadItem(#user : User, isSelected:Bool){
         
         if testLabel == nil {
             testLabel = UILabel(frame: CGRect(x: 15, y: 0, width: 300, height: 60))
@@ -140,13 +140,13 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
     
     var sendMainButton:UIButton?
     
-    var usersWhoAddedMe:Array<PFUser> = []
-    var usersWhoAddedMeSelected:Array<PFUser> = []
-    var usersIAlreadyAdded:Array<PFUser> = []
-    var usersIAlreadyAddedSelected:Array<PFUser> = []
-    var userFriends:Array<PFUser> = []
-    var userFriendsAll:Array<PFUser> = []
-    var userFriendsSelected:Array<PFUser> = []
+    var usersWhoAddedMe:Array<User> = []
+    var usersWhoAddedMeSelected:Array<User> = []
+    var usersIAlreadyAdded:Array<User> = []
+    var usersIAlreadyAddedSelected:Array<User> = []
+    var userFriends:Array<User> = []
+    var userFriendsAll:Array<User> = []
+    var userFriendsSelected:Array<User> = []
     
     
     //Photo infos
@@ -365,11 +365,11 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
         
         if indexPath.section == 0{
-            if isUserSelected(topFriendsInfos[indexPath.row]["user"] as! PFUser, isUserIAdded: true){
+            if isUserSelected(topFriendsInfos[indexPath.row]["user"] as! User, isUserIAdded: true){
                 isSelected = true
             }
             
-            cell.loadItem(user : topFriendsInfos[indexPath.row]["user"] as! PFUser, isSelected : isSelected)
+            cell.loadItem(user : topFriendsInfos[indexPath.row]["user"] as! User, isSelected : isSelected)
             cell.setScore(topFriendsInfos[indexPath.row]["score"] as! Int)
         }
         else{
@@ -384,8 +384,8 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                 
                 if searchTextField!.hidden{
                     if userFriends.count > 0 && !isLoadingMore{
-                        var arrayFriendsId:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
-                        if userFriends.count < (PFUser.currentUser()!["nbFriends"] as! Int){
+                        var arrayFriendsId:Array<String>? = User.currentUser()!["usersFriend"] as? Array<String>
+                        if userFriends.count < (User.currentUser()!["nbFriends"] as! Int){
                             println("Load More")
                             self.isLoadingMore = true
                             getMoreFriends()
@@ -407,9 +407,9 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         tableView.deselectRowAtIndexPath(indexPath, animated: false)
         var selectCell:RecipientsCell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientsCell
         
-        var userToSelect:PFUser?
+        var userToSelect:User?
         if indexPath.section == 0{
-            userToSelect = topFriendsInfos[indexPath.row]["user"] as? PFUser
+            userToSelect = topFriendsInfos[indexPath.row]["user"] as? User
             
             
             if isUserSelected(userToSelect!, isUserIAdded : true ){
@@ -471,7 +471,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
     }
     
     
-    func isUserSelected(user : PFUser, isUserIAdded : Bool) -> Bool{
+    func isUserSelected(user : User, isUserIAdded : Bool) -> Bool{
         
         for userToVerify in userFriendsSelected{
             if userToVerify.objectId == user.objectId{
@@ -484,7 +484,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
     }
     
-    func removeUserFromSelected(user : PFUser, isUserIAdded : Bool){
+    func removeUserFromSelected(user : User, isUserIAdded : Bool){
         
         var increment:Int = 0
         var positionToRemove:Int?
@@ -518,7 +518,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
     }
     
-    func addUserToSelected(user : PFUser, isUserIAdded : Bool){
+    func addUserToSelected(user : User, isUserIAdded : Bool){
         
         userFriendsSelected.append(user)
         println("Users Selected : \(userFriendsSelected.count)")
@@ -560,8 +560,8 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
             queryFriends.findObjectsInBackgroundWithBlock { (friends, error) -> Void in
                 if error != nil {
                 } else {
-                    self.userFriends = friends as! Array<PFUser>
-                    self.userFriendsAll = friends as! Array<PFUser>
+                    self.userFriends = friends as! Array<User>
+                    self.userFriendsAll = friends as! Array<User>
                     self.tableView.reloadData()
                 }
             }
@@ -599,7 +599,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                     
                     
                     //If friends is no yet in the friends we have add him
-                    for friend in friends as! Array<PFUser>{
+                    for friend in friends as! Array<User>{
                         var isFriendPresent:Bool = false
                         
                         for user in self.userFriendsAll{
@@ -609,8 +609,8 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                         }
                         
                         if !isFriendPresent{
-                            self.userFriendsAll.append(friend as PFUser)
-                            self.userFriends.append(friend as PFUser)
+                            self.userFriendsAll.append(friend as User)
+                            self.userFriends.append(friend as User)
                             indexPathToInsert.append(NSIndexPath(forRow: self.userFriends.count - 1, inSection: 1))
                         }
                         
@@ -744,7 +744,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
             
             for friend in topFriendsInfosAll{
                 
-                var user:PFUser = friend["user"] as! PFUser
+                var user:User = friend["user"] as! User
                 var username:NSString = NSString(string: user.username!)
                 
                 if Utils().containsStringForAll(username as String, insideString: finalText as String){
@@ -797,7 +797,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                     finalText = finalText.lowercaseString
                     if finalText == username{
                         //If friends is no yet in the friends we have add him
-                        for friend in friends as! Array<PFUser>{
+                        for friend in friends as! Array<User>{
                             var isFriendPresent:Bool = false
                             
                             for user in self.userFriendsAll{
@@ -808,8 +808,8 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                             
                             if !isFriendPresent{
                                 self.supFriendsAdded++
-                                self.userFriendsAll.append(friend as PFUser)
-                                self.userFriends.append(friend as PFUser)
+                                self.userFriendsAll.append(friend as User)
+                                self.userFriends.append(friend as User)
                             }
                             
                             
@@ -881,7 +881,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
         if !isPublic{
             
-            recipients.append(PFUser.currentUser()!.objectId!)
+            recipients.append(User.currentUser()!.objectId!)
             newPiki["recipients"] = recipients
         }
         
@@ -892,8 +892,8 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         
         
         //Set the user who took the PIki and set rights
-        if PFUser.currentUser() != nil{
-            newPiki["user"] = PFUser.currentUser()
+        if User.currentUser() != nil{
+            newPiki["user"] = User.currentUser()
             var pikiACL:PFACL = PFACL()
             
             if isPublic{
@@ -905,7 +905,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
                 }
             }
             
-            pikiACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
+            pikiACL.setWriteAccess(true, forUser: User.currentUser()!)
             newPiki.ACL = pikiACL
         }
         
@@ -1004,7 +1004,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         var topFriendsQuery:PFQuery = PFQuery(className: "Friend")
         topFriendsQuery.orderByDescending("score")
         topFriendsQuery.limit = 10
-        topFriendsQuery.whereKey("user", equalTo: PFUser.currentUser()!)
+        topFriendsQuery.whereKey("user", equalTo: User.currentUser()!)
         topFriendsQuery.includeKey("friend")
         topFriendsQuery.cachePolicy = PFCachePolicy.CacheThenNetwork
         
@@ -1028,7 +1028,7 @@ class ChooseReceiversViewController: UIViewController, UITableViewDataSource, UI
         var topFriendsInfos:Array<[String : AnyObject]> = Array<[String : AnyObject]>()
         
         for friendObject in friendsObjects{
-            if let user = friendObject["friend"] as? PFUser {
+            if let user = friendObject["friend"] as? User {
                 var topFriendInfo:[String:AnyObject] = ["user" : user, "score" : friendObject["score"]!]
             topFriendsInfos.append(topFriendInfo)
             }

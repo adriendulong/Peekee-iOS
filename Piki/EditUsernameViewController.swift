@@ -156,7 +156,7 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
                             //Change Username
                             println("change username")
                             
-                            var currentUser = PFUser.currentUser()!
+                            var currentUser = User.currentUser()!
                             currentUser.username = finalText as String!
                             currentUser.password = finalText as String!
                             
@@ -208,10 +208,10 @@ class EditUsernameViewController: UIViewController, UITextFieldDelegate {
     
     func changeName(){
         
-        PFUser.currentUser()!["name"] = usernameTextField.text
+        User.currentUser()!["name"] = usernameTextField.text
         
         MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        PFUser.currentUser()!.saveInBackgroundWithBlock { (succeed, error) -> Void in
+        User.currentUser()!.saveInBackgroundWithBlock { (succeed, error) -> Void in
             MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
             if error != nil{
                 let alert = UIAlertView(title: "Error", message: NSLocalizedString("Error while editing your name. Please try again later.", comment :"Error while editing your name. Please try again later."),

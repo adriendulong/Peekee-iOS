@@ -195,7 +195,7 @@ class ContactPhoneTableViewCell : UITableViewCell {
                         Mixpanel.sharedInstance().track("Add Friend", properties : ["screen" : "search_friend"])
                         
                         self.searchController!.getAllUsersFromContacts()
-                        self.searchController!.addUserInFriendsList(task.result as! PFUser)
+                        self.searchController!.addUserInFriendsList(task.result as! User)
                         self.searchController!.sortFriends()
                         self.searchController!.tableView.reloadData()
                         

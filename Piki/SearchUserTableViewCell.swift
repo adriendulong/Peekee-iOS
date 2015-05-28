@@ -10,7 +10,7 @@ import Foundation
 
 class SearchUserTableViewCell : UITableViewCell {
     
-    var user:PFUser?
+    var user:User?
     var searchUsernameLabel:UILabel?
     var loadIndicator:UIActivityIndicatorView?
     

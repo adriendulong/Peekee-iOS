@@ -23,6 +23,7 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
     
     weak var delegate: InboxCellDelegate? = nil
     var type: InboxCellType = .BlueBandSmallPhoto
+    var isDeletable: Bool = false
     
     lazy var deleteView: UIView = {
         let deleteV = UIView()
@@ -487,6 +488,10 @@ class InboxCell: UITableViewCell, UIGestureRecognizerDelegate {
     // MARK: Action
     
     func handlePan(recognizer: UIPanGestureRecognizer!) {
+        
+        if !self.isDeletable {
+            return
+        }
         
         let translation = recognizer.translationInView(recognizer.view!)
         

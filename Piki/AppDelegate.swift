@@ -54,9 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
         getIfFriendsMandatory()
 
         
-        if let user = PFUser.currentUser() {
+        if let user = User.currentUser() {
             if user["userInfos"] == nil {
-                PFUser.logOut()
+                User.logOut()
                 var storyboard = UIStoryboard(name: "Subscribe", bundle: nil)
                 if let phoneNavController = storyboard.instantiateInitialViewController() as? UINavigationController {
                     self.window!.rootViewController = phoneNavController
@@ -136,9 +136,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, FBSDKMessengerURLHandlerD
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         var currentInstallation:PFInstallation = PFInstallation.currentInstallation()
 
-        if PFUser.currentUser() != nil {
+        if User.currentUser() != nil {
             currentInstallation["notificationsEnabled"] = true
-            currentInstallation["user"] = PFUser.currentUser()
+            currentInstallation["user"] = User.currentUser()
             currentInstallation.setDeviceTokenFromData(deviceToken)
             currentInstallation.saveInBackground()
         }

@@ -30,7 +30,7 @@ enum PleekState {
     @NSManaged var recipients: [String]?
     @NSManaged var lastUpdate: NSDate?
     
-    var upatedAt: NSDate {
+    var lastUpdateDate: NSDate {
         if let lastUpdate = self.lastUpdate {
             return lastUpdate
         }
@@ -57,7 +57,7 @@ enum PleekState {
     
     var nbNewReaction: Int {
         if let infos = self.infos, let nbReactions = infos["nbReaction"] as? Int  {
-            return nbReactions - self.nbReaction
+            return self.nbReaction - nbReactions
         }
         
         return 0

@@ -461,8 +461,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="BfE-fb-85h" id="GQ8-V5-4YZ">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tse-3N-UsE">
-                                                    <rect key="frame" x="19" y="32" width="224" height="21"/>
+                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tse-3N-UsE">
+                                                    <rect key="frame" x="19" y="32" width="224" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="224" id="mLw-fb-asb"/>
                                                     </constraints>
@@ -470,8 +470,8 @@
                                                     <color key="textColor" red="0.81960784310000001" green="0.83137254900000002" blue="0.85490196080000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Aa-Bb-ZTk">
-                                                    <rect key="frame" x="525" y="0.0" width="50" height="60"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Aa-Bb-ZTk">
+                                                    <rect key="frame" x="525" y="0.0" width="50" height="59"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="o7A-EQ-2h1"/>
                                                     </constraints>
@@ -486,8 +486,8 @@
                                                         <constraint firstAttribute="height" constant="20" id="C2i-KC-yYU"/>
                                                     </constraints>
                                                 </activityIndicatorView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="@adrien" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cxx-ch-kxe">
-                                                    <rect key="frame" x="19" y="19" width="240" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@adrien" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cxx-ch-kxe">
+                                                    <rect key="frame" x="19" y="19" width="240" height="20"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="240" id="ae2-zp-mwg"/>
                                                     </constraints>

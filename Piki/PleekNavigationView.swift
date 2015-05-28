@@ -10,6 +10,7 @@ import UIKit
 
 protocol PleekNavigationViewDelegate: class {
     func navigationView(navigationView: PleekNavigationView, didSelectTabAtIndex index: UInt)
+    func navigationViewDidSelectLogo(navigationView: PleekNavigationView)
     func navigationView(navigationView: PleekNavigationView, shouldUpdateTopConstraintOffset offset: CGFloat, animated: Bool)
     func navigationViewShowSettings(navigationView: PleekNavigationView)
     func navigationViewShowFriends(navigationView: PleekNavigationView)
@@ -82,21 +83,22 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         return settingsB
     } ()
     
-    private lazy var logoImageView: UIImageView = {
-        let logoIV = UIImageView()
-        logoIV.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
-        logoIV.image = UIImage(named: "logo")
+    private lazy var logoButton: UIButton = {
+        let logoButton = UIButton()
+        logoButton.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
+        logoButton.setImage(UIImage(named: "logo"), forState: .Normal)
+        logoButton.addTarget(self, action: Selector("didSelectLogo:"), forControlEvents: .TouchUpInside)
         
-        self.topContainerView.addSubview(logoIV)
+        self.topContainerView.addSubview(logoButton)
         
-        logoIV.snp_makeConstraints{ (make) -> Void in
+        logoButton.snp_makeConstraints{ (make) -> Void in
             make.width.equalTo(37)
             make.height.equalTo(40.5)
             make.centerX.equalTo(self.topContainerView.snp_centerX)
             make.top.equalTo(self.topContainerView.snp_top).offset(13)
         }
         
-        return logoIV
+        return logoButton
     } ()
     
     private lazy var friendsButton: UIButton = {
@@ -157,7 +159,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     private lazy var bestButton: PleekNavigationButton = {
         let bestB = PleekNavigationButton(image: UIImage(named: "best-icon-inactive"), selectedImage: UIImage(named: "best-icon-active"), text: NSLocalizedString("BEST", comment: ""))
         bestB.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
-        bestB.newContent = true
+        bestB.newContent = false
         
         bestB.addTarget(self, action: Selector("didSelectButton:"), forControlEvents: .TouchUpInside)
         
@@ -207,7 +209,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         self.backgroundColor = UIColor(red: 62.0/255.0, green: 80.0/255.0, blue: 180.0/255.0, alpha: 1.0)
         
         let settings = self.settingsButton
-        let logo = self.logoImageView
+        let logo = self.logoButton
         let friends = self.friendsButton
         
         let inbox = self.inboxButton
@@ -256,6 +258,12 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
+    func didSelectLogo(sender: UIButton) {
+        if let delegate = self.delegate {
+            delegate.navigationViewDidSelectLogo(self)
+        }
+    }
+    
     func didSelectButton(sender: PleekNavigationButton) {
         
         sender.newContent = false
@@ -277,12 +285,15 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
         
         switch sender {
         case self.inboxButton:
+            Mixpanel.sharedInstance().track("Inbox View")
             index = 0
         break
         case self.sentButton:
+            Mixpanel.sharedInstance().track("Sent View")
             index = 1
         break
         case self.bestButton:
+            Mixpanel.sharedInstance().track("Best View")
             index = 2
         break
         default:

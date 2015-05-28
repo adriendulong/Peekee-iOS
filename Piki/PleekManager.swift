@@ -61,7 +61,7 @@ class PleekManager {
             var newReact:PFObject = PFObject(className: "React")
             newReact["photo"] = imageFile
             newReact["Piki"] = mainPleek
-            newReact["user"] = PFUser.currentUser()
+            newReact["user"] = User.currentUser()
             
             //Set the ACL
             var reactACL:PFACL = PFACL()
@@ -76,8 +76,8 @@ class PleekManager {
                 }
                 
             }
-            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
-            if let user: PFUser = mainPleek["user"] as? PFUser{
+            reactACL.setWriteAccess(true, forUser: User.currentUser()!)
+            if let user: User = mainPleek["user"] as? User{
                 reactACL.setWriteAccess(true, forUser: user)
             }
             newReact.ACL = reactACL
@@ -189,8 +189,8 @@ class PleekManager {
         newVideoReact["previewImage"] = previewFile
         newVideoReact["Piki"] = self.mainPleek
 
-        if PFUser.currentUser() != nil{
-            newVideoReact["user"] = PFUser.currentUser()
+        if User.currentUser() != nil{
+            newVideoReact["user"] = User.currentUser()
             var reactACL:PFACL = PFACL()
             
             if self.isPublicPleek {
@@ -204,9 +204,9 @@ class PleekManager {
                 }
             }
 
-            reactACL.setWriteAccess(true, forUser: PFUser.currentUser()!)
+            reactACL.setWriteAccess(true, forUser: User.currentUser()!)
             if self.mainPleek!["user"] != nil {
-                reactACL.setWriteAccess(true, forUser: self.mainPleek!["user"] as! PFUser)
+                reactACL.setWriteAccess(true, forUser: self.mainPleek!["user"] as! User)
             }
             newVideoReact.ACL = reactACL
         }
@@ -281,7 +281,7 @@ class PleekManager {
         
         var task = BFTaskCompletionSource()
         
-        let userPiki:PFUser = self.mainPleek!["user"] as! PFUser
+        let userPiki:User = self.mainPleek!["user"] as! User
         
         var recipients:Array<String> = Array<String>()
         if !self.isPublicPleek{

@@ -15,9 +15,9 @@ class RecipientsPikiCell: UITableViewCell {
     var loadIndicator:UIActivityIndicatorView?
     
     @IBOutlet weak var nameLabel: UILabel!
-    var user:PFUser?
+    var user:User?
     
-    func loadItem(#user : PFUser){
+    func loadItem(#user : User){
         self.user = user
        
         if actionButton == nil {
@@ -101,7 +101,7 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
     
     
     var mainPiki:PFObject?
-    var recipientsUser:Array<PFUser> = Array<PFUser>()
+    var recipientsUser:Array<User> = Array<User>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,7 +117,7 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
         backStatusBar.backgroundColor = Utils().statusBarColor
         self.view.addSubview(backStatusBar)
         
-        //Get recipients PFUser objects on the server
+        //Get recipients User objects on the server
         getRecipients()
         
         //Get back to piki
@@ -183,7 +183,7 @@ class ListRecipientsViewController: UIViewController, UITableViewDelegate, UITab
                     
                 }
                 else{
-                    self.recipientsUser = recipients as! Array<PFUser>
+                    self.recipientsUser = recipients as! Array<User>
                     self.tableView.reloadData()
                 }
             }

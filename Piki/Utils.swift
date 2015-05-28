@@ -648,11 +648,11 @@ class Utils {
     
     
     
-    func isUserMuted(user : PFUser) -> Bool{
+    func isUserMuted(user : User) -> Bool{
         
-        if PFUser.currentUser() != nil {
+        if User.currentUser() != nil {
             
-            var arrayMuted:Array<String>? = PFUser.currentUser()!["usersIMuted"] as? Array<String>
+            var arrayMuted:Array<String>? = User.currentUser()!["usersIMuted"] as? Array<String>
             
             if arrayMuted != nil{
                 for friend in arrayMuted!{
@@ -689,7 +689,7 @@ class Utils {
                 successful.setError(error)
             }
             else{
-                PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+                User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                     if error != nil{
                         successful.setError(error)
                     }
@@ -713,7 +713,7 @@ class Utils {
                 successful.setError(error)
             }
             else{
-                PFUser.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+                User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
                     if error != nil{
                         successful.setError(error)
                     }
@@ -1138,7 +1138,7 @@ class Utils {
     func getShareUsernameImage() -> UIImage?{
         
         var imageToShare:UIImage?
-        var username:String = PFUser.currentUser()!.username!
+        var username:String = User.currentUser()!.username!
         
         var viewToAdd = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 320))
         viewToAdd.backgroundColor = Utils().primaryColor
@@ -1590,7 +1590,7 @@ class Utils {
         mainView.addSubview(backImageView)
         
         var usernameLabel:UILabel = UILabel(frame: CGRect(x: 0, y: 470, width: mainView.frame.width, height: 80))
-        usernameLabel.text = "@\(PFUser.currentUser()!.username!)"
+        usernameLabel.text = "@\(User.currentUser()!.username!)"
         usernameLabel.font = UIFont(name: customGothamBol, size: 60)
         usernameLabel.textColor = UIColor.whiteColor()
         usernameLabel.textAlignment = NSTextAlignment.Center
@@ -1611,13 +1611,13 @@ class Utils {
         
         var updateUserCompletionTask = BFTaskCompletionSource()
         
-        PFUser.currentUser()!.fetchInBackgroundWithBlock { (user, error) -> Void in
+        User.currentUser()!.fetchInBackgroundWithBlock { (user, error) -> Void in
             
             if error != nil{
                 updateUserCompletionTask.setError(error!)
             }
             else{
-                Mixpanel.sharedInstance().people.set(["Username" : PFUser.currentUser()!.username!])
+                Mixpanel.sharedInstance().people.set(["Username" : User.currentUser()!.username!])
 
                 //If need to be updated we make the request in order to have a cache now
                 if Utils().friendsNeedsToBeUpdated(){
@@ -1704,7 +1704,7 @@ class Utils {
         return friendsId
     }
     
-    func isUserAFriend(user : PFUser) -> Bool{
+    func isUserAFriend(user : User) -> Bool{
         
         if contains(getAppDelegate().friendsIdList, user.objectId!){
             return true
@@ -1756,7 +1756,7 @@ class Utils {
     func friendsNeedsToBeUpdated() -> Bool{
         
         //If we don't have the same number of friends that we should we update the user
-        if let nbFriends = PFUser.currentUser()!["nbFriends"] as? Int{
+        if let nbFriends = User.currentUser()!["nbFriends"] as? Int{
             if nbFriends != getAppDelegate().friendsIdList.count{
                 return true
             }
@@ -1766,7 +1766,7 @@ class Utils {
         }
         
         //If we have the same number but the date from the last modif is more recent, we update
-        if let lastFriendsModif = PFUser.currentUser()!["lastFriendsModification"] as? NSDate{
+        if let lastFriendsModif = User.currentUser()!["lastFriendsModification"] as? NSDate{
             var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
             if defaults.objectForKey("lastFriendsUpdate") != nil{
                 
@@ -1816,8 +1816,8 @@ class Utils {
         
         var realFriends:Array<String> = Array<String>()
         
-        var allFriends:Array<String>? = PFUser.currentUser()!["usersFriend"] as? Array<String>
-        var mutedFriends:Array<String>? = PFUser.currentUser()!["usersIMuted"] as? Array<String>
+        var allFriends:Array<String>? = User.currentUser()!["usersFriend"] as? Array<String>
+        var mutedFriends:Array<String>? = User.currentUser()!["usersIMuted"] as? Array<String>
         
         if mutedFriends != nil && allFriends != nil{
             realFriends = allFriends!.filter{!contains(mutedFriends!, $0)}
@@ -1836,7 +1836,7 @@ class Utils {
         var needToUpdateLocalFriendsList:Bool = false
 
         var queryFriends = PFQuery(className: "Friend")
-        queryFriends.whereKey("user", equalTo: PFUser.currentUser()!)
+        queryFriends.whereKey("user", equalTo: User.currentUser()!)
         queryFriends.limit = 500
         
         if withCache{
@@ -1876,9 +1876,9 @@ class Utils {
         
     }
     
-    func getListOfUserObjectFromJoinObject(joinFriendsObjects : Array<PFObject>) -> Array<PFUser>{
+    func getListOfUserObjectFromJoinObject(joinFriendsObjects : Array<PFObject>) -> Array<User>{
         
-        var friendsObjects:Array<PFUser> = Array<PFUser>()
+        var friendsObjects:Array<User> = Array<User>()
         var friendsId:Array<String> = Array<String>()
         
         for joinFriendObject in joinFriendsObjects{
@@ -1888,7 +1888,7 @@ class Utils {
         }
         
         for friendId in friendsId{
-            var friendObject:PFUser = PFUser(withoutDataWithObjectId: friendId)
+            var friendObject:User = User(withoutDataWithObjectId: friendId)
             friendsObjects.append(friendObject)
         }
         
@@ -1900,7 +1900,7 @@ class Utils {
     //MARK: Hide a pleek
     
     func getHidesPleek() -> Array<String>{
-        var pleeksHided:Array<String>? = PFUser.currentUser()!["pleeksHided"] as? Array<String>
+        var pleeksHided:Array<String>? = User.currentUser()!["pleeksHided"] as? Array<String>
         
         if pleeksHided == nil{
             pleeksHided = Array<String>()
@@ -1911,7 +1911,7 @@ class Utils {
     
     func hidePleek(pleekId : String){
         
-        var pleeksHided:Array<String>? = PFUser.currentUser()!["pleeksHided"] as? Array<String>
+        var pleeksHided:Array<String>? = User.currentUser()!["pleeksHided"] as? Array<String>
         
         if pleeksHided == nil{
             pleeksHided = Array<String>()
@@ -1920,9 +1920,9 @@ class Utils {
         
         pleeksHided!.append(pleekId)
         
-        PFUser.currentUser()!["pleeksHided"] = pleeksHided!
+        User.currentUser()!["pleeksHided"] = pleeksHided!
         
-        PFUser.currentUser()!.saveEventually()
+        User.currentUser()!.saveEventually()
         
     }
     
@@ -1952,11 +1952,11 @@ class Utils {
             var reactCopy:PFObject = PFObject(withoutDataWithClassName:"React", objectId: react.objectId)
             likeObject["react"] = reactCopy
             likeObject["piki"] = pleek
-            likeObject["user"] = PFUser.currentUser()
+            likeObject["user"] = User.currentUser()
             
             var aclLike:PFACL = PFACL()
             aclLike.setPublicReadAccess(true)
-            aclLike.setWriteAccess(true, forUser: PFUser.currentUser()!)
+            aclLike.setWriteAccess(true, forUser: User.currentUser()!)
             
             likeObject.ACL = aclLike
             
@@ -1968,7 +1968,7 @@ class Utils {
         }
         else{
             var likesQuery:PFQuery = PFQuery(className: "Like")
-            likesQuery.whereKey("user", equalTo: PFUser.currentUser()!)
+            likesQuery.whereKey("user", equalTo: User.currentUser()!)
             likesQuery.whereKey("piki", equalTo: pleek)
             likesQuery.whereKey("react", equalTo: react)
             
