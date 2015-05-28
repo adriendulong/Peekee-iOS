@@ -487,26 +487,26 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
             dataSource(withCache: withCache, skip: 0) { (pleeks, error) -> () in
                 if error != nil {
                     println("Error : \(error!.localizedDescription)")
-                } else {
-                    if pleeks!.count > 0 {
-                        if pleeks![0].lastUpdateDate.isGreaterThanDate(self.mostRecentDate) {
-                            self.setMostRecent(pleeks![0].lastUpdateDate)
-                            if let delegate = self.delegate {
-                                delegate.newContent(self)
+                } else if let pleeks = pleeks, let weakSelf = weakSelf {
+                    if !pleeks.isEmpty {
+                        if pleeks[0].lastUpdateDate.isGreaterThanDate(weakSelf.mostRecentDate) {
+                            weakSelf.setMostRecent(pleeks[0].lastUpdateDate)
+                            if let delegate = weakSelf.delegate {
+                                delegate.newContent(weakSelf)
                             }
                         }
                     }
                     
-                    if count(pleeks!) < Constants.LoadPleekLimit {
-                        weakSelf?.shouldLoadMore = false
+                    if pleeks.count < Constants.LoadPleekLimit {
+                        weakSelf.shouldLoadMore = false
                     } else {
-                        weakSelf?.shouldLoadMore = true
+                        weakSelf.shouldLoadMore = true
                     }
-                    weakSelf?.pleeksList = pleeks!
-                    weakSelf?.refreshControl?.endRefreshing()
-                    weakSelf?.tableView.reloadData()
-                    if pleeks!.count > 0 {
-                        weakSelf?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: false)
+                    weakSelf.pleeksList = pleeks
+                    weakSelf.refreshControl?.endRefreshing()
+                    weakSelf.tableView.reloadData()
+                    if !pleeks.isEmpty {
+                        weakSelf.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: false)
                     }
                 }
             }
@@ -537,11 +537,11 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
         
         weak var weakSelf = self
         
-        var secondBlock: BFContinuationBlock = { (task) -> AnyObject! in
+        var secondBlock: BFContinuationBlock = { [weak self] (task) -> AnyObject! in
             if task.cancelled {
                 println("cancelled")
             } else if let pleeks = task.result as? [Pleek] {
-                weakSelf?.loadMoreResult(pleeks, error: task.error)
+                self?.loadMoreResult(pleeks, error: task.error)
             }
             
             return "success"

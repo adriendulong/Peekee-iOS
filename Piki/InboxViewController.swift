@@ -19,7 +19,7 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     var firstUserUnlock:Bool?
     
-    var overlayTutoView:UIView?
+//    var overlayTutoView:UIView?
     
     var popUpShowTuto:UIView?
     var showTutoFirst:Bool = false
@@ -184,13 +184,14 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 //See if show tuto overlay
                 if User.currentUser()!["hasShownOverlayMenu"] != nil{
                     if !(User.currentUser()!["hasShownOverlayMenu"] as! Bool){
-                        self.showTutoOverlay()
+//                        self.showTutoOverlay()
                         self.showTutoFirst = true
+                        
                         self.askShowTutoVideo()
                     }
                 }
                 else{
-                    self.showTutoOverlay()
+//                    self.showTutoOverlay()
                 }
             }
         }
@@ -377,80 +378,80 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     // MARK : Old
     
-    func showTutoOverlay() {
-        
-        if overlayTutoView == nil{
-            
-            overlayTutoView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-            overlayTutoView!.backgroundColor = UIColor.clearColor()
-            
-            let gestureTapLeaveOverlay:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leaveOverlayTuto"))
-            overlayTutoView!.addGestureRecognizer(gestureTapLeaveOverlay)
-            
-            
-            let statusOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20))
-            statusOverlay.backgroundColor = UIColor.blackColor()
-            statusOverlay.alpha = 0.7
-            overlayTutoView!.addSubview(statusOverlay)
-            
-            
-            
-            let topBarOverlay:UIView = UIView(frame: CGRect(x: 0, y: 20, width: self.view.frame.width - 85, height: 60))
-            topBarOverlay.backgroundColor = UIColor.blackColor()
-            topBarOverlay.alpha = 0.7
-            overlayTutoView!.addSubview(topBarOverlay)
-            
-            
-            let firstPeekeeOverlay:UIView = UIView(frame: CGRect(x: 0, y: 80, width: self.view.frame.size.width, height: self.view.frame.size.width/3))
-            firstPeekeeOverlay.backgroundColor = UIColor.blackColor()
-            firstPeekeeOverlay.alpha = 0.7
-            overlayTutoView!.addSubview(firstPeekeeOverlay)
-            
-            let restOverlay = UIView(frame: CGRect(x: 0, y: 80 + 2 * (self.view.frame.size.width/3), width: self.view.frame.size.width, height: self.view.frame.height - (80 + 2 * (self.view.frame.size.width/3))))
-            restOverlay.backgroundColor = UIColor.blackColor()
-            restOverlay.alpha = 0.7
-            overlayTutoView!.addSubview(restOverlay)
-            
-            let lineFriends:UIImageView = UIImageView(frame: CGRect(x: self.view.frame.width - 40 - 42, y: 76, width: 42, height: 47))
-            lineFriends.image = UIImage(named: "menu_line_friends")
-            overlayTutoView!.addSubview(lineFriends)
-            
-            let linePeekee = UIImageView(frame: CGRect(x: self.view.frame.size.width/6, y: restOverlay.frame.origin.y - 4, width: 47, height: 42))
-            linePeekee.image = UIImage(named: "menu_line_peekee")
-            overlayTutoView!.addSubview(linePeekee)
-            
-            let labelTutoFriends = UILabel(frame: CGRect(x: 10, y: 95, width: self.view.frame.width - 40 - 42 - 10 - 30, height: 43))
-            labelTutoFriends.numberOfLines = 2
-            labelTutoFriends.adjustsFontSizeToFitWidth = true
-            labelTutoFriends.font = UIFont(name: Utils().customGothamBol, size: 24.0)
-            labelTutoFriends.textColor = UIColor.whiteColor()
-            labelTutoFriends.text = NSLocalizedString("Find more friends to get more Pleeks", comment : "Find more friends to get more Pleeks")
-            overlayTutoView!.addSubview(labelTutoFriends)
-            
-            let labelTutoPeekee = UILabel(frame: CGRect(x: linePeekee.frame.origin.x + linePeekee.frame.width + 5, y: linePeekee.frame.origin.y + 30, width: self.view.frame.width - (linePeekee.frame.origin.x + linePeekee.frame.width + 5), height: 22))
-            labelTutoPeekee.numberOfLines = 1
-            labelTutoPeekee.font = UIFont(name: Utils().customGothamBol, size: 24.0)
-            labelTutoPeekee.textColor = UIColor.whiteColor()
-            labelTutoPeekee.adjustsFontSizeToFitWidth = true
-            labelTutoPeekee.text = NSLocalizedString("This is a PLEEK 🍩", comment : "This is a PLEEK 🍩")
-            overlayTutoView!.addSubview(labelTutoPeekee)
-            
-            let labelSplash = UILabel(frame: CGRect(x: labelTutoFriends.frame.origin.x + labelTutoFriends.frame.width - 10, y: labelTutoFriends.center.y - 10, width: 30, height: 30))
-            labelSplash.text = "💥"
-            labelSplash.font = UIFont(name: Utils().customGothamBol, size: 30.0)
-            overlayTutoView!.addSubview(labelSplash)
-            
-            self.view.addSubview(overlayTutoView!)
-        }
-        
-        User.currentUser()!["hasShownOverlayMenu"] = true
-        User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
-            User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
-                println("UPDATE USER")
-            })
-        }
-        
-    }
+//    func showTutoOverlay() {
+//        
+//        if overlayTutoView == nil{
+//            
+//            overlayTutoView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+//            overlayTutoView!.backgroundColor = UIColor.clearColor()
+//            
+//            let gestureTapLeaveOverlay:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("leaveOverlayTuto"))
+//            overlayTutoView!.addGestureRecognizer(gestureTapLeaveOverlay)
+//            
+//            
+//            let statusOverlay = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20))
+//            statusOverlay.backgroundColor = UIColor.blackColor()
+//            statusOverlay.alpha = 0.7
+//            overlayTutoView!.addSubview(statusOverlay)
+//            
+//            
+//            
+//            let topBarOverlay:UIView = UIView(frame: CGRect(x: 0, y: 20, width: self.view.frame.width - 85, height: 60))
+//            topBarOverlay.backgroundColor = UIColor.blackColor()
+//            topBarOverlay.alpha = 0.7
+//            overlayTutoView!.addSubview(topBarOverlay)
+//            
+//            
+//            let firstPeekeeOverlay:UIView = UIView(frame: CGRect(x: 0, y: 80, width: self.view.frame.size.width, height: self.view.frame.size.width/3))
+//            firstPeekeeOverlay.backgroundColor = UIColor.blackColor()
+//            firstPeekeeOverlay.alpha = 0.7
+//            overlayTutoView!.addSubview(firstPeekeeOverlay)
+//            
+//            let restOverlay = UIView(frame: CGRect(x: 0, y: 80 + 2 * (self.view.frame.size.width/3), width: self.view.frame.size.width, height: self.view.frame.height - (80 + 2 * (self.view.frame.size.width/3))))
+//            restOverlay.backgroundColor = UIColor.blackColor()
+//            restOverlay.alpha = 0.7
+//            overlayTutoView!.addSubview(restOverlay)
+//            
+//            let lineFriends:UIImageView = UIImageView(frame: CGRect(x: self.view.frame.width - 40 - 42, y: 76, width: 42, height: 47))
+//            lineFriends.image = UIImage(named: "menu_line_friends")
+//            overlayTutoView!.addSubview(lineFriends)
+//            
+//            let linePeekee = UIImageView(frame: CGRect(x: self.view.frame.size.width/6, y: restOverlay.frame.origin.y - 4, width: 47, height: 42))
+//            linePeekee.image = UIImage(named: "menu_line_peekee")
+//            overlayTutoView!.addSubview(linePeekee)
+//            
+//            let labelTutoFriends = UILabel(frame: CGRect(x: 10, y: 95, width: self.view.frame.width - 40 - 42 - 10 - 30, height: 43))
+//            labelTutoFriends.numberOfLines = 2
+//            labelTutoFriends.adjustsFontSizeToFitWidth = true
+//            labelTutoFriends.font = UIFont(name: Utils().customGothamBol, size: 24.0)
+//            labelTutoFriends.textColor = UIColor.whiteColor()
+//            labelTutoFriends.text = NSLocalizedString("Find more friends to get more Pleeks", comment : "Find more friends to get more Pleeks")
+//            overlayTutoView!.addSubview(labelTutoFriends)
+//            
+//            let labelTutoPeekee = UILabel(frame: CGRect(x: linePeekee.frame.origin.x + linePeekee.frame.width + 5, y: linePeekee.frame.origin.y + 30, width: self.view.frame.width - (linePeekee.frame.origin.x + linePeekee.frame.width + 5), height: 22))
+//            labelTutoPeekee.numberOfLines = 1
+//            labelTutoPeekee.font = UIFont(name: Utils().customGothamBol, size: 24.0)
+//            labelTutoPeekee.textColor = UIColor.whiteColor()
+//            labelTutoPeekee.adjustsFontSizeToFitWidth = true
+//            labelTutoPeekee.text = NSLocalizedString("This is a PLEEK 🍩", comment : "This is a PLEEK 🍩")
+//            overlayTutoView!.addSubview(labelTutoPeekee)
+//            
+//            let labelSplash = UILabel(frame: CGRect(x: labelTutoFriends.frame.origin.x + labelTutoFriends.frame.width - 10, y: labelTutoFriends.center.y - 10, width: 30, height: 30))
+//            labelSplash.text = "💥"
+//            labelSplash.font = UIFont(name: Utils().customGothamBol, size: 30.0)
+//            overlayTutoView!.addSubview(labelSplash)
+//            
+//            self.view.addSubview(overlayTutoView!)
+//        }
+//        
+//        User.currentUser()!["hasShownOverlayMenu"] = true
+//        User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+//            User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+//                println("UPDATE USER")
+//            })
+//        }
+//        
+//    }
     
     func showVideo() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -559,9 +560,9 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
         
     }
     
-    func leaveOverlayTuto(){
-        overlayTutoView!.removeFromSuperview()
-    }
+//    func leaveOverlayTuto(){
+//        overlayTutoView!.removeFromSuperview()
+//    }
     
     func leavePopUpTuto(){
         
@@ -596,7 +597,12 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                 self.popUpShowTuto = nil
                 self.overlayView!.removeFromSuperview()
                 self.overlayView = nil
-                
+                User.currentUser()!["hasShownOverlayMenu"] = true
+                User.currentUser()!.saveInBackgroundWithBlock { (finished, error) -> Void in
+                    User.currentUser()!.fetchInBackgroundWithBlock({ (user, error) -> Void in
+                        println("UPDATE USER")
+                    })
+                }
                 self.showVideo()
                 
         }

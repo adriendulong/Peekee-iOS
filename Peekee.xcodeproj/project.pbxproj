@@ -1737,7 +1737,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Piki",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Peekee;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
@@ -1765,9 +1765,9 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Piki",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				PROVISIONING_PROFILE = "786c76fd-a82e-4037-b7b8-4c01474eb7a9";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1796,7 +1796,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				PROVISIONING_PROFILE = "786c76fd-a82e-4037-b7b8-4c01474eb7a9";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1841,9 +1841,9 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Piki",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				PROVISIONING_PROFILE = "786c76fd-a82e-4037-b7b8-4c01474eb7a9";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1872,7 +1872,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_NAME = Peekee;
-				PROVISIONING_PROFILE = "833a95fc-564f-4bb2-8163-f0daa446a0a4";
+				PROVISIONING_PROFILE = "786c76fd-a82e-4037-b7b8-4c01474eb7a9";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1937,7 +1937,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/Piki",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = Peekee;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Piki/Piki-Bridging-Header.h";

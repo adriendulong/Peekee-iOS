@@ -82,6 +82,7 @@ typealias PleekCompletionHandler = (pleeks: [Pleek]?, error: NSError?) -> ()
                 })
                 
                 friendsObjects.removeObject(autoFriend.first!)
+                friendsObjects.append(User.currentUser()!)
                 
                 var pleeksQuery = Pleek.query()!
                 
