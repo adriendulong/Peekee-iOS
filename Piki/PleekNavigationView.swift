@@ -23,7 +23,7 @@ class PleekNavigationView: UIView, UIGestureRecognizerDelegate {
     
     private var startY: CGFloat = 0
     private var startOffset: CGFloat = 0
-    private var index: UInt = 0
+    var index: UInt = 0
     
     private let minimumOffset: CGFloat = -35
     private let maximumOffset: CGFloat = 20

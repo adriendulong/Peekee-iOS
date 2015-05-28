@@ -936,7 +936,7 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             
             var imageLabel:UIImage?
             cell.textViewOverPhoto!.editable = false
-            if (cell.textViewOverPhoto!.text as NSString).length > 0 {
+            if count(cell.textViewOverPhoto!.text) > 0 {
                 UIGraphicsBeginImageContextWithOptions(cell.textViewOverPhoto!.frame.size, false, 0.0);
                 cell.textViewOverPhoto!.layer.renderInContext(UIGraphicsGetCurrentContext())
                 imageLabel = UIGraphicsGetImageFromCurrentImageContext()
@@ -950,7 +950,8 @@ class PleekViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             image.drawInRect(CGRect(x: 0, y: 0, width: size.width, height: size.height))
             
             if imageLabel != nil{
-                imageLabel!.drawInRect(CGRect(x: 0, y: cell.textViewOverPhoto!.frame.origin.y * UIScreen.mainScreen().scale, width: imageLabel!.size.width * UIScreen.mainScreen().scale, height: imageLabel!.size.height * UIScreen.mainScreen().scale))
+                let screenScale = UIScreen.mainScreen().scale
+                imageLabel!.drawInRect(CGRect(x: cell.textViewOverPhoto!.frame.origin.x * screenScale, y: cell.textViewOverPhoto!.frame.origin.y * UIScreen.mainScreen().scale, width: imageLabel!.size.width * UIScreen.mainScreen().scale, height: imageLabel!.size.height * UIScreen.mainScreen().scale))
             }
             
             

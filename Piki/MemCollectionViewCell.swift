@@ -75,7 +75,7 @@ class MemCollectionViewCell : UICollectionViewCell{
         selectorImageView = UIImageView(frame: CGRectZero)
         contentView.addSubview(selectorImageView)
         selectorImageView.snp_makeConstraints { (make) -> Void in
-            make.trailing.equalTo(self.contentView.snp_trailing).offset(-32)
+            make.trailing.equalTo(self.contentView.snp_trailing).offset(-10)
             make.top.equalTo(10)
             make.size.equalTo(22)
         }

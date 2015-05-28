@@ -218,8 +218,6 @@ class BestCell: UICollectionViewCell {
 
 extension BestCell {
     func configureFor(pleek: Pleek) {
-        
-        println(pleek.lastUpdate)
         weak var weakSelf = self
         
         self.pleekImageView.image = nil

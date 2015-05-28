@@ -172,22 +172,26 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     // MARK: Life Cycle
     
     override func viewDidAppear(animated: Bool) {
-        if let hasSeenRecommanded = User.currentUser()!["hasSeenRecommanded"] as? Bool {
-            if !hasSeenRecommanded {
+        //See if show Recommend Accounts
+        if User.currentUser()!["hasSeenRecommanded"] != nil{
+            if !(User.currentUser()!["hasSeenRecommanded"] as! Bool) {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 if let acountsAdviceViewController = storyboard.instantiateViewControllerWithIdentifier("AcountsAdviceViewControllerID") as? AcountsAdviceViewController {
                     self.presentViewController(acountsAdviceViewController, animated: true, completion: nil)
                 }
             }
-        } else {
-            if let hasShownOverlayMenu = User.currentUser()!["hasShownOverlayMenu"] as? Bool {
-                if !hasShownOverlayMenu {
-                    self.showTutoOverlay()
-                    self.showTutoFirst = true
-                    self.askShowTutoVideo()
+            else{
+                //See if show tuto overlay
+                if User.currentUser()!["hasShownOverlayMenu"] != nil{
+                    if !(User.currentUser()!["hasShownOverlayMenu"] as! Bool){
+                        self.showTutoOverlay()
+                        self.showTutoFirst = true
+                        self.askShowTutoVideo()
+                    }
                 }
-            } else {
-                showTutoOverlay()
+                else{
+                    self.showTutoOverlay()
+                }
             }
         }
     }
@@ -218,6 +222,9 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        if self.navigationView.index == 0 || self.navigationView.index == 1 {
+            NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("popNewPleekButton"), userInfo: nil, repeats: false)
+        }
         self.navigationController?.navigationBarHidden = true
     }
 
@@ -341,7 +348,6 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
     }
     
     func newContent(controller: UIViewController) {
-        
         if controller == self.receivedPleeksTableViewController {
             self.navigationView.newContent(atIndex: 0)
         } else if controller == self.sentPleeksTableViewController {

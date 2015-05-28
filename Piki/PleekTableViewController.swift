@@ -505,7 +505,9 @@ class PleekTableViewController: UITableViewController, InboxCellDelegate, UISear
                     weakSelf?.pleeksList = pleeks!
                     weakSelf?.refreshControl?.endRefreshing()
                     weakSelf?.tableView.reloadData()
-                    weakSelf?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: false)
+                    if pleeks!.count > 0 {
+                        weakSelf?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), atScrollPosition: .Top, animated: false)
+                    }
                 }
             }
         }
