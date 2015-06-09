@@ -793,9 +793,6 @@ class InboxViewController: UIViewController, PleekNavigationViewDelegate, PleekT
                     }
                     self.overlayView!.removeFromSuperview()
                     self.overlayView = nil
-                    
-                    
-                    
             }
         }
         

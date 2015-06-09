@@ -93,12 +93,29 @@
                 APSocialProfile *profile = [[APSocialProfile alloc] initWithSocialDictionary:dictionary];
                 [profiles addObject:profile];
             }
-            
+
             _socialProfiles = profiles;
         }
         if (fieldMask & APContactFieldNote)
         {
             _note = [self stringProperty:kABPersonNoteProperty fromRecord:recordRef];
+        }
+        if (fieldMask & APContactFieldLinkedRecordIDs)
+        {
+            NSMutableOrderedSet *linkedRecordIDs = [[NSMutableOrderedSet alloc] init];
+
+            CFArrayRef linkedPeopleRef = ABPersonCopyArrayOfAllLinkedPeople(recordRef);
+            CFIndex count = CFArrayGetCount(linkedPeopleRef);
+            for (CFIndex i = 0; i < count; i++)
+            {
+                ABRecordRef linkedRecordRef = CFArrayGetValueAtIndex(linkedPeopleRef, i);
+                [linkedRecordIDs addObject:@(ABRecordGetRecordID(linkedRecordRef))];
+            }
+            CFRelease(linkedPeopleRef);
+
+            // remove self from linked records
+            [linkedRecordIDs removeObject:@(ABRecordGetRecordID(recordRef))];
+            _linkedRecordIDs = linkedRecordIDs.array;
         }
     }
     return self;

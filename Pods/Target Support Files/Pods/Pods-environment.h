@@ -10,13 +10,13 @@
 #define COCOAPODS_POD_AVAILABLE_APAddressBook_Core
 #define COCOAPODS_VERSION_MAJOR_APAddressBook_Core 0
 #define COCOAPODS_VERSION_MINOR_APAddressBook_Core 1
-#define COCOAPODS_VERSION_PATCH_APAddressBook_Core 7
+#define COCOAPODS_VERSION_PATCH_APAddressBook_Core 8
 
 // APAddressBook/Swift
 #define COCOAPODS_POD_AVAILABLE_APAddressBook_Swift
 #define COCOAPODS_VERSION_MAJOR_APAddressBook_Swift 0
 #define COCOAPODS_VERSION_MINOR_APAddressBook_Swift 1
-#define COCOAPODS_VERSION_PATCH_APAddressBook_Swift 7
+#define COCOAPODS_VERSION_PATCH_APAddressBook_Swift 8
 
 // Animated-Gif-iOS
 #define COCOAPODS_POD_AVAILABLE_Animated_Gif_iOS
@@ -27,20 +27,20 @@
 // Bolts
 #define COCOAPODS_POD_AVAILABLE_Bolts
 #define COCOAPODS_VERSION_MAJOR_Bolts 1
-#define COCOAPODS_VERSION_MINOR_Bolts 1
-#define COCOAPODS_VERSION_PATCH_Bolts 5
+#define COCOAPODS_VERSION_MINOR_Bolts 2
+#define COCOAPODS_VERSION_PATCH_Bolts 0
 
 // Bolts/AppLinks
 #define COCOAPODS_POD_AVAILABLE_Bolts_AppLinks
 #define COCOAPODS_VERSION_MAJOR_Bolts_AppLinks 1
-#define COCOAPODS_VERSION_MINOR_Bolts_AppLinks 1
-#define COCOAPODS_VERSION_PATCH_Bolts_AppLinks 5
+#define COCOAPODS_VERSION_MINOR_Bolts_AppLinks 2
+#define COCOAPODS_VERSION_PATCH_Bolts_AppLinks 0
 
 // Bolts/Tasks
 #define COCOAPODS_POD_AVAILABLE_Bolts_Tasks
 #define COCOAPODS_VERSION_MAJOR_Bolts_Tasks 1
-#define COCOAPODS_VERSION_MINOR_Bolts_Tasks 1
-#define COCOAPODS_VERSION_PATCH_Bolts_Tasks 5
+#define COCOAPODS_VERSION_MINOR_Bolts_Tasks 2
+#define COCOAPODS_VERSION_PATCH_Bolts_Tasks 0
 
 // Facebook-iOS-SDK
 #define COCOAPODS_POD_AVAILABLE_Facebook_iOS_SDK
@@ -100,7 +100,7 @@
 #define COCOAPODS_POD_AVAILABLE_PBJVision
 #define COCOAPODS_VERSION_MAJOR_PBJVision 0
 #define COCOAPODS_VERSION_MINOR_PBJVision 4
-#define COCOAPODS_VERSION_PATCH_PBJVision 1
+#define COCOAPODS_VERSION_PATCH_PBJVision 2
 
 // Parse
 #define COCOAPODS_POD_AVAILABLE_Parse

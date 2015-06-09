@@ -10,7 +10,7 @@ import Foundation
 
 class Certified: PFObject, PFSubclassing {
     
-    @NSManaged var isRecommend: Bool
+    @NSManaged var isRecommend: NSNumber
     @NSManaged var user: User
     
     override class func initialize() {
@@ -29,12 +29,15 @@ class Certified: PFObject, PFSubclassing {
     class func getAllCertifiedUsers() -> [String] {
         var query = Certified.query()!
         query.limit = 30
+        query.includeKey("user")
         let certified: [Certified] = query.findObjects() as? [Certified] ?? []
         var certifiedUsers: [String] = []
-        
-        certified.map { (cert) -> () in
-            if cert.isRecommend {
-                certifiedUsers.append(cert.user.objectId!)
+        var i = 0
+        for cert: Certified in certified {
+            if cert.isRecommend.boolValue {
+                if let id = cert.user.objectId {
+                    certifiedUsers.append(id)
+                }
             }
         }
         

@@ -1,14 +1,14 @@
 PODS:
   - Animated-Gif-iOS (1.1.0)
-  - APAddressBook/Core (0.1.7)
-  - APAddressBook/Swift (0.1.7):
+  - APAddressBook/Core (0.1.8)
+  - APAddressBook/Swift (0.1.8):
     - APAddressBook/Core
-  - Bolts (1.1.5):
-    - Bolts/AppLinks (= 1.1.5)
-    - Bolts/Tasks (= 1.1.5)
-  - Bolts/AppLinks (1.1.5):
+  - Bolts (1.2.0):
+    - Bolts/AppLinks (= 1.2.0)
+    - Bolts/Tasks (= 1.2.0)
+  - Bolts/AppLinks (1.2.0):
     - Bolts/Tasks
-  - Bolts/Tasks (1.1.5)
+  - Bolts/Tasks (1.2.0)
   - Facebook-iOS-SDK (4.1.0):
     - Bolts (~> 1.1)
     - Facebook-iOS-SDK/CoreKit (= 4.1.0)
@@ -39,12 +39,12 @@ PODS:
     - Parse (~> 1.7.4)
   - ParseUI (1.1.4):
     - Parse (~> 1.7)
-  - PBJVision (0.4.1)
+  - PBJVision (0.4.2)
 
 DEPENDENCIES:
   - Animated-Gif-iOS
   - APAddressBook/Swift
-  - Bolts (from `https://github.com/Alak/Bolts-iOS.git`)
+  - Bolts
   - Facebook-iOS-SDK
   - libPhoneNumber-iOS
   - LLARingSpinnerView
@@ -54,19 +54,10 @@ DEPENDENCIES:
   - ParseUI
   - PBJVision
 
-EXTERNAL SOURCES:
-  Bolts:
-    :git: https://github.com/Alak/Bolts-iOS.git
-
-CHECKOUT OPTIONS:
-  Bolts:
-    :commit: 7fef515e483c42e76dbb4bb3160c72f975d0831c
-    :git: https://github.com/Alak/Bolts-iOS.git
-
 SPEC CHECKSUMS:
   Animated-Gif-iOS: b3c0d798d2f59bed92b4adddfef6ebb7b80355f2
-  APAddressBook: 6d9142c95f8306fdc229b62171251283777e750c
-  Bolts: 7f39091f5d59361d2260a23cd0df1cf4ccbcf097
+  APAddressBook: cfff7589c5f9ee6ddbe23636b7723c2dbfa60a47
+  Bolts: d176cb1e0012175589e389a9db49b85e27787576
   Facebook-iOS-SDK: f42dfb27283bf5f05e3a9edc88459a75b9892d99
   libPhoneNumber-iOS: b8ccd23576379caca37c7cbdd554addf384459ed
   LLARingSpinnerView: d5f9057460e97989aff1c52a247c6acb62b8d883
@@ -74,6 +65,6 @@ SPEC CHECKSUMS:
   Parse: 6ca512c6e860b66739c95151b2f76ac4712b7842
   ParseCrashReporting: 0cff3a2720d6e977fff1bdd64e6d3ea94528e170
   ParseUI: d1228541b02a36a7354c8f47747f5f7a89cf1ff0
-  PBJVision: 1d7fb2d44d41eff64cd641ba2b63024da9ab2deb
+  PBJVision: fe43c9a58bb1c1277d16fd802fa836d25e034a45
 
 COCOAPODS: 0.37.1

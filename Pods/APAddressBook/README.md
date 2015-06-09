@@ -1,4 +1,5 @@
 <img src="https://dl.dropboxusercontent.com/u/2334198/APAddressBook-git-teaser.png">
+[![Build Status](https://api.travis-ci.org/Alterplay/APAddressBook.svg)](https://travis-ci.org/Alterplay/APAddressBook)
 
 APAddressBook is a wrapper on [AddressBook.framework](https://developer.apple.com/library/ios/documentation/AddressBook/Reference/AddressBook_iPhoneOS_Framework/_index.html) that gives easy access to native address book without pain in a head.
 
@@ -49,7 +50,7 @@ Available fields:
 * APContactFieldThumbnail - *contact thumbnail*
 * APContactFieldCreationDate - *contact creation date*
 * APContactFieldModificationDate - *contact modification date*
-* APContactFieldPhonesWithLabels - *contact phones with labels*
+* APContactFieldPhonesWithLabels - *contact phones with original and localized labels*
 * APContactFieldCompositeName - *the concatenated value of prefix, suffix, organization, first name, and last name*
 * APContactFieldAddresses - *array of user addresses*
 * APContactFieldRecordID - *ID of record in iOS address book*
@@ -84,6 +85,11 @@ addressBook.sortDescriptors = @[
     [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES],
     [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]
 ];
+```
+
+**Get contact by address book record ID**
+```objective-c
+APContact *contact = [addressBook getContactByRecordID:recordID];
 ```
 
 **Check address book access**

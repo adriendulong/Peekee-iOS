@@ -2,7 +2,7 @@
 platform :ios, '7.0'
 
 pod 'APAddressBook/Swift'
-pod 'Bolts', :git => 'https://github.com/Alak/Bolts-iOS.git'
+pod 'Bolts'
 pod 'Parse'
 pod 'ParseUI'
 pod 'Facebook-iOS-SDK'
